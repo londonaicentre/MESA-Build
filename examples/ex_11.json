@@ -22,7 +22,7 @@
                 "other_test_type": "Whole genome sequencing",
                 "test_methodology": "Gene Panel(s): Paediatric disorders (14.43), Intellectual disability (3.2)",
                 "sample_origin": null,
-                "result_entity_type": "Gene",
+                "result_entity_type": "Variant",
                 "result_entity": "MPDZ",
                 "result_region": "c.5827C>T p.(Gln1943Ter)",
                 "gene_nomenclature": [

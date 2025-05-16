@@ -13,7 +13,7 @@
                 "other_test_type": "Screen for pathogenic variants in the Dystrophin gene by cDNA sequencing",
                 "test_methodology": "fluorescent Sanger DNA sequencing",
                 "sample_origin": null,
-                "result_entity_type": "Gene",
+                "result_entity_type": "Exon",
                 "result_entity": "dystrophin",
                 "gene_nomenclature": [
                     "LRG_199t1"
