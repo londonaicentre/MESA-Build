@@ -1,0 +1,61 @@
+{
+    "content": "QF-PCR trisomy test for chromosomes 13, 18 and 21\n\nNO ABNORMALITY DETECTED\n\nPCR analysis of uncultured chorionic villi was carried out using markers specific for chromosomes 13, 18 and 21.\n\nThe results are consistent with a normal complement for chromosomes 13, 18 and 21.\n\nA full karyotype analysis of G-banded chromosomes from cultured chorionic villi will follow from the South West Thames Regional Cytogenetics Unit.\n\n?\r\n\n\r\n\nGenetics Centre\t\t\r\n\nGuy's Hospital, 5th Floor Guy's Tower\r\n\nSt Thomas Street, London SE1 9RT\t\r\n\n\r\n\n\r\n\nCytogenetics Department",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "QF-PCR trisomy test for chromosomes 13, 18 and 21",
+            "test_clinical_rationale": "Prenatal testing for chromosomal abnormalities, trisomies of chromosomes 13, 18, and 21",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR (Quantitative Fluorescent PCR) trisomy test for chromosomes 13, 18 and 21",
+                "sample_origin": "Uncultured chorionic villi",
+                "result_entity_type": "Chromosome",
+                "result_entity": "13",
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "Results are consistent with a normal complement for chromosome 13",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "proband": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR (Quantitative Fluorescent PCR) trisomy test for chromosomes 13, 18 and 21",
+                "sample_origin": "Uncultured chorionic villi",
+                "result_entity_type": "Chromosome",
+                "result_entity": "18",
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "Results are consistent with a normal complement for chromosome 18",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "proband": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR (Quantitative Fluorescent PCR) trisomy test for chromosomes 13, 18 and 21",
+                "sample_origin": "Uncultured chorionic villi",
+                "result_entity_type": "Chromosome",
+                "result_entity": "21",
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "Results are consistent with a normal complement for chromosome 21",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No evidence of trisomy 13, 18, or 21 detected in this fetus",
+            "overall_recommendations": "A full karyotype analysis of G-banded chromosomes from cultured chorionic villi will follow from the South West Thames Regional Cytogenetics Unit"
+        }
+    }
+}

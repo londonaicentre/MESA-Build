@@ -1,0 +1,56 @@
+{
+    "content": "REASON FOR REFERRAL: Carrier test for the familial ABHD5 likely pathogenic variant (R244)\nThis individual?s daughter is apparently homozygous for the likely pathogenic variant, ABHD5 c.16G>T p.(Glu6Ter) (see Synnovis Genetics report dated 22/03/2023, PRU546007.02). This individual is clinically not affected (information supplied with referral).\n\n\tRESULT SUMMARY\nFamilial likely pathogenic ABHD5 variant detected. \n\n\n\nRESULT\nThis individual is heterozygous for the familial pathogenic variant, ABHD5 c.16G>T p.(Glu6Ter). \n\nRECOMMENDED ACTION\nIf appropriate, this individual and her partner can be offered accurate prenatal diagnosis to exclude Chanarin-Dorfman syndrome in future pregnancies.  In order to prepare for this, we recommend referral to their local Clinical Genetics centre for counselling.\nIf appropriate, other members of this family can be offered testing for this pathogenic sequence variant. We recommend that they are referred to Clinical Genetics for counselling prior to molecular testing.\n\nTechnical Notes\nMethodology: Testing of the variant was performed by Genomic DNA Sanger sequencing with direct chromatogram check (>95% sensitivity). Sequence nomenclature based on reference sequence NM_016006.4, where nucleotide number 1 corresponds to the first base of the translation initiation.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Carrier test for the familial ABHD5 likely pathogenic variant (R244)",
+            "test_clinical_rationale": "This individual's daughter is apparently homozygous for the likely pathogenic variant, ABHD5 c.16G>T p.(Glu6Ter) (see Synnovis Genetics report dated 22/03/2023, PRU546007.02). This individual is clinically not affected (information supplied with referral).",
+            "clinical_findings": [
+                {
+                    "type": "family_history",
+                    "value": "This individual's daughter is apparently homozygous for the likely pathogenic variant, ABHD5 c.16G>T p.(Glu6Ter) (see Synnovis Genetics report dated 22/03/2023, PRU546007.02)."
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "This individual is clinically not affected"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": "Sanger sequencing",
+                "test_methodology": "Sanger sequencing with direct chromatogram check (>95% sensitivity)",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "ABHD5",
+                "gene_nomenclature": [
+                    "NM_016006.4"
+                ],
+                "result_region": "c.16G>T p.(Glu6Ter)",
+                "result_status": "Abnormal",
+                "result_description": "This individual is heterozygous for the familial pathogenic variant, ABHD5 c.16G>T p.(Glu6Ter).",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    }
+                ],
+                "clinical_implications": "This mutation has been detected in approximately 52.5% of invasive melanoma [Pinzani et al. (2011) Clinica Chimica Acta 412:901-905].\n\nNomenclature based on BRAF Locus Reference Genomic sequence LRG_299, where nucleotide number 1 corresponds to the first base of the translation initiation codon."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "",
+            "overall_recommendations": "If appropriate, this individual and her partner can be offered accurate prenatal diagnosis to exclude Chanarin-Dorfman syndrome in future pregnancies.  In order to prepare for this, we recommend referral to their local Clinical Genetics centre for counselling.\nIf appropriate, other members of this family can be offered testing for this pathogenic sequence variant. We recommend that they are referred to Clinical Genetics for counselling prior to molecular testing."
+        }
+    }
+}

@@ -1,0 +1,137 @@
+{
+    "content": "REASON FOR REFERRALU: \n\nConfirmation of SNRPB variant detected in the 100,000 Genomes Project\nPatient and sibling has been diagnosed with skeletal dysplasia*. However, patient's sister and father are both clinically unaffected (information supplied with referral). Patient and his relatives were tested as part of the pilot of the Genomics England 100,000 Genomes Project using a virtual panel of genes associated with skeletal dysplasia**. The heterozygous variant of uncertain clinical significance, SNRPB c.607A>G p.(Met203Val) was detected by Whole Genome Sequencing (WGS). Confirmation of this variant in an accredited diagnostic laboratory has been requested.\nUTEST\n\nTest for the SNRPB variant by bidirectional fluorescent Sanger DNA Sequencing.\n\nURESULTS\n\nMichael LOWETH: \nHeterozygous SNRPB c.607A>G p.(Met203Val) variant detected\n\nJohn LOWETH: \nHeterozygous SNRPB c.607A>G p.(Met203Val) variant detected\n\nVictoria HOUGHTON: \nVariant NOT detected\n\nPeter LOWETH: \nVariant NOT detected\n\nU\n\nSUMMARYU \n\nThe presence of the SNRPB c.607A>G p.(Met203Val) variant is confirmed in Michael and John LOWETH.\n\nThis variant was NOT detected in Victoria HOUGHTON or Peter LOWETH. \nThe clinical significance of this variant remains uncertain1. Missense variants in this gene have been reported to cause cerebrocostomandibular syndrome2, however, these are located in another region of this gene and are predicted to affect alternative splicing.\n\nFURTHER WORK\n\nIf appropriate, Michael?s mother could be tested to investigate the possible significance of this variant. Referral to Clinical Genetics for genetic counselling is recommended prior to testing.\n\nIf appropriate, other affected members of this family could be tested to investigate the possible significance of this variant. Referral to Clinical Genetics for genetic counselling is recommended prior to testing.\nnUNotes\n\n*HPO terms submitted for this individual included: skeletal dysplasia, Genu Valgum and short stature.\n** The Unexplained skeletal dysplasia v1.3 gene panel was used by the 100,000 Genomes project for analysis\n\nSNRPB gene nomenclature based on GenBank accession number NG_042057.1 where nucleotide number 1 corresponds to the first base of the translation initiation codon.\n\n1Assessment of pathogenicity carried out using bioinformatics software Opal by Fabric Genomics designed specifically for the 100,000 Genomes project. \n\n2 OMIM reference *182282, http://www.omim.org.\n\ncc:\n \n\nPage 2 of 2\nPlease note: 1. Any DNA remaining after completion of the above tests is stored for potential use in the future.    2.  The above results and interpretations assume that (a) samples received by the laboratory are correctly identified, (b) family relationships given by consultands are true, and (c) the clinical diagnosis is as stated.   3. In order to avoid error and/or misinterpretation, transcription of all or part of this report is inadvisable.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Confirmation of SNRPB variant detected in the 100,000 Genomes Project",
+            "test_clinical_rationale": "Patient and sibling has been diagnosed with skeletal dysplasia*. However, patient's sister and father are both clinically unaffected (information supplied with referral). Patient and his relatives were tested as part of the pilot of the Genomics England 100,000 Genomes Project using a virtual panel of genes associated with skeletal dysplasia**. The heterozygous variant of uncertain clinical significance, SNRPB c.607A>G p.(Met203Val) was detected by Whole Genome Sequencing (WGS). Confirmation of this variant in an accredited diagnostic laboratory has been requested.",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Patient has been diagnosed with skeletal dysplasia"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Patient's sibling has been diagnosed with skeletal dysplasia"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Patient's sister is clinically unaffected"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Patient's father is clinically unaffected"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "The heterozygous variant of uncertain clinical significance, SNRPB c.607A>G p.(Met203Val) was detected by Whole Genome Sequencing (WGS)"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "HPO terms submitted for this individual included: skeletal dysplasia, Genu Valgum and short stature."
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "The Unexplained skeletal dysplasia v1.3 gene panel was used by the 100,000 Genomes project for analysis"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": "Sanger sequencing",
+                "test_methodology": "bidirectional fluorescent Sanger DNA Sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "SNRPB",
+                "gene_nomenclature": [
+                    "NG_042057.1"
+                ],
+                "result_region": "c.607A>G p.(Met203Val)",
+                "result_status": "Abnormal",
+                "result_description": "Heterozygous SNRPB c.607A>G p.(Met203Val) variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    }
+                ],
+                "clinical_implications": "The presence of the SNRPB c.607A>G p.(Met203Val) variant is confirmed"
+            },
+            {
+                "proband": "patient's sibling",
+                "test_type": "DNA",
+                "other_test_type": "Sanger sequencing",
+                "test_methodology": "bidirectional fluorescent Sanger DNA Sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "SNRPB",
+                "gene_nomenclature": [
+                    "NG_042057.1"
+                ],
+                "result_region": "c.607A>G p.(Met203Val)",
+                "result_status": "Abnormal",
+                "result_description": "Heterozygous SNRPB c.607A>G p.(Met203Val) variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    }
+                ],
+                "clinical_implications": "The presence of the SNRPB c.607A>G p.(Met203Val) variant is confirmed"
+            },
+            {
+                "proband": "patient's sister",
+                "test_type": "DNA",
+                "other_test_type": "Sanger sequencing",
+                "test_methodology": "bidirectional fluorescent Sanger DNA Sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "SNRPB",
+                "gene_nomenclature": [
+                    "NG_042057.1"
+                ],
+                "result_region": "c.607A>G p.(Met203Val)",
+                "result_status": "Normal",
+                "result_description": "Variant NOT detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant not detected"
+                    }
+                ],
+                "clinical_implications": "This variant was NOT detected"
+            },
+            {
+                "proband": "patient's father",
+                "test_type": "DNA",
+                "other_test_type": "Sanger sequencing",
+                "test_methodology": "bidirectional fluorescent Sanger DNA Sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "SNRPB",
+                "gene_nomenclature": [
+                    "NG_042057.1"
+                ],
+                "result_region": "c.607A>G p.(Met203Val)",
+                "result_status": "Normal",
+                "result_description": "Variant NOT detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant not detected"
+                    }
+                ],
+                "clinical_implications": "This variant was NOT detected"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The clinical significance of this variant remains uncertain1. Missense variants in this gene have been reported to cause cerebrocostomandibular syndrome2, however, these are located in another region of this gene and are predicted to affect alternative splicing.",
+            "overall_recommendations": "If appropriate, Michael?s mother could be tested to investigate the possible significance of this variant. Referral to Clinical Genetics for genetic counselling is recommended prior to testing.\n\nIf appropriate, other affected members of this family could be tested to investigate the possible significance of this variant. Referral to Clinical Genetics for genetic counselling is recommended prior to testing."
+        }
+    }
+}

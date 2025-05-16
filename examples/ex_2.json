@@ -1,0 +1,36 @@
+{
+    "content": "REASON FOR REFERRAL: Diagnostic test for Central Core Disease.\n\nTEST\n\nScreen for mutations in exons 95, 100, 101 and 102 of the Ryanodine receptor 1 (RYR1) gene by DNA sequencing.\n\nRESULTS\n\nNo mutation detected.\n\nSUMMARY\nDiagnosis of Central Core disease is NOT confirmed. \n\nFURTHER WORK\nA mutation screen of the complete RYR1 coding sequence will be set up in this laboratory in due course, however a review of individual patient?s histopathology will be required prior to further testing.\nACTA1 studies have also been requested.  This is not currently available at this laboratory but may be set up at a later date.  In the meantime if you would like us forward an aliquot of DNA to another laboratory please contact us with details.\n\nNotes\nCentral Core disease is caused by dominant mutations within the Ryanodine receptor 1 (RYR1) gene. ~67% of central core disease patient have been shown to have heterozygous mutations within exons 95, 100, 101 and 102 of the RYR1 gene (Davies et. al., 2003, 13, 151-157). \n\nMutation nomenclature based on RYR1 reference sequence NM_000540.2, with nucleotide number 1 corresponding to the first base of the translation initiation codon.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Diagnostic test for Central Core Disease",
+            "test_clinical_rationale": "",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": "DNA sequencing",
+                "test_methodology": "DNA sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Exon",
+                "result_entity": "RYR1",
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "Screen for mutations in exons 95, 100, 101 and 102 of the Ryanodine receptor 1 (RYR1) gene by DNA sequencing.",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "No mutation detected"
+                    }
+                ],
+                "clinical_implications": "This mutation has been detected in approximately 52.5% of invasive melanoma [Pinzani et al. (2011) Clinica Chimica Acta 412:901-905].\n\nNomenclature based on BRAF Locus Reference Genomic sequence LRG_299, where nucleotide number 1 corresponds to the first base of the translation initiation codon."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Central Core disease is caused by dominant mutations within the Ryanodine receptor 1 (RYR1) gene. ~67% of central core disease patient have been shown to have heterozygous mutations within exons 95, 100, 101 and 102 of the RYR1 gene (Davies et. al., 2003, 13, 151-157). \n\nMutation nomenclature based on RYR1 reference sequence NM_000540.2, with nucleotide number 1 corresponding to the first base of the translation initiation codon.",
+            "overall_recommendations": "A mutation screen of the complete RYR1 coding sequence will be set up in this laboratory in due course, however a review of individual patient?s histopathology will be required prior to further testing.\nACTA1 studies have also been requested.  This is not currently available at this laboratory but may be set up at a later date.  In the meantime if you would like us forward an aliquot of DNA to another laboratory please contact us with details."
+        }
+    }
+}

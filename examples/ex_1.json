@@ -1,0 +1,85 @@
+{
+    "content": "REASON FOR REFERRAL: REASON FOR REFERRAL: Diagnostic test for Genetic Susceptibility to TP53 or BRCA-related Cancer.\n\nTEST\n\nTest for sequence variants and exon deletions and duplications in the BRCA1, BRCA2 and TP53 genes by next generation DNA sequencing1. \nRESULTS\n\nBRCA1: No clearly pathogenic sequence variant detected\n\nBRCA2: No clearly pathogenic sequence variant detected\n\nTP53:\n No clearly pathogenic sequence variant detected\n\nSUMMARY\n\nThis patient is very unlikely to have a pathogenic sequence variant in the BRCA1, BRCA2 or TP53 genes.\n\nNotes\n\n1The entire coding exons and splice sites of the BRCA1, BRCA2 and TP53 genes have been screened by massively parallel Illumina sequencing by synthesis, following target capture by in solution hybridisation. Read depth analysis was used to detect exon deletions and duplications. This is predicted to detect >98% of all BRCA1, BRCA2 and TP53 pathogenic sequence variants.\nBRCA1 reference sequence LRG_292t1, BRCA2 reference sequence LRG_293t1, and TP53 reference sequence LRG_321t1 where nucleotide number 1 corresponds to the first base of the translation initiation codon.\n\nVariants with general population frequency >10% or that have been classified as unlikely to be pathogenic have not been reported.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Diagnostic test for Genetic Susceptibility to TP53 or BRCA-related Cancer",
+            "test_clinical_rationale": "Test for sequence variants and exon deletions and duplications in the BRCA1, BRCA2 and TP53 genes by next generation DNA sequencing",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "next generation DNA sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Gene",
+                "result_entity": "BRCA1",
+                "gene_nomenclature": [
+                    "LRG_292t1"
+                ],
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "No clearly pathogenic sequence variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "No mutation detected"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "next generation DNA sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Gene",
+                "result_entity": "BRCA2",
+                "gene_nomenclature": [
+                    "LRG_293t1"
+                ],
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "No clearly pathogenic sequence variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "No mutation detected"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "next generation DNA sequencing",
+                "sample_origin": null,
+                "result_entity_type": "Gene",
+                "result_entity": "TP53",
+                "gene_nomenclature": [
+                    "LRG_321t1"
+                ],
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "No clearly pathogenic sequence variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "No mutation detected"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This patient is very unlikely to have a pathogenic sequence variant in the BRCA1, BRCA2 or TP53 genes.",
+            "overall_recommendations": "The entire coding exons and splice sites of the BRCA1, BRCA2 and TP53 genes have been screened by massively parallel Illumina sequencing by synthesis, following target capture by in solution hybridisation. Read depth analysis was used to detect exon deletions and duplications. This is predicted to detect >98% of all BRCA1, BRCA2 and TP53 pathogenic sequence variants."
+        }
+    }
+}

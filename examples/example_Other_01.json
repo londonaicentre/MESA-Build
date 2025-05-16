@@ -1,0 +1,130 @@
+{
+  "content": "Multidisciplinary Hereditary Bowel Cancer Test Result Meeting of 16/7/2015\n\nUPDATED FINAL REPORT\n\nPatient details\nSurname\n\nSURNAME\nFirst names FIRSTNAME Sex Female\nDate of birth 11/07/1960\nGenetics (Pru) number 123456:02\nNHS Number 1234567890\nDiagnosis Endometrial at age 48 years\nFamily history Amsterdam positive\n\nReferred for Review of MDM report 2012\nRe: esults of tests Lchiabilars on endometrial cancer tissue\n\nmicrosatellite instability ing: ti hows high i i bility (Msi-H).\nImmunohistochemistry ire) testing: | th \\ tal tissue shows | f expression on MLH1 and PMS2\nwith pai rp teins MSH2 and MSH6.\nBRAF Mae testing this mutatior i lic t not detected\nMLH1 promoter germ-line resting: sigan methylation was not seen but sequencing led the p \\f\nthe methyiation rone, high ri ant.\n\nRNA studie s: have shown reduced expression of the c.27A alle | in three relatives carrying the variant although\nome of th ancer at prese'\n\nInterpretation of test ?results\n\nh\n\ngene defect. This family has a MLH1 c.-\n\nposare 85G>T haplotype which is a constitutional crmutt ion and confirms the diagnosis of Lynch\n\nsyndrome. There is insufficient data to inform nal cancer risks associated with this haplotype, we would\n\nreac it as 5S (pontena, high risk to offer predictive testing to at risk relatives to inform their bowel surveillance\nlan Frayling, 17/07/2015).\n\nRecommendation\nPredictive, cascade genetic testing for the familial MLH1 c.-27C>A+c.85G>T haplotype is available for other\nh eed f\n\nrelatives, to inform their ior enhanced bowel surveillance. If they have inherited the high risk hay apiotype, :\nthen they remain at a significantly increased risk of Lynch-associated cancers, although these risks\nquantified at present. We would recommend a full colonoscopy every two years from 25-75 years. We woud\nrecommend screeni oS for A Pylori and eradication of infection if present. We would recommend consideration\nof low f d referr ?al to CaPP3. We would recommend women with\nthis fami plotyp ferred t prophylactic TAH and BSO from 45 years\nPlease consider inputting this family into the INSIGHT database and for publication in a peer reviewed journal.\n\n",
+  "output": {
+    "clinical_context": {
+      "referral_reason": "Review of MDM report 2012 for results of tests on endometrial cancer tissue",
+      "test_clinical_rationale": "Investigation for Lynch syndrome in a patient with endometrial cancer and Amsterdam positive family history",
+      "clinical_findings": [
+        {
+          "type": "morbidity",
+          "value": "Endometrial cancer at age 48 years"
+        },
+        {
+          "type": "family_history",
+          "value": "Amsterdam positive family history"
+        }
+      ]
+    },
+    "biomarker_test_results": [
+      {
+        "proband": "patient",
+        "test_type": "Other",
+        "other_test_type": "Microsatellite Instability Testing",
+        "test_methodology": "Microsatellite instability testing on endometrial cancer tissue",
+        "sample_origin": "Endometrial cancer tissue",
+        "result_entity_type": "Genomic Feature",
+        "result_entity": "Microsatellite Instability",
+        "result_region": null,
+        "result_status": "Abnormal",
+        "result_description": "High microsatellite instability (MSI-H)",
+        "quantitative_results": [],
+        "categorical_results": [
+          {
+            "result_name": "Microsatellite Status",
+            "result_value": "MSI-H (High)"
+          }
+        ],
+        "clinical_implications": null
+      },
+      {
+        "proband": "patient",
+        "test_type": "Other",
+        "other_test_type": "Immunohistochemistry",
+        "test_methodology": "Immunohistochemistry testing on endometrial cancer tissue",
+        "sample_origin": "Endometrial cancer tissue",
+        "result_entity_type": "Protein",
+        "result_entity": "MLH1",
+        "result_region": null,
+        "result_status": "Abnormal",
+        "result_description": "Loss of expression of MLH1 proteins",
+        "quantitative_results": [],
+        "categorical_results": [
+          {
+            "result_name": "MLH1 Expression",
+            "result_value": "Reduced"
+          }
+        ],
+        "clinical_implications": null
+      },
+      {
+        "proband": "patient",
+        "test_type": "Other",
+        "other_test_type": "Immunohistochemistry",
+        "test_methodology": "Immunohistochemistry testing on endometrial cancer tissue",
+        "sample_origin": "Endometrial cancer tissue",
+        "result_entity_type": "Protein",
+        "result_entity": "PMS2",
+        "result_region": null,
+        "result_status": "Abnormal",
+        "result_description": "Loss of expression of PMS2 proteins",
+        "quantitative_results": [],
+        "categorical_results": [
+          {
+            "result_name": "PMS2 Expression",
+            "result_value": "Reduced"
+          }
+        ],
+        "clinical_implications": null
+      },
+      {
+        "proband": "patient",
+        "test_type": "DNA",
+        "other_test_type": null,
+        "test_methodology": "BRAF mutation testing",
+        "sample_origin": "Endometrial cancer tissue",
+        "result_entity_type": "Gene",
+        "result_entity": "BRAF",
+        "result_region": null,
+        "result_status": "Normal",
+        "result_description": "BRAF mutation not detected",
+        "quantitative_results": [],
+        "categorical_results": [],
+        "clinical_implications": null
+      },
+      {
+        "proband": "patient",
+        "test_type": "DNA",
+        "other_test_type": null,
+        "test_methodology": "MLH1 promoter testing",
+        "sample_origin": null,
+        "result_entity_type": "Gene",
+        "result_entity": "MLH1",
+        "result_region": "Promoter",
+        "result_status": "Abnormal",
+        "result_description": "MLH1 promoter methylation was not seen but sequencing identified the high risk variant",
+        "quantitative_results": [],
+        "categorical_results": [],
+        "clinical_implications": null
+      },
+      {
+        "proband": "patient",
+        "test_type": "Other",
+        "other_test_type": "RNA Studies",
+        "test_methodology": "RNA expression analysis",
+        "sample_origin": null,
+        "result_entity_type": "Gene",
+        "result_entity": "MLH1",
+        "result_region": "c.27A allele",
+        "result_status": "Abnormal",
+        "result_description": "Reduced expression of the c.27A allele in three relatives carrying the variant",
+        "quantitative_results": [],
+        "categorical_results": [],
+        "clinical_implications": null
+      }
+    ],
+    "clinical_outcome": {
+      "overall_implications": "",
+      "overall_recommendations": "Predictive cascade genetic testing available for relatives. For carriers: full colonoscopy every two years from 25-75 years, screening for H. Pylori and eradication if present, consideration of low-dose aspirin, referral to CaPP3 if appropriate. Women with this familial haplotype should be offered prophylactic TAH and BSO from age 45 years. Consider inputting this family into the INSIGHT database and for publication in a peer-reviewed journal."
+    }
+  }
+}

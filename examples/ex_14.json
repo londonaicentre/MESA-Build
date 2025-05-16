@@ -1,0 +1,129 @@
+{
+    "content": "REASON FOR REFERRALU: Diagnostic test by Whole Exome Sequencing (WES).\n\nPatient has a clinical presentation including developmental delay, macrocephaly and dysmorphic ears (information supplied with referral) and has been tested as part of the diagnostic Whole Exome Sequencing service in our laboratory. Mother and Father are Patient?s unaffected parents.\nTEST\n\nTest for sequence variants in a virtual panel of developmental genes by WES analysis.  \n\nAny variant(s) detected by WES is confirmed by Sanger sequencing analysis.\nRESULTS\n\nPatient:\nHemizygous USP9X c.2978A>G p.(His993Arg).\n\n\n\nHeterozygous FOXP1 c.1652G>A p.(Arg551His)\n\nMother:\nHeterozygous USP9X c.2978A>G p.(His993Arg).\nFather:\nNo variant detected.\n\n\n\nHeterozygous FOXP1 c.1652G>A p.(Arg551His)\n\nA list of all variants detected is attached to this report as an excel file. An email address is required for this to be sent electronically (preferably NHS.net), if this has not been already provided.\n\nSUMMARYU \n\nThe presence of the USP9X c.2978A>G p.(His993Arg) and FOXP1 c.1652G>A p.(Arg551His) variants are confirmed in Patient. \nVariants in USP9X have been reported to cause X-linked recessive mental retardation. The variant was identified in Patient?s mother, and is of uncertain significance.\nVariants in FOXP1 have been reported to cause autosomal dominant mental retardation with language impairment and with or without autistic features. The variant were identified in Patient?s unaffected father, Greg. The heterozygous FOXP1 variant is therefore unlikely to be the cause of the clinical phenotype in Patient.\n\nThe clinical diagnosis of developmental delay, macrocephaly and dysmorphic ears has NOT been explained at the molecular genetic level in Patient.\n\nFURTHER WORK\n\nNo further testing is currently available.  \n\nWe recommend that this patient and their family are referred to their local Clinical Genetics department to discuss the implications of this result.  \n\nNotes\n\nUSP9X and FOXP1 gene nomenclature based on GenBank accession number NM_001039590.2 and NM_001244810.1 respectively where nucleotide number 1 corresponds to the first base of the translation initiation codon\nMethod:\n\nWES capture was performed using Agilent SureSelectXT Clinical Research Exome (SureSelectXT Human All Exon V5 baited with clinically relevant genes). The enriched exome libraries were sequenced using paired-end, 150 cycle chemistry on an Illumina NextSeq 550\n\nData Processing: \n\nData processing by Mokapipe v2.7 (demultiplexing bcl2fastq, alignment BWA-MEM, variant calling & coverage GATK)\nPanel details: Genes tested within developmental virtual panel and horizontal coverage\n\nThe list of genes tested and their horizontal coverage is attached. Horizontal coverage is determined using coding exons (+/- 5bp) to a minimum depth of 20X\n\nAssessment of pathogenicity: \n\nPerformed using QIAGEN Ingenuity Variant Analysis (CADD, CentoMD, EVS, Allele Frequency Community, JASPAR, Ingenuity Knowledge Base, Vista Enhancer, OMIM, gnomAD, Clinical Trials, BSIFT, TCGA, PolyPhen-2, 1000 Genome Frequency, Clinvar, DGV, COSMIC, ExAC, HGMD, PhyloP, DbSNP, TargetScan, SIFT4G), and Alamut for splice site analysis (SpliceSiteFinder-like, MaxEntScan, NNSplice, GeneSplicer)\n\nClassifications are performed according to ACMG guidelines, ref: Richards et al, 2015 Genet Med. 17:405-424\n\nLimitations of the assay\n\nThis WES analysis will not detect genomic rearrangements such as copy number variation, inversions and larger insertions/deletions. Intronic variants -/+5bp of the coding exons are not assessed.  \n\nIn addition, as some genes within our panels are known to have associated pseudo-genes, we cannot exclude the possibility of false negative results for these genes. \n\nThe sensitivity and specificity of the WES analysis was determined to be\n\nSNV: Sensitivity 99.20%: (95% CI: 99.20% to 99.30%), specificity 100%: (95% CI: 100% to 100%) \n\nSNV+InDel: Sensitivity 98.70%: (95% CI: 98.57 % to 98.82 %), specificity 100%: (95% CI: 100% to 100%) \n\n(This was performed using the GIAB sample, NA12878 and Agilent Exome v5, HiSeq2500 and PE100)\n\nClinical pick-up rate\n\nWES has been reported to provide a molecular genetic diagnosis in ~30% of cases (Ann Neurol 2014; 76:473-483, N Engl J Med 2013; 369:1502-11, http://www.irdirc.org/wp-content/uploads/2014/11/T1S2-1_GilissenC.pdf, SciTM 2014; Vol 6 Issue 265 ra168)\n\nCC: \nDuty Scientist, Laboratory Genetics Level 2B, Queen Elizabeth University Hospital, Govan Road, Glasgow, G51 4TF\n\nPage 1 of 2\nPlease note: 1. Any DNA remaining after completion of the above tests is stored for potential use in the future.    2.  The above results and interpretations assume that (a) samples received by the laboratory are correctly identified, (b) family relationships given by consultants are true, and (c) the clinical diagnosis is as stated.   3. In order to avoid error and/or misinterpretation, transcription of all or part of this report is inadvisable.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": ": Diagnostic test by Whole Exome Sequencing (WES)",
+            "test_clinical_rationale": "Patient has a clinical presentation including developmental delay, macrocephaly and dysmorphic ears",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Patient has a clinical presentation including developmental delay, macrocephaly and dysmorphic ears "
+                },
+                {
+                    "type": "family_history",
+                    "value": "Parents are unaffected"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": "Whole exome sequencing",
+                "test_methodology": "Test for sequence variants in a virtual panel of developmental genes by WES analysis",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "USP9X",
+                "result_region": "c.2978A>G p.(His993Arg)",
+                "gene_nomenclature": [
+                    "NM_001039590.2"
+                ],
+                "result_status": "Abnormal",
+                "result_description": "",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Hemizygous"
+                    }
+                ],
+                "clinical_implications": "confirmed."
+            },
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": "Whole exome sequencing",
+                "test_methodology": "Test for sequence variants in a virtual panel of developmental genes by WES analysis",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "FOXP1",
+                "result_region": "c.1652G>A p.(Arg551His)",
+                "gene_nomenclature": [
+                    "NM_001244810.1"
+                ],
+                "result_status": "Abnormal",
+                "result_description": "",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "confirmed."
+            },
+            {
+                "proband": "patient's mother",
+                "test_type": "DNA",
+                "other_test_type": "Whole exome sequencing",
+                "test_methodology": "Test for sequence variants in a virtual panel of developmental genes by WES analysis",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "USP9X",
+                "result_region": "c.2978A>G p.(His993Arg)",
+                "gene_nomenclature": [
+                    "NM_001039590.2"
+                ],
+                "result_status": "Abnormal",
+                "result_description": "",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous "
+                    }
+                ],
+                "clinical_implications": "confirmed."
+            },
+            {
+                "proband": "patient's father",
+                "test_type": "DNA",
+                "other_test_type": "Whole exome sequencing",
+                "test_methodology": "Test for sequence variants in a virtual panel of developmental genes by WES analysis",
+                "sample_origin": null,
+                "result_entity_type": "Variant",
+                "result_entity": "FOXP1",
+                "result_region": "c.1652G>A p.(Arg551His)",
+                "gene_nomenclature": [
+                    "NM_001244810.1"
+                ],
+                "result_status": "Abnormal",
+                "result_description": "",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The presence of the USP9X c.2978A>G p.(His993Arg) and FOXP1 c.1652G>A p.(Arg551His) variants are confirmed in Patient. \nVariants in USP9X have been reported to cause X-linked recessive mental retardation. The variant was identified in Patient?s mother, and is of uncertain significance.\nVariants in FOXP1 have been reported to cause autosomal dominant mental retardation with language impairment and with or without autistic features. The variant were identified in Patient?s unaffected father, Greg. The heterozygous FOXP1 variant is therefore unlikely to be the cause of the clinical phenotype in Patient.\n\nThe clinical diagnosis of developmental delay, macrocephaly and dysmorphic ears has NOT been explained at the molecular genetic level in Patient.",
+            "overall_recommendations": "No further testing is currently available.  \n\nWe recommend that this patient and their family are referred to their local Clinical Genetics department to discuss the implications of this result."
+        }
+    }
+}

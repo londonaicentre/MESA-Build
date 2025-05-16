@@ -1,0 +1,39 @@
+{
+    "content": "UUREASON FOR REFERRAL: UUTesting for the BRAF c.1799T>A (p.Val600Glu) mutation.\n\nTEST\n\nTest DNA extracted from tumour tissue for the c.1799T>A (p.Val600Glu)* activating mutation in the BRAF gene by DNA sequencing of standard PCR.\nRESULTS\n\nMutation c.1799T>A (p.Val600Glu) detected. \n\nUUSUMMARYUU \n\nThe BRAF c.1799T>A (p.Val600Glu) activating mutation has been detected.\n\nUUNotes\n\n*This mutation has been detected in approximately 52.5% of invasive melanoma [Pinzani et al. (2011) Clinica Chimica Acta 412:901-905].\n\nNomenclature based on BRAF Locus Reference Genomic sequence LRG_299, where nucleotide number 1 corresponds to the first base of the translation initiation codon.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Testing for the BRAF c.1799T>A (p.Val600Glu) mutation.",
+            "test_clinical_rationale": "",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "DNA sequencing of standard PCR",
+                "sample_origin": "tumour tissue",
+                "result_entity_type": "Variant",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [
+                    "LRG_299"
+                ],
+                "result_region": "c.1799T>A (p.Val600Glu)",
+                "result_status": "Abnormal",
+                "result_description": "The BRAF c.1799T>A (p.Val600Glu) activating mutation has been detected.",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "Variant detected"
+                    }
+                ],
+                "clinical_implications": "This mutation has been detected in approximately 52.5% of invasive melanoma [Pinzani et al. (2011) Clinica Chimica Acta 412:901-905]."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "",
+            "overall_recommendations": ""
+        }
+    }
+}

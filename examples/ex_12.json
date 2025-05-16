@@ -1,0 +1,41 @@
+{
+    "content": "le.",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Whole-Genome Sequencing Diagnostic Test provided by NHS GMS",
+            "test_clinical_rationale": "Hereditary neuropathy or pain disorder NOT PMP22 copy number (R78.4)",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "HPO terms: Peripheral neuropathy"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "DNA",
+                "other_test_type": "Whole genome sequencing",
+                "test_methodology": "Hereditary neuropathy NOT PMP22 copy number (1.36)",
+                "sample_origin": null,
+                "result_entity_type": "Panel",
+                "result_entity": null,
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Detection",
+                        "result_value": "No mutation detected"
+                    }
+                ],
+                "clinical_implications": "Whole genome sequence analysis did not identify any pathogenic variant(s) that explains the cause of patient?s clinical presentation.  This result does not exclude a genetic diagnosis."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "A genetic cause for the clinical presentation of this individual has not been identified.",
+            "overall_recommendations": ""
+        }
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "content": "NO ABNORMALITY DETECTED\nSample:\n\nBone marrow aspirate\nClinical details:\nPresentation AML, r/o APL \n\nInterphase FISH analysis showed no evidence of RAR? rearrangement in the 100 cells analysed.\n[Probe used:\nRAR? Vysis]",
+    "output": {
+        "clinical_context": {
+            "referral_reason": "Presentation with Acute Myeloid Leukemia (AML), rule out Acute Promyelocytic Leukemia (APL)",
+            "test_clinical_rationale": "Testing for RAR𝛼 rearrangement to confirm or exclude a diagnosis of Acute Promyelocytic Leukemia (APL)",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Acute Myeloid Leukemia (AML)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "proband": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with RAR𝛼 probe (Vysis)",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "Gene",
+                "result_entity": "RAR𝛼",
+                "result_region": null,
+                "result_status": "Normal",
+                "result_description": "No evidence of RAR𝛼 rearrangement in the 100 cells analysed",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of RAR𝛼 rearrangement"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No evidence of RAR𝛼 rearrangement",
+            "overall_recommendations": ""
+        }
+    }
+}
