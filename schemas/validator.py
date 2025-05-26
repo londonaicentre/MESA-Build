@@ -1,9 +1,9 @@
 import os
 import json
-from geneworks_models import GenomicTestReport
+from schemas.genomicextractmodel import GenomicTestReport
 from pydantic_core._pydantic_core import ValidationError
 
-examples_folder = "../examples/"
+examples_folder = "../datagen/examples/"
 problems = []
 
 for example in os.listdir(examples_folder):
@@ -13,10 +13,11 @@ for example in os.listdir(examples_folder):
         json_data = json.loads(f.read())
         try:
             loaded_example = GenomicTestReport(**json_data["output"])
+            print(f"Example {filepath} validated")
             loaded_example.model_dump_json()
         except ValidationError:
             problems.append(filepath)
             print(f"Example {filepath} failed validation")
             loaded_example = GenomicTestReport(**json_data["output"])
 
-print("All examples are validated.")
+print("All examples checked.")

@@ -1,0 +1,358 @@
+{
+    "$defs": {
+        "BiomarkerTestResult": {
+            "properties": {
+                "proband": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Patient or relatives",
+                    "title": "Proband"
+                },
+                "test_type": {
+                    "$ref": "#/$defs/TestType",
+                    "description": "The category of genomic test performed"
+                },
+                "other_test_type": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Name of test type if 'Other' is selected",
+                    "title": "Other Test Type"
+                },
+                "test_methodology": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Technical description of the test methodology",
+                    "title": "Test Methodology"
+                },
+                "sample_origin": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Anatomical source of the sample tested",
+                    "title": "Sample Origin"
+                },
+                "result_entity_type": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/ResultEntityType"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The type of the primary entity being reported"
+                },
+                "result_entity": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The name of the primary entity being reported",
+                    "title": "Result Entity"
+                },
+                "gene_nomenclature": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Gene nomenclature used",
+                    "title": "Gene Nomenclature"
+                },
+                "result_region": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The specific region or variant within entity being reported",
+                    "title": "Result Region"
+                },
+                "result_status": {
+                    "$ref": "#/$defs/ResultStatus",
+                    "description": "Overall status of the test result"
+                },
+                "result_description": {
+                    "description": "Full textual description of the findings as reported",
+                    "title": "Result Description",
+                    "type": "string"
+                },
+                "quantitative_results": {
+                    "description": "Numeric measurements associated with the result",
+                    "items": {
+                        "$ref": "#/$defs/QuantitativeResult"
+                    },
+                    "title": "Quantitative Results",
+                    "type": "array"
+                },
+                "categorical_results": {
+                    "description": "Categorical classifications of the finding",
+                    "items": {
+                        "$ref": "#/$defs/CategoricalResult"
+                    },
+                    "title": "Categorical Results",
+                    "type": "array"
+                },
+                "clinical_implications": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Disease associations or risk factors specific to this test result",
+                    "title": "Clinical Implications"
+                }
+            },
+            "required": [
+                "proband",
+                "test_type",
+                "result_status",
+                "result_description"
+            ],
+            "title": "BiomarkerTestResult",
+            "type": "object"
+        },
+        "CategoricalResult": {
+            "properties": {
+                "result_name": {
+                    "description": "Classification system (e.g., 'Pathogenicity', 'Expression Level' etc)",
+                    "title": "Result Name",
+                    "type": "string"
+                },
+                "result_value": {
+                    "description": "Assigned category (e.g., 'Pathogenic', 'Positive', 'High')",
+                    "title": "Result Value",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "result_name",
+                "result_value"
+            ],
+            "title": "CategoricalResult",
+            "type": "object"
+        },
+        "ClinicalContext": {
+            "properties": {
+                "referral_reason": {
+                    "description": "The reason given for genomic test referral, including suspected diagnosis or clinical question",
+                    "title": "Referral Reason",
+                    "type": "string"
+                },
+                "test_clinical_rationale": {
+                    "description": "The anticipated clinical insights as rationale for performing this test",
+                    "title": "Test Clinical Rationale",
+                    "type": "string"
+                },
+                "clinical_findings": {
+                    "description": "Relevant historical patient information",
+                    "items": {
+                        "$ref": "#/$defs/ClinicalFinding"
+                    },
+                    "title": "Clinical Findings",
+                    "type": "array"
+                }
+            },
+            "required": [
+                "referral_reason",
+                "test_clinical_rationale"
+            ],
+            "title": "ClinicalContext",
+            "type": "object"
+        },
+        "ClinicalFinding": {
+            "properties": {
+                "type": {
+                    "$ref": "#/$defs/ClinicalFindingType",
+                    "description": "Type of clinical finding"
+                },
+                "value": {
+                    "description": "Extracted descriptive text for the finding, remaining close to original text",
+                    "title": "Value",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "value"
+            ],
+            "title": "ClinicalFinding",
+            "type": "object"
+        },
+        "ClinicalFindingType": {
+            "enum": [
+                "morbidity",
+                "patient_finding",
+                "family_history"
+            ],
+            "title": "ClinicalFindingType",
+            "type": "string"
+        },
+        "ClinicalOutcome": {
+            "properties": {
+                "overall_implications": {
+                    "description": "Comprehensive interpretation of test significance for the patient's condition",
+                    "title": "Overall Implications",
+                    "type": "string"
+                },
+                "overall_recommendations": {
+                    "description": "Consolidated recommendations based on the complete panel of results",
+                    "title": "Overall Recommendations",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "overall_implications",
+                "overall_recommendations"
+            ],
+            "title": "ClinicalOutcome",
+            "type": "object"
+        },
+        "QuantitativeResult": {
+            "properties": {
+                "result_name": {
+                    "description": "Type of measurement (e.g., 'Allele Frequency', 'Copy Number', etc)",
+                    "title": "Result Name",
+                    "type": "string"
+                },
+                "result_value": {
+                    "description": "The numeric value of the measurement",
+                    "title": "Result Value",
+                    "type": "number"
+                },
+                "result_units": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Units of measurement where applicable",
+                    "title": "Result Units"
+                }
+            },
+            "required": [
+                "result_name",
+                "result_value"
+            ],
+            "title": "QuantitativeResult",
+            "type": "object"
+        },
+        "ResultEntityType": {
+            "enum": [
+                "Chromosome",
+                "Gene",
+                "Exon",
+                "Variant",
+                "Protein",
+                "Genomic Feature",
+                "Panel"
+            ],
+            "title": "ResultEntityType",
+            "type": "string"
+        },
+        "ResultStatus": {
+            "enum": [
+                "Abnormal",
+                "Normal",
+                "UncertainSignificance",
+                "FailedOrInconclusive"
+            ],
+            "title": "ResultStatus",
+            "type": "string"
+        },
+        "TestType": {
+            "enum": [
+                "DNA",
+                "FISH",
+                "Karyotype",
+                "PCR",
+                "MLPA",
+                "Other"
+            ],
+            "title": "TestType",
+            "type": "string"
+        }
+    },
+    "properties": {
+        "clinical_context": {
+            "$ref": "#/$defs/ClinicalContext",
+            "description": "Clinical context for the test"
+        },
+        "biomarker_test_results": {
+            "anyOf": [
+                {
+                    "items": {
+                        "$ref": "#/$defs/BiomarkerTestResult"
+                    },
+                    "type": "array"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "description": "Results of individual biomarker tests performed",
+            "title": "Biomarker Test Results"
+        },
+        "clinical_outcome": {
+            "$ref": "#/$defs/ClinicalOutcome",
+            "description": "Overall interpretation and recommendations"
+        }
+    },
+    "required": [
+        "clinical_context",
+        "biomarker_test_results",
+        "clinical_outcome"
+    ],
+    "title": "GenomicTestReport",
+    "type": "object"
+}
