@@ -1,5 +1,5 @@
 import json
-from schemas.genomicextractmodel import GenomicTestReport
+from schemas.genomic_extract_model import GenomicTestReport
 
 schema = GenomicTestReport.model_json_schema()
 

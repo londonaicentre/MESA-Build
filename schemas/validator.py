@@ -1,6 +1,6 @@
 import os
 import json
-from schemas.genomicextractmodel import GenomicTestReport
+from schemas.genomic_extract_model import GenomicTestReport
 from pydantic import ValidationError
 
 examples_folder = "../datagen/examples/"

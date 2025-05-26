@@ -134,7 +134,7 @@ class ClinicalOutcome(BaseModel):
         ...,
         description="Consolidated recommendations based on the complete panel of results",
     )
-    
+
 
 class GenomicTestReport(BaseModel):
     clinical_context: ClinicalContext = Field(
