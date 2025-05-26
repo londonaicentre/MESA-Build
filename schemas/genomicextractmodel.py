@@ -100,7 +100,7 @@ class BiomarkerTestResult(BaseModel):
         None, description="The name of the primary entity being reported"
     )
     gene_nomenclature: Optional[List[str]] = Field(
-        default_factory=list,
+        default_factory=None,
         description="Gene nomenclature used",
     )
     result_region: Optional[str] = Field(
