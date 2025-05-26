@@ -5,29 +5,29 @@ from pydantic import BaseModel, Field
 
 
 class TestType(str, Enum):
-    DNA = "DNA"
-    FISH = "FISH"
-    KARYOTYPE = "Karyotype"
-    PCR = "PCR"
-    MLPA = "MLPA"
-    OTHER = "Other"
+    DNA = "dna"
+    FISH = "fish"
+    KARYOTYPE = "karyotype"
+    PCR = "pcr"
+    MLPA = "mlpa"
+    OTHER = "other"
 
 
 class ResultStatus(str, Enum):
-    ABNORMAL = "Abnormal"
-    NORMAL = "Normal"
-    UNCERTAIN_SIGNIFICANCE = "UncertainSignificance"
-    FAILED_OR_INCONCLUSIVE = "FailedOrInconclusive"
+    ABNORMAL = "abnormal"
+    NORMAL = "normal"
+    UNCERTAIN_SIGNIFICANCE = "uncertain_significance"
+    FAILED_OR_INCONCLUSIVE = "failed_or_inconclusive"
 
 
 class ResultEntityType(str, Enum):
-    CHROMOSOME = "Chromosome"
-    GENE = "Gene"
-    EXON = "Exon"
-    VARIANT = "Variant"
-    PROTEIN = "Protein"
-    GENOMIC_FEATURE = "Genomic Feature"
-    PANEL = "Panel"
+    CHROMOSOME = "chromosome"
+    GENE = "gene"
+    EXON = "exon"
+    VARIANT = "variant"
+    PROTEIN = "protein"
+    GENOMIC_FEATURE = "genomic_feature"
+    PANEL = "panel"
 
 
 class ClinicalFindingType(str, Enum):
