@@ -134,20 +134,9 @@ class ClinicalOutcome(BaseModel):
         ...,
         description="Consolidated recommendations based on the complete panel of results",
     )
-
-
-class Metadata(BaseModel):
-    version: str = Field(..., description="Schema version")
-    schema_guidelines: List[str] = Field(
-        default_factory=list, description="Guidelines for schema usage"
-    )
-    TO_DO: List[str] = Field(
-        default_factory=list, description="Pending tasks for schema improvement"
-    )
-
+    
 
 class GenomicTestReport(BaseModel):
-    # metadata: Metadata = Field(..., description="Metadata about the schema")
     clinical_context: ClinicalContext = Field(
         ..., description="Clinical context for the test"
     )
