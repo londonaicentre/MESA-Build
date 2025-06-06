@@ -1,6 +1,8 @@
 {
     "content": "AMENDED REPORT: This report replaces Viapath Genetics report dated 06/10/2017 which contains an incorrect family name in the reason for referral. We apologise for this mistake.\n\nREASON FOR REFERRALU: Test for familial FGFR3 variant\nThis individual is the daughter of person in whom the pathogenic FGFR3 sequence variant c.1620C>A (p.Asn540Lys) has been identified (see GSTS report dated 23/05/2012).\nTEST\n\nTest for the familial variant in the Fibroblast Growth Factor Receptor 3 gene (FGFR3) by bidirectional fluorescent Sanger DNA sequencing.\n\nRESULTS \n\nNo pathogenic variant detected\nSUMMARY \n\nThis individual has NOT inherited the familial pathogenic variant.\n\nA significant level of maternal cell contamination of the umbilical cord blood sample has been excluded*.\nFURTHER WORK\nWe recommend that this individual is referred to their local Clinical Genetics department to discuss the implications of this result.\n\nNotes\n\n* The presence of maternal cell contamination at a level of less than approximately 10% may not be detected.\nExon 13 including intron/exon boundaries of the FGFR3 gene were screened by fluorescent sequence analysis on genomic DNA.  \n\nVariant nomenclature based on FGFR3 reference sequence NM_000142.4, with nucleotide number 1 corresponding to the first base of the translation initiation codon.",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Test for familial FGFR3 variant",
             "test_clinical_rationale": "",
@@ -18,13 +20,13 @@
                 "other_test_type": "Exon 13 including intron/exon boundaries of the FGFR3 gene were screened by fluorescent sequence analysis on genomic DNA.",
                 "test_methodology": "bidirectional fluorescent Sanger DNA sequencing",
                 "sample_origin": null,
-                "result_entity_type": "Variant",
+                "result_entity_type": "variant",
                 "result_entity": "FGFR3",
                 "gene_nomenclature": [
                     "NM_000142.4"
                 ],
                 "result_region": "c.1620C>A (p.Asn540Lys)",
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "No pathogenic variant detected",
                 "quantitative_results": [],
                 "categorical_results": [

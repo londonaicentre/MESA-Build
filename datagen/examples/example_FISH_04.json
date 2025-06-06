@@ -1,6 +1,8 @@
 {
     "content": "ish psu dic(15;15)(D15Z1++,SNRPN-)\nG-banded chromosome analysis identified a bisatellited supernumerary marker chromosome (see separate report) in every cell examined. \n\nIn situ hybridization was therefore carried out with probes specific for the centromere regions of chromosomes 13, 14, 21 and 22, a probe set for chromosome 15 comprising probes for the short arm (D15Z1), the SNRPN locus (within band 15q11.2-q12) and the PML locus (within band 15q24) and a probe set for chromosome 22 comprising probes for the TUPLE1 locus (within band 22q11.21) and the ARSA locus (within band 22q13.33).  \n\nThe chromosome 15 short arm probe hybridized to two symmetrically placed loci on the marker chromosome; no hybridization of any other probe was observed on the marker.  All probes hybridized as expected to the normal homologues of their respective chromosomes, and no hybridization was seen elsewhere in the genome.\n\nThese results indicate that the marker chromosome is derived from chromosome 15, comprising two copies of the short arm region, but not the SNRPN locus.\n[Probes used:\nD13Z1/D21Z1 ? Q-biogene\n\n\n\nD14Z1/D22Z1 ? Q-biogene\n\n\n\nTUPLE1/ARSA ? Abbott\n\n\n\nD15Z1/SNRPN/PML ? Abbott]",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Previous testing with G-banded chromosome analysis identified bisatellited supernumerary marker chromosome in every cell",
             "test_clinical_rationale": "Characterisation of a supernumerary marker chromosome"
@@ -12,10 +14,10 @@
                 "other_test_type": null,
                 "test_methodology": "In situ hybridization with D15Z1 probe (chromosome 15 short arm)",
                 "sample_origin": null,
-                "result_entity_type": "Chromosome",
+                "result_entity_type": "chromosome",
                 "result_entity": "15",
                 "result_region": "D15Z1",
-                "result_status": "Abnormal",
+                "result_status": "abnormal",
                 "result_description": "The chromosome 15 short arm probe (D15Z1) hybridized to two symmetrically placed loci on the marker chromosome",
                 "quantitative_results": [],
                 "categorical_results": [
@@ -32,10 +34,10 @@
                 "other_test_type": null,
                 "test_methodology": "In situ hybridization with SNRPN probe (chromosome 15q11.2-q12)",
                 "sample_origin": null,
-                "result_entity_type": "Chromosome",
+                "result_entity_type": "chromosome",
                 "result_entity": "15",
                 "result_region": "SNRPN locus (15q11.2-q12)",
-                "result_status": "Abnormal",
+                "result_status": "abnormal",
                 "result_description": "No hybridization of the SNRPN probe was observed on the marker chromosome",
                 "quantitative_results": [],
                 "categorical_results": [
@@ -52,10 +54,10 @@
                 "other_test_type": null,
                 "test_methodology": "In situ hybridization with PML probe (chromosome 15q24)",
                 "sample_origin": null,
-                "result_entity_type": "Chromosome",
+                "result_entity_type": "chromosome",
                 "result_entity": "15",
                 "result_region": "PML locus (15q24)",
-                "result_status": "Abnormal",
+                "result_status": "abnormal",
                 "result_description": "No hybridization of the PML probe was observed on the marker chromosome",
                 "quantitative_results": [],
                 "categorical_results": [

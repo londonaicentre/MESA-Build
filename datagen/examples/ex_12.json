@@ -1,6 +1,8 @@
 {
     "content": "le.",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Whole-Genome Sequencing Diagnostic Test provided by NHS GMS",
             "test_clinical_rationale": "Hereditary neuropathy or pain disorder NOT PMP22 copy number (R78.4)",
@@ -18,10 +20,10 @@
                 "other_test_type": "Whole genome sequencing",
                 "test_methodology": "Hereditary neuropathy NOT PMP22 copy number (1.36)",
                 "sample_origin": null,
-                "result_entity_type": "Panel",
-                "result_entity": null,
+                "result_entity_type": "panel",
+                "result_entity": "panel of genes",
                 "result_region": null,
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "",
                 "quantitative_results": [],
                 "categorical_results": [

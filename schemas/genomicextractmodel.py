@@ -88,7 +88,7 @@ class BiomarkerTestResult(BaseModel):
     test_methodology: str = Field(
         None, description="Technical description of the test methodology"
     )
-    sample_origin: str = Field(
+    sample_origin: Optional[str] = Field(
         None, description="Anatomical source of the sample tested"
     )
     result_entity_type: ResultEntityType = Field(
@@ -101,7 +101,7 @@ class BiomarkerTestResult(BaseModel):
         default_factory=list,
         description="Gene nomenclature used",
     )
-    result_region: str = Field(
+    result_region: Optional[str] = Field(
         None, description="The specific region or variant within entity being reported"
     )
     result_status: ResultStatus = Field(
@@ -117,7 +117,7 @@ class BiomarkerTestResult(BaseModel):
     categorical_results: List[CategoricalResult] = Field(
         default_factory=list, description="Categorical classifications of the finding"
     )
-    clinical_implications: str = Field(
+    clinical_implications: Optional[str] = Field(
         None,
         description="Disease associations or risk factors specific to this test result",
     )

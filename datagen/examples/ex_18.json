@@ -1,6 +1,8 @@
 {
     "content": "REASON FOR REFERRAL: Diagnostic Test for Xp21 Muscular Dystrophy\n\nThis individual has previously been tested for deletions and duplications of all 79 dystrophin exons and no variants were detected (information supplied with referral). DNA sequence analysis of all 79 dystrophin exons using genomic DNA did not identify any pathogenic variants (see GSTS Pathology report dated 13/11/2013).\nA further screen by RNA analysis has been requested. \nTEST\n\nScreen for pathogenic variants in the Dystrophin gene by cDNA sequencing\n\nRESULTS\n\nSequence analysis of Patient?s muscle dystrophin cDNA transcripts detected the presence of two non-dystrophin coding exons (chrX:25805448-25805621 and chrX:25774817-25774972, respectively) that had been inserted between exons 49 and 50 of his dystrophin cDNA transcripts. These non-dystrophin coding exons originate approximately 5.3 Mb from the 3? end of the 3?UTR of dystrophin gene.  These inserted exons were detected again when the RT-PCR sequencing analysis was repeated.\nNo other variants were detected.\nSUMMARY \n\nThe insertion of these two non-dystrophin exons could have arisen as a result of a genomic re-arrangement (inversion or insertion).  The diagnosis of Xp21 Muscular Dystrophy remains unconfirmed until the RT-analysis results have been proven on the genomic DNA level.\nFURTHER WORK\n\nWe recommend that this individual undergo karyotype analysis and aCGH to determine if a genomic re-arrangement has occurred. Sequencing of intron 49 in Patient?s genomic DNA may be possible to detect an inversion/insertion breakpoint, although this may take some time. Please contact the lab to discuss this option.\n Notes\n\nThe muscle specific dystrophin transcript LRG_199t1 has been sequenced from nucleotide 1 corresponding to the first base of the translation initiation codon to nucleotide 11058 last base of the termination coding by fluorescent Sanger DNA sequencing. RNA sequence analysis, in combination with MLPA and genomic DNA sequence analysis of all 79 dystrophin exons will detect >99% of dystrophin pathogenic variants.\n\nNomenclature based on dystrophin reference sequence LRG_199t1 with nucleotide number 1 corresponding to the first base of the translation initiation codon",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Diagnostic Test for Xp21 Muscular Dystrophy",
             "test_clinical_rationale": "This individual has previously been tested for deletions and duplications of all 79 dystrophin exons and no variants were detected (information supplied with referral). DNA sequence analysis of all 79 dystrophin exons using genomic DNA did not identify any pathogenic variants (see GSTS Pathology report dated 13/11/2013).\nA further screen by RNA analysis has been requested.",
@@ -13,13 +15,13 @@
                 "other_test_type": "Screen for pathogenic variants in the Dystrophin gene by cDNA sequencing",
                 "test_methodology": "fluorescent Sanger DNA sequencing",
                 "sample_origin": null,
-                "result_entity_type": "Exon",
+                "result_entity_type": "exon",
                 "result_entity": "dystrophin",
                 "gene_nomenclature": [
                     "LRG_199t1"
                 ],
                 "result_region": null,
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "Patient?s muscle dystrophin cDNA transcripts detected the presence of two non-dystrophin coding exons (chrX:25805448-25805621 and chrX:25774817-25774972, respectively) that had been inserted between exons 49 and 50 of his dystrophin cDNA transcripts. These non-dystrophin coding exons originate approximately 5.3 Mb from the 3? end of the 3?UTR of dystrophin gene.  These inserted exons were detected again when the RT-PCR sequencing analysis was repeated.",
                 "quantitative_results": [],
                 "categorical_results": [
