@@ -64,7 +64,7 @@ class QuantitativeResult(BaseModel):
         description="Type of measurement (e.g., 'Allele Frequency', 'Copy Number', etc)",
     )
     result_value: float = Field(..., description="The numeric value of the measurement")
-    result_units: str = Field(None, description="Units of measurement where applicable")
+    result_units: str = Field(..., description="Units of measurement where applicable")
 
 
 class CategoricalResult(BaseModel):
