@@ -86,7 +86,7 @@ class BiomarkerTestResult(BaseModel):
         None, description="Name of test type if 'Other' is selected"
     )
     test_methodology: str = Field(
-        None, description="Technical description of the test methodology"
+        ..., description="Technical description of the test methodology"
     )
     sample_origin: Optional[str] = Field(
         None, description="Anatomical source of the sample tested"
