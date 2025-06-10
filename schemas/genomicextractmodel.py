@@ -92,10 +92,10 @@ class BiomarkerTestResult(BaseModel):
         None, description="Anatomical source of the sample tested"
     )
     result_entity_type: ResultEntityType = Field(
-        description="The type of the primary entity being reported"
+        ..., description="The type of the primary entity being reported"
     )
     result_entity: str = Field(
-        description="The name of the primary entity being reported"
+        ..., description="The name of the primary entity being reported"
     )
     gene_nomenclature: List[str] = Field(
         default_factory=list,
@@ -135,7 +135,10 @@ class ClinicalOutcome(BaseModel):
 
 
 class GenomicTestReport(BaseModel):
-    sufficient_data_quality: bool
+    sufficient_data_quality: bool = Field(
+        ...,
+        description="If sufficient_data_quality and is_genomic_report are true then biomarker_test_results are expected",
+    )
     is_genomic_report: bool
     # if both above are True, then all 3 below is expected
     clinical_context: Optional[ClinicalContext] = Field(
