@@ -5,11 +5,11 @@ from pydantic import BaseModel, Field
 
 
 class TestType(str, Enum):
-    DNA = "DNA"
-    FISH = "FISH"
-    KARYOTYPE = "Karyotype"
-    PCR = "PCR"
-    MLPA = "MLPA"
+    DNA = "DNA" # broad-spectrum sequencing approaches (e.g. WGS, WES, targeted panels, Sanger sequencing)
+    FISH = "FISH" # Cytogenetic technique using fluorescent probes to detect specific chromosomal regions
+    KARYOTYPE = "Karyotype" # Classical cytogenetic analysis of chromosome structure and number
+    PCR = "PCR" # Amplification-based methods including qPCR, RT-PCR, digital PCR
+    MLPA = "MLPA"# Copy number detection technique
     OTHER = "Other"
 
 
@@ -26,14 +26,12 @@ class ResultEntityType(str, Enum):
     EXON = "exon"
     VARIANT = "variant"
     PROTEIN = "protein"
-    GENOMIC_FEATURE = "genomic_feature"
-    PANEL = "panel"
 
 
 class ClinicalFindingType(str, Enum):
-    MORBIDITY = "morbidity"
-    PATIENT_FINDING = "patient_finding"
-    FAMILY_HISTORY = "family_history"
+    MORBIDITY = "morbidity" # background diagnoses
+    PATIENT_FINDING = "patient_finding" # symptoms, signs, or other observations
+    FAMILY_HISTORY = "family_history" # morbidity or finding in a family member
 
 
 class ClinicalFinding(BaseModel):
@@ -57,6 +55,10 @@ class ClinicalContext(BaseModel):
         default_factory=list, description="Relevant historical patient information"
     )
 
+class GeneIdentifier(BaseModel):
+    nomenclature_system: str  # "HGNC", "Entrez", "Ensembl", etc.
+    identifier: str           # The actual ID/symbol
+    version: Optional[str]    # If there are version references
 
 class QuantitativeResult(BaseModel):
     result_name: str = Field(
@@ -78,12 +80,12 @@ class CategoricalResult(BaseModel):
 
 
 class BiomarkerTestResult(BaseModel):
-    proband: str = Field(..., description="Patient or relatives")
+    test_subject: str = Field(..., description="Person whose test is reported, e.g. patient, child, other relative")
     test_type: TestType = Field(
         ..., description="The category of genomic test performed"
     )
     other_test_type: Optional[str] = Field(
-        None, description="Name of test type if 'Other' is selected"
+        None, description="Description of test type if 'Other' is selected"
     )
     test_methodology: str = Field(
         ..., description="Technical description of the test methodology"
@@ -97,9 +99,9 @@ class BiomarkerTestResult(BaseModel):
     result_entity: str = Field(
         ..., description="The name of the primary entity being reported"
     )
-    gene_nomenclature: List[str] = Field(
+    gene_nomenclature: List[GeneIdentifier] = Field(
         default_factory=list,
-        description="Gene nomenclature used",
+        description="Gene nomenclatures used",
     )
     result_region: Optional[str] = Field(
         None, description="The specific region or variant within entity being reported"
@@ -108,7 +110,7 @@ class BiomarkerTestResult(BaseModel):
         ..., description="Overall status of the test result"
     )
     result_description: str = Field(
-        ..., description="Full textual description of the findings as reported"
+        ..., description="Textual description of the findings as reported"
     )
     quantitative_results: List[QuantitativeResult] = Field(
         default_factory=list,
@@ -126,7 +128,7 @@ class BiomarkerTestResult(BaseModel):
 class ClinicalOutcome(BaseModel):
     overall_implications: str = Field(
         ...,
-        description="Comprehensive interpretation of test significance for the patient's condition",
+        description="Interpretation of test significance for the patient",
     )
     overall_recommendations: str = Field(
         ...,
@@ -137,10 +139,12 @@ class ClinicalOutcome(BaseModel):
 class GenomicTestReport(BaseModel):
     sufficient_data_quality: bool = Field(
         ...,
-        description="If sufficient_data_quality and is_genomic_report are true then biomarker_test_results are expected",
+        description="Is there sufficient data quality? False can reflect poor optical character recognition or other corruptions in text",
     )
-    is_genomic_report: bool
-    # if both above are True, then all 3 below is expected
+    is_genomic_report: bool = Field(
+        ...,
+        description="Is the document a genomic test report?",
+    )
     clinical_context: Optional[ClinicalContext] = Field(
         ..., description="Clinical context for the test"
     )
