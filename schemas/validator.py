@@ -1,10 +1,9 @@
 import os
 import json
-from schemas.genomicextractmodel import GenomicTestReport
-from pydantic_core._pydantic_core import ValidationError
+from genomicextractmodel import GenomicTestReport
+from pydantic import ValidationError
 
-examples_folder = "../datagen/examples/"
-problems = []
+examples_folder = "datagen/examples/"
 
 for example in os.listdir(examples_folder):
     filepath = os.path.join(examples_folder, example)
@@ -16,7 +15,6 @@ for example in os.listdir(examples_folder):
             print(f"Example {filepath} validated")
             loaded_example.model_dump_json()
         except ValidationError:
-            problems.append(filepath)
             print(f"Example {filepath} failed validation")
             loaded_example = GenomicTestReport(**json_data["output"])
 

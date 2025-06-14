@@ -1,6 +1,8 @@
 {
     "content": "UREASON FOR REFERRALU: Diagnostic test for Rigid Spine Muscular Dystrophy (RSMD) / Multiminicore disease.\n\nUTEST\n\nScreen for mutations in the Selenoprotein N1 (SEPN1) gene by DNA sequencing.\n\nURESULTS\n\nNo mutation detected\n\nUSUMMARYU \n\nThe clinical diagnosis of a SEPN1-related muscular dystrophy is NOT confirmed.\n\nUNotes\nRecessive mutations in the Selenoprotein N1 gene (SEPN1) are associated with rigid spine muscular dystrophy (RSMD) and the classic form of multiminicore disease.  The entire coding region of the SEPN1 gene including splice sites has been screened for mutations by fluorescent Sanger DNA sequencing, which detects >99% of point mutations and microlesions.\nPlease note: 1. Any DNA remaining after completion of the above tests is stored for potential use in the future.    2.  The above results and interpretations assume that (a) samples received by the laboratory are correctly identified, (b) family relationships given by consultands are true, and (c) the clinical diagnosis is as stated.   3. In order to avoid error and/or misinterpretation, transcription of all or part of this report is inadvisable.",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Diagnostic test for Rigid Spine Muscular Dystrophy (RSMD) / Multiminicore disease.",
             "test_clinical_rationale": "",
@@ -13,10 +15,10 @@
                 "other_test_type": null,
                 "test_methodology": "DNA sequencing",
                 "sample_origin": null,
-                "result_entity_type": "Gene",
+                "result_entity_type": "gene",
                 "result_entity": "SEPN1",
                 "result_region": null,
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "",
                 "quantitative_results": [],
                 "categorical_results": [

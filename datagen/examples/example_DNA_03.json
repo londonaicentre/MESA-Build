@@ -1,6 +1,8 @@
 {
     "content": "Reason for referral:   Predictive testing for BRCA2 2157delG mutation\n\n\n1. patient's second cousin has been shown to have a BRCA2 frameshift mutation in exon 11 (2157delG) (information supplied with referral).\n\n2. Patient has been tested for the presence of the 2157delG mutation by direct DNA sequencing of genomic DNA.\n\n3. The 2157delG mutation was NOT DETECTED in PATIENT. This result reduces his risk of developing cancers attributable to BRCA2 mutations to the population risk.\n\n4. Predictive testing can be offered to other appropriate family members by testing for the presence of this mutation provided they have undergone suitable counselling.\n\n\nAuthorised by: person, 22 April 2004\n\n\nN.B.  BRCA2 nomenclature based on GenBank accession number U43746.",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Family history of BRCA2 mutation - patient's second cousin has a BRCA2 frameshift mutation in exon 11 (2157delG)",
             "test_clinical_rationale": "Predictive testing for BRCA2 2157delG mutation for cancer risk",
@@ -18,13 +20,13 @@
                 "other_test_type": null,
                 "test_methodology": "Direct DNA sequencing of genomic DNA",
                 "sample_origin": null,
-                "result_entity_type": "Gene",
+                "result_entity_type": "gene",
                 "result_entity": "BRCA2",
                 "gene_nomenclature": [
                     "U43746"
                 ],
                 "result_region": "Exon 11, 2157delG",
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "The 2157delG mutation was NOT DETECTED in PATIENT",
                 "quantitative_results": [],
                 "categorical_results": [

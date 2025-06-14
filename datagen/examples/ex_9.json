@@ -1,6 +1,8 @@
 {
     "content": "REASON FOR REFERRAL: Testing for Fragile X syndrome.\n\nDNA from the above individual has been extracted and stored.  No tests for Fragile X syndrome have been performed as this is not indicated by the referral reason (recurrent miscarriage).  Karyotyping will be carried out by the cytogenetics department and a separate report will follow in due course.  Please contact the laboratory if any other DNA-based tests are required.",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": false,
         "clinical_context": {
             "referral_reason": "recurrent miscarriage",
             "test_clinical_rationale": "",

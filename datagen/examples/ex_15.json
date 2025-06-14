@@ -1,6 +1,8 @@
 {
     "content": "REASON FOR REFERRAL: Diagnostic test for congenital myopathy\nPanel CM/CMD, Virtual panel = Core / Centronuclear myopathy\n\nTEST\nTest for sequence variants and exon deletions and duplications in a panel of genes that cause congenital myopathy by next generation sequencing1.\nSequence variants confirmed by Sanger sequencing.\n\nRESULTS\nHeterozygous DNM2 c.1856C>T p.(Ser619Leu) sequence variant detected\nNo exonic deletions or duplications detected2.\n\nSUMMARY\nThe DNM2 c.1856C>T p.(Ser619Leu) sequence variant has been previously reported in the literature in association with centronuclear myopathy and has been shown to affect the function of the DNM2 protein4. It is therefore predicted to be pathogenic. \nThis result is confirms the clinical diagnosis of a congenital myopathy.\n\nFURTHER WORK\nIf possible, this patient?s parents should be tested to confirm the inheritance pattern in this family.\n\nReported by:    \t\tJo McCauley\nData checked by:\tKP\nReport authorised by:     Rachael Mein, 29 August 2019    \n\n\nNotes\n1The coding exons and splice sites (including upto +/-10bp flanking sequence) of genes involved in congenital myopathy have been screened by Illumina sequencing, following target capture by in-solution hybridisation. In-house validation has shown this method to have equivalent sensitivity to fluorescent Sanger sequencing, which detects >99% of point mutations. Please note that this technique has only been validated to detect small insertions and deletions up to 10 base pairs in length.\nVariants in the triplicated/homologous repeat regions of NEB and TTN may not be detected due to sequence homology.? \nSequence variants filtered using Ingenuity Variant Analysis? software.  Variants with general population frequency of >1% (according to ExAc data http://exac.broadinstitute.org) or are unlikely to be pathogenic have not been reported. \n2 Copy Number Variant (CNV) analysis was performed by read depth comparison of the coding regions of the captured genes.  A small number of exons have fallen outside the normal range but are unlikely to be significant so these regions have not been investigated further. CNV analysis was not possible for SEPN1 ex1 as this exon is not fully captured therefore point mutations in this exon are screened by Sanger sequencing.  \n3 Assessment of pathogenicity is carried out using bioinformatics software Alamut.\n4 Gibbs et al., Disease Model and Mechanisms (2014) 7; 157-161\nVariant nomenclature based on the following reference sequence(s), with nucleotide number 1 of each gene corresponding to the first base of each translation initiation codon: \n\tGene\n\tReference sequence\n\t\n\tGene\n\tReference sequence\n\t\n\tGene\n\tReference sequence\n\n\tACTA1\n\tNM_001100.3\n\t\n\tMTMR14\n\tNM_001077525.2\n\t\n\tSPEG\n\tNM_005876.4\n\n\tBIN1\n\tNM_139343.2 \n\t\n\tMYH2\n\tNM_017534.5\n\t\n\tSRPK3\n\tNM_014370.3\n\n\tCCDC78\n\tNM_001031737.2\n\t\n\tMYH7\n\tNM_000257.2\n\t\n\tSTAC3\n\tNM_145064.1\n\n\tDNM2\n\tNM_001005360.2\n\t\n\tNEB\n\tNM_001271208.1\n\t\n\tSTIM1\n\tNM_003156.3\n\n\tDOK7\n\tNM_173660.4\n\t\n\tORAI1\n\tNM_032790.3\n\t\n\tTPM2\n\tNM_003289.3 \n\n\tECEL1\n\tNM_004826.2\n\t\n\tRYR1\n\tNM_000540.2\n\t\n\tTPM3\n\tNM_152263.2\n\n\tMEGF10\n\tNM_032446.2\n\t\n\tSEPN1\n\tNM_020451.2\n\t\n\tTTN\n\tNM_001267550.1\n\n\tMTM1\n\tNM_000252.2\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n\nPage 1 of 2",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Diagnostic test for congenital myopathy",
             "test_clinical_rationale": "",
@@ -13,13 +15,13 @@
                 "other_test_type": "Panel sequqnecing",
                 "test_methodology": "Test for sequence variants and exon deletions and duplications in a panel of genes that cause congenital myopathy by next generation sequencing",
                 "sample_origin": null,
-                "result_entity_type": "Variant",
+                "result_entity_type": "variant",
                 "result_entity": "DNM2",
                 "result_region": "c.1856C>T p.(Ser619Leu)",
                 "gene_nomenclature": [
                     "NM_001005360.2"
                 ],
-                "result_status": "Abnormal",
+                "result_status": "abnormal",
                 "result_description": "",
                 "quantitative_results": [],
                 "categorical_results": [

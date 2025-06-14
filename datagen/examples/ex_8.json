@@ -1,6 +1,8 @@
 {
     "content": "UUREASON FOR REFERRALUU: Diagnostic test for Spinal Muscular Atrophy.\nUUTEST\n\nTest for copy number of exons 7 and 8 of the SMN1 gene by MLPA.\n\nUURESULTS\n\nSMN1 \nexon 7: TWO copies detected\n\n\nexon 8: TWO copies detected\n\nUUSUMMARYUU \n\nThis result indicates that it is extremely unlikely (significantly <1%) that the clinical phenotype is due to mutations in the SMN1 gene. However, if there remains a definite clinical diagnosis of SMA, then screening for point mutations in the SMN1 gene may be offered.  \n\nUUNotes\n\nExons 7 and 8 (or 7 only) of the survival motor neuron 1 (SMN1) gene are homozygously absent in approximately 94% of spinal muscular atrophy (SMA) patients. The remaining SMA patients are either compound heterozygotes for SMN1 mutations, or have an SMA phenotype unrelated to SMN1 (Wirth (2000) Hum.Mut. 15 p228-237).\nMultiplex Ligation-dependant Probe Amplification (MLPA) kit P060-B1 used to test SMN1 ex7 and ex8 copy number.",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "Diagnostic test for Spinal Muscular Atrophy",
             "test_clinical_rationale": "",
@@ -13,16 +15,16 @@
                 "other_test_type": null,
                 "test_methodology": "Multiplex Ligation-dependant Probe Amplification (MLPA) kit P060-B1 used to test SMN1 ex7 and ex8 copy number.",
                 "sample_origin": null,
-                "result_entity_type": "Exon",
+                "result_entity_type": "exon",
                 "result_entity": "SMN1",
                 "result_region": "exon 7",
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "TWO copies detected",
                 "quantitative_results": [
                     {
                         "result_name": "Copy Number",
                         "result_value": 2,
-                        "result_units": null
+                        "result_units": "copy number"
                     }
                 ],
                 "categorical_results": [],
@@ -34,16 +36,16 @@
                 "other_test_type": null,
                 "test_methodology": "Multiplex Ligation-dependant Probe Amplification (MLPA) kit P060-B1 used to test SMN1 ex7 and ex8 copy number.",
                 "sample_origin": null,
-                "result_entity_type": "Exon",
+                "result_entity_type": "exon",
                 "result_entity": "SMN1",
                 "result_region": "exon 8",
-                "result_status": "Normal",
+                "result_status": "normal",
                 "result_description": "TWO copies detected",
                 "quantitative_results": [
                     {
                         "result_name": "Copy Number",
                         "result_value": 2,
-                        "result_units": null
+                        "result_units": "copy number"
                     }
                 ],
                 "categorical_results": [],

@@ -14,20 +14,20 @@ class TestType(str, Enum):
 
 
 class ResultStatus(str, Enum):
-    ABNORMAL = "Abnormal"
-    NORMAL = "Normal"
-    UNCERTAIN_SIGNIFICANCE = "UncertainSignificance"
-    FAILED_OR_INCONCLUSIVE = "FailedOrInconclusive"
+    ABNORMAL = "abnormal"
+    NORMAL = "normal"
+    UNCERTAIN_SIGNIFICANCE = "uncertain_significance"
+    FAILED_OR_INCONCLUSIVE = "failed_or_inconclusive"
 
 
 class ResultEntityType(str, Enum):
-    CHROMOSOME = "Chromosome"
-    GENE = "Gene"
-    EXON = "Exon"
-    VARIANT = "Variant"
-    PROTEIN = "Protein"
-    GENOMIC_FEATURE = "Genomic Feature"
-    PANEL = "Panel"
+    CHROMOSOME = "chromosome"
+    GENE = "gene"
+    EXON = "exon"
+    VARIANT = "variant"
+    PROTEIN = "protein"
+    GENOMIC_FEATURE = "genomic_feature"
+    PANEL = "panel"
 
 
 class ClinicalFindingType(str, Enum):
@@ -49,7 +49,7 @@ class ClinicalContext(BaseModel):
         ...,
         description="The reason given for genomic test referral, including suspected diagnosis or clinical question",
     )
-    test_clinical_rationale: str = Field(
+    test_clinical_rationale: Optional[str] = Field(
         ...,
         description="The anticipated clinical insights as rationale for performing this test",
     )
@@ -64,9 +64,7 @@ class QuantitativeResult(BaseModel):
         description="Type of measurement (e.g., 'Allele Frequency', 'Copy Number', etc)",
     )
     result_value: float = Field(..., description="The numeric value of the measurement")
-    result_units: Optional[str] = Field(
-        None, description="Units of measurement where applicable"
-    )
+    result_units: str = Field(..., description="Units of measurement where applicable")
 
 
 class CategoricalResult(BaseModel):
@@ -80,26 +78,26 @@ class CategoricalResult(BaseModel):
 
 
 class BiomarkerTestResult(BaseModel):
-    proband: Optional[str] = Field(..., description="Patient or relatives")
+    proband: str = Field(..., description="Patient or relatives")
     test_type: TestType = Field(
         ..., description="The category of genomic test performed"
     )
     other_test_type: Optional[str] = Field(
         None, description="Name of test type if 'Other' is selected"
     )
-    test_methodology: Optional[str] = Field(
-        None, description="Technical description of the test methodology"
+    test_methodology: str = Field(
+        ..., description="Technical description of the test methodology"
     )
     sample_origin: Optional[str] = Field(
         None, description="Anatomical source of the sample tested"
     )
-    result_entity_type: Optional[ResultEntityType] = Field(
-        None, description="The type of the primary entity being reported"
+    result_entity_type: ResultEntityType = Field(
+        ..., description="The type of the primary entity being reported"
     )
-    result_entity: Optional[str] = Field(
-        None, description="The name of the primary entity being reported"
+    result_entity: str = Field(
+        ..., description="The name of the primary entity being reported"
     )
-    gene_nomenclature: Optional[List[str]] = Field(
+    gene_nomenclature: List[str] = Field(
         default_factory=list,
         description="Gene nomenclature used",
     )
@@ -136,24 +134,19 @@ class ClinicalOutcome(BaseModel):
     )
 
 
-class Metadata(BaseModel):
-    version: str = Field(..., description="Schema version")
-    schema_guidelines: List[str] = Field(
-        default_factory=list, description="Guidelines for schema usage"
-    )
-    TO_DO: List[str] = Field(
-        default_factory=list, description="Pending tasks for schema improvement"
-    )
-
-
 class GenomicTestReport(BaseModel):
-    # metadata: Metadata = Field(..., description="Metadata about the schema")
-    clinical_context: ClinicalContext = Field(
+    sufficient_data_quality: bool = Field(
+        ...,
+        description="If sufficient_data_quality and is_genomic_report are true then biomarker_test_results are expected",
+    )
+    is_genomic_report: bool
+    # if both above are True, then all 3 below is expected
+    clinical_context: Optional[ClinicalContext] = Field(
         ..., description="Clinical context for the test"
     )
     biomarker_test_results: Optional[List[BiomarkerTestResult]] = Field(
         ..., description="Results of individual biomarker tests performed"
     )
-    clinical_outcome: ClinicalOutcome = Field(
+    clinical_outcome: Optional[ClinicalOutcome] = Field(
         ..., description="Overall interpretation and recommendations"
     )

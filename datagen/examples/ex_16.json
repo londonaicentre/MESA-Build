@@ -1,6 +1,8 @@
 {
     "content": "REFERRAL REASON:      FABRY DISEASE\nDiagnostic testing for Patient who has deficient plasma and leucocyte alpha-galactosidase activity and diagnosis of Fabry disease (reported 23/05/2016, our ref. 16/12291). Confirmatory screening of the GLA gene has been requested.\n\nRESULTS \n\n\tName \n(Date of birth) \n\tSpecimen \n\tGLA exons 1 to 7\nSequencing analysis \n\tConclusion\n\n\tPatient Surname\n(29/05/2016) \n\t16/12291\n\themizygous c.476T>C p.(Phe159Ser) \n\tConsistent with diagnosis\n\n\nAll exons and intron-exon boundaries of the GLA gene have been analysed by nested PCR & Sanger sequencing analysis. Patient is hemizygous for a T to C transition at cDNA position 476 (c.476T>C). This novel variant is predicted to result in the substitution of phenylalanine with serine at amino acid residue 159 if translated p.(Phe159Ser).  Phenylalanine and serine are amino acids with different physicochemical properties (being aromatic and polar respectively), residue 159 is highly conserved and this variant is predicted to be pathogenic by in silico analysis1. The c.476T>C variant is therefore likely to be pathogenic. \nThis result is consistent with the biochemical diagnosis of Fabry disease in Patient.\n\nFURTHER TESTING \nThis result has implications for other members of Patient?s family including offspring. At risk relatives can be offered testing for the c.476T>C p.(Phe159Ser)variant if appropriate; referral to their local clinical genetics service is also recommended. \n\nReport Date: \n8th June 2016\nNB: Results depend on the samples being labelled correctly and, where relevant, family relationships being as indicated. Transcription of all or part of this report is inadvisable. Any DNA remaining after completion of the above tests is stored for potential use in the future.\n\tInformation: Fabry disease (OMIM #301500) is an X-linked lysosomal storage disorder caused by deficiency of the enzyme (-galactosidase A. Heterozygotes can be affected with Fabry disease however many have (-galactosidase levels which overlap with the normal range; in these cases DNA mutation analysis can confirm a clinical diagnosis in some cases. The (-galactosidase enzyme is coded for by the GLA gene (Xq22) which comprises 7 exons. Sanger sequencing analysis can be carried out on extracted DNA or directly from dried bloodspots by nested PCR; currently dried bloodspots are prepared from all lithium heparin samples received by the laboratory. (unidirectional) Sanger sequence analysis has a sensitivity of approximately 99% (Ellard et al. (2009) Genet Test Mol Biomarkers 13(3):381-386) however mutations in promoter, untranslated and deep intronic regions will not be detected. This test also does not detect whole exon/gene deletion or duplication. Large rearrangements of the GLA gene, including whole exon deletions and duplications are estimated to account for 2-3% of disease alleles (Shabbeer et al (2006) Hum Genomics 5:297-309; Schafer E et al (2005) Hum Mutat 25(4):412). Reference sequence: NM_000169.2 (LRG_672 t1) (nucleotide number 1 corresponds to the first base of the translation initiation codon.)\n1. In silico analysis: Mutation Taster (www.mutationtaster.org)  PolyPhen2 (genetics.bwh.harvard.edu/pph2/)  SIFT (sift-dna.org) Align-GVGD (agvgd.hci.utah.edu/)\n\n\nPage 1 of 1",
     "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
         "clinical_context": {
             "referral_reason": "FABRY DISEASE",
             "test_clinical_rationale": "Diagnostic testing for Patient who has deficient plasma and leucocyte alpha-galactosidase activity and diagnosis of Fabry disease (reported 23/05/2016, our ref. 16/12291). Confirmatory screening of the GLA gene has been requested.",
@@ -13,14 +15,14 @@
                 "other_test_type": null,
                 "test_methodology": "All exons and intron-exon boundaries of the GLA gene have been analysed by nested PCR & Sanger sequencing analysis.",
                 "sample_origin": null,
-                "result_entity_type": "Variant",
+                "result_entity_type": "variant",
                 "result_entity": "GLA",
                 "result_region": "c.476T>C p.(Phe159Ser)",
                 "gene_nomenclature": [
                     "NM_000169.2",
                     "LRG_672"
                 ],
-                "result_status": "Abnormal",
+                "result_status": "abnormal",
                 "result_description": "Patient is hemizygous for a T to C transition at cDNA position 476 (c.476T>C). This novel variant is predicted to result in the substitution of phenylalanine with serine at amino acid residue 159 if translated p.(Phe159Ser).  Phenylalanine and serine are amino acids with different physicochemical properties (being aromatic and polar respectively), residue 159 is highly conserved and this variant is predicted to be pathogenic by in silico analysis.",
                 "quantitative_results": [],
                 "categorical_results": [
