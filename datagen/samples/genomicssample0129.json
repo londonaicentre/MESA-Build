@@ -1,0 +1,77 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSex: Male\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Fragile X syndrome\n\nCLINICAL INDICATION\nAdult male patient referred for molecular genetic testing to evaluate for Fragile X syndrome.\n\nTEST PERFORMED\nFMR1 and FMR2 Repeat Expansion Analysis by PCR\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood leukocytes. PCR-based assay was performed to detect CGG repeat expansions in the FMR1 gene (FRAXA locus) and GCC repeat expansions in the FMR2 gene (FRAXE locus). Fragment analysis was performed using capillary electrophoresis to determine repeat sizes. This assay detects normal, intermediate, premutation, and full mutation expansions in both genes.\n\nRESULTS\n\nFMR1 (FRAXA) Analysis:\nAllele 1: 29 CGG repeats - NORMAL\n\nFMR2 (FRAXE) Analysis:\nAllele 1: 16 GCC repeats - NORMAL\n\nREFERENCE RANGES\nFMR1 (FRAXA):\n- Normal: 6-50 CGG repeats\n- Intermediate: 51-60 CGG repeats\n- Premutation: 61-200 CGG repeats\n- Full mutation: >200 CGG repeats\n\nFMR2 (FRAXE):\n- Normal: 6-30 GCC repeats\n- Intermediate: 31-60 GCC repeats\n- Premutation: 61-200 GCC repeats\n- Full mutation: >200 GCC repeats\n\nINTERPRETATION\nMolecular genetic testing reveals normal CGG repeat sizes in the FMR1 gene and normal GCC repeat sizes in the FMR2 gene. These results significantly reduce the likelihood of Fragile X syndrome to less than 1%.\n\nLIMITATIONS\nThis PCR-based assay detects repeat expansions in the FMR1 and FMR2 genes. A small percentage of Fragile X cases may be caused by point mutations, deletions, or other rearrangements within the FMR1 gene that are not detected by this method. If clinical suspicion remains high, additional testing such as FMR1 gene sequencing or deletion/duplication analysis may be considered.\n\nRECOMMENDATIONS\nBased on these normal results, the likelihood of Fragile X syndrome is reduced to <1%. However, if clinical features strongly suggest Fragile X syndrome, consider additional molecular testing to detect rare point mutations or rearrangements not identified by repeat expansion analysis.\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD\nCAP#: [redacted ID] CLIA#: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Fragile X syndrome",
+            "test_clinical_rationale": "Adult male patient referred for molecular genetic testing to evaluate for Fragile X syndrome",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR-based assay to detect CGG repeat expansions in FMR1 gene and GCC repeat expansions in FMR2 gene with fragment analysis by capillary electrophoresis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "FMR1",
+                "gene_nomenclature": [],
+                "result_region": "FRAXA locus",
+                "result_status": "normal",
+                "result_description": "29 CGG repeats - NORMAL",
+                "quantitative_results": [
+                    {
+                        "result_name": "CGG Repeat Number",
+                        "result_value": 29.0,
+                        "result_units": "repeats"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Repeat Expansion Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Normal repeat size significantly reduces likelihood of Fragile X syndrome"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR-based assay to detect CGG repeat expansions in FMR1 gene and GCC repeat expansions in FMR2 gene with fragment analysis by capillary electrophoresis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "FMR2",
+                "gene_nomenclature": [],
+                "result_region": "FRAXE locus",
+                "result_status": "normal",
+                "result_description": "16 GCC repeats - NORMAL",
+                "quantitative_results": [
+                    {
+                        "result_name": "GCC Repeat Number",
+                        "result_value": 16.0,
+                        "result_units": "repeats"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Repeat Expansion Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Normal repeat size rules out FRAXE-associated intellectual disability"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal CGG repeat sizes in FMR1 gene and normal GCC repeat sizes in FMR2 gene significantly reduce the likelihood of Fragile X syndrome to less than 1%",
+            "overall_recommendations": "Based on these normal results, the likelihood of Fragile X syndrome is reduced to <1%. However, if clinical features strongly suggest Fragile X syndrome, consider additional molecular testing to detect rare point mutations or rearrangements not identified by repeat expansion analysis"
+        }
+    }
+}

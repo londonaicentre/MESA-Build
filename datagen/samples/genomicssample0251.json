@@ -1,0 +1,113 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMRN: [redacted ID]\nReferring Clinician: [redacted name]\nDate of Report: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Autosomal Dominant Hereditary Spastic Paraplegia (AD-HSP). Patient previously tested negative for sequence variants in SPAST and ATL-1 genes. Current testing requested to continue diagnostic investigation.\n\nTEST PERFORMED\nDNA sequencing analysis of ATL-1 (SPG3a), REEP1 (SPG31) and NIPA1 (SPG6) genes\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood leucocytes. Prior MLPA analysis was performed using the SALSA MLPA probemix P165 HSP kit (MRC-Holland), which covers all exons of the spastin gene (SPAST) and 13 of the 14 coding exons of the atlastin gene (ATL-1). Current testing involved fluorescent DNA sequencing of the complete coding regions and intron-exon boundaries of ATL-1 (SPG3a), REEP1 (SPG31) and NIPA1 (SPG6) genes. The analytical sensitivity of this method is >98% for the detection of point mutations and small insertions/deletions (microlesions).\n\nRESULTS\n\nATL-1 (SPG3a) gene (NM_015915.4):\nHeterozygous variant detected: c.705C>T (p.Phe235Phe)\nClassification: Variant of Uncertain Significance (VUS)\nThis variant results in a synonymous change and is likely non-pathogenic.\n\nREEP1 (SPG31) gene (NM_022912.2):\nNo pathogenic mutations detected\n\nNIPA1 (SPG6) gene (NM_144599.5):\nNo pathogenic mutations detected\n\nPrevious testing:\nSPAST (Spastin) gene: No pathogenic mutations detected (prior analysis)\nATL-1 gene: No pathogenic mutations detected in prior sequencing\n\nINTERPRETATION\nA heterozygous variant of uncertain significance was identified in the SPG3a/ATL-1 gene: c.705C>T (p.Phe235Phe). This variant results in a synonymous amino acid change (phenylalanine to phenylalanine at position 235) and is likely to be non-pathogenic. No other pathogenic mutations were detected in the ATL-1, REEP1, or NIPA1 genes.\n\nThe genetic diagnosis of AD-HSP has not been confirmed by this analysis. However, these results do not exclude a diagnosis of AD-HSP as mutations in other genes not tested here may be causative. Mutations in SPAST and SPG3a account for approximately 50% of AD-HSP cases, while REEP1 mutations account for approximately 7.5% of cases.\n\nRECOMMENDATIONS\nPresymptomatic testing for the c.705C>T variant detected in the ATL-1 gene is not recommended given its likely non-pathogenic nature.\n\nFurther genetic testing may be considered if clinically indicated, including:\n- Extended HSP gene panel testing\n- Whole exome sequencing\n- Clinical reassessment and consideration of alternative diagnoses\n\nThis report has been reviewed and authorised by:\n[redacted name], PhD, FRCPath\nConsultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Autosomal Dominant Hereditary Spastic Paraplegia (AD-HSP)",
+            "test_clinical_rationale": "Patient previously tested negative for sequence variants in SPAST and ATL-1 genes. Current testing requested to continue diagnostic investigation",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Fluorescent DNA sequencing of complete coding regions and intron-exon boundaries with >98% sensitivity for point mutations and microlesions",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "ATL-1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_015915",
+                        "version": "4"
+                    }
+                ],
+                "result_region": "c.705C>T (p.Phe235Phe)",
+                "result_status": "uncertain_significance",
+                "result_description": "Heterozygous variant of uncertain significance detected, likely non-pathogenic",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Variant Classification",
+                        "result_value": "Variant of Uncertain Significance (VUS)"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "Variant Type",
+                        "result_value": "Synonymous"
+                    }
+                ],
+                "clinical_implications": "This variant results in a synonymous amino acid change and is likely to be non-pathogenic"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Fluorescent DNA sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "REEP1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_022912",
+                        "version": "2"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Fluorescent DNA sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "NIPA1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_144599",
+                        "version": "5"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "SALSA MLPA probemix P165 HSP kit covering all SPAST exons and 13/14 coding exons of ATL-1",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SPAST",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected (prior analysis)",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The genetic diagnosis of AD-HSP has not been confirmed. These results do not exclude AD-HSP diagnosis as mutations in other genes may be causative. SPAST and SPG3a mutations account for approximately 50% of AD-HSP cases, while REEP1 mutations account for approximately 7.5% of cases",
+            "overall_recommendations": "Presymptomatic testing for the c.705C>T variant detected in the ATL-1 gene is not recommended given its likely non-pathogenic nature. Further genetic testing may be considered including extended HSP gene panel testing, whole exome sequencing, or clinical reassessment"
+        }
+    }
+}

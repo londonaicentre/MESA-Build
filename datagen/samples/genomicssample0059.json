@@ -1,0 +1,90 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nMaternal Age: 19 years\nGestational Age at Sampling: 18 weeks\nIndication for Testing: Prenatal trisomy screening\nReferring Clinician: Dr. [redacted name]\nReferring Hospital: [redacted location]\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nTest Code: QFPCR-TRI\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniotic fluid cells for the rapid detection of trisomies 13, 18 and 21. DNA was extracted from 2ml of amniotic fluid using QIAamp DNA Mini Kit. Multiplex PCR amplification was performed using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, 21, X and Y. A minimum of 4 informative markers per chromosome were analyzed. Fragment analysis was performed on an Applied Biosystems 3500 Genetic Analyzer. Peak area ratios were calculated for all informative markers.\n\nRESULTS\n\nChromosome 13 (STR markers: D13S631, D13S258, D13S742, D13S628):\nResult: NORMAL DIALLELIC PATTERN\nAll informative markers show normal 1:1 peak ratios\n\nChromosome 18 (STR markers: D18S391, D18S390, D18S535, D18S386):\nResult: NORMAL DIALLELIC PATTERN\nAll informative markers show normal 1:1 peak ratios\n\nChromosome 21 (STR markers: D21S1435, D21S11, D21S1270, D21S1411):\nResult: NORMAL DIALLELIC PATTERN\nAll informative markers show normal 1:1 peak ratios\n\nSex Chromosome Markers:\nAMELOGENIN: XY pattern detected\nSex chromosome aneuploidy screening: No abnormalities detected\n\nQUALITY METRICS\nDNA Concentration: 45 ng/μl\nTotal DNA Yield: 180 ng\nAmplification Success: 100%\nMaternal Cell Contamination: Not detected\n\nINTERPRETATION\nQF-PCR analysis demonstrates a normal chromosomal complement for chromosomes 13, 18 and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome) was detected in this fetal sample.\n\nThe fetal sex is male (XY).\n\nLIMITATIONS\nThis test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, 21, X and Y only. It will not detect:\n- Balanced chromosomal rearrangements\n- Mosaicism below 20%\n- Structural chromosomal abnormalities\n- Aneuploidies of other chromosomes\n- Single gene disorders\n- Microdeletion/microduplication syndromes\n\nRECOMMENDATIONS\nFull karyotype analysis from cultured amniocytes to follow. This will provide comprehensive cytogenetic evaluation of all chromosomes and can detect structural abnormalities not identified by QF-PCR.\n\nThis result has been discussed with the referring clinician.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist\nReport Date: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal trisomy screening",
+            "test_clinical_rationale": "Rapid detection of common trisomies in prenatal sample",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal Age: 19 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Gestational Age at Sampling: 18 weeks"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) on uncultured amniotic fluid cells using fluorescently labeled primers for STR markers",
+                "sample_origin": "Amniotic Fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern - All informative markers show normal 1:1 peak ratios",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Status",
+                        "result_value": "NORMAL DIALLELIC PATTERN"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) on uncultured amniotic fluid cells using fluorescently labeled primers for STR markers",
+                "sample_origin": "Amniotic Fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S391, D18S390, D18S535, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern - All informative markers show normal 1:1 peak ratios",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Status",
+                        "result_value": "NORMAL DIALLELIC PATTERN"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) on uncultured amniotic fluid cells using fluorescently labeled primers for STR markers",
+                "sample_origin": "Amniotic Fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S11, D21S1270, D21S1411",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern - All informative markers show normal 1:1 peak ratios",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Status",
+                        "result_value": "NORMAL DIALLELIC PATTERN"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal chromosomal complement for chromosomes 13, 18 and 21. No evidence of common trisomies detected. Fetal sex is male (XY)",
+            "overall_recommendations": "Full karyotype analysis from cultured amniocytes to follow. This will provide comprehensive cytogenetic evaluation of all chromosomes and can detect structural abnormalities not identified by QF-PCR"
+        }
+    }
+}

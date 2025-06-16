@@ -1,0 +1,104 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Chorionic villi\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\nReferring Physician: Dr. [redacted name]\n\nCLINICAL INDICATION\nPregnant patient referred for prenatal diagnosis following increased risk on non-invasive prenatal testing (NIPT) for trisomy 21.\n\nPREVIOUS TESTING\n- NIPT performed at [redacted location]: High risk for trisomy 21\n- Rapid PCR on uncultured chorionic villi: Positive for trisomy 21\n\nTEST PERFORMED\nTargeted G-banded chromosome analysis focusing on chromosome 21\nRapid PCR analysis of uncultured chorionic villi for chromosomes 13, 18, 21, X and Y\n\nMETHODOLOGY\nChorionic villi were cultured according to standard protocols. Metaphase chromosomes were obtained from cultured cells and G-banded using trypsin-Giemsa staining. A minimum of 20 metaphases were analyzed with particular attention to chromosome 21. Rapid PCR was performed on uncultured villi using quantitative fluorescent PCR (QF-PCR) with STR markers specific for chromosomes 13, 18, 21, X and Y.\n\nRESULTS\n\nKARYOTYPE: 47,XX,+21\n\nTargeted G-banded analysis detected three copies of chromosome 21 in all cells examined. The sex chromosome complement is female (XX). No other chromosomal abnormalities were detected in the regions analyzed.\n\nRAPID PCR RESULTS:\n- Chromosome 13: Two alleles detected (normal)\n- Chromosome 18: Two alleles detected (normal)\n- Chromosome 21: Three alleles detected (trisomy)\n- Sex chromosomes: XX (female)\n\nINTERPRETATION\nThe karyotype analysis reveals primary trisomy 21 with a female sex chromosome complement, consistent with Down syndrome. This finding confirms the previous NIPT screening result and rapid PCR analysis.\n\nPrimary trisomy 21 typically results from a spontaneous meiotic nondisjunction event during gametogenesis or less commonly from a post-zygotic mitotic error. The risk of trisomy 21 increases with maternal age.\n\nCLINICAL IMPLICATIONS\nThis finding confirms a diagnosis of Down syndrome in the fetus. Individuals with Down syndrome have intellectual disability of varying degrees, characteristic facial features, and increased risk for congenital heart defects, gastrointestinal anomalies, and other medical conditions. The presence of trisomy 21 in this pregnancy is associated with an increased risk for aneuploidy in future pregnancies, although the absolute risk remains relatively low.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss the implications of this diagnosis\n2. Parental karyotyping is not indicated as primary trisomy 21 is typically a de novo event\n3. For future pregnancies:\n   - First and second trimester biochemical screening\n   - Detailed ultrasound monitoring\n   - Prenatal diagnosis (CVS or amniocentesis) is available if desired\n4. Referral to pediatric specialists for postnatal care planning if pregnancy continues\n\nThis report has been reviewed and approved by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\nBoard Certified Clinical Cytogeneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Pregnant patient referred for prenatal diagnosis following increased risk on non-invasive prenatal testing (NIPT) for trisomy 21",
+            "test_clinical_rationale": "Confirmation of NIPT screening result indicating high risk for trisomy 21",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Pregnant patient"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Previous NIPT showing high risk for trisomy 21"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Previous rapid PCR positive for trisomy 21"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Targeted G-banded chromosome analysis using trypsin-Giemsa staining on cultured chorionic villi cells",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Three copies of chromosome 21 detected in all cells examined",
+                "quantitative_results": [
+                    {
+                        "result_name": "Chromosome 21 Copy Number",
+                        "result_value": 3.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "47,XX,+21"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Diagnosis",
+                        "result_value": "Trisomy 21 (Down syndrome)"
+                    }
+                ],
+                "clinical_implications": "Primary trisomy 21 results from spontaneous meiotic nondisjunction or post-zygotic mitotic error. Associated with intellectual disability, characteristic facial features, and increased risk for congenital anomalies"
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative fluorescent PCR (QF-PCR) with STR markers on uncultured chorionic villi",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "13, 18, 21, X, Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Trisomy 21 detected; normal copy number for chromosomes 13, 18; female sex chromosomes",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13",
+                        "result_value": "Two alleles (normal)"
+                    },
+                    {
+                        "result_name": "Chromosome 18",
+                        "result_value": "Two alleles (normal)"
+                    },
+                    {
+                        "result_name": "Chromosome 21",
+                        "result_value": "Three alleles (trisomy)"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX (female)"
+                    }
+                ],
+                "clinical_implications": "Confirms trisomy 21 diagnosis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Confirmed diagnosis of Down syndrome (trisomy 21) in female fetus. This is associated with intellectual disability, characteristic facial features, and increased risk for congenital heart defects and other medical conditions. Increased risk for aneuploidy in future pregnancies, though absolute risk remains relatively low",
+            "overall_recommendations": "Genetic counseling recommended. Parental karyotyping not indicated as primary trisomy 21 is typically de novo. For future pregnancies: first and second trimester biochemical screening, detailed ultrasound monitoring, prenatal diagnosis available if desired. Referral to pediatric specialists for postnatal care planning if pregnancy continues"
+        }
+    }
+}

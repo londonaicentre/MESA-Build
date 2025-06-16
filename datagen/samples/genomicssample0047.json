@@ -1,0 +1,89 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Fetal tissue (placental)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Analysis of fetal tissue from twin pregnancy\nClinical History: Twin pregnancy\n\nTEST PERFORMED\nOligonucleotide Array Comparative Genomic Hybridization (Array CGH)\nQF-PCR Analysis for Aneuploidy Detection\n\nMETHODOLOGY\nArray CGH analysis was performed on uncultured placental DNA using the GenArray-8000 oligonucleotide array platform. This array is designed to detect clinically significant genomic imbalances and any imbalance greater than 1Mb throughout the genome. Analysis was performed using GenScan software with the GRCh37/hg19 human genome reference assembly.\n\nSupplementary QF-PCR (Quantitative Fluorescence-Polymerase Chain Reaction) analysis was performed to specifically exclude triploidy using markers for chromosomes 13, 18, 21, X and Y.\n\nRESULTS\n\nARRAY CGH RESULTS:\narr(1-22,X)x2\n\nInterpretation: Normal female chromosome complement\n\nNo copy number variants of clinical significance were detected.\nNo genomic imbalances >1Mb were identified.\n\nQF-PCR RESULTS:\nChromosome 13: Normal diallelic pattern\nChromosome 18: Normal diallelic pattern\nChromosome 21: Normal diallelic pattern\nChromosome X: Two copies detected\nChromosome Y: Not detected\nTriploidy: EXCLUDED\n\nINTERPRETATION\nArray CGH analysis of uncultured placental DNA showed no abnormalities. The results are consistent with a normal female chromosome complement with no clinically significant imbalances detected. QF-PCR analysis confirmed the absence of common aneuploidies and excluded triploidy.\n\nLIMITATIONS\n- Array CGH cannot detect balanced chromosomal rearrangements\n- Low-level mosaicism (<20-30%) may not be detected\n- Single gene mutations and methylation abnormalities are not detected by this method\n- Uniparental disomy cannot be excluded\n- The resolution of this array is limited to imbalances >1Mb\n\nRECOMMENDATIONS\nNo further chromosome analysis is required for this sample based on the current findings.\n\nThis report has been reviewed and electronically signed by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\nLicense #: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Analysis of fetal tissue from twin pregnancy",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Twin pregnancy"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue from twin pregnancy",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Oligonucleotide Array Comparative Genomic Hybridization using GenArray-8000 platform with GenScan software analysis against GRCh37/hg19 reference",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 1-22,X",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "arr(1-22,X)x2 - Normal female chromosome complement",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr(1-22,X)x2"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX (Female)"
+                    }
+                ],
+                "clinical_implications": "No copy number variants of clinical significance detected. No genomic imbalances >1Mb identified"
+            },
+            {
+                "test_subject": "Fetal tissue from twin pregnancy",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) for chromosomes 13, 18, 21, X and Y",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 13, 18, 21, X, Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal diallelic patterns for all tested chromosomes. Triploidy excluded",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "EXCLUDED"
+                    },
+                    {
+                        "result_name": "Chromosome 13",
+                        "result_value": "Normal diallelic pattern"
+                    },
+                    {
+                        "result_name": "Chromosome 18",
+                        "result_value": "Normal diallelic pattern"
+                    },
+                    {
+                        "result_name": "Chromosome 21",
+                        "result_value": "Normal diallelic pattern"
+                    },
+                    {
+                        "result_name": "Chromosome X",
+                        "result_value": "Two copies detected"
+                    },
+                    {
+                        "result_name": "Chromosome Y",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "Absence of common aneuploidies confirmed"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal female chromosome complement with no clinically significant imbalances detected",
+            "overall_recommendations": "No further chromosome analysis is required for this sample based on the current findings"
+        }
+    }
+}

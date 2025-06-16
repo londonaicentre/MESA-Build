@@ -1,0 +1,99 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Male\nSpecimen: Tissue biopsy\nAccession #: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL HISTORY\nMetastatic lung adenocarcinoma\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) for ALK and ROS1 Gene Rearrangements\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the following probes:\n- ALK (2p23) Dual Color Break Apart Rearrangement Probe (Abbott Molecular)\n- ROS1 (6q22) Dual Color Break Apart Rearrangement Probe (Abbott Molecular)\n\nFifty (50) interphase nuclei were analyzed for each probe set. Results were correlated with H&E stained slides to ensure analysis of tumor cells.\n\nCRITERIA FOR POSITIVE RESULTS\nALK FISH: ≥15% of cells with split signals (>2 signal diameters apart) or isolated 3' signals\nROS1 FISH: ≥15% of cells with split signals (>2 signal diameters apart) or isolated 3' signals\n\nRESULTS\n\nALK (2p23) FISH Analysis:\n- No ALK rearrangement detected\n- 2-4 copies of intact ALK signals observed per cell\n- 0% of cells showed split or isolated signals\n- Classification: ALK NEGATIVE\n\nROS1 (6q22) FISH Analysis:\n- No ROS1 rearrangement detected\n- 2-4 copies of intact ROS1 signals observed per cell\n- 0% of cells showed split or isolated signals\n- Classification: ROS1 NEGATIVE\n\nINTERPRETATION\nThis tumor is NEGATIVE for both ALK and ROS1 gene rearrangements by FISH analysis. The increased copy numbers (2-4 copies) of both ALK and ROS1 genes were noted in tumor cells, which may represent polysomy or focal amplification. The clinical significance of these copy number gains is unclear at this time.\n\nCLINICAL IMPLICATIONS\nALK and ROS1 rearrangements are important therapeutic targets in non-small cell lung cancer (NSCLC). Patients with tumors harboring these alterations may benefit from targeted tyrosine kinase inhibitors. This tumor is negative for both rearrangements, indicating that ALK inhibitors (e.g., crizotinib, alectinib, brigatinib) and ROS1 inhibitors (e.g., crizotinib, entrectinib) are not indicated based on these results.\n\nLIMITATIONS\nFISH analysis detects only rearrangements involving the ALK and ROS1 genes. Other alterations such as point mutations or small insertions/deletions are not detected by this method. False negative results may occur if tumor cells comprise <20% of the sample or if variant rearrangements are present.\n\nPathologist: Dr. [redacted name], MD\nBoard Certified in Anatomic Pathology and Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Metastatic lung adenocarcinoma",
+            "test_clinical_rationale": "Detection of ALK and ROS1 rearrangements as potential therapeutic targets in NSCLC",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Metastatic lung adenocarcinoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue sections using dual color break apart rearrangement probes",
+                "sample_origin": "Tissue biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "normal",
+                "result_description": "No ALK rearrangement detected. 2-4 copies of intact ALK signals observed per cell",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Cells with Split Signals",
+                        "result_value": 0.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ALK Status",
+                        "result_value": "ALK NEGATIVE"
+                    },
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2-4 copies"
+                    }
+                ],
+                "clinical_implications": "Negative for ALK rearrangement, indicating ALK inhibitors are not indicated"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue sections using dual color break apart rearrangement probes",
+                "sample_origin": "Tissue biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "No ROS1 rearrangement detected. 2-4 copies of intact ROS1 signals observed per cell",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Cells with Split Signals",
+                        "result_value": 0.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ROS1 Status",
+                        "result_value": "ROS1 NEGATIVE"
+                    },
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2-4 copies"
+                    }
+                ],
+                "clinical_implications": "Negative for ROS1 rearrangement, indicating ROS1 inhibitors are not indicated"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This tumor is negative for both ALK and ROS1 gene rearrangements, which are important therapeutic targets in non-small cell lung cancer. The increased copy numbers (2-4 copies) of both genes may represent polysomy or focal amplification, with unclear clinical significance",
+            "overall_recommendations": "ALK inhibitors (e.g., crizotinib, alectinib, brigatinib) and ROS1 inhibitors (e.g., crizotinib, entrectinib) are not indicated based on these results"
+        }
+    }
+}

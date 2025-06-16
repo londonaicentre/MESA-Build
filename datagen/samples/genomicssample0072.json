@@ -1,0 +1,93 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPatient: [redacted name]\nSex: Female\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\nReferring Physician: Dr. [redacted name]\n\nREFERRAL REASON\nDiagnostic testing for Cystic Fibrosis or CFTR-related disease. Clinical suspicion of CFTR-related disorder based on presenting symptoms.\n\nTEST PERFORMED\nCFTR Gene Screening Panel\n- Common pathogenic variant screening\n- Intron 8 PolyT tract genotyping\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood leukocytes. PCR-based screening was performed using a commercial CFTR gene screening kit designed to detect common pathogenic variants associated with Cystic Fibrosis. The panel includes analysis of the most frequent disease-causing variants in the CFTR gene as recommended by ACMG/ACOG guidelines, representing approximately 90% of CF alleles in the general Caucasian population. Additionally, genotyping of the Intron 8 PolyT tract was performed to assess the 5T, 7T, and 9T allele status.\n\nRESULTS\n\nCFTR VARIANT SCREENING:\nNo pathogenic variants detected in the following positions:\n- F508del (c.1521_1523delCTT): Not detected\n- G542X (c.1624G>T): Not detected\n- G551D (c.1652G>A): Not detected\n- W1282X (c.3846G>A): Not detected\n- N1303K (c.3909C>G): Not detected\n- R553X (c.1657C>T): Not detected\n- R117H (c.350G>A): Not detected\n- Additional variants in screening panel: Not detected\n\nINTRON 8 POLYT TRACT GENOTYPING:\nAllele 1: 7T\nAllele 2: 9T\nGenotype: 7T/9T\n\nThe 7T allele has a frequency of approximately 5-10% in the general population. When present with the R117H variant, it can be associated with CFTR-related disorders. However, in the absence of R117H, the 7T allele typically does not cause disease.\n\nSUMMARY\nNo clearly pathogenic variants were detected in the CFTR gene using this screening method. The patient's Intron 8 PolyT tract genotype is 7T/9T. This genotype, in the absence of other CFTR variants, is not associated with classic Cystic Fibrosis or CFTR-related disease.\n\nCLINICAL IMPLICATIONS\nThese results indicate a reduced likelihood of CFTR-related disease caused by common CFTR variants. However, this screening panel detects approximately 90% of CF alleles in the Caucasian population and 70-95% in other ethnic groups. Rare or population-specific variants would not be detected by this method.\n\nRECOMMENDATIONS\n1. If strong clinical suspicion for CFTR-related disease remains, consider comprehensive CFTR panel testing including full gene sequencing and deletion/duplication analysis\n2. Clinical correlation with sweat chloride testing and pulmonary function studies is recommended\n3. Genetic counseling is available to discuss these results and implications for family members\n\nTEST LIMITATIONS\nThis screening panel is designed to detect common CFTR variants and does not include full gene sequencing. Rare variants, deep intronic variants, and large deletions/duplications would not be detected. The analytical sensitivity of this assay is >99% for the variants tested. This test was developed and validated by [redacted location] Medical Center Molecular Genetics Laboratory.\n\nAuthorized by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Cystic Fibrosis or CFTR-related disease",
+            "test_clinical_rationale": "Clinical suspicion of CFTR-related disorder based on presenting symptoms",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Female patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR-based screening using commercial CFTR gene screening kit for common pathogenic variants and Intron 8 PolyT tract genotyping",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [],
+                "result_region": "Common pathogenic variant positions",
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected in screening panel",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "F508del",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "G542X",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "G551D",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "W1282X",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "N1303K",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "R553X",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "R117H",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "Reduced likelihood of CFTR-related disease caused by common CFTR variants"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Intron 8 PolyT tract genotyping",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "CFTR Intron 8 PolyT tract",
+                "gene_nomenclature": [],
+                "result_region": "Intron 8",
+                "result_status": "normal",
+                "result_description": "Genotype: 7T/9T",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Allele 1",
+                        "result_value": "7T"
+                    },
+                    {
+                        "result_name": "Allele 2",
+                        "result_value": "9T"
+                    }
+                ],
+                "clinical_implications": "This genotype, in the absence of other CFTR variants, is not associated with classic Cystic Fibrosis or CFTR-related disease"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No clearly pathogenic variants detected in CFTR gene screening. The 7T/9T genotype in the absence of other CFTR variants indicates reduced likelihood of CFTR-related disease. However, this screening detects approximately 90% of CF alleles in Caucasian population and rare variants would not be detected",
+            "overall_recommendations": "If strong clinical suspicion for CFTR-related disease remains, consider comprehensive CFTR panel testing including full gene sequencing and deletion/duplication analysis. Clinical correlation with sweat chloride testing and pulmonary function studies is recommended. Genetic counseling is available to discuss results and implications for family members"
+        }
+    }
+}

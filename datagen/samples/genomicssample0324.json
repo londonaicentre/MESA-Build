@@ -1,0 +1,45 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nREFERRING CLINICIAN: Dr. [redacted name]\nDATE OF REPORT: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Fragile-X syndrome\n\nMETHODOLOGY\nPCR assay for FRAXA expansion mutation detection in FMR1 gene\n\nDNA was extracted from peripheral blood. PCR amplification of the CGG repeat region in the FMR1 gene was performed using fluorescent primers flanking the repeat region. Fragment analysis was carried out by capillary electrophoresis. This method reliably detects normal and premutation alleles up to approximately 200 CGG repeats.\n\nRESULTS\nGene: FMR1 (OMIM *309550)\nAllele size: 35 (±1) CGG repeats\nInterpretation: NORMAL\n\nReference ranges (ACGS Guidelines 2014):\n- Normal: 6-45 CGG repeats\n- Intermediate: 46-54 CGG repeats\n- Premutation: 55-200 CGG repeats\n- Full mutation: >200 CGG repeats\n\nSUMMARY\nNormal allele with 35 (±1) CGG repeats detected. Within normal range (6-45 repeats) per ACGS Guidelines (2014).\n\nThe patient is very unlikely to be affected with Fragile-X syndrome based on this result.\n\nTEST LIMITATIONS\nThis PCR-based method detects CGG repeat expansions in the FMR1 gene. A small proportion (<1%) of Fragile-X syndrome cases may be caused by point mutations or rearrangements not detected by this method. If clinical suspicion remains high, please contact the laboratory to discuss further testing options.\n\nReported by: [redacted name], Clinical Scientist\nAuthorised by: [redacted name], Consultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Fragile-X syndrome",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR assay for FRAXA expansion mutation detection in FMR1 gene. PCR amplification of the CGG repeat region using fluorescent primers with fragment analysis by capillary electrophoresis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "FMR1",
+                "gene_nomenclature": [],
+                "result_region": "CGG repeat region",
+                "result_status": "normal",
+                "result_description": "Normal allele with 35 (±1) CGG repeats detected. Within normal range (6-45 repeats) per ACGS Guidelines (2014)",
+                "quantitative_results": [
+                    {
+                        "result_name": "CGG Repeat Number",
+                        "result_value": 35.0,
+                        "result_units": "repeats"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Allele Classification",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Patient very unlikely to be affected with Fragile-X syndrome. Small proportion (<1%) of cases may be caused by point mutations/rearrangements not detected by this method"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The patient is very unlikely to be affected with Fragile-X syndrome based on this result",
+            "overall_recommendations": "If clinical suspicion remains high, please contact the laboratory to discuss further testing options"
+        }
+    }
+}

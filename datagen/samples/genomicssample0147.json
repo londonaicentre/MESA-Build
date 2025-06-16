@@ -1,0 +1,102 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nReferring Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing following abnormal ultrasound findings\n\nSPECIMEN TYPE\nChorionic villi (uncultured)\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on DNA extracted from uncultured chorionic villi to detect common aneuploidies. This test utilizes chromosome-specific short tandem repeat (STR) markers to assess copy number for chromosomes 13, 18, and 21. Multiple informative markers are analyzed for each chromosome to ensure diagnostic accuracy.\n\nMarkers analyzed:\n- Chromosome 13: D13S631, D13S258, D13S742, D13S628\n- Chromosome 18: D18S535, D18S391, D18S390, D18S386\n- Chromosome 21: D21S1435 (21q21.3), D21S1411 (21q21.3), D21S1270 (21q22.3), D21S1437 (21q22.3)\n\nRESULTS\n\nChromosome 21: ABNORMAL - Trisomy 21 detected\n- D21S1435: Three alleles detected (peak ratio 1:1:1)\n- D21S1411: Three alleles detected (peak ratio 1:1:1)\n- D21S1270: Three alleles detected (peak ratio 1:1:1)\n- D21S1437: Two alleles detected (peak ratio 2:1)\n\nChromosome 13: Normal disomic pattern\n- All markers show expected biallelic patterns\n\nChromosome 18: Normal disomic pattern\n- All markers show expected biallelic patterns\n\nINTERPRETATION\nThe QF-PCR analysis demonstrates trisomy 21 (Down syndrome) in this fetal sample. Three informative markers for chromosome 21 show triallelic patterns consistent with the presence of three copies of chromosome 21. The findings for chromosomes 13 and 18 are consistent with a normal complement.\n\nThese molecular findings of trisomy 21 are consistent with the reported abnormal ultrasound findings and indicate Down syndrome in the fetus.\n\nTEST LIMITATIONS\n1. This test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, and 21 only\n2. Low-level mosaicism (<20%) may not be detected by this methodology\n3. Structural chromosome abnormalities and segmental imbalances will not be detected\n4. Maternal cell contamination, if present, may affect results\n5. This test does not screen for other genetic conditions\n\nRECOMMENDATIONS\n1. Follow-up karyotype analysis from cultured chorionic villi is recommended to confirm the diagnosis and exclude structural abnormalities\n2. Genetic counselling is strongly recommended to discuss:\n   - The implications of trisomy 21/Down syndrome\n   - Recurrence risks for future pregnancies\n   - Available management options\n   - Additional testing considerations\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: Dr. [redacted name], Consultant Clinical Geneticist\nReport Date: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing following abnormal ultrasound findings",
+            "test_clinical_rationale": "Rapid aneuploidy detection to investigate abnormal ultrasound findings",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Abnormal ultrasound findings"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using chromosome-specific short tandem repeat (STR) markers on uncultured chorionic villi",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "21q21.3, 21q22.3",
+                "result_status": "abnormal",
+                "result_description": "Trisomy 21 detected with three informative markers showing triallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "Trisomy 21"
+                    },
+                    {
+                        "result_name": "D21S1435 Pattern",
+                        "result_value": "Three alleles (1:1:1)"
+                    },
+                    {
+                        "result_name": "D21S1411 Pattern",
+                        "result_value": "Three alleles (1:1:1)"
+                    },
+                    {
+                        "result_name": "D21S1270 Pattern",
+                        "result_value": "Three alleles (1:1:1)"
+                    },
+                    {
+                        "result_name": "D21S1437 Pattern",
+                        "result_value": "Two alleles (2:1)"
+                    }
+                ],
+                "clinical_implications": "Trisomy 21 indicates Down syndrome, consistent with abnormal ultrasound findings"
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal disomic pattern - all markers show expected biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Normal disomy"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal disomic pattern - all markers show expected biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "Normal disomy"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis demonstrates trisomy 21 (Down syndrome) in the fetal sample, consistent with reported abnormal ultrasound findings. Chromosomes 13 and 18 show normal complement",
+            "overall_recommendations": "Follow-up karyotype analysis from cultured chorionic villi recommended to confirm diagnosis and exclude structural abnormalities. Genetic counselling strongly recommended to discuss implications of trisomy 21/Down syndrome, recurrence risks, management options, and additional testing considerations"
+        }
+    }
+}

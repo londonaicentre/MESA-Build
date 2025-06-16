@@ -1,0 +1,54 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSEX: Female\n\nORDERING PHYSICIAN: Dr. [redacted name]\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INFORMATION\nReason for referral: Patient with splenomegaly, evaluated for possible myeloproliferative neoplasm (MPN) or multiple myeloma (MM)\n\nSPECIMEN TYPE\nBone marrow aspirate\n\nTEST PERFORMED\nConventional cytogenetic analysis (karyotype)\n\nMETHODOLOGY\nBone marrow cells were cultured for 24 and 48 hours without mitogens. Metaphase chromosomes were prepared using standard techniques and analyzed by G-banding at a resolution of 400-550 bands. Twenty metaphase cells were analyzed and karyotyped according to the International System for Human Cytogenomic Nomenclature (ISCN 2020).\n\nRESULTS\nKaryotype: 46,XX[20]\n\nNormal female karyotype (46,XX) in all 20 analyzed cells. No clonal chromosomal abnormalities detected.\n\nINTERPRETATION\nConventional cytogenetic analysis revealed a normal female karyotype with no evidence of chromosomal abnormalities. No abnormal clone was detected by G-banding analysis. These findings do not support a diagnosis of myeloproliferative neoplasm based on cytogenetic criteria.\n\nWhile this normal karyotype does not exclude the possibility of MPN or MM, many cases of these disorders may have normal conventional cytogenetics. Molecular studies (e.g., JAK2, CALR, MPL mutations for MPN) or FISH analysis may provide additional diagnostic information.\n\nRECOMMENDATIONS\n1. Correlation with morphologic findings, flow cytometry, and molecular studies is recommended for comprehensive evaluation of suspected MPN.\n2. If final diagnosis is multiple myeloma with >10% plasma cells in bone marrow, consider FISH analysis for myeloma-associated abnormalities including del(13q), del(17p), t(4;14), t(11;14), t(14;16), and 1q21 amplification.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Patient with splenomegaly, evaluated for possible myeloproliferative neoplasm (MPN) or multiple myeloma (MM)",
+            "test_clinical_rationale": "Cytogenetic evaluation to detect chromosomal abnormalities associated with suspected MPN or MM",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Splenomegaly"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banding chromosome analysis at 400-550 band resolution with 24 and 48 hour cultures",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female karyotype (46,XX) in all 20 analyzed cells. No abnormal clone detected by G-banding",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX[20]"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    }
+                ],
+                "clinical_implications": "No chromosomal abnormalities detected to support MPN diagnosis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype does not support a diagnosis of myeloproliferative neoplasm based on cytogenetic criteria. However, this does not exclude MPN or MM as many cases may have normal conventional cytogenetics",
+            "overall_recommendations": "Correlation with morphologic findings, flow cytometry, and molecular studies recommended for comprehensive MPN evaluation. Consider FISH analysis if final diagnosis is myeloma with >10% plasma cells in bone marrow"
+        }
+    }
+}

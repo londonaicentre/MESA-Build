@@ -1,0 +1,87 @@
+{
+    "content": "PRENATAL GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT: [redacted name]\nDATE OF BIRTH: [redacted date]\nSAMPLE TYPE: Chorionic villus sample (CVS)\nDATE COLLECTED: [redacted date]\nDATE REPORTED: [redacted date]\nREFERRING PHYSICIAN: Dr. [redacted name]\n\nREFERRAL REASON\nPrenatal diagnosis requested for current pregnancy due to previous pregnancy affected with TUBA1A-related Lissencephaly. The previous pregnancy was found to carry a heterozygous TUBA1A c.197T>C p.(Val66Ala) likely pathogenic variant.\n\nMETHODOLOGY\n1. Sanger Sequencing: Targeted sequencing of TUBA1A exon 2 was performed to detect the familial c.197T>C p.(Val66Ala) variant. DNA was extracted from cultured chorionic villi cells. PCR amplification followed by bidirectional Sanger sequencing was performed using standard protocols.\n\n2. Maternal Cell Contamination (MCC) Analysis: PCR-based analysis of polymorphic markers was performed to exclude maternal cell contamination in the fetal sample. The assay has a detection threshold of approximately 10% maternal contamination.\n\nRESULTS\nTUBA1A Gene Analysis (NM_006009.3):\n- The familial TUBA1A c.197T>C p.(Val66Ala) variant was NOT DETECTED in the fetal sample\n- Sequencing quality was adequate across the region of interest\n- Coverage: 100% of coding region analyzed\n\nMaternal Cell Contamination Analysis:\n- No evidence of maternal cell contamination detected\n- Detection limit: ~10% maternal DNA\n\nSUMMARY\nThe familial TUBA1A c.197T>C p.(Val66Ala) variant associated with Lissencephaly was not detected in this fetal sample. Based on these results, the fetus is predicted to be unaffected by familial TUBA1A-related Lissencephaly.\n\nLIMITATIONS\n- This test specifically targets the known familial variant and does not exclude other potential genetic causes of Lissencephaly\n- Maternal cell contamination below 10% cannot be excluded\n- This analysis does not detect mosaicism below the sensitivity of Sanger sequencing (~20%)\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal diagnosis requested for current pregnancy due to previous pregnancy affected with TUBA1A-related Lissencephaly",
+            "test_clinical_rationale": "Previous pregnancy was found to carry a heterozygous TUBA1A c.197T>C p.(Val66Ala) likely pathogenic variant",
+            "clinical_findings": [
+                {
+                    "type": "family_history",
+                    "value": "Previous pregnancy affected with TUBA1A-related Lissencephaly"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Previous pregnancy with heterozygous TUBA1A c.197T>C p.(Val66Ala) likely pathogenic variant"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample from CVS, current pregnancy",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted Sanger sequencing of TUBA1A exon 2 with PCR amplification and bidirectional sequencing",
+                "sample_origin": "Chorionic villus sample",
+                "result_entity_type": "variant",
+                "result_entity": "TUBA1A",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_006009",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.197T>C p.(Val66Ala)",
+                "result_status": "normal",
+                "result_description": "The familial TUBA1A c.197T>C p.(Val66Ala) variant was NOT DETECTED in the fetal sample",
+                "quantitative_results": [
+                    {
+                        "result_name": "Coverage",
+                        "result_value": 100.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Variant Status",
+                        "result_value": "Not Detected"
+                    }
+                ],
+                "clinical_implications": "Fetus is predicted to be unaffected by familial TUBA1A-related Lissencephaly"
+            },
+            {
+                "test_subject": "Fetal sample from CVS, current pregnancy",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR-based analysis of polymorphic markers for maternal cell contamination detection",
+                "sample_origin": "Chorionic villus sample",
+                "result_entity_type": "variant",
+                "result_entity": "Polymorphic markers",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No evidence of maternal cell contamination detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Detection Limit",
+                        "result_value": 10.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "MCC Status",
+                        "result_value": "Not Detected"
+                    }
+                ],
+                "clinical_implications": "Maternal cell contamination excluded above ~10% threshold"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The fetus is predicted to be unaffected by familial TUBA1A-related Lissencephaly based on the absence of the familial c.197T>C p.(Val66Ala) variant",
+            "overall_recommendations": "This test specifically targets the known familial variant and does not exclude other potential genetic causes of Lissencephaly. Maternal cell contamination below 10% cannot be excluded. This analysis does not detect mosaicism below the sensitivity of Sanger sequencing (~20%)"
+        }
+    }
+}

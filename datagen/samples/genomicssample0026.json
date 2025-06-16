@@ -1,0 +1,90 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY\n[redacted location] Regional Genetics Centre\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nHOSPITAL NUMBER: [redacted ID]\nREFERRING CLINICIAN: Dr [redacted name]\nDATE OF COLLECTION: [redacted date]\nDATE OF REPORT: [redacted date]\n\nCLINICAL DETAILS\nPrenatal testing requested on amniotic fluid sample\nMaternal age: 41 years\nGestation: 17 weeks by ultrasound dating\nIndication: Advanced maternal age\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nRapid aneuploidy screening for chromosomes 13, 18, and 21\n\nMETHODOLOGY\nDNA extracted from uncultured amniocytes\nMultiplex QF-PCR analysis using fluorescently labelled primers for STR markers on chromosomes 13, 18, and 21\nProducts analysed by capillary electrophoresis\nMinimum of 4 informative markers assessed per chromosome\n\nRESULTS\n\nChromosome 13: Normal diallelic pattern\nInformative markers: D13S631, D13S258, D13S742, D13S628\nConclusion: Two copies of chromosome 13 detected\n\nChromosome 18: Normal diallelic pattern  \nInformative markers: D18S391, D18S390, D18S535, D18S386\nConclusion: Two copies of chromosome 18 detected\n\nChromosome 21: Normal diallelic pattern\nInformative markers: D21S1435, D21S1411, D21S1412, D21S1446\nConclusion: Two copies of chromosome 21 detected\n\nSUMMARY\nNormal complement for chromosomes 13, 18, and 21\nNo evidence of trisomy 13, 18, or 21 detected\n\nLIMITATIONS\nThis test screens only for trisomies of chromosomes 13, 18, and 21\nOther chromosomal abnormalities, mosaicism <20%, and structural rearrangements are not excluded\n\nFOLLOW-UP\nFull karyotype analysis from cultured amniocytes is in progress and will be reported separately\n\nAuthorised by: [redacted name], Clinical Scientist\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Advanced maternal age",
+            "test_clinical_rationale": "Prenatal testing requested on amniotic fluid sample",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal age: 41 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Gestation: 17 weeks by ultrasound dating"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus, amniocentesis sample from 41-year-old gravida",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labelled primers for STR markers, analysed by capillary electrophoresis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern. Two copies of chromosome 13 detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13"
+            },
+            {
+                "test_subject": "Fetus, amniocentesis sample from 41-year-old gravida",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labelled primers for STR markers, analysed by capillary electrophoresis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S391, D18S390, D18S535, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern. Two copies of chromosome 18 detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18"
+            },
+            {
+                "test_subject": "Fetus, amniocentesis sample from 41-year-old gravida",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labelled primers for STR markers, analysed by capillary electrophoresis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1446",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern. Two copies of chromosome 21 detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal chromosomal complement for tested chromosomes; absence of common trisomies (13, 18, and 21). This test screens only for these specific trisomies and does not exclude other chromosomal abnormalities, mosaicism <20%, or structural rearrangements",
+            "overall_recommendations": "Full karyotype analysis from cultured amniocytes is in progress and will be reported separately"
+        }
+    }
+}

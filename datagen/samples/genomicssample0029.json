@@ -1,0 +1,70 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT: [redacted name]\nDATE OF BIRTH: [redacted date]\nMEDICAL RECORD: [redacted ID]\nSPECIMEN TYPE: Placental tissue (uncultured)\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INDICATION\nFetal loss investigation\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for Rapid Aneuploidy Detection\n\nMETHOD\nQF-PCR analysis was performed on uncultured placental material to detect aneuploidies of chromosomes 13, 14, 15, 16, 18, 21, X and Y. The assay utilizes fluorescently labeled primers to amplify chromosome-specific short tandem repeat (STR) markers. Peak area ratios are calculated to determine chromosome copy number. Sex chromosome analysis includes SRY and AMELY markers for Y chromosome detection, and multiple X-linked markers including AMELX and TAF9L (Xq21.1/3p24.2). The TAF9L marker provides quantitative assessment as it has homologous sequences on both X chromosome and chromosome 3p24.2.\n\nRESULTS\n\nChromosome 13: Normal diallelic pattern detected (2 copies)\nChromosome 14: Normal diallelic pattern detected (2 copies)\nChromosome 15: Normal diallelic pattern detected (2 copies)\nChromosome 16: Normal diallelic pattern detected (2 copies)\nChromosome 18: Normal diallelic pattern detected (2 copies)\nChromosome 21: Normal diallelic pattern detected (2 copies)\n\nSex Chromosomes:\n- X chromosome markers (AMELX, DXS6809, DXS6803): Single allele pattern consistent with one X chromosome\n- Y chromosome markers (SRY, AMELY): No amplification detected\n- TAF9L quantitative marker: Ratio 1:2 (X:autosome), confirming single X chromosome\n\nCONCLUSION: 45,X - Monosomy X detected\n\nINTERPRETATION\nQF-PCR analysis demonstrates a single X chromosome with absence of Y-specific sequences, consistent with monosomy X (Turner syndrome). The quantitative TAF9L marker confirms the presence of only one X chromosome. Normal copy number is detected for chromosomes 13, 14, 15, 16, 18, and 21.\n\nMonosomy X (45,X) is associated with Turner syndrome and is a common cause of first trimester pregnancy loss, accounting for approximately 10-15% of all spontaneous miscarriages. The majority of 45,X conceptuses (>99%) result in spontaneous loss. This finding likely explains the fetal demise in this case.\n\nThis represents a sporadic aneuploidy event with low recurrence risk for future pregnancies (approximately 1%).\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss these results, provide emotional support, and review reproductive options\n2. Optional parental chromosome analysis is available if desired, though parental chromosomal rearrangements are rarely associated with 45,X\n3. Standard prenatal screening is recommended for future pregnancies\n\nASSAY LIMITATIONS\n- This test detects whole chromosome aneuploidies only and will not detect balanced rearrangements, mosaicism below 20%, or single gene disorders\n- Maternal cell contamination may affect results; however, the finding of monosomy X makes this unlikely\n- This assay does not analyze chromosomes 1-12, 17, 19, 20, or 22\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal loss investigation",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue from pregnancy loss",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured placental material using fluorescently labeled primers to amplify chromosome-specific STR markers",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "X",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Single X chromosome detected with absence of Y-specific sequences, consistent with monosomy X",
+                "quantitative_results": [
+                    {
+                        "result_name": "TAF9L Ratio",
+                        "result_value": 0.5,
+                        "result_units": "X:autosome ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "45,X"
+                    },
+                    {
+                        "result_name": "Sex Chromosome Status",
+                        "result_value": "Monosomy X"
+                    }
+                ],
+                "clinical_implications": "Monosomy X (Turner syndrome) likely cause of fetal loss. Common cause of first trimester pregnancy loss, accounting for 10-15% of spontaneous miscarriages"
+            },
+            {
+                "test_subject": "Fetal tissue from pregnancy loss",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "13, 14, 15, 16, 18, 21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern detected for chromosomes 13, 14, 15, 16, 18, and 21",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2 copies each"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Monosomy X (45,X) detected, consistent with Turner syndrome. This finding likely explains the fetal demise. Represents a sporadic aneuploidy event with low recurrence risk (approximately 1%) for future pregnancies",
+            "overall_recommendations": "Genetic counseling recommended to discuss results, provide emotional support, and review reproductive options. Optional parental chromosome analysis available if desired. Standard prenatal screening recommended for future pregnancies"
+        }
+    }
+}

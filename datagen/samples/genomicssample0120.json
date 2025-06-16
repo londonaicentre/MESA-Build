@@ -1,0 +1,127 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge: 27 years\nSex: Female\nSpecimen Type: Fetal tissue\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\nReferring Physician: Dr. [redacted name]\nLaboratory Reference: [redacted ID]\n\nCLINICAL INDICATION\nFetal tissue analysis for suspected chromosomal abnormalities\n\nTEST PERFORMED\n1. Conventional Karyotype Analysis\n2. Supplementary PCR Analysis for Aneuploidy Detection\n\nRESULTS\n\nKARYOTYPE ANALYSIS\nSpecimen: Products of conception\nMethod: Standard cytogenetic culture and G-banding analysis\nResult: FAILED - No analyzable metaphases obtained\n\nThe tissue sample received was severely macerated, preventing successful cell culture and chromosome analysis. Multiple culture attempts were made using standard protocols, but no viable cells were obtained for metaphase preparation.\n\nSUPPLEMENTARY PCR ANALYSIS\nMethod: Quantitative fluorescence PCR (QF-PCR) for rapid aneuploidy detection\nMarkers analyzed:\n- Chromosome 13: D13S631, D13S258, D13S742\n- Chromosome 18: D18S535, D18S391, D18S390\n- Chromosome 21: D21S1411, D21S1435, D21S1270\n- Sex chromosomes: AMELX/Y, SRY, XHPRT\n\nResults:\nChromosome 13: Normal diallelic pattern consistent with two copies\nChromosome 18: Normal diallelic pattern consistent with two copies\nChromosome 21: Normal diallelic pattern consistent with two copies\nSex chromosomes: XY pattern detected (normal male complement)\n\nINTERPRETATION\nAlthough conventional karyotype analysis could not be performed due to the macerated state of the tissue, PCR analysis demonstrates:\n- No evidence of trisomy 13 (Patau syndrome)\n- No evidence of trisomy 18 (Edwards syndrome)\n- No evidence of trisomy 21 (Down syndrome)\n- Normal male sex chromosome complement (XY)\n\nThese findings suggest a normal chromosomal complement for the tested chromosomes. However, this analysis cannot detect:\n- Balanced chromosomal rearrangements\n- Mosaicism below 20%\n- Abnormalities of chromosomes not tested\n- Structural chromosomal abnormalities\n\nRECOMMENDATIONS\n1. If chromosomal abnormality is still clinically suspected, consider obtaining peripheral blood samples from both parents for karyotype analysis to exclude the possibility of a balanced chromosomal rearrangement\n2. Genetic counseling is recommended to discuss these results and implications for future pregnancies\n3. For future pregnancies, consider early prenatal diagnosis options including chorionic villus sampling or amniocentesis\n\nLIMITATIONS\nThis PCR-based analysis is limited to detection of aneuploidy for chromosomes 13, 18, 21 and sex chromosomes only. A complete cytogenetic evaluation could not be performed due to sample quality.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal tissue analysis for suspected chromosomal abnormalities",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "27-year-old pregnant female"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Fetal tissue specimen"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Standard cytogenetic culture and G-banding analysis",
+                "sample_origin": "Products of conception",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "FAILED - No analyzable metaphases obtained. Tissue sample severely macerated, preventing successful cell culture",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative fluorescence PCR (QF-PCR) for rapid aneuploidy detection",
+                "sample_origin": "Products of conception",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern consistent with two copies",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative fluorescence PCR (QF-PCR) for rapid aneuploidy detection",
+                "sample_origin": "Products of conception",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S535, D18S391, D18S390",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern consistent with two copies",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative fluorescence PCR (QF-PCR) for rapid aneuploidy detection",
+                "sample_origin": "Products of conception",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1411, D21S1435, D21S1270",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern consistent with two copies",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            },
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative fluorescence PCR (QF-PCR) for rapid aneuploidy detection",
+                "sample_origin": "Products of conception",
+                "result_entity_type": "chromosome",
+                "result_entity": "Sex chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "AMELX/Y, SRY, XHPRT",
+                "result_status": "normal",
+                "result_description": "XY pattern detected (normal male complement)",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosome Complement",
+                        "result_value": "XY (Male)"
+                    }
+                ],
+                "clinical_implications": "Normal male sex chromosome complement"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "PCR analysis suggests normal chromosomal complement for chromosomes 13, 18, 21 and sex chromosomes despite inability to perform full karyotype. Cannot exclude balanced chromosomal rearrangements, mosaicism below 20%, or abnormalities of untested chromosomes",
+            "overall_recommendations": "Consider parental blood samples for karyotype analysis to exclude balanced chromosomal rearrangement if abnormality still suspected. Genetic counseling recommended. For future pregnancies, consider early prenatal diagnosis options including CVS or amniocentesis"
+        }
+    }
+}

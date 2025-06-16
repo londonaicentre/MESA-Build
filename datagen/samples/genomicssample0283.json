@@ -1,0 +1,134 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPrenatal diagnosis requested following high-risk non-invasive prenatal testing (NIPT) result for trisomy 13.\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniotic fluid cells using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, 21, X and Y. A minimum of four informative markers were analyzed for each chromosome. Peak area ratios were calculated for all heterozygous markers. Normal diallelic ratios range from 0.8-1.4. Triallelic patterns or skewed ratios (>1.8 or <0.65) indicate trisomy.\n\nRESULTS\n\nChromosome 13: Normal female pattern\n- D13S631: 1.02\n- D13S258: 1.11\n- D13S742: 0.98\n- D13S628: 1.05\n\nChromosome 18: Normal female pattern\n- D18S391: 0.95\n- D18S390: 1.08\n- D18S535: 1.01\n- D18S386: 0.99\n\nChromosome 21: Normal female pattern\n- D21S1435: 1.12\n- D21S1411: 0.94\n- D21S1412: 1.03\n- D21S1437: 0.97\n\nSex Chromosomes: XX (Female)\n- AMELX/Y: X only\n- DXYS218: Single peak\n- X22: Two peaks, ratio 1.06\n\nCONCLUSION\nNormal complement for chromosomes 13, 18 and 21. No abnormality detected in uncultured amniotic fluid sample.\n\nINTERPRETATION\nThis QF-PCR result shows no evidence of trisomy 13, 18 or 21 in the fetal sample. The normal result supersedes the positive NIPT screening for trisomy 13, indicating no chromosomal abnormality for these chromosomes. NIPT is a screening test with known false positive rates, particularly for trisomy 13 which has a positive predictive value of approximately 45-50%.\n\nLIMITATIONS\nQF-PCR detects whole chromosome aneuploidies for chromosomes 13, 18, 21, X and Y only. This test will not detect:\n- Balanced chromosomal rearrangements\n- Mosaicism below 20-30%\n- Segmental chromosomal imbalances\n- Aneuploidies of other chromosomes\n- Single gene disorders\n\nRECOMMENDATIONS\nNo further chromosome analysis is needed for this sample based on the current clinical indication. The pregnancy can be managed as chromosomally normal for the tested chromosomes.\n\nIf there are ongoing clinical concerns or ultrasound abnormalities, please contact the laboratory to discuss additional testing options including chromosomal microarray or karyotype analysis.\n\nAuthorized by: [redacted name], PhD, FRCPath\nConsultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal diagnosis requested following high-risk non-invasive prenatal testing (NIPT) result for trisomy 13",
+            "test_clinical_rationale": "Confirmation of suspected trisomy 13 from NIPT screening",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "High-risk NIPT result for trisomy 13"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniotic fluid cells using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "D13S631 ratio",
+                        "result_value": 1.02,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S258 ratio",
+                        "result_value": 1.11,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S742 ratio",
+                        "result_value": 0.98,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S628 ratio",
+                        "result_value": 1.05,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of trisomy 13"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "D18S391 ratio",
+                        "result_value": 0.95,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S390 ratio",
+                        "result_value": 1.08,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S535 ratio",
+                        "result_value": 1.01,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S386 ratio",
+                        "result_value": 0.99,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of trisomy 18"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "D21S1435 ratio",
+                        "result_value": 1.12,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1411 ratio",
+                        "result_value": 0.94,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1412 ratio",
+                        "result_value": 1.03,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1437 ratio",
+                        "result_value": 0.97,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of trisomy 21"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal result supersedes positive NIPT screening for trisomy 13, indicating no chromosomal abnormality for chromosomes 13, 18 and 21. NIPT false positive likely due to known limitations of screening test (positive predictive value 45-50% for trisomy 13)",
+            "overall_recommendations": "No further chromosome analysis needed for this sample based on current clinical indication. Pregnancy can be managed as chromosomally normal for tested chromosomes. Contact laboratory if ongoing clinical concerns or ultrasound abnormalities"
+        }
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\n\nSPECIMEN\nType: Chest wall lesion core biopsy\nDiagnosis: Lung carcinoma\nCollection Date: [redacted date]\nReceived Date: [redacted date]\n\nTEST PERFORMED\nROS1 Gene Rearrangement Analysis by Fluorescence In Situ Hybridization (FISH)\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the Vysis LSI ROS1 (6q22) Dual Color Break Apart Rearrangement Probe (Abbott Molecular). H&E stained sections were reviewed to identify tumor areas. A total of 50 tumor cell nuclei were analyzed.\n\nRESULT\nROS1 (6q22) rearrangement: NOT DETECTED\n\nFISH analysis revealed 2-3 intact ROS1 signals per nucleus in the majority of cells examined. No evidence of ROS1 gene rearrangement was identified. The presence of 2-3 copies of ROS1 is of uncertain significance and may represent low-level polysomy of chromosome 6 or focal amplification.\n\nINTERPRETATION\nThis patient's lung carcinoma is negative for ROS1 gene rearrangement. Based on this result, the patient is unlikely to benefit from ROS1-targeted tyrosine kinase inhibitors such as crizotinib, entrectinib, or lorlatinib.\n\nThe clinical significance of 2-3 copies of intact ROS1 remains uncertain and does not predict response to ROS1-targeted therapy.\n\nReported by: [redacted name], MD\nBoard Certified in Molecular Genetic Pathology\nReport Date: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "ROS1 gene rearrangement analysis for lung carcinoma",
+            "test_clinical_rationale": "To determine eligibility for ROS1-targeted tyrosine kinase inhibitor therapy",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Lung carcinoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Chest wall lesion"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis performed on formalin-fixed paraffin-embedded tissue sections using Vysis LSI ROS1 (6q22) Dual Color Break Apart Rearrangement Probe with H&E correlation",
+                "sample_origin": "Chest wall lesion core biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "No ROS1 gene rearrangement detected. 2-3 intact ROS1 signals per nucleus observed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "ROS1 Copy Number",
+                        "result_value": 2.5,
+                        "result_units": "copies per cell"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ROS1 Rearrangement Status",
+                        "result_value": "Not Detected"
+                    }
+                ],
+                "clinical_implications": "Patient is unlikely to benefit from ROS1-targeted tyrosine kinase inhibitors such as crizotinib, entrectinib, or lorlatinib"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This patient's lung carcinoma is negative for ROS1 gene rearrangement. The presence of 2-3 copies of intact ROS1 is of uncertain significance and may represent low-level polysomy of chromosome 6 or focal amplification, but does not predict response to ROS1-targeted therapy",
+            "overall_recommendations": "Patient is unlikely to benefit from ROS1 tyrosine kinase inhibitors based on negative ROS1 rearrangement status"
+        }
+    }
+}

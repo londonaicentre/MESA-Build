@@ -1,0 +1,90 @@
+{
+    "content": "PRENATAL GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Centre\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nPatient ID: [redacted ID]\nMaternal Age: 38 years\nGestational Age: 12 weeks\nSample Type: Chorionic villus sample (CVS)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing for chromosomal abnormalities\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured chorionic villi using fluorescently labeled primers for short tandem repeat (STR) markers specific to chromosomes 13, 18, and 21. DNA was extracted from uncultured chorionic villi and amplified using multiplex PCR. Fragment analysis was performed on an ABI 3500 Genetic Analyzer. A minimum of four informative markers per chromosome were analyzed to assess for trisomy.\n\nMarkers analyzed:\n- Chromosome 13: D13S631, D13S258, D13S742, D13S628\n- Chromosome 18: D18S535, D18S391, D18S858, D18S386\n- Chromosome 21: D21S1435, D21S11, D21S1270, D21S1411\n\nRESULTS\nChromosome 13: Normal diallelic pattern observed\nChromosome 18: Normal diallelic pattern observed\nChromosome 21: Normal diallelic pattern observed\n\nCONCLUSION\nNormal complement for chromosomes 13, 18, and 21. No abnormality detected by QF-PCR trisomy test.\n\nLIMITATIONS\nThis test is designed to detect trisomies of chromosomes 13, 18, and 21 only. Other chromosomal abnormalities, including balanced rearrangements, mosaicism below 20%, and abnormalities of other chromosomes will not be detected by this method.\n\nRECOMMENDATIONS\nFull karyotype analysis from cultured chorionic villi to follow. This will provide comprehensive chromosomal analysis and exclude other chromosomal abnormalities not detected by QF-PCR.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing for chromosomal abnormalities",
+            "test_clinical_rationale": "Rapid aneuploidy detection for trisomies of chromosomes 13, 18, and 21 in prenatal sample",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "38-year-old mother"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "12 weeks gestation"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Chorionic villus sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of uncultured chorionic villi using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Copy Number",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "No trisomy 13 detected"
+            },
+            {
+                "test_subject": "Chorionic villus sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of uncultured chorionic villi using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S535, D18S391, D18S858, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Copy Number",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "No trisomy 18 detected"
+            },
+            {
+                "test_subject": "Chorionic villus sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of uncultured chorionic villi using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S11, D21S1270, D21S1411",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Copy Number",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "No trisomy 21 detected"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No chromosomal abnormalities detected for chromosomes 13, 18, and 21. This test excludes the common autosomal trisomies but does not exclude other chromosomal abnormalities",
+            "overall_recommendations": "Full karyotype analysis from cultured chorionic villi to follow. This will provide comprehensive chromosomal analysis and exclude other chromosomal abnormalities not detected by QF-PCR"
+        }
+    }
+}

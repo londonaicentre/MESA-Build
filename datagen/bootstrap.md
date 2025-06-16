@@ -1,5 +1,5 @@
 ## Bootstrap Table Instructions
-The prompts below are used with a large language model chat interface to generate content for synthetic genomics reports.This is an intermediate step prior to generation of realistic documents. The output is a table where columns correspond to different document content types, and qualifiers for type of document, content style, and structure. Each row is subsequently given to an LLM to produce fake documents according to the description. This stage therefore introduces variability and coverage of different concepts into the documents being generated.
+The prompts below are used with a large language model to generate content for synthetic genomics reports.This is an intermediate step prior to generation of realistic documents. The output is a table where columns correspond to different document content types, and qualifiers for type of document, content style, and structure. Each row is subsequently given to an LLM to produce fake documents according to the description. This stage therefore introduces variability and coverage of different concepts into the documents being generated.
 
 ### Baseline prompt
 ```
@@ -18,10 +18,13 @@ Result Description - Detailed technical description of findings as would appear 
 Clinical Context - Patient presentation, referral reason, and rationale for testing
 Disease Context - Suspected or confirmed conditions related to the test
 Family History - Relevant genetic information about relatives, if any
-Proband Info - Whose sample was tested (patient, relative, etc.)
+Test Subject - Whose sample was tested (patient, relative, etc. or multiple)
 Clinical Implications - Interpretation of results for patient care
 Recommendations - Follow-up testing, referrals, or management suggestions
 Report style - This table will be used to generate synthetic reports. Describe a report style, that may include elements such as is conciseness, structure, and verbosity of clinical descriptions.
+
+The table should be structured as a csv file with the following headings:
+test_type,test_details,result_entities,result_description,clinical_context,disease_context,family_history,test_subject,clinical_implications,recommendations,report_style
 
 **Further Instructions**
 - Each example may contain multiple entities or results.
@@ -31,7 +34,6 @@ Report style - This table will be used to generate synthetic reports. Describe a
 Please confirm that you understand these instructions.
 """
 ```
-
 
 ### Additional prompt
 For each batch (for example - generating 20 rows of data), we present an additional prompt to tailor the output. This could point the batch at a type of test, a disease area, a particular proband pattern, a report style, or any other variable. This can be also used to deliver examples of reports to 'mimic'. This is particularly useful for capturing description of edge cases.

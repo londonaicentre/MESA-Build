@@ -1,0 +1,86 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nReferring Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INFORMATION\nGestational Age: 12 weeks (based on ultrasound dating)\nIndication for Testing: Prenatal screening for common chromosomal trisomies\nSample Type: Uncultured chorionic villi\nSample ID: [redacted ID]\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on DNA extracted from uncultured chorionic villi using a panel of short tandem repeat (STR) markers specific for chromosomes 13, 18, and 21. A minimum of four informative markers were analyzed for each chromosome. Peak area ratios were calculated for all heterozygous markers, with normal diallelic ratios ranging from 0.8-1.4. The presence of three alleles or skewed diallelic ratios (>1.8 or <0.65) would indicate trisomy.\n\nRESULTS\n\nChromosome 13:\n- Markers analyzed: D13S631, D13S258, D13S742, D13S628\n- Result: Normal biallelic pattern observed\n- Interpretation: Normal complement for chromosome 13\n\nChromosome 18:\n- Markers analyzed: D18S391, D18S390, D18S535, D18S386\n- Result: Normal biallelic pattern observed\n- Interpretation: Normal complement for chromosome 18\n\nChromosome 21:\n- Markers analyzed: D21S1435, D21S1411, D21S1412, D21S1446\n- Result: Normal biallelic pattern observed\n- Interpretation: Normal complement for chromosome 21\n\nSex Chromosomes:\n- AMELX/Y analysis: XX pattern detected\n- Interpretation: Female fetus\n\nOVERALL RESULT: NO ABNORMALITY DETECTED\n\nINTERPRETATION\nQF-PCR analysis shows a normal complement for chromosomes 13, 18, and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome) was detected in this sample.\n\nLIMITATIONS\n1. This test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, and 21 only\n2. Low-level mosaicism (<20%) may not be detected by this methodology\n3. Structural chromosomal abnormalities, including segmental imbalances, translocations, and microdeletions/duplications are not detected\n4. Maternal cell contamination, if present, may mask fetal abnormalities\n5. This test does not screen for open neural tube defects or other genetic conditions\n\nRECOMMENDATIONS\n1. Follow-up cytogenetic analysis (karyotyping) will be performed on cultured chorionic villi to confirm these results and provide a comprehensive chromosomal analysis\n2. Results from the cytogenetics laboratory will be reported separately when available\n3. Genetic counseling is recommended to discuss these results and any additional testing options\n4. Standard prenatal care should continue as recommended by the referring physician\n\nThis test was developed and validated by [redacted location] Regional Genetics Laboratory. Results should be interpreted in conjunction with clinical findings and other laboratory data.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD\nCAP Number: [redacted ID] | CLIA Number: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal screening for common chromosomal trisomies",
+            "test_clinical_rationale": "Rapid aneuploidy detection at 12 weeks gestation",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "12 weeks gestational age based on ultrasound dating"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis using STR markers specific for chromosomes 13, 18, and 21 on DNA extracted from uncultured chorionic villi",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal biallelic pattern observed for chromosome 13",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Normal complement"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis using STR markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal biallelic pattern observed for chromosome 18",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "Normal complement"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis using STR markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal biallelic pattern observed for chromosome 21",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "Normal complement"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal results indicate no evidence of trisomy 13, 18, or 21. QF-PCR shows normal complement for all tested chromosomes. Female fetus identified",
+            "overall_recommendations": "Follow-up cytogenetic analysis (karyotyping) will be performed on cultured chorionic villi to confirm results and provide comprehensive chromosomal analysis. Results from cytogenetics laboratory will be reported separately. Genetic counseling recommended. Continue standard prenatal care as recommended"
+        }
+    }
+}

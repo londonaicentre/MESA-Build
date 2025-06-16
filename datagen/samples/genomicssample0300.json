@@ -1,0 +1,139 @@
+{
+    "content": "CLINICAL GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nSex: Male\nHospital Number: [redacted ID]\nDate of Report: [redacted date]\n\nREFERRAL INFORMATION\nReferring Clinician: Dr [redacted name]\nReferral Reason: Elevated total cholesterol 7-8 mmol/L, referred for Familial Hypercholesterolaemia testing\n\nCLINICAL DETAILS\nThis adult male patient presents with persistently elevated total cholesterol levels ranging from 7-8 mmol/L. Clinical assessment has raised suspicion of Familial Hypercholesterolaemia.\n\nMETHODOLOGY\nNext-generation sequencing (NGS) was performed to detect sequence variants and exon deletions/duplications in the following genes:\n- LDLR (NM_000527.5): Full gene analysis\n- PCSK9 (NM_174936.4): Full gene analysis  \n- LDLRAP1 (NM_015627.3): Full gene analysis\n- APOB (NM_000384.3): Targeted analysis of exon 26\n\nAnalysis was performed using parallel sequencing following target capture by hybridization. Read depth analysis was utilized for detection of exon-level copy number alterations. All identified pathogenic variants were confirmed by Sanger sequencing.\n\nMinimum coverage achieved: 30x for >99% of target regions\nMean coverage: 250x\n\nRESULTS\n\nGene: LDLR (NM_000527.5)\nVariant: c.1118_1121dupGTGG p.(Tyr375fs)\nZygosity: Heterozygous\nClassification: Pathogenic (ACMG/AMP criteria: PVS1, PM2, PP5)\n\nThis frameshift duplication results in premature termination of the LDL receptor protein, leading to loss of function.\n\nNo pathogenic or likely pathogenic variants were identified in:\n- LDLRAP1 (NM_015627.3)\n- PCSK9 (NM_174936.4)\n- APOB exon 26 (NM_000384.3)\n\nSUMMARY\nMolecular genetic testing has identified a heterozygous pathogenic frameshift variant c.1118_1121dupGTGG p.(Tyr375fs) in the LDLR gene. This variant confirms the clinical diagnosis of Familial Hypercholesterolaemia (FH).\n\nThe LDLR gene encodes the low-density lipoprotein receptor, which plays a crucial role in cholesterol homeostasis by mediating the endocytosis of cholesterol-rich LDL particles. Loss-of-function variants in LDLR account for approximately 85-90% of molecularly confirmed FH cases.\n\nCLINICAL IMPLICATIONS\nThis frameshift variant in LDLR confirms the diagnosis of heterozygous Familial Hypercholesterolaemia. Individuals with heterozygous FH have significantly elevated LDL cholesterol levels from birth and, if untreated, have a greater than 50% risk of coronary heart disease by age 50 in men and age 60 in women.\n\nThe inheritance pattern is autosomal dominant with each offspring having a 50% risk of inheriting the pathogenic variant.\n\nRECOMMENDATIONS\n1. Lipid-lowering therapy should be initiated or optimized according to current FH management guidelines\n2. Cascade screening is strongly recommended for first-degree relatives\n3. Predictive testing is available for family members if appropriate, following genetic counseling\n4. Regular cardiovascular risk assessment and monitoring\n5. Lifestyle modifications including dietary management and regular exercise\n\nThis report has been authorized by:\n[redacted name], PhD, FRCPath\nConsultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Elevated total cholesterol 7-8 mmol/L, referred for Familial Hypercholesterolaemia testing",
+            "test_clinical_rationale": "Clinical assessment has raised suspicion of Familial Hypercholesterolaemia",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male patient"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Persistently elevated total cholesterol levels ranging from 7-8 mmol/L"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing with parallel sequencing following target capture by hybridization, with read depth analysis for exon-level copy number alterations",
+                "sample_origin": null,
+                "result_entity_type": "variant",
+                "result_entity": "LDLR",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000527",
+                        "version": "5"
+                    }
+                ],
+                "result_region": "c.1118_1121dupGTGG p.(Tyr375fs)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous frameshift duplication resulting in premature termination of the LDL receptor protein",
+                "quantitative_results": [
+                    {
+                        "result_name": "Minimum Coverage",
+                        "result_value": 30.0,
+                        "result_units": "x"
+                    },
+                    {
+                        "result_name": "Mean Coverage",
+                        "result_value": 250.0,
+                        "result_units": "x"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "ACMG Criteria",
+                        "result_value": "PVS1, PM2, PP5"
+                    }
+                ],
+                "clinical_implications": "This frameshift variant in LDLR confirms the diagnosis of heterozygous Familial Hypercholesterolaemia"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing",
+                "sample_origin": null,
+                "result_entity_type": "gene",
+                "result_entity": "LDLRAP1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_015627",
+                        "version": "3"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic or likely pathogenic variants identified",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing",
+                "sample_origin": null,
+                "result_entity_type": "gene",
+                "result_entity": "PCSK9",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_174936",
+                        "version": "4"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic or likely pathogenic variants identified",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing - targeted analysis",
+                "sample_origin": null,
+                "result_entity_type": "exon",
+                "result_entity": "APOB",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000384",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "exon 26",
+                "result_status": "normal",
+                "result_description": "No pathogenic or likely pathogenic variants identified",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Molecular genetic testing confirms heterozygous Familial Hypercholesterolaemia due to LDLR frameshift variant. Individuals with heterozygous FH have significantly elevated LDL cholesterol from birth and greater than 50% risk of coronary heart disease by age 50 in men and age 60 in women if untreated. Autosomal dominant inheritance with 50% risk to offspring",
+            "overall_recommendations": "Lipid-lowering therapy should be initiated or optimized according to current FH management guidelines. Cascade screening strongly recommended for first-degree relatives. Predictive testing available for family members if appropriate, following genetic counseling. Regular cardiovascular risk assessment and monitoring. Lifestyle modifications including dietary management and regular exercise"
+        }
+    }
+}

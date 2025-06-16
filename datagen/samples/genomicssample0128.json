@@ -1,0 +1,108 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Non-small cell lung cancer (NSCLC) with lymph node involvement\nSpecimen Type: Tissue biopsy\nTumor Content: 25%\n\nTEST PERFORMED\nComprehensive Cancer Panel - DNA and RNA Analysis\n\nMETHODOLOGY\nDNA Panel: Amplicon-based next-generation sequencing of 57 cancer-related genes using PCR amplification. Sequencing performed on Illumina platform with dual variant calling algorithms. The assay detects single nucleotide variants and small insertions/deletions with ≥2.5% allele frequency with a minimum of 15 supporting reads.\n\nRNA Panel: Fusion and expression analysis attempted but failed due to insufficient RNA quality.\n\nGenes Analyzed (DNA Panel): ABL1, AKT1, ALK, APC, ATM, BRAF, CDH1, CDKN2A, CSF1R, CTNNB1, EGFR, ERBB2, ERBB4, EZH2, FBXW7, FGFR1, FGFR2, FGFR3, FLT3, GNA11, GNAQ, GNAS, HNF1A, HRAS, IDH1, IDH2, JAK2, JAK3, KDR, KIT, KRAS, MET, MLH1, MPL, NOTCH1, NPM1, NRAS, PDGFRA, PIK3CA, PTEN, PTPN11, RB1, RET, SMAD4, SMARCB1, SMO, SRC, STK11, TP53, TSC1, VHL, and others.\n\nRESULTS\n\nDNA ANALYSIS - VARIANTS DETECTED:\n\nKRAS (NM_033360.3)\nVariant: c.35G>C, p.Gly12Ala\nVariant Allele Frequency: 32%\nClinical Significance: Pathogenic\n\nDNA ANALYSIS - GENES WITH NO REPORTABLE VARIANTS:\n\nEGFR: No variants detected in exons 18-21 (including codons 719, 746-750, 768, 790, 858, 861)\nBRAF: No variants detected in codons 443-474 and 582-608 (including V600)\n\nSTRUCTURAL VARIANT ANALYSIS:\nAnalysis failed due to technical limitations\n\nRNA ANALYSIS:\nFailed - Insufficient RNA quality\n\nINTERPRETATION\n\nThe KRAS p.Gly12Ala variant detected at 32% allele frequency is a well-characterized oncogenic mutation commonly found in NSCLC. This variant results in constitutive activation of the RAS signaling pathway.\n\nClinical Implications:\n- KRAS mutations predict decreased sensitivity to EGFR tyrosine kinase inhibitors in NSCLC\n- Patients with KRAS mutations are unlikely to benefit from EGFR inhibitor therapy (erlotinib, gefitinib, afatinib, osimertinib)\n- KRAS G12 mutations also predict lack of response to MEK inhibitors and BRAF inhibitors\n- Due to RNA panel failure, candidacy for ALK, ROS1, RET, MET, and NTRK fusion-targeted therapies could not be determined\n\nRECOMMENDATIONS\n\nBased on the molecular findings:\n- Patient is unlikely to benefit from targeted therapies against EGFR, MEK, or BRAF\n- Standard chemotherapy or immunotherapy approaches should be considered\n- Consider repeat biopsy for RNA fusion analysis if clinically indicated\n\nASSAY LIMITATIONS\n- This assay detects variants with allele frequencies ≥2.5%\n- Structural variants and gene fusions require adequate RNA quality\n- Not all exons of all genes are covered\n- Results should be interpreted in conjunction with clinical and pathological findings\n\nElectronically signed by: Dr. [redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Non-small cell lung cancer (NSCLC) with lymph node involvement",
+            "test_clinical_rationale": "Comprehensive molecular profiling to identify targetable mutations and guide treatment selection",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer (NSCLC) with lymph node involvement"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Tumor content: 25%"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Amplicon-based next-generation sequencing of 57 cancer-related genes using PCR amplification with dual variant calling algorithms",
+                "sample_origin": "Tissue biopsy",
+                "result_entity_type": "variant",
+                "result_entity": "KRAS",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_033360",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.35G>C, p.Gly12Ala",
+                "result_status": "abnormal",
+                "result_description": "KRAS mutation detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Variant Allele Frequency",
+                        "result_value": 32.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Clinical Significance",
+                        "result_value": "Pathogenic"
+                    }
+                ],
+                "clinical_implications": "KRAS mutations predict decreased sensitivity to EGFR tyrosine kinase inhibitors in NSCLC"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Amplicon-based next-generation sequencing",
+                "sample_origin": "Tissue biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "EGFR",
+                "gene_nomenclature": [],
+                "result_region": "exons 18-21",
+                "result_status": "normal",
+                "result_description": "No variants detected in exons 18-21",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Amplicon-based next-generation sequencing",
+                "sample_origin": "Tissue biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [],
+                "result_region": "codons 443-474 and 582-608",
+                "result_status": "normal",
+                "result_description": "No variants detected in codons 443-474 and 582-608",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion analysis",
+                "test_methodology": "RNA-based fusion detection",
+                "sample_origin": "Tissue biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "RNA panel",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Failed - Insufficient RNA quality",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "ALK, ROS1, RET, MET, and NTRK inhibitor candidacy undetermined due to RNA panel failure"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "KRAS G12A mutation detected predicts lack of response to EGFR, MEK, and BRAF targeted therapies. RNA fusion analysis failed, preventing assessment of ALK, ROS1, RET, MET, and NTRK fusion status",
+            "overall_recommendations": "Patient is unlikely to benefit from targeted therapies against EGFR, MEK, or BRAF. Standard chemotherapy or immunotherapy approaches should be considered. Consider repeat biopsy for RNA fusion analysis if clinically indicated"
+        }
+    }
+}

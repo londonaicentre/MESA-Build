@@ -1,0 +1,51 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY\nDNA EXTRACTION AND STORAGE REPORT\n\nPatient Name: [redacted name]\nDate of Birth: [redacted]\nMedical Record Number: [redacted ID]\nSpecimen ID: [redacted ID]\n\nDate of Collection: [redacted]\nDate of Receipt: [redacted]\nDate of Report: [redacted]\n\nSPECIMEN TYPE: Peripheral blood (EDTA)\n\nTEST PERFORMED: DNA Extraction and Storage\n\nMETHODOLOGY:\nGenomic DNA was extracted from peripheral blood using standard column-based purification methods. DNA quality was assessed by spectrophotometry (A260/A280 ratio) and quantification performed using fluorometric analysis.\n\nRESULTS:\nDNA successfully extracted from blood sample\nDNA Concentration: 125 ng/μL\nA260/A280 ratio: 1.85\nTotal yield: 62.5 μg\n\nDNA has been aliquoted and stored at -80°C for future testing as requested.\n\nCOMMENTS:\nNo genetic testing has been performed at this time. The extracted DNA is available for future molecular genetic testing upon request. Please contact the laboratory with specific testing requirements.\n\nDISCLAIMERS:\n• Sample identification is based on information provided at the time of collection. The laboratory cannot guarantee the identity of the patient from whom the sample was obtained.\n• Stated family relationships cannot be verified and are based on information provided.\n• These results should be interpreted in the context of clinical findings and family history. Genetic counseling is recommended.\n• DNA quality may degrade over time. Re-extraction may be necessary for future testing depending on storage duration and test requirements.\n\nFor testing requests or inquiries, please contact:\nMolecular Genetics Laboratory\nPhone: [redacted]\nEmail: [redacted]\n\nAuthorized by: [redacted name], PhD\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": null,
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Genomic DNA extraction from peripheral blood using standard column-based purification methods with spectrophotometry and fluorometric analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "Genomic DNA",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "DNA successfully extracted from blood sample",
+                "quantitative_results": [
+                    {
+                        "result_name": "DNA Concentration",
+                        "result_value": 125.0,
+                        "result_units": "ng/μL"
+                    },
+                    {
+                        "result_name": "A260/A280 ratio",
+                        "result_value": 1.85,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Total yield",
+                        "result_value": 62.5,
+                        "result_units": "μg"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Storage Status",
+                        "result_value": "Stored at -80°C"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "DNA has been successfully extracted and stored for future genetic testing. No genetic analysis has been performed at this time",
+            "overall_recommendations": "Contact the laboratory with specific testing requirements for future molecular genetic testing"
+        }
+    }
+}

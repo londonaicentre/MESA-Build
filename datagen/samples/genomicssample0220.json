@@ -1,0 +1,39 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Cancer Center\n\nPATIENT: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSPECIMEN ID: [redacted ID]\nORDERING PHYSICIAN: Dr. [redacted name]\n\nCLINICAL INDICATION\nNon-small cell lung cancer (NSCLC)\n\nSPECIMEN TYPE\nLung biopsy tissue\n\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) analysis\n\nMETHODOLOGY\nFISH analysis was performed on formalin-fixed paraffin-embedded tissue sections from lung biopsy.\n\nRESULTS\nNo results documented.\n\nCOMMENTS\nG-banded chromosome analysis not needed. Sample processed for FISH studies only.\n\nThis report has been reviewed and electronically signed by:\n[redacted name], Ph.D.\nDirector, Cytogenetics Laboratory\nCAP#: [redacted ID] CLIA#: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Non-small cell lung cancer (NSCLC)",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer (NSCLC)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections from lung biopsy",
+                "sample_origin": "Lung biopsy tissue",
+                "result_entity_type": "gene",
+                "result_entity": "Not specified",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "No results documented",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis was attempted but no results were documented",
+            "overall_recommendations": "G-banded chromosome analysis not needed. Sample processed for FISH studies only"
+        }
+    }
+}

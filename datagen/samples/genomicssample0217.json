@@ -1,0 +1,58 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nSex: Female\nHospital Number: [redacted ID]\nSpecimen Type: Peripheral blood (EDTA)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Alport syndrome/Thin Basement Membrane Nephropathy (TBMN)\n\nTEST DETAILS\nNext-generation sequencing (NGS) to detect sequence variants and exon deletions/duplications in COL4A3, COL4A4, COL4A5, NPHS2 genes, and exon deletions/duplications in COL4A6 gene. Variant confirmation by bidirectional Sanger sequencing.\n\nRESULTS\n\nGene\tTranscript\tVariant\tZygosity\tClassification\nCOL4A4\tNM_000092.5\tc.4923C>G p.(Cys1641Trp)\tHeterozygous\tLikely Pathogenic\n\nNo pathogenic or likely pathogenic variants detected in COL4A3, COL4A5, NPHS2, or COL4A6.\n\nSUMMARY\nHeterozygous COL4A4 c.4923C>G p.(Cys1641Trp) likely pathogenic variant detected. This novel variant results in substitution of cysteine with tryptophan at position 1641, predicted to disrupt a critical domain of the α4 chain of type IV collagen. Similar missense variants affecting cysteine residues in this region have been reported in patients with Alport syndrome (PMID: 28991257, 31980526).\n\nThe variant is absent from population databases (gnomAD v3.1.2) and multiple in silico prediction tools classify it as deleterious (SIFT: Deleterious, PolyPhen-2: Probably Damaging, CADD: 28.4). According to ACMG/AMP guidelines, this variant is classified as likely pathogenic (PM2, PM5, PP3, PP4).\n\nCLINICAL INTERPRETATION\nThis result is consistent with a diagnosis of Thin Basement Membrane Nephropathy (TBMN) and carrier status for autosomal recessive Alport syndrome. Heterozygous pathogenic variants in COL4A4 typically cause TBMN, characterized by persistent microscopic hematuria and generally benign prognosis.\n\nIf Alport syndrome is suspected clinically, a second pathogenic variant may exist that was not detected by this assay. Limitations include inability to detect deep intronic variants, complex rearrangements, or variants in regulatory regions.\n\nCarriers of COL4A4 pathogenic variants require lifelong blood pressure and proteinuria monitoring with a low threshold for ACE inhibitor therapy to prevent progression to chronic kidney disease.\n\nFURTHER WORK\nFamilial variant testing is available for at-risk relatives. Genetic counseling is recommended before testing to discuss inheritance patterns, clinical implications, and reproductive risks.\n\nTECHNICAL NOTES\nMethodology: Genomic DNA extracted from peripheral blood. Target enrichment using custom capture probes followed by paired-end sequencing on Illumina platform. Minimum coverage 30x for >99% of coding regions and flanking intronic sequences (±20bp). Copy number analysis performed using read depth algorithms. Variants confirmed by bidirectional Sanger sequencing.\n\nLimitations: This test does not detect variants in non-coding regions (except splice sites ±20bp), balanced rearrangements, or low-level mosaicism (<20%). Pseudogene interference may affect PMS2 analysis.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Alport syndrome/Thin Basement Membrane Nephropathy (TBMN)",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Female patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing (NGS) to detect sequence variants and exon deletions/duplications in COL4A3, COL4A4, COL4A5, NPHS2 genes, and exon deletions/duplications in COL4A6 gene. Variant confirmation by bidirectional Sanger sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "COL4A4",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000092",
+                        "version": "5"
+                    }
+                ],
+                "result_region": "c.4923C>G p.(Cys1641Trp)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous COL4A4 c.4923C>G p.(Cys1641Trp) likely pathogenic variant detected. Novel variant predicted to disrupt critical α4 chain domain. Similar missense variants in this region reported in Alport syndrome patients",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Likely Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "ACMG Classification",
+                        "result_value": "PM2, PM5, PP3, PP4"
+                    }
+                ],
+                "clinical_implications": "Result consistent with TBMN diagnosis and carrier status for autosomal recessive Alport Syndrome. If Alport syndrome suspected clinically, second pathogenic variant may exist undetected by this assay. Carriers require lifelong BP and proteinuria monitoring with low threshold for ACE inhibitor therapy"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This result is consistent with a diagnosis of Thin Basement Membrane Nephropathy (TBMN) and carrier status for autosomal recessive Alport syndrome. Heterozygous pathogenic variants in COL4A4 typically cause TBMN, characterized by persistent microscopic hematuria and generally benign prognosis",
+            "overall_recommendations": "Familial variant testing available for relatives. Genetic counseling recommended before testing. Lifelong blood pressure and proteinuria monitoring with low threshold for ACE inhibitor therapy"
+        }
+    }
+}

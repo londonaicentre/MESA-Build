@@ -1,0 +1,193 @@
+{
+    "content": "FLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n[redacted name] Medical Center\nDepartment of Cytogenetics and Molecular Pathology\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen Type: Bone Marrow Aspirate\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nClinical Indication: Presentation myeloma\nDiagnosis: Multiple myeloma\n\nTEST PERFORMED\nInterphase and metaphase FISH analysis for multiple myeloma panel\n\nPROBE SETS UTILIZED\n1. IGH Break Apart Probe (14q32)\n2. IGH/FGFR3 Dual Color Dual Fusion Probe t(4;14)(p16.3;q32)\n3. 1q21/1p36 Dual Color Probe\n4. CLL Panel including:\n   - ATM (11q22.3)\n   - TP53 (17p13.1)\n   - D13S319/13q34 (13q14/13q34)\n5. Multi-color Probe Set for Chromosomes 5, 9, and 15\n\nRESULTS\n\nINTERPHASE FISH ANALYSIS (100 nuclei scored per probe set):\n\nIGH/FGFR3 Rearrangement:\n- POSITIVE: IGH/FGFR3 fusion signals detected in 33/100 cells (33%)\n- Consistent with t(4;14)(p16.3;q32) rearrangement\n\nChromosome 13 Status:\n- ABNORMAL: Loss of both 13q14 and 13q34 signals in 58/100 cells (58%)\n- Pattern consistent with monosomy 13\n\n1q21/1p36 Analysis:\n- 1q21: GAIN detected - Three signals in 26/100 cells (26%)\n- 1p36: NORMAL - Two signals in all cells analyzed\n\nATM (11q22.3):\n- DELETION detected in 38/100 cells (38%)\n\nTP53 (17p13.1):\n- NORMAL: Two signals in all cells analyzed\n\nChromosomes 5, 9, and 15:\n- NORMAL: Two signals for each chromosome in all cells analyzed\n\nMETAPHASE FISH ANALYSIS:\n50 metaphase cells analyzed\n- No abnormalities detected in dividing cells\n\nINTERPRETATION\nThis FISH analysis reveals multiple chromosomal abnormalities characteristic of high-risk multiple myeloma:\n\n1. The IGH/FGFR3 rearrangement t(4;14) detected in 33% of cells is associated with poor prognosis in multiple myeloma. This translocation results in dysregulation of FGFR3 and MMSET, contributing to myeloma pathogenesis.\n\n2. Monosomy 13 (loss of entire chromosome 13) identified in 58% of cells is a common finding in multiple myeloma and may confer additional adverse prognostic significance when combined with t(4;14).\n\n3. Gain of 1q21 in 26% of cells represents an additional high-risk feature associated with disease progression and shorter survival.\n\n4. ATM deletion detected in 38% of cells may impact DNA damage response pathways.\n\nThe absence of abnormalities in metaphase cells suggests that the malignant plasma cells have low proliferative activity, which is typical for multiple myeloma.\n\nThese findings indicate a high-risk cytogenetic profile that should be considered in treatment planning and prognostic assessment.\n\nReported by: [redacted name], Ph.D., FACMG\nReviewed by: [redacted name], M.D., Director of Cytogenetics",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Presentation myeloma",
+            "test_clinical_rationale": "FISH analysis for multiple myeloma panel to assess cytogenetic risk factors",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Multiple myeloma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase and metaphase FISH analysis using probe sets including IGH break apart, dual color 1q21/1p36, multi-color probe set, CLL panel, and IGH/FGFR3 dual color dual fusion",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "variant",
+                "result_entity": "IGH/FGFR3",
+                "gene_nomenclature": [],
+                "result_region": "t(4;14)(p16.3;q32)",
+                "result_status": "abnormal",
+                "result_description": "IGH/FGFR3 fusion signals detected in 33/100 cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Positive Cells",
+                        "result_value": 33.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage Positive",
+                        "result_value": 33.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "POSITIVE"
+                    }
+                ],
+                "clinical_implications": "IGH/FGFR3 rearrangement t(4;14) is associated with poor prognosis in multiple myeloma"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using D13S319/13q34 probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "13q14 and 13q34",
+                "result_status": "abnormal",
+                "result_description": "Loss of both 13q14 and 13q34 signals (monosomy 13)",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Deletion",
+                        "result_value": 58.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage Abnormal",
+                        "result_value": 58.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Monosomy 13"
+                    }
+                ],
+                "clinical_implications": "Monosomy 13 is a common finding in multiple myeloma and may confer additional adverse prognostic significance"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using 1q21/1p36 dual color probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "1q21",
+                "gene_nomenclature": [],
+                "result_region": "1q21",
+                "result_status": "abnormal",
+                "result_description": "Extra copy of 1q21 detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Gain",
+                        "result_value": 26.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage with Gain",
+                        "result_value": 26.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "1q21 Status",
+                        "result_value": "GAIN"
+                    }
+                ],
+                "clinical_implications": "Gain of 1q21 represents an additional high-risk feature associated with disease progression and shorter survival"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using ATM probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "ATM",
+                "gene_nomenclature": [],
+                "result_region": "11q22.3",
+                "result_status": "abnormal",
+                "result_description": "ATM deletion detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Deletion",
+                        "result_value": 38.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage with Deletion",
+                        "result_value": 38.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ATM Status",
+                        "result_value": "DELETION"
+                    }
+                ],
+                "clinical_implications": "ATM deletion may impact DNA damage response pathways"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Metaphase FISH analysis",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "Metaphase cells",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No abnormalities detected in dividing cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphase Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "Absence of abnormalities in metaphase cells suggests low proliferative activity typical for multiple myeloma"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis reveals multiple chromosomal abnormalities characteristic of high-risk multiple myeloma including IGH/FGFR3 rearrangement t(4;14), monosomy 13, gain of 1q21, and ATM deletion. These findings indicate a high-risk cytogenetic profile",
+            "overall_recommendations": "These findings indicate a high-risk cytogenetic profile that should be considered in treatment planning and prognostic assessment"
+        }
+    }
+}

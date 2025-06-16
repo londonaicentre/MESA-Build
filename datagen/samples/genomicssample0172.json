@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT: [redacted name] (Twin)\nDATE OF BIRTH: [redacted date]\nMRN: [redacted ID]\nREFERRING CLINICIAN: Dr. [redacted name]\nDATE COLLECTED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INDICATION\nFollow-up karyotype analysis requested following previous rapid PCR testing.\n\nTEST PERFORMED\nG-banded chromosome analysis\n\nMETHODOLOGY\nConventional cytogenetic analysis was performed on cultured peripheral blood lymphocytes. Metaphase chromosomes were G-banded and analyzed at 450-550 band resolution. A minimum of 20 cells were examined.\n\nRESULT\nKaryotype: 46,XX\n\nNormal female karyotype.\n\nINTERPRETATION\nG-banded chromosome analysis shows a normal female karyotype without evidence of trisomy 21 or other significant chromosomal abnormalities. This level of analysis is sufficient to exclude numerical abnormalities and major structural rearrangements. Smaller structural abnormalities below the resolution of conventional cytogenetics (approximately 5-10 Mb) cannot be excluded.\n\nThis normal karyotype result excludes Down syndrome and other major chromosomal abnormalities detectable by conventional cytogenetic analysis.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Follow-up karyotype analysis requested following previous rapid PCR testing",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Twin",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis performed on cultured peripheral blood lymphocytes at 450-550 band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female karyotype without evidence of trisomy 21 or other significant chromosomal abnormalities",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Examined",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX"
+                    },
+                    {
+                        "result_name": "Sex",
+                        "result_value": "Female"
+                    }
+                ],
+                "clinical_implications": "Normal karyotype excludes Down syndrome and other major chromosomal abnormalities detectable by conventional cytogenetic analysis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype excludes Down syndrome and other major chromosomal abnormalities. Analysis sufficient to exclude numerical and major structural abnormalities only. Smaller structural abnormalities below the resolution of conventional cytogenetics (approximately 5-10 Mb) cannot be excluded",
+            "overall_recommendations": "No specific recommendations provided"
+        }
+    }
+}

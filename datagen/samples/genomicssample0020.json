@@ -1,0 +1,149 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted name] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nGestational Age: 22 weeks\nSample Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPrenatal screening for chromosomal trisomies at 22 weeks gestation\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniotic fluid cells using chromosome-specific short tandem repeat (STR) markers. Multiple informative markers were analyzed for each chromosome:\n- Chromosome 13: D13S631, D13S258, D13S742, D13S628\n- Chromosome 18: D18S535, D18S391, D18S858, D18S386\n- Chromosome 21: D21S1435, D21S1411, D21S1412, D21S1446\n\nFluorescent PCR products were analyzed by capillary electrophoresis. Peak area ratios were calculated for each informative marker. Normal diallelic ratios range from 0.8-1.4. Triallelic patterns or skewed ratios (>1.8 or <0.65) indicate trisomy.\n\nRESULTS\n\nChromosome 13: NORMAL\nAll markers showed normal biallelic patterns with ratios within normal range\nD13S631: 1.02\nD13S258: 0.94\nD13S742: 1.11\nD13S628: 0.89\n\nChromosome 18: NORMAL\nAll markers showed normal biallelic patterns with ratios within normal range\nD18S535: 1.08\nD18S391: 0.91\nD18S858: 1.13\nD18S386: 0.96\n\nChromosome 21: NORMAL\nAll markers showed normal biallelic patterns with ratios within normal range\nD21S1435: 0.87\nD21S1411: 1.09\nD21S1412: 0.95\nD21S1446: 1.04\n\nCONCLUSION\nNormal complement for chromosomes 13, 18, and 21. No abnormality detected.\n\nINTERPRETATION\nQF-PCR analysis demonstrates a normal pattern for chromosomes 13, 18, and 21, indicating the absence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), and trisomy 21 (Down syndrome) in this fetal sample.\n\nLIMITATIONS\n1. This test does not exclude the possibility of maternal cell contamination. However, the presence of biallelic patterns suggests fetal origin of the sample.\n2. Low-level mosaicism (<20%) may not be detected by this methodology.\n3. This test does not detect balanced chromosomal rearrangements, microdeletions, or segmental imbalances.\n4. This test is limited to chromosomes 13, 18, and 21 and does not assess other chromosomes.\n5. Uniparental disomy cannot be excluded by this test.\n\nRECOMMENDATIONS\nFollow-up testing to be performed by the cytogenetics laboratory, including full karyotype analysis, to provide comprehensive chromosomal assessment. This will detect abnormalities not covered by QF-PCR screening.\n\nThis test was developed and its performance characteristics determined by [redacted name] Medical Center Clinical Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal screening for chromosomal trisomies at 22 weeks gestation",
+            "test_clinical_rationale": "Screening for chromosomal trisomies",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "22 weeks gestation"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniotic fluid cells using chromosome-specific short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "All markers showed normal biallelic patterns with ratios within normal range",
+                "quantitative_results": [
+                    {
+                        "result_name": "D13S631 ratio",
+                        "result_value": 1.02,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S258 ratio",
+                        "result_value": 0.94,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S742 ratio",
+                        "result_value": 1.11,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S628 ratio",
+                        "result_value": 0.89,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "NORMAL"
+                    }
+                ],
+                "clinical_implications": "Absence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniotic fluid cells using chromosome-specific short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S535, D18S391, D18S858, D18S386",
+                "result_status": "normal",
+                "result_description": "All markers showed normal biallelic patterns with ratios within normal range",
+                "quantitative_results": [
+                    {
+                        "result_name": "D18S535 ratio",
+                        "result_value": 1.08,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S391 ratio",
+                        "result_value": 0.91,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S858 ratio",
+                        "result_value": 1.13,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S386 ratio",
+                        "result_value": 0.96,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "NORMAL"
+                    }
+                ],
+                "clinical_implications": "Absence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniotic fluid cells using chromosome-specific short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1446",
+                "result_status": "normal",
+                "result_description": "All markers showed normal biallelic patterns with ratios within normal range",
+                "quantitative_results": [
+                    {
+                        "result_name": "D21S1435 ratio",
+                        "result_value": 0.87,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1411 ratio",
+                        "result_value": 1.09,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1412 ratio",
+                        "result_value": 0.95,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1446 ratio",
+                        "result_value": 1.04,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "NORMAL"
+                    }
+                ],
+                "clinical_implications": "Absence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal results indicate absence of trisomy 13, 18, or 21",
+            "overall_recommendations": "Follow-up testing to be performed by the cytogenetics laboratory, including full karyotype analysis, to provide comprehensive chromosomal assessment"
+        }
+    }
+}

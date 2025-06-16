@@ -1,0 +1,99 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReferral Reason: Amniocentesis for prenatal chromosome analysis\nGestational Age at Sampling: [redacted] weeks\nIndication: Prenatal screening for trisomy syndromes\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nRapid aneuploidy detection for chromosomes 13, 18, and 21\n\nMETHODOLOGY\nDNA was extracted from uncultured amniocytes obtained from amniotic fluid. QF-PCR analysis was performed using fluorescently labeled primers for short tandem repeat (STR) markers specific to chromosomes 13, 18, and 21. The following markers were analyzed:\n\nChromosome 13: D13S631, D13S258, D13S742, D13S628\nChromosome 18: D18S535, D18S391, D18S390, D18S386\nChromosome 21: D21S1435, D21S1411, D21S1412, D21S1414\n\nPCR products were analyzed by capillary electrophoresis on an ABI 3500 Genetic Analyzer. Peak area ratios were calculated for informative markers.\n\nRESULTS\n\nCHROMOSOME 13 ANALYSIS\nInformative markers: 3/4\nD13S631: 1:1 ratio (normal)\nD13S258: 1:1 ratio (normal)\nD13S742: Uninformative (homozygous)\nD13S628: 1:1 ratio (normal)\nConclusion: Normal diallelic pattern consistent with two copies of chromosome 13\n\nCHROMOSOME 18 ANALYSIS\nInformative markers: 4/4\nD18S535: 1:1 ratio (normal)\nD18S391: 1:1 ratio (normal)\nD18S390: 1:1 ratio (normal)\nD18S386: 1:1 ratio (normal)\nConclusion: Normal diallelic pattern consistent with two copies of chromosome 18\n\nCHROMOSOME 21 ANALYSIS\nInformative markers: 3/4\nD21S1435: 1:1 ratio (normal)\nD21S1411: Uninformative (homozygous)\nD21S1412: 1:1 ratio (normal)\nD21S1414: 1:1 ratio (normal)\nConclusion: Normal diallelic pattern consistent with two copies of chromosome 21\n\nSUMMARY\nAnalysis showed normal complement for chromosomes 13, 18, and 21. No abnormalities detected.\n\nINTERPRETATION\nThe QF-PCR results indicate a normal chromosomal complement for chromosomes 13, 18, and 21, suggesting absence of common trisomies (Down syndrome, Edwards syndrome, and Patau syndrome). This rapid screening test has a detection rate of >99% for trisomies 13, 18, and 21 in singleton pregnancies.\n\nLIMITATIONS\n- This test does not detect balanced chromosomal rearrangements\n- Mosaicism below 20% may not be detected\n- Other chromosomal abnormalities are not assessed by this method\n- Maternal cell contamination <20% may not be detected\n\nRECOMMENDATIONS\nFull karyotype analysis from cultured amniocytes to follow. This will provide comprehensive chromosomal analysis including detection of structural abnormalities and abnormalities of other chromosomes not assessed by QF-PCR.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Amniocentesis for prenatal chromosome analysis",
+            "test_clinical_rationale": "Prenatal screening for trisomy syndromes",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers specific to chromosomes 13, 18, and 21",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern consistent with two copies of chromosome 13",
+                "quantitative_results": [
+                    {
+                        "result_name": "Informative markers",
+                        "result_value": 3.0,
+                        "result_units": "markers"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Peak Ratio",
+                        "result_value": "1:1 (normal)"
+                    }
+                ],
+                "clinical_implications": "Absence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers specific to chromosomes 13, 18, and 21",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S535, D18S391, D18S390, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern consistent with two copies of chromosome 18",
+                "quantitative_results": [
+                    {
+                        "result_name": "Informative markers",
+                        "result_value": 4.0,
+                        "result_units": "markers"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Peak Ratio",
+                        "result_value": "1:1 (normal)"
+                    }
+                ],
+                "clinical_implications": "Absence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers specific to chromosomes 13, 18, and 21",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1414",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern consistent with two copies of chromosome 21",
+                "quantitative_results": [
+                    {
+                        "result_name": "Informative markers",
+                        "result_value": 3.0,
+                        "result_units": "markers"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Peak Ratio",
+                        "result_value": "1:1 (normal)"
+                    }
+                ],
+                "clinical_implications": "Absence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Results indicate normal chromosomal complement, suggesting absence of common trisomies. Detection rate >99% for trisomies 13, 18, and 21 in singleton pregnancies",
+            "overall_recommendations": "Full karyotype analysis from cultured amniocytes to follow. This will provide comprehensive chromosomal analysis including detection of structural abnormalities and abnormalities of other chromosomes not assessed by QF-PCR"
+        }
+    }
+}

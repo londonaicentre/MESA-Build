@@ -1,0 +1,68 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted name] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSPECIMEN: Chorionic villus sample\nCOLLECTION DATE: [redacted date]\nREPORT DATE: [redacted date]\nACCESSION: [redacted ID]\n\nCLINICAL INDICATION\nPrenatal testing requested for advanced maternal age (37 years). Ultrasound gestational age: 13 weeks.\n\nTEST PERFORMED\nG-banded chromosome analysis of cultured chorionic villi\n\nRESULT\nKaryotype: 46,XY\n\nNormal male chromosome complement\n\nINTERPRETATION\nG-banded analysis reveals a normal male karyotype with no evidence of trisomy 21 (Down syndrome) or other numerical or major structural chromosomal abnormalities. Twenty metaphases were analyzed at a resolution of 400-450 bands.\n\nThis analysis is sufficient for detection of numerical abnormalities and major structural rearrangements but may not detect subtle structural abnormalities, low-level mosaicism (<10%), or submicroscopic deletions/duplications.\n\nThis report supersedes the preliminary rapid aneuploidy screening (QF-PCR) performed one week prior.\n\nMETHODOLOGY\nChorionic villus tissue was cultured according to standard protocols. Chromosome analysis was performed using G-banding technique on cultured cells. Analysis included examination of 20 metaphase cells and karyotyping of 5 cells.\n\nLIMITATIONS\n- Cannot detect balanced rearrangements that do not result in gain or loss of chromosomal material\n- Mosaicism below 10% may not be detected\n- Submicroscopic abnormalities require molecular cytogenetic techniques for detection\n- Maternal cell contamination, while unlikely, cannot be completely excluded\n\nRECOMMENDATIONS\nNo additional cytogenetic testing indicated based on these results. Routine prenatal care should continue. Genetic counseling is available if desired.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD\n\nThis laboratory is accredited by CAP (#[redacted ID]) and CLIA certified (#[redacted ID])",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing requested for advanced maternal age (37 years)",
+            "test_clinical_rationale": "Testing for Down syndrome (trisomy 21) and other chromosomal abnormalities",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal age 37 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Ultrasound gestational age: 13 weeks"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample (chorion) from 37-year-old mother",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis of cultured chorionic villi",
+                "sample_origin": "Chorionic villus sample",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal male chromosome complement with no evidence of trisomy 21 or other numerical or major structural chromosomal abnormalities",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Cells Karyotyped",
+                        "result_value": 5.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Band Resolution",
+                        "result_value": 450.0,
+                        "result_units": "bands"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype Result",
+                        "result_value": "46,XY"
+                    },
+                    {
+                        "result_name": "Sex",
+                        "result_value": "Male"
+                    }
+                ],
+                "clinical_implications": "Normal male karyotype indicates absence of Down syndrome and other major chromosomal abnormalities"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal male karyotype with no evidence of trisomy 21 (Down syndrome) or other major chromosomal abnormalities detectable by G-banding analysis",
+            "overall_recommendations": "No additional cytogenetic testing indicated based on these results. Routine prenatal care should continue. Genetic counseling is available if desired. This report supersedes the preliminary rapid aneuploidy screening (QF-PCR) performed one week prior"
+        }
+    }
+}

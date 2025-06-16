@@ -1,0 +1,59 @@
+{
+    "content": "MOLECULAR ONCOLOGY LABORATORY REPORT\n[redacted location] Cancer Center\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nPhysician: Dr. [redacted name]\n\nSPECIMEN INFORMATION\nSpecimen Type: Bone Marrow Aspirate\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INDICATION\nDiagnostic sample assessment for suspected acute myeloid leukemia\n\nTEST PERFORMED\nQuantitative Real-Time PCR for CBFB::MYH11 Fusion Transcript\n\nMETHODOLOGY\nRNA was extracted from bone marrow aspirate using standard protocols. cDNA synthesis was performed using random hexamer primers. Real-time quantitative PCR (qPCR) was performed using TaqMan technology on the Applied Biosystems 7500 Real-Time PCR System. The CBFB::MYH11 type A fusion transcript was amplified using specific primers and probe sets. Results are expressed as fusion transcript copy number per 100,000 copies of the ABL1 control gene. The analytical sensitivity of this assay is 1 fusion transcript per 100,000 ABL1 copies.\n\nRESULTS\n\n┌─────────────────────────────────────────────────────────────────────┐\n│ Target                │ Copy Number        │ Normalized to ABL1     │\n├─────────────────────────────────────────────────────────────────────┤\n│ CBFB::MYH11 Type A   │ 1.12 × 10^5       │ 55,755 / 100,000      │\n│ ABL1 Control         │ 2.01 × 10^5       │ Reference Gene         │\n└─────────────────────────────────────────────────────────────────────┘\n\nINTERPRETATION\nHigh levels of CBFB::MYH11 type A fusion transcript detected.\n\nThe presence of the CBFB::MYH11 fusion transcript is consistent with acute myeloid leukemia (AML) with inv(16)(p13;q22) or t(16;16)(p13;q22). This genetic abnormality results from the inversion or translocation involving chromosome 16, leading to fusion of the core binding factor beta gene (CBFB) at 16q22 with the smooth muscle myosin heavy chain gene (MYH11) at 16p13.\n\nThe detected fusion transcript level of 55,755 copies per 100,000 ABL1 copies represents a high tumor burden at diagnosis. This baseline measurement will be important for monitoring minimal residual disease (MRD) during and after therapy.\n\nCLINICAL SIGNIFICANCE\nAML with inv(16)/t(16;16); CBFB::MYH11 is classified as AML with recurrent genetic abnormalities according to WHO classification. This subtype generally has a favorable prognosis with appropriate therapy, particularly when combined with high-dose cytarabine-based regimens. The presence of this fusion transcript confirms the diagnosis and provides a molecular marker for MRD monitoring.\n\nRECOMMENDATIONS\n1. Results are consistent with AML with inv(16)/t(16;16); CBFB::MYH11 diagnosis\n2. Next paired bone marrow (5ml first pull in EDTA) and peripheral blood (20ml in EDTA) samples for MRD assessment post-therapy\n3. Serial monitoring of CBFB::MYH11 transcript levels is recommended to assess treatment response\n4. A 3-log reduction from baseline is considered a good molecular response\n\nREPORTED BY\n[redacted name], PhD, FACMG\nDirector, Molecular Oncology Laboratory\n\nElectronically signed on [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic sample assessment for suspected acute myeloid leukemia",
+            "test_clinical_rationale": "Diagnostic sample assessment",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Real-time quantitative PCR (qPCR) using TaqMan technology on Applied Biosystems 7500 Real-Time PCR System measuring fusion transcript copy number per 100,000 ABL1 control gene copies",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "CBFB::MYH11",
+                "gene_nomenclature": [],
+                "result_region": "Type A fusion transcript",
+                "result_status": "abnormal",
+                "result_description": "High levels of CBFB::MYH11 type A fusion transcript detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "CBFB::MYH11 Copy Number",
+                        "result_value": 112000.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "CBFB::MYH11 Normalized",
+                        "result_value": 55755.0,
+                        "result_units": "per 100,000 ABL1"
+                    },
+                    {
+                        "result_name": "ABL1 Copy Number",
+                        "result_value": 201000.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Fusion Type",
+                        "result_value": "Type A"
+                    },
+                    {
+                        "result_name": "Tumor Burden",
+                        "result_value": "High"
+                    }
+                ],
+                "clinical_implications": "Results consistent with AML with inv(16)/t(16;16); CBFB::MYH11 diagnosis. This genetic abnormality results from inversion or translocation involving chromosome 16, generally has favorable prognosis with appropriate therapy"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Results consistent with AML with inv(16)/t(16;16); CBFB::MYH11 diagnosis. High tumor burden at diagnosis with fusion transcript level of 55,755 copies per 100,000 ABL1 copies. This subtype has favorable prognosis with appropriate therapy, particularly with high-dose cytarabine-based regimens",
+            "overall_recommendations": "Next paired bone marrow (5ml first pull in EDTA) and peripheral blood (20ml in EDTA) samples for MRD assessment post-therapy. Serial monitoring of CBFB::MYH11 transcript levels recommended to assess treatment response. A 3-log reduction from baseline is considered a good molecular response"
+        }
+    }
+}

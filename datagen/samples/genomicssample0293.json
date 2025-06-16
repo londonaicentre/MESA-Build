@@ -1,0 +1,112 @@
+{
+    "content": "PRENATAL CYTOGENETICS REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nAbnormal maternal serum screening with increased risk for trisomy 18. Amniocentesis performed for fetal karyotype analysis.\n\nFAMILY HISTORY\nFather is known carrier of chromosome 18 inversion. No reported phenotypic abnormalities in father or paternal family members with this rearrangement.\n\nTEST PERFORMED\nConventional cytogenetic analysis (G-banded karyotype)\nMethodology: Amniotic fluid cells were cultured according to standard protocols. Chromosome analysis was performed using G-banding technique at 550-band resolution. Twenty metaphases were analyzed.\n\nRESULT\nKaryotype: 46,XY,inv(18)(p11.2q21.3)\n\nINTERPRETATION\nThe fetal karyotype shows a normal male chromosome complement with a pericentric inversion of chromosome 18. The inversion breakpoints are at p11.2 and q21.3. This represents a balanced chromosomal rearrangement with no apparent loss or gain of chromosomal material.\n\nParental karyotyping was performed to determine the origin of this inversion:\n- Paternal karyotype: 46,XY,inv(18)(p11.2q21.3)\n- Maternal karyotype: 46,XX (normal)\n\nThe chromosome 18 inversion identified in the fetus is identical to that carried by the father, confirming this is a familial balanced rearrangement.\n\nCLINICAL SIGNIFICANCE\nBalanced pericentric inversions that are inherited from a phenotypically normal parent are typically associated with normal development and no increased risk for congenital abnormalities. The father's normal phenotype and the familial nature of this inversion provide reassurance regarding the expected normal development of the fetus.\n\nThe initial maternal serum screening indication of increased risk for trisomy 18 is not supported by this karyotype analysis, which shows no evidence of trisomy 18.\n\nRECOMMENDATIONS\n1. No additional cytogenetic testing is indicated based on these findings\n2. Normal fetal development is expected given the familial nature of this balanced inversion\n3. Genetic counseling is recommended to discuss:\n   - The benign nature of this familial inversion\n   - Future reproductive risks (small increased risk of unbalanced rearrangements in offspring)\n   - The discordance between maternal serum screening and karyotype results\n4. Standard prenatal care and monitoring should continue\n5. This inversion should be documented in the child's medical records for future reference\n\nThis analysis was performed in a CLIA-certified laboratory.\n\nReported by: [redacted name], Ph.D., FACMG\nLaboratory Director: [redacted name], M.D., Ph.D.\nReport Date: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Abnormal maternal serum screening with increased risk for trisomy 18",
+            "test_clinical_rationale": "Amniocentesis performed for fetal karyotype analysis",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Abnormal maternal serum screening"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Increased risk for trisomy 18"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Father is known carrier of chromosome 18 inversion"
+                },
+                {
+                    "type": "family_history",
+                    "value": "No reported phenotypic abnormalities in father or paternal family members with this rearrangement"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Conventional cytogenetic analysis using G-banding technique at 550-band resolution",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "inv(18)(p11.2q21.3)",
+                "result_status": "abnormal",
+                "result_description": "46,XY,inv(18)(p11.2q21.3) - Pericentric inversion of chromosome 18",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    },
+                    {
+                        "result_name": "Chromosome Rearrangement",
+                        "result_value": "Balanced pericentric inversion"
+                    },
+                    {
+                        "result_name": "Inheritance Pattern",
+                        "result_value": "Paternally inherited"
+                    }
+                ],
+                "clinical_implications": "Familial balanced inversion inherited from phenotypically normal father; typically associated with normal development"
+            },
+            {
+                "test_subject": "father",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Parental karyotyping",
+                "sample_origin": "Blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "inv(18)(p11.2q21.3)",
+                "result_status": "abnormal",
+                "result_description": "46,XY,inv(18)(p11.2q21.3) - Identical inversion to fetus",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XY,inv(18)(p11.2q21.3)"
+                    }
+                ],
+                "clinical_implications": "Confirms familial nature of the inversion"
+            },
+            {
+                "test_subject": "mother",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Parental karyotyping",
+                "sample_origin": "Blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - Normal female karyotype",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The fetus carries a balanced pericentric inversion of chromosome 18 inherited from the phenotypically normal father. This familial balanced rearrangement is typically associated with normal development. The initial maternal serum screening indication of increased risk for trisomy 18 is not supported by the karyotype analysis",
+            "overall_recommendations": "No additional cytogenetic testing indicated. Normal fetal development expected. Genetic counseling recommended to discuss benign nature of familial inversion and small increased risk of unbalanced rearrangements in future offspring. Standard prenatal care should continue. Document inversion in child's medical records"
+        }
+    }
+}

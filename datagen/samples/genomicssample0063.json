@@ -1,0 +1,34 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY\n[redacted location] Hospital NHS Trust\n\nQF-PCR SEX CHROMOSOME ANALYSIS REPORT\n\nPatient ID: [redacted ID]\nDate of Birth: Not applicable\nSample Type: Amniotic fluid\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nFetal sexing\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for sex chromosome analysis\n\nMETHODOLOGY\nDNA extracted from cultured amniotic fluid cells. QF-PCR performed using fluorescently labeled primers for sex chromosome markers including AMELX/Y, SRY, and X-linked STR markers.\n\nRESULT\nFILE ONLY\n\nAuthorised by: [redacted name]\nConsultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal sexing",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for sex chromosome markers including AMELX/Y, SRY, and X-linked STR markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Sex chromosomes",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "FILE ONLY",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Test performed for fetal sexing purposes",
+            "overall_recommendations": "Result filed for record only"
+        }
+    }
+}

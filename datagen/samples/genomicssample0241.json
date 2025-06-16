@@ -1,0 +1,94 @@
+{
+    "content": "CLINICAL GENETICS LABORATORY REPORT\n[redacted location] Children's Hospital\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nPatient: [redacted name]\nDOB: [redacted date]\nAge: 3 years\nSex: Female\nMRN: [redacted ID]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nREFERRING PHYSICIAN\n[redacted name], MD\nPediatric Neurology\n\nCLINICAL INDICATION\n3-year-old female presenting with developmental regression, loss of purposeful hand skills, stereotypic hand movements, and acquired microcephaly. Clinical suspicion of Rett syndrome.\n\nCLINICAL HISTORY\nThe patient had normal development until approximately 18 months of age, when parents noted gradual loss of acquired language skills and purposeful hand use. She subsequently developed repetitive hand-wringing movements. Head circumference, which was at the 50th percentile at birth, has decelerated and is now below the 3rd percentile. No family history of neurodevelopmental disorders reported.\n\nTEST PERFORMED\nWhole Exome Sequencing - Trio Analysis\n• Proband and biological parents analyzed\n• Library preparation: Agilent SureSelect Human All Exon V7\n• Sequencing platform: Illumina NovaSeq 6000\n• Mean coverage: 120x (proband), 100x (parents)\n• Minimum coverage threshold: 20x for >95% of coding regions\n• Analysis focused on genes associated with neurodevelopmental disorders\n\nTECHNICAL FINDINGS\n\nMECP2 (NM_004992.3): c.808C>T p.(Arg270*)\n• Heterozygous nonsense variant detected in proband\n• Coverage at variant position: 142x\n• Variant allele frequency: 48%\n• Not detected in either parent (coverage: Mother 98x, Father 102x)\n• De novo status confirmed\n\nVARIANT CLASSIFICATION\nThe MECP2 c.808C>T p.(Arg270*) variant is classified as PATHOGENIC (Class 5) based on:\n• PVS1: Nonsense variant in gene where loss-of-function is known disease mechanism\n• PS2: De novo occurrence confirmed by trio analysis\n• PM2: Absent from population databases (gnomAD)\n• PP5: Multiple reputable sources classify as pathogenic (ClinVar consensus)\n\nCLINICAL INTERPRETATION\nThe identified de novo nonsense variant in MECP2 confirms the clinical diagnosis of Rett syndrome (OMIM #312750). The p.Arg270* variant is one of the most common pathogenic variants in MECP2, accounting for approximately 6% of classic Rett syndrome cases. This variant results in premature protein truncation, eliminating critical functional domains including the transcriptional repression domain.\n\nPatients with the p.Arg270* variant typically present with classic Rett syndrome phenotype, including:\n• Normal early development followed by regression (6-18 months)\n• Loss of purposeful hand skills with stereotypic movements\n• Acquired microcephaly\n• Gait abnormalities\n• Variable seizure onset (typically after 4 years)\n\nDEVELOPMENTAL PREDICTIONS\nBased on genotype-phenotype correlations for p.Arg270*:\n• Regression phase expected to stabilize by age 4-5 years\n• Ambulation may be preserved in 50% of cases\n• Communication skills typically limited to eye gaze\n• Seizures develop in approximately 70% by adolescence\n• Scoliosis risk increases after age 8\n\nCLINICAL MANAGEMENT RECOMMENDATIONS\n\n1. MULTIDISCIPLINARY CARE COORDINATION\n   • Pediatric neurology for seizure monitoring and management\n   • Physical therapy for motor function preservation\n   • Occupational therapy for hand function and daily activities\n   • Speech/communication therapy with augmentative communication devices\n   • Developmental pediatrics for comprehensive care coordination\n\n2. SURVEILLANCE\n   • EEG monitoring annually or with clinical changes\n   • Orthopedic evaluation for scoliosis screening (annually after age 5)\n   • Nutritional assessment and growth monitoring\n   • Cardiac evaluation including QTc monitoring\n   • Sleep study if breathing irregularities develop\n\n3. SUPPORTIVE INTERVENTIONS\n   • Consider trial of communication devices/eye gaze technology\n   • Nutritional support as needed for growth failure\n   • Constipation management\n   • Bone health monitoring\n\n4. GENETIC COUNSELING\n   • Recurrence risk for parents: ~1% due to theoretical germline mosaicism\n   • Future prenatal testing available\n   • X-linked dominant inheritance pattern\n   • Recommend genetic counseling for extended family planning\n\nREPORTED BY\n[redacted name], PhD, FACMG\nLaboratory Director\n\n[redacted name], MD\nClinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "3-year-old female presenting with developmental regression, loss of purposeful hand skills, stereotypic hand movements, and acquired microcephaly. Clinical suspicion of Rett syndrome",
+            "test_clinical_rationale": "Whole exome sequencing to identify genetic cause of neurodevelopmental regression and confirm suspected Rett syndrome diagnosis",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "3-year-old female"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Normal development until approximately 18 months of age"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Gradual loss of acquired language skills and purposeful hand use"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Repetitive hand-wringing movements"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Head circumference decelerated from 50th percentile at birth to below 3rd percentile"
+                },
+                {
+                    "type": "family_history",
+                    "value": "No family history of neurodevelopmental disorders"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Whole exome sequencing with trio analysis using Agilent SureSelect Human All Exon V7 library preparation on Illumina NovaSeq 6000",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "MECP2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_004992",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.808C>T p.(Arg270*)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous nonsense variant detected in proband, not detected in either parent, confirming de novo status",
+                "quantitative_results": [
+                    {
+                        "result_name": "Coverage at Variant Position",
+                        "result_value": 142.0,
+                        "result_units": "x"
+                    },
+                    {
+                        "result_name": "Variant Allele Frequency",
+                        "result_value": 48.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Mean Coverage Proband",
+                        "result_value": 120.0,
+                        "result_units": "x"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic (Class 5)"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "Inheritance",
+                        "result_value": "De novo"
+                    }
+                ],
+                "clinical_implications": "Confirms classic Rett syndrome diagnosis. p.Arg270* is common MECP2 mutation accounting for ~6% of classic Rett syndrome cases, associated with typical clinical progression including regression, loss of hand skills, microcephaly, and variable seizure onset"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "De novo MECP2 p.Arg270* variant confirms Rett syndrome diagnosis. This variant typically presents with classic phenotype including regression phase stabilizing by age 4-5, preserved ambulation in 50%, communication limited to eye gaze, 70% seizure risk by adolescence, and increased scoliosis risk after age 8",
+            "overall_recommendations": "Multidisciplinary care required: pediatric neurology for seizure monitoring, physical therapy for motor function, occupational therapy for hand function, speech/communication therapy with augmentative devices. Annual EEG monitoring, scoliosis screening after age 5, nutritional assessment, cardiac evaluation with QTc monitoring. Genetic counseling for ~1% parental recurrence risk due to possible germline mosaicism. Prenatal testing available for future pregnancies"
+        }
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: Not applicable (fetus)\nMedical Record Number: [redacted ID]\nSpecimen Type: Chorionic villi\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Prenatal genetic testing at 14 weeks gestation\nClinical History: Routine prenatal screening\n\nTEST PERFORMED\nTargeted G-banded chromosome analysis of chromosome 21 and sex chromosomes following rapid PCR of uncultured chorionic villi\n\nMETHODOLOGY\nRapid PCR analysis was initially performed on uncultured chorionic villi using quantitative fluorescence-PCR (QF-PCR) with STR markers specific for chromosomes 13, 18, 21, X and Y. Following the rapid result, targeted G-banded karyotype analysis was performed on cultured chorionic villi cells focusing on chromosome 21 and sex chromosomes. A minimum of 15 metaphases were analyzed at 400-550 band resolution.\n\nRESULTS\nKaryotype: 47,XX,+21\n\nTargeted G-banded analysis confirmed primary trisomy 21 with female karyotype, consistent with Down syndrome and confirming prior rapid PCR result.\n\nAll analyzed metaphases showed three copies of chromosome 21. The sex chromosome complement was normal female (XX). No structural abnormalities were detected in the targeted analysis.\n\nINTERPRETATION\nThis result indicates Down syndrome (trisomy 21) in a female fetus. Primary trisomy 21 typically arises from meiotic nondisjunction during gamete formation or less commonly from a post-zygotic mitotic error. The risk of nondisjunction increases with maternal age.\n\nDown syndrome is associated with intellectual disability, characteristic facial features, and increased risk for certain medical conditions including congenital heart defects, gastrointestinal abnormalities, and leukemia. However, the severity and specific features cannot be predicted from the karyotype alone.\n\nRECOMMENDATIONS\n1. Genetic counseling is strongly advised to discuss the implications of this diagnosis, prognosis, and management options\n2. Parental karyotyping is not indicated as primary trisomy 21 is typically a de novo event\n3. Detailed ultrasound examination to assess for associated structural anomalies\n4. For future pregnancies:\n   - Increased surveillance due to elevated aneuploidy risk\n   - First trimester combined screening (biochemical markers and nuchal translucency)\n   - Consider cell-free DNA screening or diagnostic testing\n   - Prenatal diagnosis via chorionic villus sampling or amniocentesis may be offered\n\nThis report has been reviewed and authorized by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\n\nFor questions regarding this report, please contact the laboratory at [redacted phone number]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal genetic testing at 14 weeks gestation",
+            "test_clinical_rationale": "Routine prenatal screening",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Targeted G-banded chromosome analysis of chromosome 21 and sex chromosomes following rapid PCR of uncultured chorionic villi",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Targeted G-banded analysis confirmed primary trisomy 21 with female karyotype, consistent with Down syndrome and confirming prior rapid PCR result",
+                "quantitative_results": [
+                    {
+                        "result_name": "Chromosome 21 Copy Number",
+                        "result_value": 3.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 15.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "47,XX,+21"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Diagnosis",
+                        "result_value": "Down syndrome"
+                    }
+                ],
+                "clinical_implications": "Primary trisomy 21 (Down syndrome) arising from meiotic or post-zygotic error"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Down syndrome (trisomy 21) in a female fetus. Associated with intellectual disability, characteristic facial features, and increased risk for congenital heart defects, gastrointestinal abnormalities, and leukemia. Severity cannot be predicted from karyotype alone",
+            "overall_recommendations": "Genetic counseling strongly advised. Parental karyotyping not indicated. Detailed ultrasound examination recommended. Future pregnancies have increased aneuploidy risk; first trimester combined screening, cell-free DNA screening or diagnostic testing recommended. Prenatal diagnosis via CVS or amniocentesis may be offered"
+        }
+    }
+}

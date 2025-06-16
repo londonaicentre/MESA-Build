@@ -1,0 +1,73 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSex: Female\nEthnicity: White European\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nREFERRAL REASON\nCystic fibrosis carrier testing requested for pregnant woman with family history of CF. Known familial CFTR pathogenic variant c.1521_1523delCTT p.(Phe508del) identified in affected family member.\n\nCLINICAL INFORMATION\nPatient is currently pregnant and has requested carrier screening due to family history of cystic fibrosis. A family member has been diagnosed with CF and carries the c.1521_1523delCTT p.(Phe508del) pathogenic variant in the CFTR gene.\n\nTEST METHODOLOGY\nCF-Screen Panel\nTargeted PCR-based screening for common pathogenic variants in the CFTR gene\nPanel detects 50 variants representing approximately 88% of CF-causing variants in the Caucasian population\nIncludes specific testing for the known familial variant c.1521_1523delCTT p.(Phe508del)\nMethodology: Allele-specific PCR with fluorescent detection\nAnalytical sensitivity: >99% for variants included in panel\n\nRESULTS\nGene: CFTR (NM_000492.4)\nResult: NEGATIVE - No pathogenic variants detected\n\nVariants Tested: 50 common CFTR pathogenic variants including:\n- c.1521_1523delCTT p.(Phe508del) - NOT DETECTED\n- c.1652G>A p.(Gly551Asp) - NOT DETECTED\n- c.1624G>T p.(Gly542*) - NOT DETECTED\n- c.489+1G>T - NOT DETECTED\n[Additional variants tested as per CF-Screen panel]\n\nSUMMARY\nNo pathogenic variants were detected in this CFTR carrier screen. The known familial variant c.1521_1523delCTT p.(Phe508del) was specifically tested and not detected in this patient.\n\nBased on the negative result and the patient's White European ethnicity, the residual carrier risk is reduced from the population risk of approximately 1/25 to approximately 1/802.\n\nCLINICAL IMPLICATIONS\nThis negative result significantly reduces but does not eliminate the patient's risk of being a CF carrier. Given the negative carrier screen in this patient and assuming the partner is not a known CF carrier, prenatal testing for cystic fibrosis is not indicated based on current guidelines.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss these results and their implications for the current pregnancy\n2. Partner carrier screening may be considered based on ethnicity and family history\n3. Carrier testing is available for other adult family members who may be at risk\n4. Genetic counseling is recommended prior to testing family members to discuss benefits, risks, and limitations of carrier screening\n\nTECHNICAL NOTES AND LIMITATIONS\n- This test screens for 50 common CFTR pathogenic variants and detects approximately 88% of CF-causing variants in individuals of Caucasian ancestry\n- Detection rates vary by ethnicity: Ashkenazi Jewish (94%), Hispanic (72%), African American (65%), Asian (49%)\n- This test does not detect all CFTR variants; therefore, a negative result does not rule out carrier status\n- Rare variants, deep intronic variants, and large deletions/duplications may not be detected by this methodology\n- Full CFTR gene sequencing and deletion/duplication analysis is available if clinically indicated\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the FDA.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD\nCAP: [redacted ID] | CLIA: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Cystic fibrosis carrier testing requested for pregnant woman with family history of CF. Known familial CFTR pathogenic variant c.1521_1523delCTT p.(Phe508del) identified in affected family member",
+            "test_clinical_rationale": "Carrier screening due to family history of cystic fibrosis to assess risk for current pregnancy",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Currently pregnant"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "White European ethnicity"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Family member diagnosed with CF carrying c.1521_1523delCTT p.(Phe508del) pathogenic variant"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "CF-Screen Panel - Targeted PCR-based screening with allele-specific PCR and fluorescent detection",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000492",
+                        "version": "4"
+                    }
+                ],
+                "result_region": "50 common pathogenic variants including c.1521_1523delCTT p.(Phe508del)",
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected in CFTR screening. Test included known familial variant c.1521_1523delCTT p.(Phe508del)",
+                "quantitative_results": [
+                    {
+                        "result_name": "Analytical Sensitivity",
+                        "result_value": 99.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Detection Rate",
+                        "result_value": 88.0,
+                        "result_units": "% (Caucasian population)"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "c.1521_1523delCTT p.(Phe508del) Status",
+                        "result_value": "NOT DETECTED"
+                    },
+                    {
+                        "result_name": "Overall Result",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": "Carrier risk reduced from population risk of ~1/25 to ~1/802. Prenatal testing for CF not indicated"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Negative result significantly reduces but does not eliminate the patient's risk of being a CF carrier. Given the negative carrier screen and assuming partner is not a known CF carrier, prenatal testing for cystic fibrosis is not indicated based on current guidelines",
+            "overall_recommendations": "Genetic counseling recommended to discuss results and implications for current pregnancy. Partner carrier screening may be considered. Carrier testing available for other adult family members. Genetic counseling recommended prior to testing family members"
+        }
+    }
+}

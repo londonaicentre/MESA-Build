@@ -1,0 +1,58 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: Not applicable (prenatal)\nSample ID: [redacted ID]\nReferring Clinician: Dr. [redacted name]\nDate of Sample Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INFORMATION\nMaternal age: 35 years\nGestational age by ultrasound: 12 weeks\nIndication for testing: Advanced maternal age, screening for Down syndrome and other chromosomal abnormalities\nSample type: Chorionic villus sample (CVS)\n\nTEST PERFORMED\nG-banded chromosome analysis (Karyotype)\n\nMETHODOLOGY\nChorionic villus cells were cultured according to standard protocols. Metaphase chromosomes were obtained from cultured cells and analyzed using G-banding technique at 400-550 band resolution. A minimum of 20 metaphase cells were examined, with detailed analysis of 5 cells and karyotyping of 2 cells.\n\nRESULT\nKaryotype: 46,XY\n\nINTERPRETATION\nG-banded chromosome analysis reveals a normal male karyotype (46,XY). No evidence of trisomy 21 (Down syndrome) or other numerical or structural chromosomal abnormalities was detected in the cells examined.\n\nThe normal male karyotype indicates:\n- No evidence of trisomy 21 (Down syndrome)\n- No evidence of trisomy 18 (Edwards syndrome)\n- No evidence of trisomy 13 (Patau syndrome)\n- No evidence of sex chromosome abnormalities\n- No evidence of unbalanced structural rearrangements detectable at this resolution\n\nLIMITATIONS\nThis analysis cannot detect:\n- Balanced chromosomal rearrangements that do not result in gain or loss of chromosomal material\n- Low-level mosaicism (<10%)\n- Microdeletions or microduplications below the resolution of conventional cytogenetics\n- Single gene disorders\n- Uniparental disomy\n\nCLINICAL CORRELATION\nThis result supersedes any previous rapid aneuploidy screening results (e.g., QF-PCR) performed on this pregnancy. The finding of a normal male karyotype is reassuring; however, this does not eliminate all genetic risks. The residual risk for chromosomal abnormalities is reduced to the background population risk.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss the results and any residual risks\n2. Continue routine prenatal care and ultrasound monitoring\n3. No indication for additional invasive testing based on these results\n4. Consider non-invasive prenatal screening for other genetic conditions if clinically indicated\n\nThis report has been reviewed and authorized by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\nLicense #: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Advanced maternal age, screening for Down syndrome and other chromosomal abnormalities",
+            "test_clinical_rationale": "Prenatal diagnosis to detect chromosomal abnormalities in fetus of 35-year-old mother",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal age: 35 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Gestational age by ultrasound: 12 weeks"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis at 400-550 band resolution from cultured chorionic villus cells",
+                "sample_origin": "Chorionic villus sample",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XY - Normal male karyotype observed. No evidence of trisomy 21 or other chromosomal abnormalities",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphase cells examined",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    },
+                    {
+                        "result_name": "Chromosome Count",
+                        "result_value": "46"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome), trisomy 18 (Edwards syndrome), trisomy 13 (Patau syndrome), sex chromosome abnormalities, or unbalanced structural rearrangements"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal male karyotype detected in fetal sample. This result effectively rules out common chromosomal aneuploidies including Down syndrome, Edwards syndrome, and Patau syndrome. The residual risk for chromosomal abnormalities is reduced to background population risk",
+            "overall_recommendations": "Genetic counseling recommended to discuss results and residual risks. Continue routine prenatal care and ultrasound monitoring. No indication for additional invasive testing based on these results. This result supersedes any previous rapid aneuploidy screening results"
+        }
+    }
+}

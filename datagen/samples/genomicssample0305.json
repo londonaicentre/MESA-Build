@@ -1,0 +1,80 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Progressive cognitive decline, seizures, right frontal lobe mass\nClinical Diagnosis: Diffuse glioma\nFamily History: None reported\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\n- 1p36 deletion probe (Vysis LSI 1p36/LSI 1q25 Dual Color Probe)\n- 19q13 deletion probe (Vysis LSI 19q13/19p13 Dual Color Probe)\n\nSPECIMEN TYPE\nFormalin-fixed paraffin-embedded (FFPE) tumor tissue from right frontal lobe mass\n\nMETHODOLOGY\nFISH analysis was performed on 5-micron tissue sections following standard protocols. Hybridization was carried out using commercially available probes for detection of 1p36 and 19q13 deletions. A minimum of 200 non-overlapping tumor nuclei were scored by two independent observers.\n\nRESULTS\n\nChromosome 1p36 Status: DELETED\nChromosome 19q13 Status: DELETED\n\nQuantitative Analysis:\n- Total nuclei analyzed: 200\n- Nuclei with 1p36/19q13 codeletion: 184\n- Percentage of cells with codeletion: 92%\n\nDetailed Scoring:\n- 1p36 deletion: 184/200 nuclei (92%)\n- 19q13 deletion: 184/200 nuclei (92%)\n- Concurrent 1p36/19q13 codeletion: 184/200 nuclei (92%)\n\nINTERPRETATION\nThis FISH analysis demonstrates 1p/19q codeletion in 92% of analyzed tumor nuclei, which is well above the diagnostic threshold of 30%. The presence of 1p/19q codeletion is a defining molecular feature of oligodendroglioma according to the WHO CNS tumor classification.\n\nCLINICAL IMPLICATIONS\n1. Diagnostic: The 1p/19q codeletion confirms the diagnosis of oligodendroglioma (WHO CNS classification)\n2. Prognostic: This molecular alteration is associated with:\n   - Favorable overall prognosis\n   - Longer progression-free survival\n   - Better overall survival compared to gliomas without codeletion\n3. Predictive: Enhanced sensitivity to chemotherapy, particularly alkylating agents\n\nRECOMMENDATIONS\nBased on the molecular findings and current evidence-based guidelines:\n1. Consider combined alkylating agent therapy with nitrosourea plus radiation, given the enhanced chemosensitivity of 1p/19q codeleted tumors\n2. The favorable molecular profile supports aggressive treatment approaches\n3. Clinical correlation with histopathologic findings and IDH mutation status is recommended for complete molecular characterization\n\nREPORTED BY\n[redacted name], Ph.D., FACMG\nDirector, Molecular Cytogenetics Laboratory\n\nELECTRONICALLY SIGNED: [redacted date and time]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Progressive cognitive decline, seizures, right frontal lobe mass",
+            "test_clinical_rationale": "Molecular characterization of diffuse glioma for diagnosis and treatment planning",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Progressive cognitive decline"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Seizures"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Right frontal lobe mass"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Diffuse glioma"
+                },
+                {
+                    "type": "family_history",
+                    "value": "None reported"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence In Situ Hybridization using Vysis LSI 1p36/LSI 1q25 and LSI 19q13/19p13 Dual Color Probes on FFPE tissue sections",
+                "sample_origin": "Right frontal lobe mass",
+                "result_entity_type": "chromosome",
+                "result_entity": "1p36/19q13",
+                "gene_nomenclature": [],
+                "result_region": "1p36 and 19q13",
+                "result_status": "abnormal",
+                "result_description": "1p36/19q13 codeletion in 92% of nuclei (184/200)",
+                "quantitative_results": [
+                    {
+                        "result_name": "Total Nuclei Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "nuclei"
+                    },
+                    {
+                        "result_name": "Nuclei with Codeletion",
+                        "result_value": 184.0,
+                        "result_units": "nuclei"
+                    },
+                    {
+                        "result_name": "Percentage with Codeletion",
+                        "result_value": 92.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "1p36 Status",
+                        "result_value": "DELETED"
+                    },
+                    {
+                        "result_name": "19q13 Status",
+                        "result_value": "DELETED"
+                    }
+                ],
+                "clinical_implications": "1p/19q codeletion confirms oligodendroglioma (WHO CNS classification). Associated with favorable prognosis and enhanced chemotherapy response."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The 1p/19q codeletion confirms the diagnosis of oligodendroglioma with favorable prognosis, longer progression-free survival, better overall survival, and enhanced sensitivity to chemotherapy particularly alkylating agents",
+            "overall_recommendations": "Consider combined alkylating agent therapy with nitrosourea plus radiation, given chemosensitivity of 1p/19q codeleted tumors. The favorable molecular profile supports aggressive treatment approaches. Clinical correlation with histopathologic findings and IDH mutation status is recommended"
+        }
+    }
+}

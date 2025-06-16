@@ -1,0 +1,44 @@
+{
+    "content": "PRENATAL CYTOGENETICS REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nHOSPITAL NUMBER: [redacted ID]\nREFERRING CLINICIAN: Dr. [redacted name]\nDATE OF SAMPLE: [redacted date]\nDATE OF REPORT: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing at 11 weeks gestation by ultrasound for screening of chromosomal abnormalities and aneuploidy assessment.\n\nSAMPLE TYPE\nChorionic villi sample (CVS)\n\nTEST REQUESTED\nKaryotype analysis\n\nRESULT\nSAMPLE UNSUITABLE FOR TESTING\n\nNo chorionic villi material present in sample.\n\nINTERPRETATION\nThe submitted sample did not contain adequate chorionic villi tissue for chromosome analysis. Without viable fetal tissue, karyotype analysis cannot be performed. Therefore, we are unable to provide genetic assessment for chromosomal abnormalities including common aneuploidies.\n\nRECOMMENDATIONS\n1. Consider repeat chorionic villus sampling if gestational age permits\n2. Alternatively, amniocentesis may be offered from 15 weeks gestation\n3. If rapid aneuploidy detection for chromosomes 13, 18, and 21 is still required, PCR-based testing (QF-PCR) on amniotic fluid may be considered\n4. Please contact the genetics laboratory to discuss alternative testing options\n\nThis result has been discussed with the referring clinician.\n\nAuthorised by: [redacted name]\nConsultant Clinical Scientist\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing at 11 weeks gestation by ultrasound for screening of chromosomal abnormalities and aneuploidy assessment",
+            "test_clinical_rationale": "Screening for chromosomal abnormalities and aneuploidy assessment",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "11 weeks gestation by ultrasound"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Chromosome analysis of chorionic villi sample",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "No chorionic villi material present in sample. Sample unsuitable for testing",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sample Quality",
+                        "result_value": "Unsuitable for testing"
+                    }
+                ],
+                "clinical_implications": "Unable to provide genetic assessment for chromosomal abnormalities including common aneuploidies"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Unable to provide genetic assessment due to unsuitable sample. Without viable fetal tissue, karyotype analysis cannot be performed",
+            "overall_recommendations": "Consider repeat chorionic villus sampling if gestational age permits. Alternatively, amniocentesis may be offered from 15 weeks gestation. If rapid aneuploidy detection for chromosomes 13, 18, and 21 is still required, PCR-based testing (QF-PCR) on amniotic fluid may be considered"
+        }
+    }
+}

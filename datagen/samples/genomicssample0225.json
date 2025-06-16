@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPATIENT: [redacted name]\nDATE OF BIRTH: [redacted date]\nMEDICAL RECORD: [redacted ID]\nSPECIMEN TYPE: Fetal skin tissue\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INDICATION\nPrenatal chromosomal abnormality testing - confirmation of prior prenatal diagnosis\n\nTEST PERFORMED\nKaryotype analysis\n\nMETHODOLOGY\nFetal skin fibroblasts were cultured and harvested according to standard protocols. G-banded chromosome analysis was performed at 450-550 band resolution. Twenty metaphases were analyzed.\n\nRESULT\n47,XX,+21\n\nINTERPRETATION\nThis karyotype demonstrates trisomy 21 in all cells analyzed, confirming the prior prenatal diagnosis of Down syndrome. The presence of three copies of chromosome 21 is consistent with the clinical diagnosis.\n\nRECURRENCE RISK\nThe empiric recurrence risk for trisomy 21 in future pregnancies depends on maternal age at delivery:\n- Maternal age <30: approximately 1%\n- Maternal age 35: approximately 1.5%\n- Maternal age 40: approximately 5%\n- Maternal age 45: approximately 15%\n\nParental karyotype analysis may be considered to exclude a balanced translocation, although this is found in only 3-4% of trisomy 21 cases.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss recurrence risks and reproductive options\n2. Prenatal diagnosis (chorionic villus sampling or amniocentesis) is available for subsequent pregnancies\n3. Preimplantation genetic testing may be considered as an alternative reproductive option\n\nThis analysis was performed in a CLIA-certified laboratory.\n\nReported by: [redacted name], Ph.D., FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal chromosomal abnormality testing - confirmation of prior prenatal diagnosis",
+            "test_clinical_rationale": "Confirmation of trisomy 21 diagnosis from prior prenatal testing",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis at 450-550 band resolution from cultured fetal skin fibroblasts",
+                "sample_origin": "Fetal skin tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "47,XX,+21 - Trisomy 21 confirmed in all cells analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "47,XX,+21"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    }
+                ],
+                "clinical_implications": "Confirms Down syndrome diagnosis. Empiric recurrence risk varies by maternal age: <30 years ~1%, 35 years ~1.5%, 40 years ~5%, 45 years ~15%"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Trisomy 21 (Down syndrome) confirmed in fetal sample, consistent with prior prenatal diagnosis. Elevated recurrence risk for aneuploidy in future pregnancies with risk dependent on maternal age",
+            "overall_recommendations": "Genetic counseling recommended to discuss recurrence risks and reproductive options. Prenatal diagnosis (CVS or amniocentesis) available for subsequent pregnancies. Preimplantation genetic testing may be considered. Parental karyotype analysis may be considered to exclude balanced translocation (found in 3-4% of cases)"
+        }
+    }
+}

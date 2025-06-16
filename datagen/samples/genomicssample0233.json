@@ -1,0 +1,49 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for FKRP-related muscular dystrophy. Clinical suspicion of limb-girdle muscular dystrophy or congenital muscular dystrophy based on patient presentation.\n\nMETHODOLOGY\nTargeted DNA sequencing of the FKRP gene (NM_024301.5) was performed. Genomic DNA was extracted from peripheral blood leukocytes. All coding exons and flanking intronic sequences of the FKRP gene were amplified by PCR and analyzed by bidirectional Sanger sequencing. This assay detects point mutations and small insertions/deletions within the coding regions and splice sites. Large deletions/duplications are not detected by this methodology.\n\nRESULTS\nGene: FKRP (Fukutin-related protein)\nReference Sequence: NM_024301.5\n\nVariant Detected:\nc.826C>A (p.Leu276Ile)\nZygosity: Homozygous\nClassification: Likely Pathogenic\n\nThis variant results in a leucine to isoleucine substitution at codon 276 of the FKRP protein. The c.826C>A (p.Leu276Ile) variant is the most common pathogenic variant identified in patients with LGMD2I (Limb-Girdle Muscular Dystrophy type 2I) and has been reported in multiple affected individuals in the literature. This variant has been shown to result in reduced α-dystroglycan glycosylation, which is the underlying molecular defect in FKRP-related muscular dystrophies.\n\nSUMMARY\nMolecular genetic testing identified a homozygous likely pathogenic variant in the FKRP gene, confirming the clinical diagnosis of FKRP-related muscular dystrophy. The c.826C>A (p.Leu276Ile) variant is associated with a spectrum of phenotypes ranging from mild limb-girdle muscular dystrophy (LGMD2I/LGMDR9) to more severe congenital muscular dystrophy (MDC1C). The homozygous state of this common variant is typically associated with the milder LGMD2I phenotype, though clinical severity can vary.\n\nTECHNICAL NOTES\n- Coverage: All coding exons achieved minimum 30x coverage\n- Quality metrics: Q30 >95%\n- This test was developed and validated by [redacted location] Medical Center Molecular Genetics Laboratory\n- Variant nomenclature follows HGVS guidelines\n- Reference genome: GRCh38/hg38\n\nLIMITATIONS\nThis test does not detect large deletions/duplications, deep intronic variants, or variants in regulatory regions. Rare polymorphisms may interfere with primer binding resulting in allele dropout. A negative result does not exclude the diagnosis of muscular dystrophy.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for FKRP-related muscular dystrophy. Clinical suspicion of limb-girdle muscular dystrophy or congenital muscular dystrophy based on patient presentation",
+            "test_clinical_rationale": "Molecular confirmation of suspected FKRP-related muscular dystrophy",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted DNA sequencing of the FKRP gene. All coding exons and flanking intronic sequences amplified by PCR and analyzed by bidirectional Sanger sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "FKRP",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_024301",
+                        "version": "5"
+                    }
+                ],
+                "result_region": "c.826C>A (p.Leu276Ile)",
+                "result_status": "abnormal",
+                "result_description": "Homozygous c.826C>A (p.Leu276Ile) variant detected. This variant results in a leucine to isoleucine substitution at codon 276 of the FKRP protein",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Likely Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Homozygous"
+                    }
+                ],
+                "clinical_implications": "Most common pathogenic variant in LGMD2I patients. Results in reduced α-dystroglycan glycosylation. Associated with spectrum from mild limb-girdle muscular dystrophy (LGMD2I/LGMDR9) to severe congenital muscular dystrophy (MDC1C)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Molecular genetic testing confirmed the clinical diagnosis of FKRP-related muscular dystrophy. The homozygous c.826C>A variant is typically associated with the milder LGMD2I phenotype, though clinical severity can vary",
+            "overall_recommendations": "Clinical management according to standard care guidelines for FKRP-related muscular dystrophy"
+        }
+    }
+}

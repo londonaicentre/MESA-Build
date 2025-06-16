@@ -1,0 +1,95 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen ID: [redacted ID]\n\nSPECIMEN INFORMATION\nSpecimen Type: Tissue\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INFORMATION\nClinical History: Relapsed adenocarcinoma\nDiagnosis: Non-small cell lung cancer (NSCLC)\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\n\nMETHODOLOGY\nInterphase FISH analysis was performed on 50 cells from the submitted specimen, with correlation to H&E stained slides. The following probes were utilized:\n- GenProbe ALK Break Apart FISH Probe Kit (ALK gene at 2p23)\n- CytoVision SPEC ROS1 Dual Color Break Apart Probe (ROS1 gene at 6q22)\n\nCells were scored according to established criteria for gene rearrangement detection.\n\nRESULTS\n\nALK (2p23) FISH Analysis:\n- Number of cells analyzed: 50\n- ALK rearrangement: NOT DETECTED\n- ALK copy number: 2-4 copies per cell observed\n- Percentage of cells with rearrangement: 0%\n\nROS1 (6q22) FISH Analysis:\n- Number of cells analyzed: 50\n- ROS1 rearrangement: NOT DETECTED\n- Percentage of cells with rearrangement: 0%\n\nINTERPRETATION\nNo ALK (2p23) gene rearrangement was detected in the cells analyzed. The observed increase in ALK copy number (2-4 copies) without rearrangement is a common finding in NSCLC; however, the clinical significance of this finding remains unclear.\n\nNo ROS1 (6q22) gene rearrangement was detected in the cells analyzed.\n\nThese results indicate ALK-negative status for this patient's tumor.\n\nCRITERIA FOR ALK REARRANGEMENT\nA specimen is considered positive for ALK rearrangement if ≥15% of tumor cells show split signals (separation of 3' and 5' signals by ≥2 signal diameters) or isolated 3' signals.\n\nPathologist: [redacted name], MD\nElectronically signed: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Relapsed adenocarcinoma",
+            "test_clinical_rationale": "FISH analysis for ALK and ROS1 rearrangements in non-small cell lung cancer",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer (NSCLC)"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Relapsed adenocarcinoma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with GenProbe ALK Break Apart FISH Probe Kit, correlated with H&E slide",
+                "sample_origin": "Tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "normal",
+                "result_description": "No ALK rearrangement detected. 2-4 copies of ALK observed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage with Rearrangement",
+                        "result_value": 0.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ALK Status",
+                        "result_value": "Negative"
+                    },
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2-4 copies per cell"
+                    }
+                ],
+                "clinical_implications": "ALK negative status. Increased ALK copy number is common in NSCLC with unclear significance"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with CytoVision SPEC ROS1 Dual Color Break Apart Probe",
+                "sample_origin": "Tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "No ROS1 rearrangement in 50 cells analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage with Rearrangement",
+                        "result_value": 0.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ROS1 Status",
+                        "result_value": "Negative"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No ALK or ROS1 gene rearrangements detected. ALK-negative status confirmed for this patient's tumor",
+            "overall_recommendations": "Based on negative ALK and ROS1 status, targeted therapy with ALK or ROS1 inhibitors is not indicated"
+        }
+    }
+}

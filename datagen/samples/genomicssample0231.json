@@ -1,0 +1,153 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Chorionic villi (uncultured)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Increased screening risk\nAdditional Testing Requested: Haemoglobinopathy testing\nGestational Age: [redacted] weeks\n\nTEST PERFORMED\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nDNA was extracted from uncultured chorionic villi. QF-PCR analysis was performed using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, and 21. A minimum of four informative markers were analyzed for each chromosome. Peak area ratios were calculated for all heterozygous markers. Normal diallelic ratios range from 0.8 to 1.4. Triallelic patterns or skewed diallelic ratios (>1.8 or <0.65) indicate trisomy.\n\nRESULTS\n\nChromosome 13:\nD13S631: 1.05 (normal diallelic pattern)\nD13S258: 1.12 (normal diallelic pattern)\nD13S742: 0.98 (normal diallelic pattern)\nD13S628: 1.03 (normal diallelic pattern)\n\nChromosome 18:\nD18S391: 0.95 (normal diallelic pattern)\nD18S390: 1.08 (normal diallelic pattern)\nD18S535: 1.01 (normal diallelic pattern)\nD18S386: 0.92 (normal diallelic pattern)\n\nChromosome 21:\nD21S1435: 1.11 (normal diallelic pattern)\nD21S1411: 0.89 (normal diallelic pattern)\nD21S1412: 1.06 (normal diallelic pattern)\nD21S1446: 0.97 (normal diallelic pattern)\n\nSUMMARY RESULT\nrsa(13,18,21)×2\n\nNo abnormality detected\n\nINTERPRETATION\nQF-PCR analysis is consistent with a normal chromosomal complement for chromosomes 13, 18, and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome) was detected in this sample.\n\nLIMITATIONS\nThis test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, and 21 only. It will not detect:\n• Balanced chromosomal rearrangements\n• Mosaicism below 20%\n• Segmental chromosomal imbalances\n• Aneuploidies of other chromosomes\n• Single gene disorders\n• Maternal cell contamination below detectable levels\n\nThis result applies only to the chromosomes tested and does not guarantee a chromosomally normal fetus.\n\nRECOMMENDATIONS\nBased on these results, no further chromosome analysis is needed on this sample for the indication provided. The haemoglobinopathy testing requested has been forwarded to the appropriate laboratory.\n\nIf ultrasound abnormalities are detected later in pregnancy, please contact the laboratory to discuss additional testing options.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Increased screening risk",
+            "test_clinical_rationale": "Rapid aneuploidy detection for common chromosomal trisomies in pregnancy",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Haemoglobinopathy testing requested"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Chorionic villi (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "STR markers: D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern for all markers",
+                "quantitative_results": [
+                    {
+                        "result_name": "D13S631 Peak Ratio",
+                        "result_value": 1.05,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S258 Peak Ratio",
+                        "result_value": 1.12,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S742 Peak Ratio",
+                        "result_value": 0.98,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S628 Peak Ratio",
+                        "result_value": 1.03,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "×2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Chorionic villi (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "STR markers: D18S391, D18S390, D18S535, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern for all markers",
+                "quantitative_results": [
+                    {
+                        "result_name": "D18S391 Peak Ratio",
+                        "result_value": 0.95,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S390 Peak Ratio",
+                        "result_value": 1.08,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S535 Peak Ratio",
+                        "result_value": 1.01,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S386 Peak Ratio",
+                        "result_value": 0.92,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "×2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Chorionic villi (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "STR markers: D21S1435, D21S1411, D21S1412, D21S1446",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern for all markers",
+                "quantitative_results": [
+                    {
+                        "result_name": "D21S1435 Peak Ratio",
+                        "result_value": 1.11,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1411 Peak Ratio",
+                        "result_value": 0.89,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1412 Peak Ratio",
+                        "result_value": 1.06,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1446 Peak Ratio",
+                        "result_value": 0.97,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "×2"
+                    },
+                    {
+                        "result_name": "Summary Result",
+                        "result_value": "rsa(13,18,21)×2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis is consistent with a normal chromosomal complement for chromosomes 13, 18, and 21. No evidence of trisomy detected",
+            "overall_recommendations": "No further chromosome analysis is needed on this sample for the indication provided. The haemoglobinopathy testing requested has been forwarded to the appropriate laboratory. If ultrasound abnormalities are detected later in pregnancy, please contact the laboratory to discuss additional testing options"
+        }
+    }
+}

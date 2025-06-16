@@ -1,0 +1,46 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY\nDNA EXTRACTION AND STORAGE NOTIFICATION\n\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nReferring Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nSPECIMEN TYPE: Peripheral blood (EDTA)\n\nTEST PERFORMED: DNA Extraction and Storage\n\nRESULT:\nDNA successfully extracted from peripheral blood sample and stored at -80°C for future testing.\n\nDNA Concentration: 125 ng/μL\nDNA Quality (A260/A280): 1.85\nTotal Yield: 62.5 μg\nStorage Location: Freezer [redacted ID], Box [redacted ID], Position [redacted ID]\n\nNOTE: No genetic testing has been performed on this sample at this time. DNA has been extracted and banked for potential future analysis as clinically indicated.\n\nPENDING TESTS:\nKaryotype analysis has been requested on this patient. Results pending from Cytogenetics Laboratory.\n\nThis extracted DNA sample will be retained in our laboratory for a minimum of 5 years in accordance with laboratory policy.\n\nFor questions regarding this report or to request genetic testing on the stored DNA sample, please contact the Molecular Genetics Laboratory at [redacted phone].\n\nReported by: [redacted name], Clinical Laboratory Scientist\nAuthorized by: Dr. [redacted name], Laboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": null,
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "DNA Extraction and Storage",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "DNA sample",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "DNA successfully extracted from peripheral blood sample and stored at -80°C for future testing",
+                "quantitative_results": [
+                    {
+                        "result_name": "DNA Concentration",
+                        "result_value": 125.0,
+                        "result_units": "ng/μL"
+                    },
+                    {
+                        "result_name": "DNA Quality (A260/A280)",
+                        "result_value": 1.85,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Total Yield",
+                        "result_value": 62.5,
+                        "result_units": "μg"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "DNA has been successfully extracted and stored for potential future genetic analysis. No genetic testing performed at this time",
+            "overall_recommendations": "Karyotype analysis has been requested on this patient. Results pending from Cytogenetics Laboratory. Extracted DNA sample will be retained for a minimum of 5 years"
+        }
+    }
+}

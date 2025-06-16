@@ -1,0 +1,34 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSPECIMEN: Amniotic fluid\nCOLLECTION DATE: [redacted date]\nRECEIPT DATE: [redacted date]\nREPORT DATE: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing\n\nTEST REQUESTED\nQF-PCR/MLPA studies\n\nRESULT\nNo chromosome analysis performed. Sample processed for QF-PCR/MLPA studies only.\n\nCOMMENT\nAs requested, G-banded chromosome analysis was not performed on this specimen. The sample has been processed for rapid aneuploidy detection by QF-PCR and/or MLPA analysis only. Results of these molecular studies will be reported separately.\n\nThis report is for filing purposes only.\n\nReported by: [redacted name], Clinical Scientist\nAuthorised by: [redacted name], Consultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR/MLPA studies requested without G-banded chromosome analysis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Not applicable",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "No chromosome analysis performed. Sample processed for QF-PCR/MLPA studies only",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "G-banded chromosome analysis was not performed as requested. Molecular studies for rapid aneuploidy detection are being processed separately",
+            "overall_recommendations": "File only"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n\nPATIENT INFORMATION\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSex: Male\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPatient evaluated for muscular dystrophy\n\nTEST PERFORMED\nDystrophin Gene Deletion Analysis by Multiplex PCR\n\nMETHODOLOGY\nMultiplex PCR assay targeting 3' and 5' regions of dystrophin gene for deletion detection. This method detects approximately 98% of all deletions in the dystrophin gene.\n\nRESULTS\n1. Dystrophin gene (DMD): No deletion detected\n2. All targeted exons in the 3' and 5' regions amplified successfully\n3. Internal controls performed as expected\n\nINTERPRETATION\nNo deletion detected in the dystrophin gene using multiplex PCR screening method. This is a significant finding as deletions account for the majority of Duchenne Muscular Dystrophy (DMD) cases. However, this result does not exclude the possibility of:\n- Point mutations\n- Small insertions or deletions\n- Duplications\n- Deletions in regions not covered by this assay\n\nLIMITATIONS\nThis assay detects approximately 98% of dystrophin gene deletions but does not detect point mutations, small insertions/deletions, or duplications.\n\nAuthorized by: [redacted name], Ph.D.\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Patient evaluated for muscular dystrophy",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Young male patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR assay targeting 3' and 5' regions of dystrophin gene for deletion detection. This method detects approximately 98% of all deletions",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "Dystrophin",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "HGNC",
+                        "identifier": "DMD",
+                        "version": null
+                    }
+                ],
+                "result_region": "3' and 5' regions",
+                "result_status": "normal",
+                "result_description": "No deletion detected in dystrophin gene using multiplex PCR screening method",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Deletion Status",
+                        "result_value": "No deletion detected"
+                    }
+                ],
+                "clinical_implications": "Negative result for dystrophin gene deletion. Significant finding as deletions account for majority of DMD cases"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No deletion detected in the dystrophin gene. This is a significant finding as deletions account for the majority of Duchenne Muscular Dystrophy cases. However, this result does not exclude point mutations, small insertions/deletions, duplications, or deletions in regions not covered by this assay",
+            "overall_recommendations": "This assay detects approximately 98% of dystrophin gene deletions but does not detect point mutations, small insertions/deletions, or duplications"
+        }
+    }
+}

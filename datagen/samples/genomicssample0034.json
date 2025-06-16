@@ -1,0 +1,71 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY REPORT\n[redacted location] Cancer Center\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen Type: Breast tissue\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nBreast cancer\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) for HER2 Gene Amplification\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the MediSpec OG-7020 ERBB2 (17q12) / SE 17 dual-color probe set. The ERBB2 probe (orange signal) hybridizes to the HER2 gene locus at 17q12, and the SE 17 probe (green signal) hybridizes to the chromosome 17 centromere. Analysis was performed on 70 interphase nuclei and correlated with HER2 immunohistochemistry stained slides.\n\nRESULTS\n\nHER2 (ERBB2) FISH Analysis:\n- Mean HER2 gene copy number per cell: 4.06\n- Mean chromosome 17 centromere per cell: 1.89\n- HER2/Chr17 ratio: 2.15\n- Number of cells analyzed: 70\n\nResult: POSITIVE for HER2 gene amplification\n\nINTERPRETATION\nAmplification of the HER2 (ERBB2) gene locus at 17q12 is detected. The HER2/Chr17 ratio of 2.15 meets criteria for HER2 positivity (ratio ≥2.0) according to ASCO/CAP 2018 guidelines for HER2 testing in breast cancer.\n\nThis result indicates HER2 positive status, which has important implications for treatment selection. Patients with HER2 positive breast cancer are eligible for HER2-targeted therapies including trastuzumab, pertuzumab, T-DM1, and other anti-HER2 agents.\n\nREPORTING CRITERIA\nThis test was performed and interpreted according to the 2018 ASCO/CAP HER2 Testing Guidelines:\n- HER2 Positive: HER2/Chr17 ratio ≥2.0 with average HER2 copy number ≥4.0 signals/cell\n- HER2 Equivocal: HER2/Chr17 ratio <2.0 with average HER2 copy number ≥4.0 and <6.0 signals/cell\n- HER2 Negative: HER2/Chr17 ratio <2.0 with average HER2 copy number <4.0 signals/cell\n\nReported by: [redacted name], Ph.D.\nLaboratory Director: [redacted name], M.D., Ph.D.\nCAP#: [redacted ID] CLIA#: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Breast cancer",
+            "test_clinical_rationale": "HER2 status determination for treatment selection in breast cancer",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Breast cancer"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using MediSpec OG-7020 ERBB2 (17q12) / SE 17 dual-color probe set on formalin-fixed paraffin-embedded tissue",
+                "sample_origin": "Breast tissue",
+                "result_entity_type": "gene",
+                "result_entity": "HER2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "HGNC",
+                        "identifier": "ERBB2",
+                        "version": null
+                    }
+                ],
+                "result_region": "17q12",
+                "result_status": "abnormal",
+                "result_description": "Amplification of HER2 (ERBB2) gene locus detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "HER2/Chr17 ratio",
+                        "result_value": 2.15,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Mean HER2 gene copy number per cell",
+                        "result_value": 4.06,
+                        "result_units": "copies/cell"
+                    },
+                    {
+                        "result_name": "Mean chromosome 17 centromere per cell",
+                        "result_value": 1.89,
+                        "result_units": "copies/cell"
+                    },
+                    {
+                        "result_name": "Cells analyzed",
+                        "result_value": 70.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "HER2 Status",
+                        "result_value": "Positive"
+                    }
+                ],
+                "clinical_implications": "HER2 positive status by ratio criteria (ratio ≥2.0), indicating eligibility for HER2-targeted therapy"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "HER2 positive breast cancer confirmed. This result indicates eligibility for HER2-targeted therapies including trastuzumab, pertuzumab, T-DM1, and other anti-HER2 agents",
+            "overall_recommendations": "Patient is eligible for HER2-targeted therapy based on positive HER2 amplification status"
+        }
+    }
+}

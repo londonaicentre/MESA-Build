@@ -1,0 +1,65 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient 1: [redacted name], Female\nDOB: [redacted date]\nMRN: [redacted ID]\n\nPatient 2: [redacted name], Male\nDOB: [redacted date]\nMRN: [redacted ID]\n\nReferring Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INDICATION\nInheritance study following abnormal findings in previous pregnancy loss. Previous pregnancy had trisomy 13 detected by PCR of placental material.\n\nTEST PERFORMED\nTargeted G-band karyotype analysis of chromosome 13\n\nMETHODOLOGY\nPeripheral blood samples were collected from both partners. Lymphocytes were cultured and harvested according to standard protocols. G-banding was performed at 550-band resolution with targeted analysis of chromosome 13. A minimum of 20 metaphases were analyzed for each patient.\n\nRESULTS\n\nPatient 1 (Female): 46,XX\nTargeted analysis of chromosome 13: Normal\nNo structural abnormalities or rearrangements detected\n\nPatient 2 (Male): 46,XY\nTargeted analysis of chromosome 13: Normal\nNo structural abnormalities or rearrangements detected\n\nINTERPRETATION\nNo abnormality detected in chromosome 13 for either partner. Targeted analysis showed normal chromosome structure with no rearrangements. Neither partner has a chromosome rearrangement associated with the trisomy 13 found in the previous pregnancy loss.\n\nThe absence of structural chromosome 13 abnormalities in both parents suggests the previous trisomy 13 was likely due to nondisjunction during meiosis rather than an inherited chromosomal rearrangement. While no structural predisposition was identified, there remains an increased risk of trisomy 13 in future pregnancies compared to the general population.\n\nRECOMMENDATIONS\n1. Biochemical screening (first trimester combined screening or second trimester quad screen) for future pregnancies\n2. Detailed ultrasound monitoring throughout pregnancy\n3. Prenatal diagnosis (chorionic villus sampling or amniocentesis) is available if needed\n4. Genetic counseling to discuss recurrence risks and reproductive options\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Inheritance study following abnormal findings in previous pregnancy loss",
+            "test_clinical_rationale": "Previous pregnancy had trisomy 13 detected by PCR of placental material",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Previous pregnancy loss with trisomy 13"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Adult female",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Targeted G-band karyotype analysis at 550-band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No structural abnormalities or rearrangements detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": "No chromosome rearrangement associated with trisomy 13 found in pregnancy loss"
+            },
+            {
+                "test_subject": "Male partner",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Targeted G-band karyotype analysis at 550-band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No structural abnormalities or rearrangements detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XY"
+                    }
+                ],
+                "clinical_implications": "No chromosome rearrangement associated with trisomy 13 found in pregnancy loss"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Neither partner has chromosome rearrangement associated with trisomy 13 found in pregnancy loss. The previous trisomy 13 was likely due to nondisjunction during meiosis. Increased risk of trisomy 13 in future pregnancies remains",
+            "overall_recommendations": "Biochemical screening and ultrasound monitoring for future pregnancies. Prenatal diagnosis available if needed. Genetic counseling to discuss recurrence risks and reproductive options"
+        }
+    }
+}

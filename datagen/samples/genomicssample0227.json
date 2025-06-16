@@ -1,0 +1,91 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPATIENT INFORMATION\nName: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nAge: 71 years\nSex: Female\nOrdering Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Non-small cell lung cancer (NSCLC)\nReason for Testing: Evaluation for targeted therapy eligibility\nSpecimen Type: Lung biopsy tissue\nSpecimen ID: [redacted ID]\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\n- ALK (2p23) rearrangement analysis\n- ROS1 (6q22) rearrangement analysis\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections. The analysis was correlated with TTF1 immunostained slides to ensure tumor cell identification.\n\nProbes Used:\n- ALK Break Apart FISH Probe Kit (Abbott Molecular)\n- SPEC ROS1 Dual Color Break Apart Probe (ZytoVision)\n\nAnalysis: 50 interphase nuclei were evaluated for each probe set\n\nDIAGNOSTIC CRITERIA\nALK rearrangement positive: ≥15% of cells showing split signals (>2 signal diameters apart) or isolated 3' signals\nROS1 rearrangement positive: ≥15% of cells showing split signals or isolated green signals\n\nRESULTS\n\nALK (2p23) FISH Analysis:\n- Result: NEGATIVE for ALK rearrangement\n- Pattern observed: 2-4 copies of intact ALK signals per cell\n- Percentage of cells with rearrangement: 0%\n- Classification: ALK negative\n\nROS1 (6q22) FISH Analysis:\n- Result: NEGATIVE for ROS1 rearrangement\n- Pattern observed: Intact ROS1 signals\n- Percentage of cells with rearrangement: 0%\n- Cells analyzed: 50\n\nINTERPRETATION\nNo ALK (2p23) gene rearrangement was detected in the tumor cells analyzed. The presence of 2-4 copies of ALK per cell represents copy number gain, which is commonly observed in NSCLC but has unclear clinical significance at this time.\n\nNo ROS1 (6q22) gene rearrangement was detected in the 50 cells analyzed.\n\nCLINICAL IMPLICATIONS\nThe absence of ALK and ROS1 rearrangements indicates that this patient is unlikely to benefit from ALK or ROS1 tyrosine kinase inhibitors such as crizotinib, alectinib, brigatinib, or entrectinib. The increased ALK copy number observed is a common finding in NSCLC; however, its clinical significance remains unclear and does not predict response to ALK-targeted therapy.\n\nRECOMMENDATIONS\nBased on these results, ALK/ROS1 targeted therapy is not recommended. Alternative molecular testing may be considered to identify other actionable alterations, including EGFR mutations, BRAF mutations, MET alterations, RET fusions, or NTRK fusions. PD-L1 expression testing may also be considered for immunotherapy eligibility assessment.\n\nPathologist: Dr. [redacted name]\nElectronically signed: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Evaluation for targeted therapy eligibility",
+            "test_clinical_rationale": "Lung cancer patient evaluation for targeted therapy eligibility",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "71 years, Female"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer (NSCLC)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using ALK Break Apart FISH Probe Kit (Abbott Molecular), correlated with TTF1 immunostained slide",
+                "sample_origin": "Lung biopsy tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "normal",
+                "result_description": "No ALK (2p23) rearrangement detected. 2-4 copies of ALK observed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Percentage of cells with rearrangement",
+                        "result_value": 0.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Copy Number Range",
+                        "result_value": 3.0,
+                        "result_units": "copies per cell"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ALK Status",
+                        "result_value": "ALK negative"
+                    }
+                ],
+                "clinical_implications": "Patient unlikely to benefit from ALK tyrosine kinase inhibitors. Increased ALK copy number noted as common in NSCLC with unclear significance"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using SPEC ROS1 Dual Color Break Apart Probe (ZytoVision)",
+                "sample_origin": "Lung biopsy tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "No ROS1 (6q22) rearrangement in 50 cells analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage of cells with rearrangement",
+                        "result_value": 0.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ROS1 Status",
+                        "result_value": "Negative"
+                    }
+                ],
+                "clinical_implications": "Patient unlikely to benefit from ROS1 tyrosine kinase inhibitors"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The absence of ALK and ROS1 rearrangements indicates that this patient is unlikely to benefit from ALK or ROS1 tyrosine kinase inhibitors such as crizotinib, alectinib, brigatinib, or entrectinib",
+            "overall_recommendations": "ALK/ROS1 targeted therapy is not recommended. Alternative molecular testing may be considered to identify other actionable alterations, including EGFR mutations, BRAF mutations, MET alterations, RET fusions, or NTRK fusions. PD-L1 expression testing may also be considered for immunotherapy eligibility assessment"
+        }
+    }
+}

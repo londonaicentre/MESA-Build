@@ -1,0 +1,69 @@
+{
+    "content": "FLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n[redacted location] Cancer Center\nMolecular Diagnostics Laboratory\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen: Breast tissue\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nBreast cancer\n\nTEST PERFORMED\nHER2 Gene Amplification by Fluorescence In Situ Hybridization (FISH)\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue using the PathVysion HER2 DNA Probe Kit (Abbott Molecular). This FDA-approved dual-color probe set contains a SpectrumOrange-labeled probe specific for the HER2 gene locus (17q12) and a SpectrumGreen-labeled probe specific for the chromosome 17 centromere (SE17). Analysis was performed on 60 interphase nuclei and correlated with HER2 immunohistochemistry stained slides.\n\nRESULTS\nHER2 (17q12) gene copy number: 2.45 (mean)\nChromosome 17 centromere copy number: 2.08 (mean)\nHER2/Chr17 ratio: 1.18\nNumber of cells analyzed: 60\n\nINTERPRETATION\nNEGATIVE for HER2 gene amplification\n\nThe HER2/Chr17 ratio of 1.18 is below the threshold of 2.0 for amplification. The mean HER2 gene copy number of 2.45 per cell is within normal limits. These findings are consistent with a HER2-negative breast cancer.\n\nCOMMENT\nFISH analysis was performed in correlation with HER2 immunohistochemistry. According to ASCO/CAP 2018 guidelines, tumors with HER2/Chr17 ratio <2.0 and average HER2 copy number <4.0 signals/cell are classified as HER2 negative (ISH Group 5).\n\nPathologist: [redacted name], MD\nBoard Certified in Anatomic Pathology and Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Breast cancer",
+            "test_clinical_rationale": "HER2 status determination for treatment planning",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Breast cancer"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using PathVysion HER2 DNA Probe Kit with dual-color probes (SpectrumOrange HER2, SpectrumGreen SE17)",
+                "sample_origin": "Breast tissue",
+                "result_entity_type": "gene",
+                "result_entity": "HER2",
+                "gene_nomenclature": [],
+                "result_region": "17q12",
+                "result_status": "normal",
+                "result_description": "No HER2 gene amplification detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "HER2 Gene Copy Number",
+                        "result_value": 2.45,
+                        "result_units": "mean copies per cell"
+                    },
+                    {
+                        "result_name": "Chromosome 17 Centromere Copy Number",
+                        "result_value": 2.08,
+                        "result_units": "mean copies per cell"
+                    },
+                    {
+                        "result_name": "HER2/Chr17 Ratio",
+                        "result_value": 1.18,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 60.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "HER2 Amplification Status",
+                        "result_value": "Negative"
+                    },
+                    {
+                        "result_name": "ASCO/CAP ISH Group",
+                        "result_value": "Group 5"
+                    }
+                ],
+                "clinical_implications": "HER2 negative breast cancer confirmed by FISH analysis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "HER2 negative breast cancer confirmed. The HER2/Chr17 ratio of 1.18 and mean HER2 copy number of 2.45 are below amplification thresholds, classifying this as ISH Group 5 per ASCO/CAP 2018 guidelines",
+            "overall_recommendations": "HER2-targeted therapy is not indicated based on these results"
+        }
+    }
+}

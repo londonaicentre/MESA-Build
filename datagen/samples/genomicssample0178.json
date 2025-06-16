@@ -1,0 +1,45 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nRule out Down syndrome\n\nTEST PERFORMED\nChromosome Analysis, G-banded Karyotype\n\nMETHODOLOGY\nPeripheral blood lymphocytes were cultured, harvested, and G-banded according to standard protocols. Twenty metaphase cells were analyzed. Analysis was performed at approximately 400-450 band resolution.\n\nRESULT\nKaryotype: 46,XX\n\nNormal female karyotype. No evidence of trisomy 21 or other numerical or structural chromosomal abnormalities detected.\n\nINTERPRETATION\nThis analysis excludes Down syndrome (trisomy 21). The resolution of this study is sufficient to detect numerical abnormalities and major structural rearrangements. Subtle chromosomal abnormalities below the resolution of conventional cytogenetics cannot be excluded.\n\nAuthorized by: [redacted name], Ph.D., FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Rule out Down syndrome",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis. Peripheral blood lymphocytes cultured, harvested, and G-banded according to standard protocols at 400-450 band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - Normal female karyotype. No evidence of trisomy 21 or other numerical or structural chromosomal abnormalities detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    }
+                ],
+                "clinical_implications": "This analysis excludes Down syndrome (trisomy 21)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype excludes Down syndrome. The resolution is sufficient to detect numerical abnormalities and major structural rearrangements. Subtle chromosomal abnormalities below the resolution of conventional cytogenetics cannot be excluded",
+            "overall_recommendations": "No specific recommendations provided"
+        }
+    }
+}

@@ -1,0 +1,98 @@
+{
+    "content": "CYTOGENETICS LABORATORY\n[redacted location] Hospital NHS Trust\n\nQF-PCR ANEUPLOIDY SCREENING REPORT\n\nPatient ID: [redacted ID]\nDate of Birth: [redacted date]\nSample Type: Uncultured placental material\nClinical Details: Fetal loss investigation\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured placental material to detect aneuploidies of chromosomes 13, 15, 16, 18, 21, 22, X and Y using fluorescently labeled microsatellite markers. DNA was extracted and amplified using multiplex PCR with chromosome-specific STR markers. Fragment analysis was performed on an Applied Biosystems genetic analyzer.\n\nMARKERS ANALYZED\nChromosome 21: D21S11, D21S1409, D21S1435, D21S1411, D21S1446\nChromosome 13: D13S631, D13S305, D13S628, D13S634\nChromosome 18: D18S535, D18S391, D18S390, D18S386\nChromosome X: AMELX, DXS6803, DXS6809, HPRT\nChromosome Y: AMELY, SRY\nChromosomes 15, 16, 22: Multiple STR markers\n\nRESULTS\n\n**ABNORMAL RESULT - TRISOMY 21 DETECTED**\n\nChromosome 21: TRISOMY\n- D21S11: Three alleles detected (ratio 1:1:1)\n- D21S1409: Three alleles detected (ratio 1:1:1)\n- D21S1435: Three alleles detected (ratio 1:1:1)\n- D21S1411: Three alleles detected (ratio 1:1:1)\n- D21S1446: Uninformative (homozygous)\n\nChromosome 13: NORMAL DISOMIC PATTERN\nAll informative markers show normal biallelic ratios\n\nChromosome 15: NORMAL DISOMIC PATTERN\nAll informative markers show normal biallelic ratios\n\nChromosome 16: NORMAL DISOMIC PATTERN\nAll informative markers show normal biallelic ratios\n\nChromosome 18: NORMAL DISOMIC PATTERN\nAll informative markers show normal biallelic ratios\n\nChromosome 22: NORMAL DISOMIC PATTERN\nAll informative markers show normal biallelic ratios\n\nSex Chromosomes: FEMALE (XX)\nAMELX present, AMELY absent\nX chromosome markers show normal female pattern\n\nTriploidy Assessment: NO EVIDENCE OF TRIPLOIDY\nNormal diallelic patterns observed for all informative autosomal markers\n\nMOLECULAR KARYOTYPE\nrsa(X,13,15,16,18)×2,(21)×3,(22)×2\n\nINTERPRETATION\nThis QF-PCR analysis has detected trisomy 21 (Down syndrome) in the fetal tissue sample. Four informative markers on chromosome 21 (D21S11, D21S1409, D21S1435, D21S1411) each show three distinct alleles in a 1:1:1 ratio, confirming the presence of three copies of chromosome 21.\n\nThe remaining chromosomes tested (13, 15, 16, 18, 22, X) show normal copy number. The fetus was female with a normal XX sex chromosome complement. No evidence of triploidy was detected.\n\nTrisomy 21 is the most likely etiology for the fetal loss in this case. Down syndrome occurs in approximately 1 in 700 live births but is more common in early pregnancy losses.\n\nLIMITATIONS\n- This test only detects numerical abnormalities of the specified chromosomes\n- Structural rearrangements, mosaicism <20%, and abnormalities of other chromosomes are not detected\n- Maternal cell contamination cannot be excluded without comparative analysis\n\nRECOMMENDATIONS\n1. Parental blood samples are requested for chromosome analysis to exclude a balanced chromosome rearrangement that may increase recurrence risk\n2. Genetic counseling is recommended to discuss results and recurrence risks\n3. The empiric recurrence risk for trisomy 21 is approximately 1% above the maternal age-related risk\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal loss investigation",
+            "test_clinical_rationale": "Rapid aneuploidy detection to determine etiology of fetal loss",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Fetal loss"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR aneuploidy screening for chromosomes 13, 15, 16, 18, 21, 22, X and Y using microsatellite markers on uncultured placental material",
+                "sample_origin": "Placental material",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S11, D21S1409, D21S1435, D21S1411",
+                "result_status": "abnormal",
+                "result_description": "Trisomy 21 detected via four informative markers",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Trisomy"
+                    },
+                    {
+                        "result_name": "Allele Ratio",
+                        "result_value": "1:1:1"
+                    },
+                    {
+                        "result_name": "Molecular Karyotype",
+                        "result_value": "rsa(X,13,15,16,18)×2,(21)×3,(22)×2"
+                    }
+                ],
+                "clinical_implications": "Trisomy 21 (Down syndrome) likely etiology of fetal loss"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis using fluorescently labeled microsatellite markers",
+                "sample_origin": "Placental material",
+                "result_entity_type": "chromosome",
+                "result_entity": "13, 15, 16, 18, 22",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal complement for chromosomes 13, 15, 16, 18 and 22",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Pattern",
+                        "result_value": "Normal disomic pattern"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR sex chromosome analysis using AMELX/AMELY and X-linked markers",
+                "sample_origin": "Placental material",
+                "result_entity_type": "chromosome",
+                "result_entity": "X and Y",
+                "gene_nomenclature": [],
+                "result_region": "AMELX, DXS6803, DXS6809, HPRT",
+                "result_status": "normal",
+                "result_description": "Female sex chromosome pattern",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "Female (XX)"
+                    },
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "No evidence of triploidy"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Trisomy 21 (Down syndrome) detected as the likely etiology of fetal loss. This is a common cause of early pregnancy loss. The empiric recurrence risk is approximately 1% above the maternal age-related risk",
+            "overall_recommendations": "Parental blood samples requested for chromosome analysis to exclude balanced chromosome rearrangement that may increase recurrence risk. Genetic counseling recommended to discuss results and recurrence risks"
+        }
+    }
+}

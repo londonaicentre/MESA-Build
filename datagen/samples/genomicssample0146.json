@@ -1,0 +1,80 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Placental tissue (chorionic villi)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nFetal chromosome analysis requested\n\nTEST PERFORMED\nArray Comparative Genomic Hybridization (Array CGH)\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\n\nMETHODOLOGY\nArray CGH analysis was performed on uncultured placental DNA using oligonucleotide microarray technology. The GenArray XR4 platform was utilized, containing approximately 60,000 genome-wide probes providing comprehensive coverage across all chromosomes. DNA was extracted from placental tissue, labeled, and hybridized according to manufacturer's protocols. Data analysis was performed using proprietary software with reference to the GRCh37/hg19 human genome assembly.\n\nQF-PCR analysis was performed in parallel to rapidly exclude common aneuploidies and triploidy. Multiplex PCR amplification of short tandem repeat (STR) markers on chromosomes 13, 18, 21, X, and Y was conducted.\n\nRESULTS\n\nARRAY CGH RESULT:\narr(1-22)x2,(X,Y)x1\n\nINTERPRETATION: Normal male chromosome complement\n\nNo clinically significant copy number variants detected\nNo imbalances >1Mb identified\nNo known pathogenic microdeletions or microduplications detected\n\nQF-PCR RESULT:\nChromosome 13: Two alleles detected - Normal disomic pattern\nChromosome 18: Two alleles detected - Normal disomic pattern\nChromosome 21: Two alleles detected - Normal disomic pattern\nSex chromosomes: XY pattern confirmed\nTriploidy: Excluded\n\nCLINICAL INTERPRETATION\nThe array CGH analysis demonstrates a normal male chromosome complement with no detectable genomic imbalances. The resolution of this analysis excludes chromosomal imbalances greater than 1Mb and smaller fully penetrant pathogenic variants included in the array design. The QF-PCR results are concordant, confirming normal copy number for chromosomes 13, 18, and 21, and excluding triploidy.\n\nThese results are consistent with a chromosomally normal male fetus.\n\nLIMITATIONS\n1. Array CGH cannot detect balanced chromosomal rearrangements (translocations, inversions)\n2. Low-level mosaicism (<20%) may not be detected\n3. Point mutations and small insertions/deletions are not detected by this methodology\n4. Uniparental disomy cannot be excluded\n5. This test was performed on placental tissue; confined placental mosaicism cannot be excluded\n\nRECOMMENDATIONS\nNo further chromosome analysis is required for this sample based on current findings. Standard prenatal care and monitoring should continue as clinically indicated.\n\nThis report has been reviewed and electronically signed by:\n[redacted name], PhD, FACMG\nDirector, Prenatal Cytogenetics Laboratory\nBoard Certified Clinical Cytogeneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal chromosome analysis requested",
+            "test_clinical_rationale": "Prenatal screening for chromosomal abnormalities",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample (placental material)",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Array CGH analysis of uncultured placental DNA using oligonucleotide microarray (GenArray XR4 platform with ~60,000 genome-wide probes)",
+                "sample_origin": "Placental tissue (chorionic villi)",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 1-22, X, Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "arr(1-22)x2,(X,Y)x1 - Normal male chromosome complement",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "Normal male"
+                    },
+                    {
+                        "result_name": "Reference Genome",
+                        "result_value": "GRCh37/hg19"
+                    }
+                ],
+                "clinical_implications": "Results consistent with a chromosomally normal male fetus"
+            },
+            {
+                "test_subject": "Fetal sample (placental material)",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) with multiplex PCR amplification of STR markers",
+                "sample_origin": "Placental tissue (chorionic villi)",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 13, 18, 21, X, Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal disomic pattern for chromosomes 13, 18, 21; XY pattern confirmed; Triploidy excluded",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13",
+                        "result_value": "Normal disomic pattern"
+                    },
+                    {
+                        "result_name": "Chromosome 18",
+                        "result_value": "Normal disomic pattern"
+                    },
+                    {
+                        "result_name": "Chromosome 21",
+                        "result_value": "Normal disomic pattern"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY pattern"
+                    },
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "Excluded"
+                    }
+                ],
+                "clinical_implications": "Confirms normal copy number for common aneuploidy chromosomes"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Array CGH and QF-PCR analyses demonstrate normal male chromosome complement with no detectable genomic imbalances. Excluded imbalances >1Mb and smaller fully penetrant pathogenic variants. Results consistent with chromosomally normal male fetus",
+            "overall_recommendations": "No further chromosome analysis required for this sample. Standard prenatal care and monitoring should continue as clinically indicated"
+        }
+    }
+}

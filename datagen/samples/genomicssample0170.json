@@ -1,0 +1,62 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for genetic susceptibility to BRCA-related cancer.\n\nMETHODOLOGY\nBidirectional DNA sequencing and Multiplex Ligation-dependent Probe Amplification (MLPA) analysis of BRCA1 (NM_007294.3) and BRCA2 (NM_000059.3) genes was performed.\n\nDNA was extracted from peripheral blood using standard protocols. All coding exons and intron-exon boundaries of BRCA1 and BRCA2 were amplified by PCR and analyzed by bidirectional Sanger sequencing. Generic MLPA kits were utilized to test all exons of both genes for large deletions and duplications.\n\nTechnical Notes:\n- DNA sequencing detects >99% of point mutations and microlesions\n- MLPA analysis detects large deletions and duplications not identifiable by sequencing\n- Combined analysis detects >98% of BRCA1/BRCA2 mutations\n- This test does not detect deep intronic variants or regulatory region mutations\n\nRESULTS\n\nBRCA1 (NM_007294.3):\nNo pathogenic mutations detected\nComplete coding regions and splice sites screened\nNo large deletions or duplications detected by MLPA\n\nBRCA2 (NM_000059.3):\nNo pathogenic mutations detected\nComplete coding regions and splice sites screened\nNo large deletions or duplications detected by MLPA\n\nSUMMARY\nNo pathogenic mutations were identified in the BRCA1 or BRCA2 genes. The patient is very unlikely to have a pathogenic mutation in BRCA1 or BRCA2 genes.\n\nLIMITATIONS\nThis test has a clinical sensitivity of >98% for detecting pathogenic variants in BRCA1 and BRCA2. A negative result does not exclude the possibility of:\n- Mutations in regions not covered by this analysis\n- Mutations in other cancer susceptibility genes\n- Mutations below the detection threshold of the methodologies used\n\nReported by: [redacted name], PhD\nAuthorized by: [redacted name], MD, PhD\nClinical Molecular Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for genetic susceptibility to BRCA-related cancer",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Bidirectional DNA sequencing and Multiplex Ligation-dependent Probe Amplification (MLPA) analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "BRCA1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_007294",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "Complete coding regions and splice sites",
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected. No large deletions or duplications detected by MLPA",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Bidirectional DNA sequencing and Multiplex Ligation-dependent Probe Amplification (MLPA) analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "BRCA2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000059",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "Complete coding regions and splice sites",
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected. No large deletions or duplications detected by MLPA",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Patient is very unlikely to have a pathogenic mutation in BRCA1 or BRCA2 genes",
+            "overall_recommendations": "This test has a clinical sensitivity of >98% for detecting pathogenic variants in BRCA1 and BRCA2. A negative result does not exclude mutations in regions not covered by this analysis, mutations in other cancer susceptibility genes, or mutations below the detection threshold"
+        }
+    }
+}

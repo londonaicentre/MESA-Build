@@ -1,0 +1,112 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Amniotic fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nMaternal Age: 42 years\nGestational Age: 20 weeks (by ultrasound dating)\nIndication for Testing: Advanced maternal age\nReferring Physician: Dr. [redacted name]\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniocytes extracted from amniotic fluid. This test screens for the most common aneuploidies involving chromosomes 13, 18, and 21 using fluorescently labeled primers to amplify chromosome-specific short tandem repeat (STR) markers. A minimum of four informative markers per chromosome were analyzed. Peak area ratios between 0.8-1.4 are considered normal (disomic), while ratios <0.65 or >1.8 indicate trisomy.\n\nRESULTS\n\nChromosome 13:\nMarkers analyzed: D13S631, D13S258, D13S742, D13S628\nResult: NORMAL - Consistent with two copies of chromosome 13\nPeak ratios: All within normal range (0.95-1.12)\n\nChromosome 18:\nMarkers analyzed: D18S391, D18S390, D18S535, D18S386\nResult: NORMAL - Consistent with two copies of chromosome 18\nPeak ratios: All within normal range (0.89-1.08)\n\nChromosome 21:\nMarkers analyzed: D21S1435, D21S1411, D21S1412, D21S1437\nResult: NORMAL - Consistent with two copies of chromosome 21\nPeak ratios: All within normal range (0.91-1.15)\n\nFetal Sex: Female (XX)\n\nINTERPRETATION\nQF-PCR analysis demonstrates a normal chromosome complement for chromosomes 13, 18, and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome) was detected in this fetal sample.\n\nLIMITATIONS\nThis test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, and 21 only. It does not detect:\n- Structural chromosome abnormalities\n- Mosaicism below 20%\n- Aneuploidies of other chromosomes\n- Single gene disorders\n- Maternal cell contamination cannot be completely excluded\n\nRECOMMENDATIONS\nBased on these normal QF-PCR results, no further karyotyping is indicated for this sample. The residual risk for chromosomal abnormalities not detected by this test remains at the background population risk.\n\nThis test was developed and validated by [redacted location] Regional Genetics Laboratory.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD\nCAP Number: [redacted ID]\nCLIA Number: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Advanced maternal age",
+            "test_clinical_rationale": "Screening for chromosomal abnormalities in fetus at 20 weeks gestation",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal Age: 42 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Gestational Age: 20 weeks (by ultrasound dating)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample via amniocentesis",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniocytes using fluorescently labeled primers to amplify chromosome-specific short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "NORMAL - Consistent with two copies of chromosome 13",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio Range",
+                        "result_value": 1.12,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetal sample via amniocentesis",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniocytes",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S391, D18S390, D18S535, D18S386",
+                "result_status": "normal",
+                "result_description": "NORMAL - Consistent with two copies of chromosome 18",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio Range",
+                        "result_value": 1.08,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetal sample via amniocentesis",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis on uncultured amniocytes",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1437",
+                "result_status": "normal",
+                "result_description": "NORMAL - Consistent with two copies of chromosome 21",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio Range",
+                        "result_value": 1.15,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (2 copies)"
+                    },
+                    {
+                        "result_name": "Fetal Sex",
+                        "result_value": "Female (XX)"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal chromosome complement for chromosomes 13, 18, and 21. No evidence of the three most common autosomal trisomies detected in this fetal sample",
+            "overall_recommendations": "Based on these normal QF-PCR results, no further karyotyping is indicated for this sample. The residual risk for chromosomal abnormalities not detected by this test remains at the background population risk"
+        }
+    }
+}

@@ -1,0 +1,87 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: Not applicable (prenatal)\nMedical Record Number: [redacted ID]\nSpecimen Type: Chorionic villi\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\nReferring Physician: Dr. [redacted name]\n\nCLINICAL INDICATION\nPrenatal evaluation for potential structural chromosomal abnormality in fetus. Mother is a known carrier of a balanced reciprocal translocation between chromosome 1p and 5q.\n\nFAMILY HISTORY\nMother: Balanced reciprocal translocation carrier t(1;5)(p36.33;q35.3)\nPrevious pregnancy losses: Not specified\n\nTEST PERFORMED\nInterphase Fluorescence In Situ Hybridization (FISH) Analysis\n\nMETHODOLOGY\nInterphase FISH was performed on uncultured chorionic villi using commercially available subtelomeric probes:\n- TeloChromo-1p (1p36.33) - SpectrumOrange\n- TeloChromo-5p (5p15.33) - SpectrumGreen\n- TeloChromo-5q (5q35.3) - SpectrumAqua\n\nA minimum of 100 interphase nuclei were analyzed for each probe set. The analysis was performed according to standard laboratory protocols and ACMG guidelines.\n\nRESULTS\nFISH Result: nuc ish 1p36.33(TeloChromo-1px2),5p15.33(TeloChromo-5px2),5q35.3(TeloChromo-5qx2)\n\nInterpretation: Normal or balanced complement for chromosomes 1 and 5\n\nCell Count Summary:\n- 1p36.33: 98/100 cells with 2 signals\n- 5p15.33: 99/100 cells with 2 signals\n- 5q35.3: 98/100 cells with 2 signals\n\nINTERPRETATION\nThe FISH analysis demonstrates two signals for each of the subtelomeric regions tested (1p36.33, 5p15.33, and 5q35.3), indicating either a normal chromosomal complement or a balanced rearrangement for chromosomes 1 and 5. This technique cannot distinguish between a normal karyotype and a balanced translocation inherited from the mother.\n\nThe presence of two signals for each region indicates that there is no detectable deletion or duplication of the terminal regions of chromosomes 1p, 5p, or 5q. If the fetus has inherited the maternal balanced translocation, it would be expected to have a normal phenotype, as balanced translocations typically do not result in gain or loss of genetic material.\n\nADDITIONAL INFORMATION\nPrevious prenatal testing by PCR demonstrated a normal complement for chromosomes 13, 18, and 21, ruling out the common autosomal trisomies.\n\nRECOMMENDATIONS\n1. No further chromosome analysis is indicated at this time based on these results.\n2. Genetic counseling is recommended for the parents regarding:\n   - The implications of this result\n   - The possibility that the fetus may be a balanced translocation carrier\n   - Future reproductive risks\n3. If the child inherits the balanced translocation, genetic counseling will be recommended at reproductive age to discuss potential risks for future pregnancies.\n\nLIMITATIONS\nThis FISH analysis is limited to the detection of copy number changes in the specific chromosomal regions tested. It cannot detect balanced rearrangements, point mutations, or abnormalities in other chromosomal regions not covered by the probes used.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD\nCAP Number: [redacted ID]\nCLIA Number: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal evaluation for potential structural chromosomal abnormality in fetus",
+            "test_clinical_rationale": "Mother is a known carrier of a balanced reciprocal translocation between chromosome 1p and 5q",
+            "clinical_findings": [
+                {
+                    "type": "family_history",
+                    "value": "Mother: Balanced reciprocal translocation carrier t(1;5)(p36.33;q35.3)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH performed on uncultured chorionic villi using subtelomeric probes TeloChromo-1p, TeloChromo-5p, and TeloChromo-5q",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "1",
+                "gene_nomenclature": [],
+                "result_region": "1p36.33",
+                "result_status": "normal",
+                "result_description": "Two signals detected for 1p36.33",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with 2 signals",
+                        "result_value": 98.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish 1p36.33(TeloChromo-1px2)"
+                    }
+                ],
+                "clinical_implications": "Normal or balanced complement for chromosome 1"
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH performed on uncultured chorionic villi using subtelomeric probes",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "5",
+                "gene_nomenclature": [],
+                "result_region": "5p15.33, 5q35.3",
+                "result_status": "normal",
+                "result_description": "Two signals detected for both 5p15.33 and 5q35.3",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with 2 signals (5p)",
+                        "result_value": 99.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Cells with 2 signals (5q)",
+                        "result_value": 98.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish 5p15.33(TeloChromo-5px2),5q35.3(TeloChromo-5qx2)"
+                    }
+                ],
+                "clinical_implications": "Normal or balanced complement for chromosome 5"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis demonstrates normal or balanced complement for chromosomes 1 and 5. Cannot distinguish between normal karyotype and balanced translocation. If fetus inherited maternal balanced translocation, normal phenotype expected. Previous PCR showed normal complement for chromosomes 13, 18, and 21",
+            "overall_recommendations": "No further chromosome analysis needed. Genetic counseling recommended regarding implications of results, possibility of balanced translocation carrier status, and future reproductive risks. If child inherits balanced translocation, genetic counseling recommended at reproductive age"
+        }
+    }
+}

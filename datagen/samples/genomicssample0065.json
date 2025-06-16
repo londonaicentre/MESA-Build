@@ -1,0 +1,80 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nTesting for genetic susceptibility to breast/ovarian cancer.\n\nMETHODOLOGY\nComprehensive BRCA1 and BRCA2 analysis was performed using the following methods:\n1. Protein Truncation Test (PTT): Initial screening performed on BRCA1 exon 11 and BRCA2 exons 10 and 11\n2. Unidirectional DNA Sequencing: Full coding sequence analysis of BRCA1 (NM_007294.3) and BRCA2 (NM_000059.3) genes including intron/exon boundaries\n3. Multiplex Ligation-dependent Probe Amplification (MLPA): Analysis for large deletions and duplications using SALSA MLPA kits P002 (BRCA1) and P045 (BRCA2)\n\nRESULTS\n\nBRCA1 GENE ANALYSIS\nProtein Truncation Test: No truncating mutations detected in exon 11\nSequencing: No pathogenic variants identified\nMLPA: No deletions or duplications detected\nConclusion: No mutations detected in BRCA1\n\nBRCA2 GENE ANALYSIS\nProtein Truncation Test: No truncating mutations detected in exons 10 and 11\nSequencing: HETEROZYGOUS NONSENSE MUTATION IDENTIFIED\n  Variant: c.9924C>G\n  Protein: p.Tyr3308X\n  Location: Exon 27\n  Zygosity: Heterozygous\n  Classification: Pathogenic\nMLPA: No deletions or duplications detected\n\nFINDINGS SUMMARY\nA heterozygous nonsense mutation was identified in the BRCA2 gene (c.9924C>G; p.Tyr3308X) in exon 27. This variant introduces a premature stop codon at amino acid position 3308, resulting in a truncated protein lacking 111 amino acids at the C-terminus. This mutation has been previously reported in multiple families with hereditary breast and ovarian cancer and is classified as pathogenic according to ACMG/AMP guidelines.\n\nCLINICAL IMPLICATIONS\nThe identified BRCA2 nonsense mutation is pathogenic, confirming a diagnosis of inherited breast/ovarian cancer predisposition syndrome. Female carriers of pathogenic BRCA2 mutations have a lifetime risk of breast cancer of 45-85% and ovarian cancer risk of 11-27%. Male carriers have an increased risk of breast cancer (6-8% lifetime risk) and prostate cancer. There may also be increased risks for pancreatic cancer and melanoma.\n\nRECOMMENDATIONS\n1. Referral to oncology for discussion of risk-reducing strategies and enhanced surveillance protocols\n2. Predictive testing is available for family members\n3. Genetic counseling is strongly recommended prior to predictive testing of at-risk relatives\n4. First-degree relatives have a 50% chance of carrying this mutation\n5. Consider referral to high-risk breast clinic for surveillance recommendations\n\nNOMENCLATURE NOTE\nVariant nomenclature follows Human Genome Variation Society (HGVS) guidelines. Reference sequences used: BRCA1 (NM_007294.3) and BRCA2 (NM_000059.3).\n\nDATA VERIFICATION\nAll positive findings have been confirmed by repeat analysis. This test was developed and validated by the [redacted location] Molecular Genetics Laboratory.\n\nAuthorized by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Testing for genetic susceptibility to breast/ovarian cancer",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Protein Truncation Test on BRCA1 exon 11, followed by unidirectional DNA sequencing of full coding sequence and MLPA analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "BRCA1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_007294",
+                        "version": "3"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic variants identified. No deletions or duplications detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Protein Truncation Test on BRCA2 exons 10 and 11, followed by unidirectional DNA sequencing of full coding sequence and MLPA analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "BRCA2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000059",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.9924C>G; p.Tyr3308X in exon 27",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous nonsense mutation identified in BRCA2 (c.9924C>G; p.Tyr3308X) in exon 27",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "Variant Type",
+                        "result_value": "Nonsense mutation"
+                    }
+                ],
+                "clinical_implications": "This variant introduces a premature stop codon at amino acid position 3308, resulting in a truncated protein. Previously reported in multiple families with hereditary breast and ovarian cancer"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "BRCA2 nonsense mutation is pathogenic, confirming diagnosis of inherited breast/ovarian cancer predisposition syndrome. Female carriers have 45-85% lifetime breast cancer risk and 11-27% ovarian cancer risk. Male carriers have 6-8% breast cancer risk and increased prostate cancer risk. Increased risks for pancreatic cancer and melanoma",
+            "overall_recommendations": "Referral to oncology for risk-reducing strategies and enhanced surveillance. Predictive testing available for family members with genetic counseling recommended prior to testing. First-degree relatives have 50% chance of carrying mutation. Consider referral to high-risk breast clinic"
+        }
+    }
+}

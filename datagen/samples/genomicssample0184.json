@@ -1,0 +1,113 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMRN: [redacted ID]\nSample Type: Placental tissue (uncultured)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Fetal loss investigation\nClinical Details: Products of conception submitted for chromosomal analysis following pregnancy loss\n\nTEST PERFORMED\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR)\nAneuploidy screening for chromosomes 13, 14, 15, 16, 18, 21, 22, X and Y\n\nMETHODOLOGY\nDNA was extracted from uncultured placental tissue. QF-PCR analysis was performed using fluorescently labeled primers for polymorphic microsatellite markers specific to chromosomes 13, 14, 15, 16, 18, 21, 22, X and Y. PCR products were analyzed by capillary electrophoresis on an ABI 3500 Genetic Analyzer. Peak areas were calculated to determine allele ratios.\n\nRESULTS\n\nCHROMOSOME 14: ABNORMAL - TRISOMY 14 DETECTED\nMarker\t\tLocation\tAllele Pattern\tRatio\nD14S122\t\t14q11.2\t\tTriallelic\t1:1:1\nD14S125\t\t14q23.2\t\tTriallelic\t1:1:1\nD14S553\t\t14q32.12\tDiallelic\t2:1\nD14S1010\t14q32.33\tTriallelic\t1:1:1\nD14S1007\t14q32.33\tDiallelic\t2:1\n\nCHROMOSOME 13: Normal disomic pattern\nTwo informative markers analyzed\n\nCHROMOSOME 15: Normal disomic pattern\nThree informative markers analyzed\n\nCHROMOSOME 16: Normal disomic pattern\nTwo informative markers analyzed\n\nCHROMOSOME 18: Normal disomic pattern\nThree informative markers analyzed\n\nCHROMOSOME 21: Normal disomic pattern\nFour informative markers analyzed\n\nCHROMOSOME 22: Normal disomic pattern\nTwo informative markers analyzed\n\nSEX CHROMOSOMES: Female (XX)\nX chromosome markers show normal female pattern\nNo Y chromosome markers detected\n\nTRIPLOIDY ASSESSMENT: No evidence of triploidy\nAllele patterns consistent with diploid cell line with trisomy 14\n\nINTERPRETATION\nQF-PCR analysis demonstrates trisomy 14 in this fetal tissue sample. Five informative markers for chromosome 14 show either triallelic patterns (1:1:1 ratio) or diallelic patterns with abnormal 2:1 ratios, confirming the presence of three copies of chromosome 14.\n\nAll other chromosomes tested (13, 15, 16, 18, 21, 22, X) show normal copy number. The sex chromosome complement is female (XX).\n\nTrisomy 14 is a severe chromosomal abnormality that is incompatible with life. It is typically associated with early pregnancy loss, as observed in this case. Most cases of trisomy 14 arise de novo due to meiotic nondisjunction.\n\nRECOMMENDATIONS\n1. Parental blood samples are requested for karyotype analysis to exclude a balanced chromosome rearrangement involving chromosome 14\n2. If parental karyotypes are normal, the recurrence risk for future pregnancies is low (approximately 1%)\n3. Genetic counseling is recommended to discuss these results and implications for future pregnancies\n4. Prenatal diagnosis should be offered in subsequent pregnancies\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal loss investigation",
+            "test_clinical_rationale": "Products of conception submitted for chromosomal analysis following pregnancy loss",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for polymorphic microsatellite markers with capillary electrophoresis on ABI 3500 Genetic Analyzer",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "14",
+                "gene_nomenclature": [],
+                "result_region": "D14S122 (14q11.2), D14S125 (14q23.2), D14S553 (14q32.12), D14S1010 (14q32.33), D14S1007 (14q32.33)",
+                "result_status": "abnormal",
+                "result_description": "Trisomy 14 detected with five informative markers showing triallelic or abnormal diallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "D14S122 Pattern",
+                        "result_value": "Triallelic 1:1:1"
+                    },
+                    {
+                        "result_name": "D14S125 Pattern",
+                        "result_value": "Triallelic 1:1:1"
+                    },
+                    {
+                        "result_name": "D14S553 Pattern",
+                        "result_value": "Diallelic 2:1"
+                    },
+                    {
+                        "result_name": "D14S1010 Pattern",
+                        "result_value": "Triallelic 1:1:1"
+                    },
+                    {
+                        "result_name": "D14S1007 Pattern",
+                        "result_value": "Diallelic 2:1"
+                    }
+                ],
+                "clinical_implications": "Trisomy 14 is a severe chromosomal abnormality incompatible with life, typically associated with early pregnancy loss"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR aneuploidy screening",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "13, 15, 16, 18, 21, 22",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal disomic pattern for chromosomes 13, 15, 16, 18, 21 and 22",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR sex chromosome analysis",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "X and Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Female sex chromosome complement (XX). No Y chromosome markers detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosome Complement",
+                        "result_value": "Female (XX)"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR triploidy assessment",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "Genome-wide",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No evidence of triploidy. Allele patterns consistent with diploid cell line with trisomy 14",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Ploidy Status",
+                        "result_value": "Diploid with trisomy 14"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Trisomy 14 identified as probable cause of fetal loss. This is a severe chromosomal abnormality incompatible with life. Most cases arise de novo due to meiotic nondisjunction",
+            "overall_recommendations": "Parental blood samples requested for karyotype analysis to exclude balanced chromosome rearrangement. If parental karyotypes normal, recurrence risk approximately 1%. Genetic counseling recommended. Prenatal diagnosis should be offered in subsequent pregnancies"
+        }
+    }
+}

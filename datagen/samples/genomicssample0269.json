@@ -1,0 +1,79 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSPECIMEN TYPE: Placental tissue\nCOLLECTION DATE: [redacted date]\nREPORT DATE: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing of fetal tissue\n\nTEST PERFORMED\nArray Comparative Genomic Hybridization (Array CGH)\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR)\n\nMETHODOLOGY\nArray CGH: Oligonucleotide array analysis performed using GeneScan HR60 platform containing approximately 60,000 genome-wide probes with 120kb median resolution. DNA extracted from placental tissue and hybridized according to manufacturer's protocol. Data analysis performed using GenomeView software with GRCh37/hg19 reference genome.\n\nQF-PCR: Multiplex QF-PCR analysis for rapid aneuploidy detection and triploidy screening.\n\nRESULTS\n\nARRAY CGH RESULT: arr(1-22)x2,(X,Y)x1\nNormal male chromosome complement\nNo copy number imbalances detected\n\nQF-PCR RESULT: Normal male pattern\nNo evidence of triploidy\nNo evidence of common aneuploidies (13, 18, 21, X, Y)\n\nINTERPRETATION\nArray CGH analysis reveals a normal male chromosomal complement with no detectable copy number imbalances. The resolution of this array excludes chromosomal imbalances greater than 3Mb of known fully penetrant pathogenicity. Smaller imbalances, balanced rearrangements, low-level mosaicism (<20%), and single gene mutations are not excluded by this analysis.\n\nQF-PCR results are consistent with a normal male karyotype with no evidence of triploidy or common aneuploidies.\n\nRECOMMENDATIONS\nNo further chromosome analysis is required based on these results.\n\nThis test was developed and its performance characteristics determined by [redacted location] Cytogenetics Laboratory. The laboratory is certified under Clinical Laboratory Improvement Amendments (CLIA) to perform high-complexity testing.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing of fetal tissue",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample from placental material",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Oligonucleotide array analysis using GeneScan HR60 platform with ~60,000 genome-wide probes and 120kb median resolution. Analysis using GenomeView software with GRCh37/hg19 reference",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 1-22, X, Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal male chromosome complement. No copy number imbalances detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Probe Count",
+                        "result_value": 60000.0,
+                        "result_units": "probes"
+                    },
+                    {
+                        "result_name": "Median Resolution",
+                        "result_value": 120.0,
+                        "result_units": "kb"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr(1-22)x2,(X,Y)x1"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    }
+                ],
+                "clinical_implications": "Results consistent with normal male karyotype. Excludes imbalances >3Mb of known fully penetrant pathogenicity. Smaller imbalances not excluded"
+            },
+            {
+                "test_subject": "Fetal sample from placental material",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex QF-PCR analysis for rapid aneuploidy detection and triploidy screening",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 13, 18, 21, X, Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal male pattern. No evidence of triploidy or common aneuploidies",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "QF-PCR Result",
+                        "result_value": "Normal male pattern"
+                    },
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "No evidence of triploidy"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal male chromosomal complement with no detectable copy number imbalances. Array resolution excludes imbalances >3Mb of known fully penetrant pathogenicity. Smaller imbalances, balanced rearrangements, low-level mosaicism (<20%), and single gene mutations not excluded",
+            "overall_recommendations": "No further chromosome analysis required"
+        }
+    }
+}

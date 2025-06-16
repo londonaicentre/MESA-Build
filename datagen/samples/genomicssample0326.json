@@ -1,0 +1,124 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY\n[redacted location] Regional Genetics Centre\n\nQF-PCR RAPID ANEUPLOIDY SCREENING REPORT\n\nPatient: [redacted name]\nDOB: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL DETAILS\nPrenatal testing requested at 16 weeks gestation\nIndication: Screening for chromosomal trisomies\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nRapid aneuploidy detection for chromosomes 13, 18 and 21\n\nMETHODOLOGY\nDNA extracted from uncultured amniocytes\nMultiplex QF-PCR using fluorescently labelled primers for STR markers\nChromosome 13: D13S631, D13S258, D13S742, D13S628\nChromosome 18: D18S391, D18S390, D18S535, D18S386\nChromosome 21: D21S1435, D21S1411, D21S1412, D21S1446\nAnalysis performed on ABI 3500 Genetic Analyzer\nPeak area ratios calculated for all informative markers\n\nRESULTS\n\nChromosome 13: Normal diallelic pattern\n- D13S631: 1.05 (normal range 0.8-1.4)\n- D13S258: 1.12 (normal range 0.8-1.4)\n- D13S742: Uninformative (homozygous)\n- D13S628: 0.98 (normal range 0.8-1.4)\n\nChromosome 18: Normal diallelic pattern\n- D18S391: 1.08 (normal range 0.8-1.4)\n- D18S390: 0.95 (normal range 0.8-1.4)\n- D18S535: 1.14 (normal range 0.8-1.4)\n- D18S386: Uninformative (homozygous)\n\nChromosome 21: Normal diallelic pattern\n- D21S1435: 1.02 (normal range 0.8-1.4)\n- D21S1411: 0.91 (normal range 0.8-1.4)\n- D21S1412: 1.09 (normal range 0.8-1.4)\n- D21S1446: 1.11 (normal range 0.8-1.4)\n\nSex chromosome markers:\nAMELOGENIN: XY pattern detected\nTAF9: Normal male pattern\n\nCONCLUSION\nAnalysis shows normal complement for chromosomes 13, 18, and 21\nNo evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome)\nFetal sex: Male\n\nLIMITATIONS\nThis test screens only for trisomies of chromosomes 13, 18 and 21\nDoes not detect balanced rearrangements, mosaicism below 20%, or other chromosomal abnormalities\nMaternal cell contamination excluded (MCC markers checked)\n\nRECOMMENDATIONS\nFull karyotype analysis from cultured amniocytes to follow\nThis will provide comprehensive chromosomal analysis at higher resolution\nExpected reporting time for karyotype: 10-14 days\n\nReported by: [redacted name], Clinical Scientist\nAuthorised by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing requested at 16 weeks gestation",
+            "test_clinical_rationale": "Screening for chromosomal trisomies",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "16 weeks gestation"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labelled primers for STR markers on uncultured amniocytes",
+                "sample_origin": "Amniotic Fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "D13S631 Peak Ratio",
+                        "result_value": 1.05,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S258 Peak Ratio",
+                        "result_value": 1.12,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D13S628 Peak Ratio",
+                        "result_value": 0.98,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labelled primers for STR markers on uncultured amniocytes",
+                "sample_origin": "Amniotic Fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S391, D18S390, D18S535, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "D18S391 Peak Ratio",
+                        "result_value": 1.08,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S390 Peak Ratio",
+                        "result_value": 0.95,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D18S535 Peak Ratio",
+                        "result_value": 1.14,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labelled primers for STR markers on uncultured amniocytes",
+                "sample_origin": "Amniotic Fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1446",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "D21S1435 Peak Ratio",
+                        "result_value": 1.02,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1411 Peak Ratio",
+                        "result_value": 0.91,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1412 Peak Ratio",
+                        "result_value": 1.09,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "D21S1446 Peak Ratio",
+                        "result_value": 1.11,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Analysis shows normal complement for chromosomes 13, 18, and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome). Fetal sex determined as male",
+            "overall_recommendations": "Full karyotype analysis from cultured amniocytes to follow. This will provide comprehensive chromosomal analysis at higher resolution. Expected reporting time for karyotype: 10-14 days"
+        }
+    }
+}

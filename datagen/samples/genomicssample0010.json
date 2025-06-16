@@ -1,0 +1,69 @@
+{
+    "content": "FLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge/Sex: 33-year-old male\nMRN: [redacted ID]\nSpecimen Type: Lymph node biopsy\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL DETAILS\nClinical Indication: Lymph node biopsy tissue section analysis\nSuspected Diagnosis: Follicular lymphoma\n\nTEST PERFORMED\nInterphase FISH Analysis for IGH/BCL2 Rearrangement\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the Vysis LSI IGH/BCL2 Dual Color, Dual Fusion Translocation Probe (Abbott Molecular). The analysis was correlated with CD79a immunostained slides to identify B-cell populations. Both intrafollicular and interfollicular regions were evaluated separately.\n\nProbe Information:\n- IGH probe (14q32): SpectrumGreen\n- BCL2 probe (18q21): SpectrumOrange\n- Expected normal pattern: 2 green, 2 orange signals\n- Expected abnormal pattern (with t(14;18)): 1 green, 1 orange, 2 fusion signals\n\nRESULTS\n\nIGH/BCL2 [t(14;18)] Rearrangement Analysis:\n\nIntrafollicular regions:\n- Cells analyzed: 200\n- Normal signal pattern (2G2O): 198/200 (99%)\n- Abnormal signal pattern: 2/200 (1%)\n- Result: NEGATIVE for IGH/BCL2 rearrangement\n\nInterfollicular regions:\n- Cells analyzed: 200\n- Normal signal pattern (2G2O): 197/200 (98.5%)\n- Abnormal signal pattern: 3/200 (1.5%)\n- Result: NEGATIVE for IGH/BCL2 rearrangement\n\nOverall Result: No evidence of IGH/BCL2 [t(14;18)] rearrangement detected\n\nINTERPRETATION\nFISH analysis shows no evidence of the IGH/BCL2 translocation t(14;18) in either the intrafollicular or interfollicular regions of this lymph node biopsy. The t(14;18) translocation is typically associated with 85-90% of follicular lymphomas and results in BCL2 overexpression. The absence of this translocation in the context of suspected follicular lymphoma may suggest:\n\n1. A BCL2-negative follicular lymphoma (10-15% of cases)\n2. An alternative B-cell lymphoma diagnosis\n3. A reactive lymphoid process\n\nCorrelation with morphology, immunophenotyping, and clinical findings is recommended for definitive diagnosis.\n\nAUTHORIZED BY:\n[redacted name], M.D.\nDirector, Molecular Cytogenetics Laboratory\n[redacted location] Medical Center",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Lymph node biopsy tissue section analysis",
+            "test_clinical_rationale": "Suspected follicular lymphoma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "33-year-old male"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using Vysis LSI IGH/BCL2 Dual Color, Dual Fusion Translocation Probe, correlated with CD79a immunostained slide",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "variant",
+                "result_entity": "IGH/BCL2 translocation",
+                "gene_nomenclature": [],
+                "result_region": "t(14;18)",
+                "result_status": "normal",
+                "result_description": "No evidence of IGH/BCL2 [t(14;18)] rearrangement in intrafollicular or interfollicular regions",
+                "quantitative_results": [
+                    {
+                        "result_name": "Intrafollicular Cells Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Intrafollicular Normal Pattern",
+                        "result_value": 99.0,
+                        "result_units": "percent"
+                    },
+                    {
+                        "result_name": "Interfollicular Cells Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Interfollicular Normal Pattern",
+                        "result_value": 98.5,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "NEGATIVE"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "2G2O (normal)"
+                    }
+                ],
+                "clinical_implications": "Absence of IGH/BCL2 translocation typically associated with follicular lymphoma. May suggest BCL2-negative follicular lymphoma (10-15% of cases), alternative B-cell lymphoma, or reactive lymphoid process"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The absence of t(14;18) IGH/BCL2 translocation in suspected follicular lymphoma requires correlation with morphology and immunophenotyping for definitive diagnosis",
+            "overall_recommendations": "Correlation with morphology, immunophenotyping, and clinical findings is recommended for definitive diagnosis"
+        }
+    }
+}

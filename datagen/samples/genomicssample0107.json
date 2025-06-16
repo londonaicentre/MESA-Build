@@ -1,0 +1,90 @@
+{
+    "content": "PRENATAL GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Amniotic Fluid (uncultured)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nGestational Age: 17 weeks by ultrasound\nIndication for Testing: Prenatal screening for chromosomal trisomies\nClinical Details: Routine prenatal screening\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniotic fluid cells using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, 21, X and Y. A minimum of four informative markers per chromosome were analyzed. Peak area ratios between 0.8-1.4 are considered normal (disomic), while ratios <0.65 or >1.8 indicate trisomy.\n\nSAMPLE QUALITY\nThe amniotic fluid sample was noted to be blood-stained upon receipt.\n\nRESULTS\n\nChromosome 13 markers:\nD13S631: Multiple peaks detected - uninterpretable\nD13S258: Multiple peaks detected - uninterpretable\nD13S742: Multiple peaks detected - uninterpretable\nD13S628: Multiple peaks detected - uninterpretable\n\nChromosome 18 markers:\nD18S391: Multiple peaks detected - uninterpretable\nD18S390: Multiple peaks detected - uninterpretable\nD18S535: Multiple peaks detected - uninterpretable\nD18S386: Multiple peaks detected - uninterpretable\n\nChromosome 21 markers:\nD21S1411: Multiple peaks detected - uninterpretable\nD21S1412: Multiple peaks detected - uninterpretable\nD21S1435: Multiple peaks detected - uninterpretable\nD21S1446: Multiple peaks detected - uninterpretable\n\nINTERPRETATION\nTwo distinct genotypes have been detected at significant levels across all markers tested, consistent with maternal cell contamination (MCC). The presence of maternal cells in the amniotic fluid sample, likely due to blood contamination, precludes accurate determination of the fetal karyotype by QF-PCR.\n\nThe blood-stained nature of the sample significantly increases the risk of maternal cell contamination, as maternal blood cells can overwhelm the fetal cell population in the uncultured sample.\n\nCONCLUSION\nResults are UNINTERPRETABLE due to maternal cell contamination. QF-PCR analysis cannot reliably exclude or confirm trisomy 13, 18, or 21 in this sample.\n\nRECOMMENDATIONS\n1. QF-PCR analysis will be repeated on cultured amniocytes, which typically eliminates maternal cell contamination as maternal cells do not grow in culture\n2. A full report on cultured amniocytes will follow\n3. If rapid results are clinically urgent, consider repeat amniocentesis with careful technique to avoid blood contamination\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal screening for chromosomal trisomies",
+            "test_clinical_rationale": "Routine prenatal screening",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "17 weeks gestational age by ultrasound"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Multiple peaks detected - uninterpretable due to two genotypes at significant levels",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Contamination Status",
+                        "result_value": "Maternal cell contamination detected"
+                    }
+                ],
+                "clinical_implications": "Cannot reliably exclude or confirm trisomy 13"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S391, D18S390, D18S535, D18S386",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Multiple peaks detected - uninterpretable due to two genotypes at significant levels",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Contamination Status",
+                        "result_value": "Maternal cell contamination detected"
+                    }
+                ],
+                "clinical_implications": "Cannot reliably exclude or confirm trisomy 18"
+            },
+            {
+                "test_subject": "Fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Amniotic fluid (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1411, D21S1412, D21S1435, D21S1446",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Multiple peaks detected - uninterpretable due to two genotypes at significant levels",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Contamination Status",
+                        "result_value": "Maternal cell contamination detected"
+                    },
+                    {
+                        "result_name": "Sample Quality",
+                        "result_value": "Blood-stained"
+                    }
+                ],
+                "clinical_implications": "Cannot reliably exclude or confirm trisomy 21"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Results inconclusive due to maternal cell contamination. The blood-stained nature of the sample resulted in detection of two distinct genotypes at significant levels, preventing accurate determination of fetal karyotype",
+            "overall_recommendations": "QF-PCR analysis will be repeated on cultured amniocytes to eliminate maternal cell contamination. Full report on cultured amniocytes to follow. If rapid results are clinically urgent, consider repeat amniocentesis with careful technique to avoid blood contamination"
+        }
+    }
+}

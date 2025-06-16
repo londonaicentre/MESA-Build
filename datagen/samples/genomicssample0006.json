@@ -1,0 +1,123 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT INFORMATION\nName: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nAge: 14 years\nSex: Female\nOrdering Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nSPECIMEN INFORMATION\nSpecimen Type: Skin biopsy tissue section\nSpecimen ID: [redacted ID]\nAnatomic Site: [redacted location]\nClinical History: Intradermal Spitz lesion with deep mitotic figures\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\n\nNOTE: This report includes FISH studies only. No G-banded chromosome analysis was performed.\n\nMETHODOLOGY\nFISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using commercially available probes. Hybridization and washing were performed according to manufacturer's protocols. A minimum of 100 interphase nuclei were scored for each probe set.\n\nProbes utilized:\n- RREB1 (6p25)\n- MYB (6q23)\n- CCND1 (11q13)\n- CEP6 (chromosome 6 centromere)\n\nRESULTS\nFISH analysis completed on skin biopsy specimen.\n\nRREB1/MYB/CCND1/CEP6: No significant copy number alterations detected\n- RREB1: 2 signals in 98% of cells\n- MYB: 2 signals in 97% of cells\n- CCND1: 2 signals in 99% of cells\n- CEP6: 2 signals in 98% of cells\n\nINTERPRETATION\nThe FISH analysis shows no evidence of copy number alterations in RREB1, MYB, or CCND1 genes. These findings do not support a diagnosis of melanoma. The absence of these alterations is consistent with a benign Spitz nevus, though does not definitively exclude an atypical Spitz tumor.\n\nCLINICAL CORRELATION\nThe FISH results should be interpreted in conjunction with histopathologic findings. The presence of deep mitotic figures noted in the clinical history warrants careful clinical follow-up despite negative FISH findings.\n\nRECOMMENDATIONS\nNo additional genetic testing required at this time. Clinical follow-up as per dermatopathology recommendations.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Intradermal Spitz lesion with deep mitotic figures",
+            "test_clinical_rationale": "Genetic characterization of Spitz nevus/tumor to differentiate from melanoma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adolescent female, 14 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Intradermal Spitz lesion with deep mitotic figures"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization on formalin-fixed paraffin-embedded tissue sections",
+                "sample_origin": "Skin biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "RREB1",
+                "gene_nomenclature": [],
+                "result_region": "6p25",
+                "result_status": "normal",
+                "result_description": "2 signals in 98% of cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Signal Count",
+                        "result_value": 2.0,
+                        "result_units": "signals"
+                    },
+                    {
+                        "result_name": "Percentage of Cells",
+                        "result_value": 98.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "No alteration"
+                    }
+                ],
+                "clinical_implications": "No evidence of copy number alterations"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization on formalin-fixed paraffin-embedded tissue sections",
+                "sample_origin": "Skin biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "MYB",
+                "gene_nomenclature": [],
+                "result_region": "6q23",
+                "result_status": "normal",
+                "result_description": "2 signals in 97% of cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Signal Count",
+                        "result_value": 2.0,
+                        "result_units": "signals"
+                    },
+                    {
+                        "result_name": "Percentage of Cells",
+                        "result_value": 97.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "No alteration"
+                    }
+                ],
+                "clinical_implications": "No evidence of copy number alterations"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization on formalin-fixed paraffin-embedded tissue sections",
+                "sample_origin": "Skin biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "CCND1",
+                "gene_nomenclature": [],
+                "result_region": "11q13",
+                "result_status": "normal",
+                "result_description": "2 signals in 99% of cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Signal Count",
+                        "result_value": 2.0,
+                        "result_units": "signals"
+                    },
+                    {
+                        "result_name": "Percentage of Cells",
+                        "result_value": 99.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "No alteration"
+                    }
+                ],
+                "clinical_implications": "No evidence of copy number alterations"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis shows no evidence of copy number alterations in RREB1, MYB, or CCND1 genes. These findings do not support a diagnosis of melanoma and are consistent with a benign Spitz nevus, though do not definitively exclude an atypical Spitz tumor",
+            "overall_recommendations": "No additional genetic testing required at this time. Clinical follow-up as per dermatopathology recommendations. The presence of deep mitotic figures warrants careful clinical monitoring"
+        }
+    }
+}

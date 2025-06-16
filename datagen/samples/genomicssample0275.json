@@ -1,0 +1,80 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Centre\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSex: Female\nReferring Clinician: Dr. [redacted name]\nDate of Report: [redacted date]\n\nCLINICAL INDICATION\nPreimplantation genetic diagnosis (PGD) eligibility assessment for Huntington disease (HD). Patient has 50% risk of inheriting HD but declines predictive testing. Family history significant for HD in maternal lineage.\n\nFAMILY HISTORY\nPatient's mother affected with HD (onset age 45). Maternal grandfather also affected. Patient asymptomatic at age 32. Partner has no family history of HD.\n\nTEST PERFORMED\nLinkage analysis for Huntington disease using polymorphic microsatellite markers flanking the HTT gene\nMethodology: PCR amplification of 17 polymorphic markers spanning the HTT locus on chromosome 4p16.3\nSamples analyzed: Patient, partner, patient's mother (affected), patient's father (unaffected)\n\nMARKERS ANALYZED\nD4S2936, D4S3038, HD.STR2, D4S43, D4S1614, D4S127, 4-3021432, D4S126, I1CAHD, D4S3034, 4-3347773, D4S412, 4-3798971, D4S3023, D4S2925, D4S2285, D4S2366\n\nRESULTS\n\nHAPLOTYPE ANALYSIS\n\nMarker\t\tPosition (Mb)\tMother\t\tFather\t\tPatient\t\tPartner\nD4S2936\t\t2.85\t\t142/146\t\t138/144\t\t142/144\t\t140/148\nD4S3038\t\t2.91\t\t224/228\t\t220/226\t\t224/226\t\t222/230\nHD.STR2\t\t3.02\t\t108/112\t\t104/110\t\t108/110\t\t106/114\nD4S43\t\t3.08\t\t172/176\t\t168/174\t\t172/174\t\t170/178\nD4S1614\t\t3.12\t\t285/289\t\t281/287\t\t285/287\t\t283/291\nD4S127\t\t3.18\t\t156/160\t\t152/158\t\t156/158\t\t154/162\n4-3021432\t3.24\t\t198/202\t\t194/200\t\t198/200\t\t196/204\nD4S126\t\t3.31\t\t244/248\t\t240/246\t\t244/246\t\t242/250\nI1CAHD\t\t3.37\t\t132/136\t\t128/134\t\t132/134\t\t130/138\nD4S3034\t\t3.43\t\t216/220\t\t212/218\t\t216/218\t\t214/222\n4-3347773\t3.49\t\t188/192\t\t184/190\t\t188/190\t\t186/194\nD4S412\t\t3.55\t\t264/268\t\t260/266\t\t264/266\t\t262/270\n4-3798971\t3.61\t\t176/180\t\t172/178\t\t176/178\t\t174/182\nD4S3023\t\t3.67\t\t228/232\t\t224/230\t\t228/230\t\t226/234\nD4S2925\t\t3.73\t\t152/156\t\t148/154\t\t152/154\t\t150/158\nD4S2285\t\t3.79\t\t204/208\t\t200/206\t\t204/206\t\t202/210\nD4S2366\t\t3.85\t\t168/172\t\t164/170\t\t168/170\t\t166/174\n\nPHASE DETERMINATION\nBased on the inheritance pattern and affected status of the mother, the maternal chromosome carrying alleles 142-224-108-172-285-156-198-244-132-216-188-264-176-228-152-204-168 represents the HIGH-RISK haplotype.\n\nThe patient has inherited this high-risk haplotype from her affected mother. The low-risk haplotype inherited from the unaffected father consists of alleles 144-226-110-174-287-158-200-246-134-218-190-266-178-230-154-206-170.\n\nPartner's phase could not be determined due to absence of parental samples.\n\nINFORMATIVITY ASSESSMENT\nThe couple is informative for 17/17 (100%) markers tested. All markers show different allele combinations between the patient's high-risk and low-risk haplotypes, allowing clear discrimination.\n\nINTERPRETATION\nThis linkage analysis demonstrates that preimplantation genetic diagnosis for Huntington disease by exclusion testing is feasible for this couple. The analysis has successfully identified the high-risk chromosome inherited from the affected mother and the low-risk chromosome from the unaffected father.\n\nUsing the flanking markers analyzed, embryos can be tested to determine whether they have inherited the high-risk or low-risk chromosome from the patient. The predicted misdiagnosis rate is <1% when using multiple informative flanking markers as demonstrated in this analysis.\n\nLIMITATIONS\n1. This test does not determine the patient's HD status\n2. Recombination between markers and the HTT gene, though rare, could lead to misdiagnosis\n3. Allele dropout during single cell analysis may affect PGD accuracy\n4. Partner's phase not established; parental samples would improve analysis\n\nRECOMMENDATIONS\n1. Proceed with IVF/PGD using the established haplotype information\n2. Embryo biopsy and testing should include multiple markers to minimize error\n3. Consider confirmatory prenatal testing (CVS or amniocentesis) if pregnancy is achieved\n4. Genetic counseling should continue throughout the PGD process\n5. Consider obtaining parental samples from partner if available to establish phase\n\nAuthorized by: Dr. [redacted name], Clinical Molecular Geneticist\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Preimplantation genetic diagnosis (PGD) eligibility assessment for Huntington disease (HD). Patient has 50% risk of inheriting HD but declines predictive testing",
+            "test_clinical_rationale": "Assessment for PGD eligibility to allow selection of embryos without high-risk HD chromosome",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Female patient, age 32, asymptomatic"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Mother affected with HD (onset age 45)"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Maternal grandfather also affected with HD"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Partner has no family history of HD"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification of 17 polymorphic microsatellite markers spanning the HTT locus on chromosome 4p16.3",
+                "sample_origin": "Blood",
+                "result_entity_type": "gene",
+                "result_entity": "HTT",
+                "gene_nomenclature": [],
+                "result_region": "D4S2936, D4S3038, HD.STR2, D4S43, D4S1614, D4S127, 4-3021432, D4S126, I1CAHD, D4S3034, 4-3347773, D4S412, 4-3798971, D4S3023, D4S2925, D4S2285, D4S2366",
+                "result_status": "normal",
+                "result_description": "Linkage analysis shows couple is informative for sufficient markers to identify low risk HTT haplotype. High-risk haplotype identified as 142-224-108-172-285-156-198-244-132-216-188-264-176-228-152-204-168",
+                "quantitative_results": [
+                    {
+                        "result_name": "Informative Markers",
+                        "result_value": 17.0,
+                        "result_units": "markers"
+                    },
+                    {
+                        "result_name": "Total Markers Tested",
+                        "result_value": 17.0,
+                        "result_units": "markers"
+                    },
+                    {
+                        "result_name": "Informativity Percentage",
+                        "result_value": 100.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "PGD Feasibility",
+                        "result_value": "Feasible"
+                    },
+                    {
+                        "result_name": "High-risk Haplotype",
+                        "result_value": "Identified from affected mother"
+                    },
+                    {
+                        "result_name": "Partner Phase",
+                        "result_value": "Not determined"
+                    }
+                ],
+                "clinical_implications": "PGD for HD by exclusion testing feasible with predicted misdiagnosis rate <1% when using flanking markers"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Preimplantation genetic diagnosis for Huntington disease is feasible for this couple using exclusion testing. The high-risk chromosome from the affected mother has been identified, allowing embryo selection without determining the patient's HD status. Predicted misdiagnosis rate is <1% with multiple informative markers",
+            "overall_recommendations": "Proceed with IVF/PGD using the established haplotype information. Embryo biopsy and testing should include multiple markers to minimize error. Consider confirmatory prenatal testing (CVS or amniocentesis) if pregnancy is achieved. Genetic counseling should continue throughout the PGD process. Consider obtaining parental samples from partner if available to establish phase"
+        }
+    }
+}

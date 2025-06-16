@@ -1,0 +1,39 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT INFORMATION\nName: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Female\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nBreast cancer\n\nSPECIMEN TYPE\nBreast biopsy tissue\n\nTEST PERFORMED\nFluorescence in situ hybridization (FISH) analysis\n\nRESULTS\nFISH analysis performed on breast biopsy tissue.\nG-banded chromosome analysis not required.\n\nRECOMMENDATION\nFile only\n\nReported by: [redacted name], Ph.D.\nLaboratory Director: [redacted name], M.D., Ph.D.",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Breast cancer",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Breast cancer"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization analysis",
+                "sample_origin": "Breast biopsy tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "FISH analysis on breast tissue",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "uncertain_significance",
+                "result_description": "FISH analysis performed on breast biopsy tissue. G-banded chromosome analysis not required.",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis completed on breast biopsy tissue",
+            "overall_recommendations": "File only"
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY\n[redacted location] Hospital NHS Trust\nDepartment of Clinical Genetics\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nHOSPITAL NUMBER: [redacted ID]\nNHS NUMBER: [redacted ID]\nSAMPLE TYPE: Peripheral blood\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL DETAILS\nMiddle-aged male patient\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\n\nRESULT\nQF-PCR studies completed.\n\nCOMMENT\nQF-PCR analysis has been performed on the submitted sample. The test has been completed and results have been documented in the patient's laboratory records.\n\nThis report is filed for record purposes. No further action is indicated at this time.\n\nAuthorised by:\nDr [redacted name]\nConsultant Clinical Scientist\n\nEnd of Report",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Not specified",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Middle-aged male patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "QF-PCR markers",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "QF-PCR studies completed",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis has been performed and completed. Results have been documented in the patient's laboratory records",
+            "overall_recommendations": "Filed for record. No further action is indicated at this time"
+        }
+    }
+}

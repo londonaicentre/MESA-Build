@@ -1,0 +1,85 @@
+{
+    "content": "CYTOGENETICS LABORATORY\nGENOMIC MICROARRAY ANALYSIS REPORT\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted]\nMedical Record Number: [redacted ID]\nSpecimen Type: Products of conception/placental material\nDate Collected: [redacted]\nDate Received: [redacted]\nDate Reported: [redacted]\n\nREFERRING PHYSICIAN\nDr. [redacted name]\n[redacted location]\n\nCLINICAL INDICATION\nFetal loss investigation\n\nTEST PERFORMED\nArray Comparative Genomic Hybridization (Array CGH)\nQF-PCR for aneuploidy screening\n\nMETHODOLOGY\nArray CGH analysis was performed using oligonucleotide arrays containing approximately 60,000 probes distributed across the genome. Testing was conducted on the GenomeArray 3000 platform with a median resolution of 120kb. DNA was extracted from products of conception/placental material and hybridized against reference DNA. Data analysis was performed using GenomeScan software with reference to the GRCh37/hg19 human genome assembly.\n\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) analysis was performed to screen for common aneuploidies and to exclude triploidy.\n\nRESULT: ABNORMAL\n\nArray CGH Result:\narr[GRCh37] (8)x3\n\nComplete trisomy of chromosome 8 detected\n\nQF-PCR Result:\n- Negative for triploidy\n- Male chromosome complement (XY)\n- Consistent with trisomy 8\n\nNo other fully penetrant pathogenic copy number imbalances were identified.\n\nINTERPRETATION\nThis analysis reveals complete trisomy of chromosome 8 in the submitted products of conception. Trisomy 8 is a chromosomal abnormality that is typically incompatible with fetal survival and is a recognized cause of pregnancy loss. This finding is most likely causative for the fetal loss in this case.\n\nComplete trisomy 8 in pregnancy tissue is most commonly due to a sporadic meiotic or early mitotic error (de novo aneuploidy event). The recurrence risk for sporadic aneuploidy is generally low, estimated at approximately 1% above the maternal age-related risk.\n\nWhile this finding is most consistent with a sporadic event, a parental chromosome rearrangement involving chromosome 8 has not been completely excluded. If clinically indicated for reassurance purposes, parental blood samples would be accepted for karyotype analysis to rule out a balanced rearrangement.\n\nLIMITATIONS\n- Array CGH cannot detect balanced chromosomal rearrangements, polyploidy, or low-level mosaicism (<20-30%)\n- The resolution of this array is approximately 120kb; smaller copy number variants may not be detected\n- Maternal cell contamination cannot be completely excluded\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss these results and recurrence risks\n2. Parental chromosome analysis may be considered if appropriate for reassurance, though the likelihood of identifying a predisposing rearrangement is low\n3. For future pregnancies, prenatal diagnosis options should be discussed\n\nThis report has been reviewed and electronically signed by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal loss investigation",
+            "test_clinical_rationale": "Investigation of chromosomal abnormalities as potential cause of pregnancy loss",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Products of conception/placental material"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Products of conception/placental material",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Array CGH analysis using oligonucleotide arrays with ~60,000 probes on GenomeArray 3000 platform with 120kb median resolution. Data analyzed using GenomeScan software based on GRCh37/hg19",
+                "sample_origin": "Products of conception/placental material",
+                "result_entity_type": "chromosome",
+                "result_entity": "8",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Complete trisomy of chromosome 8 detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": 3.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "Array Resolution",
+                        "result_value": 120.0,
+                        "result_units": "kb"
+                    },
+                    {
+                        "result_name": "Probe Count",
+                        "result_value": 60000.0,
+                        "result_units": "probes"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr[GRCh37] (8)x3"
+                    }
+                ],
+                "clinical_implications": "Trisomy 8 is typically incompatible with fetal survival and is a recognized cause of pregnancy loss. Most likely causative for the fetal loss"
+            },
+            {
+                "test_subject": "Products of conception/placental material",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) for aneuploidy screening",
+                "sample_origin": "Products of conception/placental material",
+                "result_entity_type": "chromosome",
+                "result_entity": "Sex chromosomes and ploidy",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Negative for triploidy. Male chromosome complement",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "Negative"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY (Male)"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Complete trisomy 8 detected in products of conception, likely causative for fetal loss. Finding most consistent with sporadic aneuploidy event with low recurrence risk (~1% above maternal age-related risk)",
+            "overall_recommendations": "Genetic counseling recommended to discuss results and recurrence risks. Parental chromosome analysis may be considered for reassurance though likelihood of identifying predisposing rearrangement is low. Prenatal diagnosis options should be discussed for future pregnancies"
+        }
+    }
+}

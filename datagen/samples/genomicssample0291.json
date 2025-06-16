@@ -1,0 +1,74 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSex: Male\nSpecimen Type: Peripheral Blood\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Post-transplant monitoring in male recipient with female donor\nClinical History: AML post allogeneic stem cell transplant\nTransplant Date: [redacted date]\nDonor: Female\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\nProbes: CEP X (DXZ1) SpectrumOrange / CEP Y (DYZ3) SpectrumGreen\nManufacturer: Abbott Molecular\n\nMETHODOLOGY\nFISH analysis was performed on interphase nuclei from peripheral blood using X and Y chromosome enumeration probes. A minimum of 200 interphase nuclei were scored for the presence of X and Y chromosome signals.\n\nRESULTS\nX chromosome signals: 200/200 cells (100%)\nY chromosome signals: 8/200 cells (4%)\n\nINTERPRETATION\nFISH analysis demonstrates 96% XX cells (donor-derived) and 4% XY cells (recipient-derived) in this male patient who received an allogeneic stem cell transplant from a female donor. This finding indicates >95% donor chimerism, which is consistent with successful engraftment.\n\nThe presence of 4% XY cells represents residual recipient cells. While high donor chimerism is favorable for engraftment status, it does not exclude the possibility of minimal residual disease.\n\nRECOMMENDATIONS\n1. Continue routine chimerism monitoring as per transplant protocol\n2. Consider molecular disease marker monitoring if available for assessment of minimal residual disease\n3. Correlation with morphologic and flow cytometric findings is recommended\n4. Follow-up chimerism analysis in 1-2 months or as clinically indicated\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Post-transplant monitoring in male recipient with female donor",
+            "test_clinical_rationale": "Assessment of donor chimerism following allogeneic stem cell transplant",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "AML post allogeneic stem cell transplant"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Male recipient with female donor"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis with X/Y chromosome enumeration probes (CEP X DXZ1 SpectrumOrange / CEP Y DYZ3 SpectrumGreen)",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "X/Y chromosomes",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "96% XX cells (donor-derived) and 4% XY cells (recipient-derived)",
+                "quantitative_results": [
+                    {
+                        "result_name": "X chromosome positive cells",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Y chromosome positive cells",
+                        "result_value": 8.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Donor chimerism",
+                        "result_value": 96.0,
+                        "result_units": "percent"
+                    },
+                    {
+                        "result_name": "Recipient cells",
+                        "result_value": 4.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Engraftment Status",
+                        "result_value": "Successful engraftment (>95% donor chimerism)"
+                    }
+                ],
+                "clinical_implications": ">95% donor chimerism indicates successful engraftment. 4% XY cells represent residual recipient cells. High donor chimerism favorable but doesn't exclude minimal residual disease"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis demonstrates >95% donor chimerism indicating successful engraftment. The presence of 4% recipient cells represents residual host hematopoiesis. While favorable for engraftment, this does not exclude minimal residual disease",
+            "overall_recommendations": "Continue routine chimerism monitoring as per transplant protocol. Consider molecular disease marker monitoring if available for assessment of minimal residual disease. Correlation with morphologic and flow cytometric findings recommended. Follow-up chimerism analysis in 1-2 months or as clinically indicated"
+        }
+    }
+}

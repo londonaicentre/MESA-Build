@@ -1,0 +1,58 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Amniotic fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReferral Reason: Prenatal testing at 16 weeks gestation with abnormal ultrasound findings\nClinical Details: Abnormal ultrasound findings detected during routine prenatal screening\n\nTEST PERFORMED\nTargeted G-banded chromosome analysis of chromosome 21 and sex chromosomes following rapid PCR of uncultured amniocytes\n\nMETHODOLOGY\nAmniotic fluid cells were cultured using standard techniques. Metaphase chromosomes were prepared and G-banded according to laboratory protocols. Targeted analysis focused on chromosome 21 and sex chromosomes based on prior rapid PCR results. A minimum of 20 metaphases were examined.\n\nRESULTS\nKaryotype: 47,XX,+21\n\nABNORMAL FEMALE KARYOTYPE\nPrimary trisomy 21 detected in all cells analyzed\nSex chromosomes: XX (female)\nNo other structural abnormalities identified in the targeted analysis\n\nINTERPRETATION\nThis result confirms the presence of trisomy 21 (Down syndrome) in a female fetus. The finding of three copies of chromosome 21 in all cells examined is consistent with primary trisomy 21, which typically results from nondisjunction during meiosis or, less commonly, from a post-zygotic mitotic error. This karyotype finding is consistent with the abnormal ultrasound findings and confirms the previous rapid PCR results.\n\nThe recurrence risk for trisomy 21 in future pregnancies is increased above the maternal age-related risk, estimated at approximately 1% plus the age-related risk.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss the implications of this diagnosis\n2. Parental karyotyping is not indicated as this appears to be primary trisomy 21\n3. For future pregnancies:\n   - Combined first trimester screening (biochemical markers and ultrasound)\n   - Detailed ultrasound monitoring\n   - Prenatal diagnosis (CVS or amniocentesis) is available if desired\n4. Referral to appropriate support services and Down syndrome organizations\n\nThis analysis was performed in accordance with current professional guidelines and laboratory quality standards.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing at 16 weeks gestation with abnormal ultrasound findings",
+            "test_clinical_rationale": "Confirmation of suspected chromosomal abnormality following abnormal ultrasound findings",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "16 weeks gestation"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Abnormal ultrasound findings detected during routine prenatal screening"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Targeted G-banded chromosome analysis of chromosome 21 and sex chromosomes following rapid PCR of uncultured amniocytes",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosome 21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Primary trisomy 21 detected in all cells analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Chromosome 21 Copy Number",
+                        "result_value": 3.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "47,XX,+21"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    }
+                ],
+                "clinical_implications": "Confirms Down syndrome diagnosis. The abnormality likely results from nondisjunction during meiosis or post-zygotic mitotic error, with recurrence risk of approximately 1% plus maternal age-related risk"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Primary trisomy 21 confirms Down syndrome in a female fetus. This finding is consistent with the abnormal ultrasound findings and previous rapid PCR results. The recurrence risk for future pregnancies is increased above the maternal age-related risk",
+            "overall_recommendations": "Genetic counseling recommended to discuss implications. Parental karyotyping not indicated. For future pregnancies: combined first trimester screening with biochemical markers and ultrasound, detailed ultrasound monitoring, prenatal diagnosis available if desired. Referral to appropriate support services and Down syndrome organizations"
+        }
+    }
+}
