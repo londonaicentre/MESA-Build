@@ -1,4 +1,4 @@
-import anthropic
+from litellm import completion
 import pandas as pd
 import json
 import re
@@ -13,7 +13,7 @@ from schema.genomicextractmodel import GenomicTestReport
 
 # load api key
 load_dotenv()
-ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
+BEDROCK_API_KEY = os.getenv('BEDROCK_API_KEY')
 
 def extract_json_from_response(response):
     """
@@ -96,7 +96,6 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
     )
 
     ## PROCESS ROWS
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -126,25 +125,18 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
 
             time.sleep(0.5)
 
-            message = client.messages.create(
-                model="claude-opus-4-20250514",
+            message = completion(
+                model='us.anthropic.claude-opus-4-20250514-v1:0',
                 max_tokens=8192,
                 temperature=0.001,
-                system=system_prompt,
                 messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": user_prompt
-                            }
-                        ]
-                    }
-                ]
+                    { "content": system_prompt, "role": "system"},
+                    { "content": user_prompt, "role": "user"}
+                ],
+                api_key=os.environ['BEDROCK_API_KEY']
             )
 
-            json_output = extract_json_from_response(message.content)
+            json_output = extract_json_from_response(message.choices[0].message.content)
 
             if json_output is not None:
                 if not isinstance(json_output, dict) or 'content' not in json_output or 'output' not in json_output:
