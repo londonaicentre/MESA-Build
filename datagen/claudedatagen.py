@@ -8,19 +8,22 @@ from dotenv import load_dotenv
 from pathlib import Path
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from schema.genomicextractmodel import GenomicTestReport
 
 # load api key
 load_dotenv()
-BEDROCK_API_KEY = os.getenv('BEDROCK_API_KEY')
+BEDROCK_API_KEY = os.getenv("BEDROCK_API_KEY")
+os.environ["AWS_REGION_NAME"] = "us-east-1"
+BEDROCK_MODEL = "us.anthropic.claude-sonnet-4-20250514-v1:0"
+
 
 def extract_json_from_response(response):
     """
     Extract JSON from Claude's response
     """
     # claude may return a text block or a list...
-    if hasattr(response, 'text'):
+    if hasattr(response, "text"):
         response = response.text
     elif isinstance(response, list):
         response = response[0].text
@@ -30,7 +33,7 @@ def extract_json_from_response(response):
         return json.loads(response)
     except json.JSONDecodeError:
         # try to find JSON in a code block
-        json_match = re.search(r'```json\s*(.*?)\s*```', response, re.DOTALL)
+        json_match = re.search(r"```json\s*(.*?)\s*```", response, re.DOTALL)
         if json_match:
             try:
                 return json.loads(json_match.group(1))
@@ -38,7 +41,7 @@ def extract_json_from_response(response):
                 pass
 
         # If fails, try to find any JSON-like structure
-        json_match = re.search(r'{[\s\S]*}', response)
+        json_match = re.search(r"{[\s\S]*}", response)
         if json_match:
             try:
                 return json.loads(json_match.group(0))
@@ -47,6 +50,7 @@ def extract_json_from_response(response):
 
         print("No valid JSON found in response")
         return None
+
 
 def validate_with_pydantic(output_data):
     """
@@ -59,6 +63,7 @@ def validate_with_pydantic(output_data):
         print(f"Pydantic validation error: {e}")
         return False, None
 
+
 def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
     """
     Process rows from bootstrap.csv and generate synthetic genomic reports
@@ -67,7 +72,7 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
 
     ## CREATE SYSTEM PROMPT
     # schema
-    with open('../schema/genomicextractmodel.py', 'r') as f:
+    with open("../schema/genomicextractmodel.py", "r") as f:
         schema_content = f.read()
 
     # examples
@@ -75,35 +80,34 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
     e1 = ""
     e2 = ""
     try:
-        with open(examples_path / 'e1.json', 'r') as f:
+        with open(examples_path / "e1.json", "r") as f:
             e1 = f.read()
-        with open(examples_path / 'e2.json', 'r') as f:
+        with open(examples_path / "e2.json", "r") as f:
             e2 = f.read()
     except FileNotFoundError as e:
         print(f"Warning: Could not load example file: {e}")
 
     # prompt
-    with open('systemprompt.md', 'r') as f:
+    with open("systemprompt.md", "r") as f:
         system_prompt_template = f.read()
 
     # create full system prompt using replace instead of format to avoid issues with curly braces
-    system_prompt = system_prompt_template.replace(
-        '{schema_content}', schema_content
-    ).replace(
-        '{e1}', e1
-    ).replace(
-        '{e2}', e2
+    system_prompt = (
+        system_prompt_template.replace("{schema_content}", schema_content)
+        .replace("{e1}", e1)
+        .replace("{e2}", e2)
     )
 
     ## PROCESS ROWS
 
     os.makedirs(output_dir, exist_ok=True)
+    samples_exist = len(os.listdir(output_dir))
 
     successful_generations = 0
     failed_generations = 0
 
     for idx, row in df.iterrows():
-        print(f"Processing row {idx + 1}/{len(df)}")
+        print(f"Processing row {idx + samples_exist + 1}/{len(df)}")
 
         try:
             user_prompt = f"""Please generate a genomic laboratory report based on the following test scenario:
@@ -126,35 +130,45 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
             time.sleep(0.5)
 
             message = completion(
-                model='us.anthropic.claude-opus-4-20250514-v1:0',
+                model=BEDROCK_MODEL,
                 max_tokens=8192,
                 temperature=0.001,
                 messages=[
-                    { "content": system_prompt, "role": "system"},
-                    { "content": user_prompt, "role": "user"}
+                    {"content": system_prompt, "role": "system"},
+                    {"content": user_prompt, "role": "user"},
                 ],
-                api_key=os.environ['BEDROCK_API_KEY']
+                api_key=os.environ["BEDROCK_API_KEY"],
             )
 
             json_output = extract_json_from_response(message.choices[0].message.content)
 
             if json_output is not None:
-                if not isinstance(json_output, dict) or 'content' not in json_output or 'output' not in json_output:
-                    print(f"Invalid schema format in output for row {idx + 1}")
+                if (
+                    not isinstance(json_output, dict)
+                    or "content" not in json_output
+                    or "output" not in json_output
+                ):
+                    print(
+                        f"Invalid schema format in output for row {idx + samples_exist + 1}"
+                    )
                     failed_generations += 1
                     continue
 
                 # validate against schema
-                is_valid, validated_output = validate_with_pydantic(json_output['output'])
+                is_valid, validated_output = validate_with_pydantic(
+                    json_output["output"]
+                )
 
                 if is_valid:
                     # Convert Pydantic model to dict for JSON serialization
-                    json_output['output'] = validated_output.model_dump()
+                    json_output["output"] = validated_output.model_dump()
 
-                    output_filename = os.path.join(output_dir, f"genomicssample{idx + 1:04d}.json")
+                    output_filename = os.path.join(
+                        output_dir, f"genomicssample{idx + samples_exist + 1:04d}.json"
+                    )
 
                     try:
-                        with open(output_filename, 'w', encoding='utf-8') as f:
+                        with open(output_filename, "w", encoding="utf-8") as f:
                             json.dump(json_output, f, indent=4, ensure_ascii=False)
                         print(f"Successfully saved output to {output_filename}")
                         successful_generations += 1
@@ -162,14 +176,21 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
                         print(f"Error saving JSON to file: {e}")
                         failed_generations += 1
                 else:
-                    print(f"Pydantic validation failed for row {idx + 1}")
+                    print(
+                        f"Pydantic validation failed for row {idx + samples_exist + 1}"
+                    )
                     # for debugging later
-                    debug_filename = os.path.join(output_dir, f"invalid_genomicssample{idx + 1:04d}.json")
-                    with open(debug_filename, 'w', encoding='utf-8') as f:
+                    debug_filename = os.path.join(
+                        output_dir,
+                        f"invalid_genomicssample{idx + samples_exist + 1:04d}.json",
+                    )
+                    with open(debug_filename, "w", encoding="utf-8") as f:
                         json.dump(json_output, f, indent=4, ensure_ascii=False)
                     failed_generations += 1
             else:
-                print(f"Skipping file save for row {idx + 1} due to JSON parsing failure")
+                print(
+                    f"Skipping file save for row {idx + 1} due to JSON parsing failure"
+                )
                 print("Claude response:", message.content)
                 failed_generations += 1
 
@@ -178,7 +199,10 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
             failed_generations += 1
             continue
 
-    print(f"Processing complete: {successful_generations} successful, {failed_generations} failed")
+    print(
+        f"Processing complete: {successful_generations} successful, {failed_generations} failed"
+    )
+
 
 if __name__ == "__main__":
-    process_bootstrap_rows("bootstrap.csv", "samples/")
+    process_bootstrap_rows("bootstrap.csv", "samples_sonnet4/")
