@@ -1,4 +1,6 @@
-from litellm import completion
+import litellm
+litellm.suppress_debug_info = True # suppress unhelpful library output on rate limit error
+from litellm import completion, RateLimitError
 import pandas as pd
 import json
 import re
@@ -7,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 import sys
+import random
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from schema.genomicextractmodel import GenomicTestReport
@@ -127,19 +130,27 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
             Generate a realistic genomic laboratory report incorporating all these details.
             Then extract the information into the structured schema format."""
 
-            time.sleep(0.5)
-
-            message = completion(
-                model=BEDROCK_MODEL,
-                max_tokens=8192,
-                temperature=0.001,
-                messages=[
-                    {"content": system_prompt, "role": "system"},
-                    {"content": user_prompt, "role": "user"},
-                ],
-                api_key=os.environ["BEDROCK_API_KEY"],
-            )
-
+            max_retries = 5
+            for attempt in range(max_retries + 1):
+                try:
+                    message = completion(
+                        model=BEDROCK_MODEL,
+                        max_tokens=8192,
+                        temperature=0.001,
+                        messages=[
+                            {"content": system_prompt, "role": "system"},
+                            {"content": user_prompt, "role": "user"},
+                        ],
+                        api_key=os.environ["BEDROCK_API_KEY"],
+                    )
+                    break
+                except RateLimitError:
+                    if attempt == max_retries: raise
+                    # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+                    delay = random.uniform(0, min(60, 2 ** attempt))
+                    print('hit rate limit, waiting ' + str(round(delay, 2)) + ' seconds (retry ' + str(attempt + 1) + ')')
+                    time.sleep(delay)
+  
             json_output = extract_json_from_response(message.choices[0].message.content)
 
             if json_output is not None:
