@@ -1,0 +1,50 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nPatient ID: [redacted ID]\nSample Type: Peripheral blood\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReferral Reason: Cystic fibrosis mutation testing\nClinical Notes: Previous request for Alagille syndrome testing noted\nReferring Clinician: Dr. [redacted name]\nReferring Hospital: [redacted location]\n\nTEST PERFORMED\nMultiplex oligonucleotide ligation assay (MOLA) screening for 31 CFTR gene mutations\n\nMETHODOLOGY\nDNA was extracted from peripheral blood using standard protocols. Multiplex oligonucleotide ligation assay was performed to screen for 31 common CFTR mutations, covering approximately 95% of cystic fibrosis mutations in Northwest European populations.\n\nMUTATIONS TESTED\nThe following 31 CFTR mutations were analyzed:\n1. F508del (c.1521_1523delCTT)\n2. G542X (c.1624G>T)\n3. G551D (c.1652G>A)\n4. W1282X (c.3846G>A)\n5. N1303K (c.3909C>G)\n6. R553X (c.1657C>T)\n7. 621+1G>T\n8. R117H (c.350G>A)\n9. 1717-1G>A\n10. R347P (c.1040G>C)\n11. R334W (c.1000C>T)\n12. 3849+10kbC>T\n13. 2789+5G>A\n14. 3120+1G>A\n15. I507del (c.1519_1521delATC)\n16. 1898+1G>A\n17. 3659delC\n18. R560T (c.1679G>C)\n19. G85E (c.254G>A)\n20. R1162X (c.3484C>T)\n21. 2184delA\n22. 711+1G>T\n23. S549N (c.1646G>A)\n24. S549R (c.1645A>C)\n25. R347H (c.1040G>A)\n26. A455E (c.1364C>A)\n27. 2183AA>G\n28. Q493X (c.1477C>T)\n29. V520F (c.1558G>T)\n30. 1078delT\n31. 3876delA\n\nRESULTS\n\nCFTR GENE ANALYSIS\nResult: No mutations detected\n\nNone of the 31 CFTR mutations tested were identified in this patient.\n\nADDITIONAL FINDINGS\n1. DNA has been extracted and stored for potential future testing\n2. Previous request for Alagille syndrome testing (JAGGED1 gene) was noted in the referral\n3. Alagille syndrome testing is not routinely performed in this laboratory\n\nINTERPRETATION\n1. The absence of detectable mutations among the 31 CFTR variants tested does not exclude a diagnosis of cystic fibrosis\n2. This panel detects approximately 95% of CF-causing mutations in Northwest European populations\n3. The clinical diagnosis of CF has not been confirmed by this testing\n4. The likelihood of CF is reduced but not eliminated\n5. Approximately 5% of CF patients of Northwest European ancestry may have mutations not covered by this panel\n\nRECOMMENDATIONS\n1. If clinical suspicion of cystic fibrosis persists, consider referral to a specialist CF laboratory for:\n   - Extended CFTR gene sequencing\n   - Deletion/duplication analysis\n   - Analysis of rare or population-specific variants\n\n2. For the previously noted Alagille syndrome query:\n   - Genetics referral is recommended if clinical diagnosis of Alagille syndrome is confirmed\n   - JAGGED1 gene testing can be arranged through specialist laboratories\n\n3. Genetic counseling may be beneficial to discuss:\n   - Test limitations\n   - Residual risk assessment\n   - Testing options for family members if indicated\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Cystic fibrosis mutation testing",
+            "test_clinical_rationale": "Previous request for Alagille syndrome testing noted",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Pediatric patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "Multiplex oligonucleotide ligation assay (MOLA)",
+                "test_methodology": "Multiplex oligonucleotide ligation assay screening for 31 CFTR gene mutations, covering approximately 95% of cystic fibrosis mutations in Northwest European populations",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [],
+                "result_region": "31 common mutations",
+                "result_status": "normal",
+                "result_description": "No mutations detected among the 31 CFTR mutations tested",
+                "quantitative_results": [
+                    {
+                        "result_name": "Number of Mutations Tested",
+                        "result_value": 31.0,
+                        "result_units": "mutations"
+                    },
+                    {
+                        "result_name": "Population Coverage",
+                        "result_value": 95.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "The absence of detectable mutations does not exclude cystic fibrosis. This panel detects approximately 95% of CF-causing mutations in Northwest European populations. The clinical diagnosis of CF has not been confirmed by this testing. The likelihood of CF is reduced but not eliminated"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Clinical diagnosis of CF not confirmed by testing. Likelihood of CF reduced but not eliminated as approximately 5% of CF patients may have mutations not covered by this panel. DNA extracted and stored for potential future testing. Alagille syndrome testing not routinely performed in this laboratory",
+            "overall_recommendations": "If clinical suspicion of cystic fibrosis persists, consider referral to specialist CF laboratory for extended CFTR gene sequencing, deletion/duplication analysis, and analysis of rare variants. For Alagille syndrome query, genetics referral is recommended if clinical diagnosis is confirmed. JAGGED1 gene testing can be arranged through specialist laboratories. Genetic counseling may be beneficial to discuss test limitations and residual risk assessment"
+        }
+    }
+}

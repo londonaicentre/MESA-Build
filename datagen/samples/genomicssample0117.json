@@ -1,0 +1,106 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Placental tissue (uncultured)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nAnalysis of fetal tissue post-miscarriage\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nAnalysis of uncultured placental material using microsatellite markers for chromosomes 13, 14, 15, 16, 18, 21, 22, X and Y\n\nMETHODOLOGY\nDNA was extracted from uncultured placental tissue. QF-PCR analysis was performed using a panel of short tandem repeat (STR) markers specific for chromosomes 13, 14, 15, 16, 18, 21, 22, X and Y. Peak area ratios were calculated for informative markers to assess chromosome copy number. The presence of Y-specific sequences was evaluated using amelogenin and SRY markers.\n\nRESULTS\n\nChromosome 16: ABNORMAL - Trisomy 16\n- D16S539: 1:1:1 triallelic pattern\n- D16S3018: 2:1 diallelic pattern (peak ratio 2.1:1)\n- D16S3031: 1:1:1 triallelic pattern\n- D16S3024: 2:1 diallelic pattern (peak ratio 1.9:1)\n- D16S3017: 1:1:1 triallelic pattern\n- D16S3121: 2:1 diallelic pattern (peak ratio 2.0:1)\n- D16S3040: 1:1:1 triallelic pattern\nConclusion: Seven informative markers confirm trisomy 16\n\nSex Chromosomes: ABNORMAL - Monosomy X (45,X)\n- AMELX/Y: Single X peak, no Y peak detected\n- SRY: Absent\n- DXS6809: Single allele\n- DXS6807: Single allele\n- XHPRT: Single allele\n- DXS8377: Single allele\nConclusion: Single X chromosome with no Y-specific sequences detected, consistent with Turner syndrome (45,X)\n\nChromosome 13: Normal disomic pattern\n- All informative markers show expected 1:1 or single allele patterns\n\nChromosome 14: Normal disomic pattern\n- All informative markers show expected 1:1 or single allele patterns\n\nChromosome 15: Normal disomic pattern\n- All informative markers show expected 1:1 or single allele patterns\n\nChromosome 18: Normal disomic pattern\n- All informative markers show expected 1:1 or single allele patterns\n\nChromosome 21: Normal disomic pattern\n- All informative markers show expected 1:1 or single allele patterns\n\nChromosome 22: Normal disomic pattern\n- All informative markers show expected 1:1 or single allele patterns\n\nTriploidy Assessment: No evidence of triploidy\n- Diallelic and triallelic marker patterns inconsistent with triploidy\n\nINTERPRETATION\nQF-PCR analysis reveals two significant chromosomal abnormalities:\n1. Trisomy 16 - confirmed by multiple informative markers\n2. Monosomy X (Turner syndrome, 45,X) - single X chromosome with absence of Y chromosome\n\nThese chromosomal abnormalities are likely the cause of fetal loss. Trisomy 16 is the most common autosomal trisomy in spontaneous abortions but is incompatible with live birth. The combination with monosomy X represents a complex aneuploid karyotype. These findings are consistent with sporadic aneuploidy, which typically occurs as a random event during meiosis.\n\nTEST LIMITATIONS\n- QF-PCR detects aneuploidy only for the chromosomes tested\n- Structural chromosomal abnormalities cannot be detected\n- Low-level mosaicism (<20%) may not be detected\n- Maternal cell contamination cannot be completely excluded\n- This test does not detect balanced chromosomal rearrangements\n\nRECOMMENDATIONS\n1. Parental chromosomal testing (karyotype analysis) is recommended to exclude potential chromosome rearrangements involving chromosomes 16 or X\n2. Genetic counseling is recommended to discuss:\n   - The implications of these findings\n   - Recurrence risks for future pregnancies\n   - Prenatal testing options for subsequent pregnancies\n3. If parental karyotypes are normal, the recurrence risk for sporadic aneuploidy is low (approximately 1%)\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Analysis of fetal tissue post-miscarriage",
+            "test_clinical_rationale": "Determine chromosomal cause of pregnancy loss",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Fetal tissue post-miscarriage"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of uncultured placental material using microsatellite markers for chromosomes 13, 14, 15, 16, 18, 21, 22, X and Y",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "16",
+                "gene_nomenclature": [],
+                "result_region": "Multiple STR markers: D16S539, D16S3018, D16S3031, D16S3024, D16S3017, D16S3121, D16S3040",
+                "result_status": "abnormal",
+                "result_description": "Trisomy 16 confirmed by seven informative markers",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio D16S3018",
+                        "result_value": 2.1,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Peak Ratio D16S3024",
+                        "result_value": 1.9,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Peak Ratio D16S3121",
+                        "result_value": 2.0,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome Copy Number",
+                        "result_value": "Trisomy"
+                    }
+                ],
+                "clinical_implications": "Trisomy 16 is the most common autosomal trisomy in spontaneous abortions but is incompatible with live birth"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis using X and Y chromosome-specific markers",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "X",
+                "gene_nomenclature": [],
+                "result_region": "AMELX/Y, SRY, DXS6809, DXS6807, XHPRT, DXS8377",
+                "result_status": "abnormal",
+                "result_description": "Single X chromosome with no Y-specific sequences, consistent with Turner syndrome",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosome Status",
+                        "result_value": "Monosomy X (45,X)"
+                    },
+                    {
+                        "result_name": "Y Chromosome",
+                        "result_value": "Absent"
+                    }
+                ],
+                "clinical_implications": "Turner syndrome (45,X) - associated with high rate of spontaneous abortion"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Placental tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "13, 14, 15, 18, 21, 22",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal findings for chromosomes 13, 14, 15, 18, 21 and 22. No triploidy detected.",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Chromosomal abnormalities (trisomy 16, monosomy X) likely caused fetal loss. The combination represents a complex aneuploid karyotype. Findings consistent with sporadic aneuploidy, which typically occurs as a random event during meiosis",
+            "overall_recommendations": "Parental chromosomal testing (karyotype analysis) recommended to exclude potential chromosome rearrangements involving chromosomes 16 or X. Genetic counseling recommended to discuss implications, recurrence risks, and prenatal testing options. If parental karyotypes are normal, recurrence risk for sporadic aneuploidy is low (approximately 1%)"
+        }
+    }
+}

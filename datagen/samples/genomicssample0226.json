@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nReferring Clinician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nTEST PERFORMED\nG-banded Chromosome Analysis (Karyotype)\n\nCLINICAL INDICATION\nPost rapid PCR screening for Down syndrome\n\nMETHODOLOGY\nPeripheral blood lymphocytes were cultured and harvested according to standard protocols. Metaphase chromosomes were G-banded using trypsin-Giemsa technique. Analysis performed at 400-450 band resolution, sufficient for detection of numerical abnormalities and major structural rearrangements.\n\nRESULT\nKaryotype: 46,XX\n\nNo evidence of trisomy 21 detected.\nNo other numerical or major structural chromosomal abnormalities identified.\n\n15 metaphase cells analyzed.\n\nINTERPRETATION\nNormal female karyotype. This result excludes Down syndrome (trisomy 21) and other major chromosomal abnormalities detectable at this resolution. The analysis complements the previous rapid PCR screening performed.\n\nLIMITATIONS\nThis analysis is designed to detect numerical abnormalities and major structural rearrangements. Subtle structural abnormalities, low-level mosaicism (<20%), and submicroscopic deletions/duplications are beyond the resolution of this test.\n\nAuthorized by: [redacted name], Clinical Scientist\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Post rapid PCR screening for Down syndrome",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis using trypsin-Giemsa technique at 400-450 band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No evidence of trisomy 21 detected. No other numerical or major structural chromosomal abnormalities identified",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 15.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    }
+                ],
+                "clinical_implications": "Normal female karyotype excludes Down syndrome and other major chromosomal abnormalities detectable at this resolution"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype excludes Down syndrome and major chromosomal abnormalities",
+            "overall_recommendations": "This analysis complements the previous rapid PCR screening. Subtle structural abnormalities, low-level mosaicism (<20%), and submicroscopic deletions/duplications are beyond the resolution of this test"
+        }
+    }
+}

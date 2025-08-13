@@ -1,0 +1,45 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for muscular dystrophy associated with reduced dystroglycan glycosylation (secondary dystroglycanopathy).\n\nCLINICAL INFORMATION\nPatient referred for molecular genetic testing to investigate suspected secondary dystroglycanopathy, a form of muscular dystrophy characterized by abnormal glycosylation of alpha-dystroglycan.\n\nTEST PERFORMED\nISPD Gene Sequencing\n- Full gene sequencing of ISPD (Isoprenoid synthase domain containing)\n- Analysis of entire coding regions and splice sites\n- Method: Fluorescent DNA sequencing\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood leukocytes. All coding exons and flanking intronic sequences of the ISPD gene were amplified by PCR using gene-specific primers. PCR products were purified and sequenced bidirectionally using fluorescent dye-terminator chemistry on an automated DNA sequencer. Sequence data were analyzed and compared to the reference sequence NM_001101426.3. Nucleotide numbering is based on the first base of the translation initiation codon (ATG) as position 1.\n\nLIMITATIONS\nThis analysis excludes detection of:\n- Large deletions or duplications encompassing whole exons or the entire gene\n- Deep intronic variants\n- Regulatory region variants\n- Epigenetic modifications\n\nRESULTS\nISPD Gene Analysis:\nNo pathogenic mutations detected\n\nReference sequence: NM_001101426.3\nCoverage: All coding exons and splice sites successfully analyzed\nSequence quality: Adequate for clinical interpretation\n\nSUMMARY\nComprehensive sequence analysis of the ISPD gene revealed no pathogenic mutations. The diagnosis of ISPD-related secondary dystroglycanopathy is not confirmed based on these results. However, this does not exclude the possibility of secondary dystroglycanopathy caused by mutations in other genes associated with this condition.\n\nRECOMMENDATIONS\n1. Clinical correlation is recommended to determine if the patient's phenotype remains consistent with secondary dystroglycanopathy.\n2. If clinical suspicion remains high, consider testing of additional genes associated with secondary dystroglycanopathy, including:\n   - B3GALNT2 (Beta-1,3-N-acetylgalactosaminyltransferase 2)\n   - GMPPB (GDP-mannose pyrophosphorylase B)\n   - Other dystroglycanopathy-associated genes (POMT1, POMT2, POMGNT1, FKTN, FKRP, LARGE)\n3. Genetic counseling is recommended to discuss these results and potential next steps.\n\nTesting of B3GALNT2 and GMPPB genes is available through our laboratory if further molecular investigation is required.\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for muscular dystrophy associated with reduced dystroglycan glycosylation (secondary dystroglycanopathy)",
+            "test_clinical_rationale": "Patient referred for molecular genetic testing to investigate suspected secondary dystroglycanopathy, a form of muscular dystrophy characterized by abnormal glycosylation of alpha-dystroglycan",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Fluorescent DNA sequencing of entire coding regions and splice sites",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "ISPD",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_001101426",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "All coding exons and splice sites",
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sequence Quality",
+                        "result_value": "Adequate for clinical interpretation"
+                    }
+                ],
+                "clinical_implications": "The diagnosis of ISPD-related secondary dystroglycanopathy is not confirmed based on these results"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Comprehensive sequence analysis of the ISPD gene revealed no pathogenic mutations. The diagnosis of ISPD-related secondary dystroglycanopathy is not confirmed based on these results. However, this does not exclude the possibility of secondary dystroglycanopathy caused by mutations in other genes associated with this condition",
+            "overall_recommendations": "Clinical correlation is recommended to determine if the patient's phenotype remains consistent with secondary dystroglycanopathy. If clinical suspicion remains high, consider testing of additional genes associated with secondary dystroglycanopathy, including B3GALNT2 and GMPPB. Other dystroglycanopathy-associated genes (POMT1, POMT2, POMGNT1, FKTN, FKRP, LARGE) may also be considered. Genetic counseling is recommended to discuss these results and potential next steps"
+        }
+    }
+}

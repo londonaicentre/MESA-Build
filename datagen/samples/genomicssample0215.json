@@ -1,0 +1,52 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nREFERRING PHYSICIAN: Dr. [redacted name]\nDATE OF COLLECTION: [redacted date]\nDATE OF REPORT: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing at 14 weeks gestation by ultrasound. Maternal age 39 years. Suspected chromosomal abnormalities including Down syndrome (trisomy 21).\n\nSPECIMEN TYPE\nAmniotic fluid\n\nTEST PERFORMED\nG-banded chromosome analysis post-amniocentesis\n\nRESULT\nKaryotype: 46,XX\n\nNormal female karyotype. No trisomy 21 or other numerical/structural abnormalities detected.\n\nINTERPRETATION\nG-banded analysis of cultured amniocytes reveals a normal female chromosome complement. No evidence of trisomy 21 (Down syndrome) or other chromosomal abnormalities was detected within the resolution limits of this analysis (approximately 5-10 Mb). This result supersedes previous rapid PCR analysis.\n\nLIMITATIONS\nThis test cannot detect balanced rearrangements that do not result in gain or loss of chromosomal material, low-level mosaicism (<20%), or submicroscopic deletions/duplications below the resolution of conventional cytogenetics.\n\nRECOMMENDATION\nNormal female karyotype indicates absence of chromosomal abnormalities within test resolution limits. Genetic counseling is recommended to discuss results and any additional testing considerations.\n\nThis laboratory is accredited by CAP (#[redacted ID]) and CLIA certified (#[redacted ID]).\n\nElectronically signed by:\n[redacted name], PhD, FACMG\nLaboratory Director\n\nVerified by:\n[redacted name], CLSp(CG)\nCytogenetics Technologist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing at 14 weeks gestation by ultrasound. Suspected chromosomal abnormalities including Down syndrome (trisomy 21)",
+            "test_clinical_rationale": "Maternal age 39 years",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "14 weeks gestation by ultrasound"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal age 39 years"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample from amniocentesis",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis post-amniocentesis",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female karyotype (46,XX). No trisomy 21 or other numerical/structural abnormalities detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX"
+                    },
+                    {
+                        "result_name": "Sex",
+                        "result_value": "Female"
+                    }
+                ],
+                "clinical_implications": "Normal female karyotype indicates absence of chromosomal abnormalities within test resolution limits"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal female karyotype indicates absence of chromosomal abnormalities within test resolution limits. No evidence of trisomy 21 (Down syndrome) or other chromosomal abnormalities detected within the resolution limits of this analysis (approximately 5-10 Mb)",
+            "overall_recommendations": "Result supersedes previous rapid PCR analysis. Genetic counseling is recommended to discuss results and any additional testing considerations"
+        }
+    }
+}

@@ -1,0 +1,144 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Male\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INFORMATION\nReferral Reason: Infertility evaluation for oligospermia\nClinical History: Patient presents with oligospermia identified on semen analysis\n\nTEST PERFORMED\nY Chromosome Microdeletion Analysis by Multiplex PCR\n\nMETHODOLOGY\nMultiplex PCR amplification was performed to detect Y chromosome microdeletions associated with male infertility. The following sequence-tagged sites (STS) markers were analyzed:\n- AZFa region: sY84, sY86\n- AZFb region: sY127, sY134\n- AZFc region: sY254, sY255\n- Yp11.31: SRY (sex-determining region Y)\n- Xp22.2: Amelogenin X\n- Yp11.2: Amelogenin Y\n\nDNA was extracted from peripheral blood using standard protocols. PCR products were analyzed by capillary electrophoresis. Internal controls were included to verify DNA quality and PCR efficiency.\n\nRESULTS\n\nY Chromosome Microdeletion Panel:\n\nAZFa region:\n- sY84: PRESENT\n- sY86: PRESENT\n\nAZFb region:\n- sY127: PRESENT\n- sY134: PRESENT\n\nAZFc region:\n- sY254: PRESENT\n- sY255: PRESENT\n\nControl Markers:\n- SRY: PRESENT\n- Amelogenin X: PRESENT\n- Amelogenin Y: PRESENT\n\nRESULT: NO DELETIONS DETECTED\n\nINTERPRETATION\nNo complete AZFa, AZFb or AZFc deletions were detected. All tested markers are present. This result excludes complete deletion of the AZFa, AZFb or AZFc regions as a cause of the patient's oligospermia.\n\nTEST LIMITATIONS\nThis assay detects complete deletions of AZF regions based on the absence of specific STS markers. Small microdeletions within AZF regions flanking the marker sequences or deletions outside the AZF regions would not be detected by this assay. Partial AZF deletions involving sequences between tested markers may also be missed. This test does not detect point mutations or other sequence variants.\n\nBACKGROUND\nY chromosome microdeletions are found in approximately 10-15% of men with severe oligospermia or azoospermia. The AZF (Azoospermia Factor) regions contain genes critical for spermatogenesis. Complete deletions of AZFa or AZFb typically result in azoospermia with spermatogenic arrest, while AZFc deletions may present with variable phenotypes ranging from oligospermia to azoospermia. Men with AZFc deletions may still achieve biological paternity through assisted reproductive techniques, though male offspring will inherit the deletion.\n\nRECOMMENDATIONS\n1. G-banded chromosome analysis and cystic fibrosis gene mutation testing results are pending and will be reported separately\n2. Consider additional genetic evaluation if karyotype and CFTR testing are negative\n3. Genetic counseling is recommended to discuss results and reproductive options\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Genetics Laboratory. It has not been cleared or approved by the FDA. The laboratory is certified under CLIA to perform high-complexity testing.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Infertility evaluation for oligospermia",
+            "test_clinical_rationale": "To detect Y chromosome microdeletions associated with male infertility",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Patient presents with oligospermia identified on semen analysis"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR amplification with capillary electrophoresis analysis of sequence-tagged sites (STS) markers",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Y chromosome",
+                "gene_nomenclature": [],
+                "result_region": "AZFa region (sY84, sY86)",
+                "result_status": "normal",
+                "result_description": "No deletions detected - all markers present",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "sY84 Status",
+                        "result_value": "PRESENT"
+                    },
+                    {
+                        "result_name": "sY86 Status",
+                        "result_value": "PRESENT"
+                    }
+                ],
+                "clinical_implications": "Complete deletion of AZFa region excluded as cause of oligospermia"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR amplification with capillary electrophoresis analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Y chromosome",
+                "gene_nomenclature": [],
+                "result_region": "AZFb region (sY127, sY134)",
+                "result_status": "normal",
+                "result_description": "No deletions detected - all markers present",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "sY127 Status",
+                        "result_value": "PRESENT"
+                    },
+                    {
+                        "result_name": "sY134 Status",
+                        "result_value": "PRESENT"
+                    }
+                ],
+                "clinical_implications": "Complete deletion of AZFb region excluded as cause of oligospermia"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR amplification with capillary electrophoresis analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Y chromosome",
+                "gene_nomenclature": [],
+                "result_region": "AZFc region (sY254, sY255)",
+                "result_status": "normal",
+                "result_description": "No deletions detected - all markers present",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "sY254 Status",
+                        "result_value": "PRESENT"
+                    },
+                    {
+                        "result_name": "sY255 Status",
+                        "result_value": "PRESENT"
+                    }
+                ],
+                "clinical_implications": "Complete deletion of AZFc region excluded as cause of oligospermia"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR amplification with capillary electrophoresis analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SRY",
+                "gene_nomenclature": [],
+                "result_region": "Yp11.31",
+                "result_status": "normal",
+                "result_description": "SRY gene present",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "SRY Status",
+                        "result_value": "PRESENT"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR amplification with capillary electrophoresis analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "Amelogenin",
+                "gene_nomenclature": [],
+                "result_region": "Xp22.2 and Yp11.2",
+                "result_status": "normal",
+                "result_description": "Both Amelogenin X and Y present",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Amelogenin X Status",
+                        "result_value": "PRESENT"
+                    },
+                    {
+                        "result_name": "Amelogenin Y Status",
+                        "result_value": "PRESENT"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No complete AZFa, AZFb or AZFc deletions detected. Complete deletion of these regions excluded as cause of oligospermia. Small microdeletions within AZF regions flanking marker sequences or outside AZF regions would not be detected by this assay",
+            "overall_recommendations": "G-banded chromosome analysis and cystic fibrosis gene mutation testing results are pending and will be reported separately. Consider additional genetic evaluation if karyotype and CFTR testing are negative. Genetic counseling is recommended to discuss results and reproductive options"
+        }
+    }
+}

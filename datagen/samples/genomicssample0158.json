@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nPhysician: Dr. [redacted name]\n\nSPECIMEN TYPE: Peripheral blood\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nTEST PERFORMED\nKaryotype Analysis - G-banded chromosome analysis\n\nCLINICAL INDICATION\nRule out Down syndrome\n\nRESULT\n46,XX\nNormal female karyotype\n\nNo trisomy 21 or other significant chromosomal abnormalities detected.\n\nTECHNICAL DETAILS\nG-banded analysis performed at 400-450 band resolution\n15 metaphases analyzed\nSample quality adequate for numerical and major structural abnormality detection only\n\nINTERPRETATION\nNormal karyotype rules out Down syndrome. This analysis can detect numerical abnormalities and structural rearrangements larger than 5-10 Mb. Smaller deletions, duplications, or balanced rearrangements may not be detected at this resolution.\n\nNOTE: This report supersedes previous rapid PCR analysis performed on [redacted date].\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Rule out Down syndrome",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis at 400-450 band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - Normal female karyotype. No trisomy 21 or other significant chromosomal abnormalities detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 15.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Karyotype Result",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": "Normal karyotype rules out Down syndrome"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype rules out Down syndrome. This analysis can detect numerical abnormalities and structural rearrangements larger than 5-10 Mb. Smaller deletions, duplications, or balanced rearrangements may not be detected at this resolution",
+            "overall_recommendations": "This report supersedes previous rapid PCR analysis"
+        }
+    }
+}

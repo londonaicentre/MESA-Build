@@ -1,0 +1,77 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL HISTORY\nDiagnosis: Non-small cell lung cancer (NSCLC)\nSpecimen Type: Tissue blocks\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections. Analysis was correlated with H&E stained slides to ensure adequate tumor representation.\n\nProbes Used:\n- Vysis ALK Break Apart FISH Probe Kit (Abbott Molecular)\n- CytoVue SPEC ROS1 Dual Color Break Apart Probe (Empire Genomics)\n\nAnalysis: 50 interphase nuclei were scored for each probe set from two separate tissue blocks.\n\nRESULTS\n\nALK (2p23) Gene Rearrangement Analysis:\nResult: NEGATIVE\nNo evidence of ALK rearrangement detected\nCells analyzed: 50 cells from each of 2 tissue blocks (100 cells total)\nInterpretation criteria: <15% of cells with split signals\n\nROS1 (6q22) Gene Rearrangement Analysis:\nResult: NEGATIVE\nNo evidence of ROS1 rearrangement detected\nCells analyzed: 50 cells from each of 2 tissue blocks (100 cells total)\nInterpretation criteria: <15% of cells with split signals\n\nOVERALL CLASSIFICATION: ALK NEGATIVE\n\nINTERPRETATION\nFISH analysis demonstrates no evidence of ALK (2p23) or ROS1 (6q22) gene rearrangements in the tumor cells examined. The patient is classified as ALK negative per current testing guidelines.\n\nCLINICAL SIGNIFICANCE\nALK and ROS1 rearrangements are targetable molecular alterations found in approximately 5% and 1-2% of NSCLC cases, respectively. The absence of these rearrangements indicates that the patient would not benefit from ALK or ROS1 targeted tyrosine kinase inhibitor therapy. Alternative treatment options should be considered based on other molecular findings and clinical factors.\n\nPathologist: Dr. [redacted name]\nBoard Certified in Anatomic Pathology and Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Non-small cell lung cancer (NSCLC)",
+            "test_clinical_rationale": "Molecular testing to determine eligibility for targeted therapy",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer (NSCLC)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue sections using Vysis ALK Break Apart FISH Probe Kit",
+                "sample_origin": "Tissue blocks",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "normal",
+                "result_description": "No evidence of ALK rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ALK Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": "Patient would not benefit from ALK targeted tyrosine kinase inhibitor therapy"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue sections using CytoVue SPEC ROS1 Dual Color Break Apart Probe",
+                "sample_origin": "Tissue blocks",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "No evidence of ROS1 rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "ROS1 Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": "Patient would not benefit from ROS1 targeted therapy"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "ALK and ROS1 negative status indicates the patient would not benefit from ALK or ROS1 targeted tyrosine kinase inhibitor therapy. These rearrangements are found in approximately 5% and 1-2% of NSCLC cases respectively",
+            "overall_recommendations": "Alternative treatment options should be considered based on other molecular findings and clinical factors"
+        }
+    }
+}

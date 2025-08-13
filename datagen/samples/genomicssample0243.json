@@ -1,0 +1,85 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT DETAILS\nPatient Name: [redacted name]\nDOB: [redacted date]\nHospital Number: [redacted ID]\nSample Type: Fetal tissue\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing for fetal abnormalities. Follow-up testing of solid tissue sample.\n\nTEST PERFORMED\nArray Comparative Genomic Hybridization (Array CGH)\n\nMETHODOLOGY\nArray CGH analysis was performed using a custom-designed oligonucleotide array platform with a median resolution of 120kb. Data analysis was conducted using genomic workbench software with reference to the GRCh37/hg19 human genome assembly.\n\nSupplementary testing:\n- QF-PCR analysis performed to exclude triploidy\n- Microsatellite analysis performed to confirm sample identity\n\nRESULTS\nArray CGH Result: arr(1-22,X)x2\n\nInterpretation: Normal female chromosome complement\n\nNo copy number imbalances detected in:\n- Chromosomes 1-22 and X\n- Known microdeletion/microduplication syndrome regions\n- No clinically significant imbalances >0.4Mb identified\n\nHigher resolution re-analysis was performed focusing on regions of known pathogenicity associated with fetal abnormalities. No smaller imbalances of clinical significance were detected.\n\nQF-PCR: Normal female pattern, no evidence of triploidy\nMicrosatellite analysis: Sample identity confirmed\n\nCONCLUSION\nThe array CGH analysis shows a normal female chromosome complement with no detectable genomic imbalances. These results do not identify a genetic cause for the reported fetal abnormalities.\n\nLIMITATIONS\nArray CGH cannot detect:\n- Balanced chromosomal rearrangements\n- Low-level mosaicism (<20%)\n- Point mutations or small insertions/deletions\n- Methylation abnormalities or uniparental disomy\n- Imbalances smaller than the resolution of this array\n\nSAMPLE STORAGE\nThe fetal tissue sample will be stored in the laboratory for 12 weeks from the date of this report before disposal. Please contact the laboratory if further testing is required within this timeframe.\n\nReported by: [redacted name]\nConsultant Clinical Scientist\nAuthorised by: [redacted name]\nConsultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing for fetal abnormalities",
+            "test_clinical_rationale": "Follow-up testing of solid tissue sample",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Array platform using custom design with 120kb median resolution. Analysis performed with genomic workbench software. GRCh37/hg19 reference genome",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 1-22 and X",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female chromosome complement. No abnormalities detected. No imbalance in microdeletion syndrome regions. No clinically significant imbalance >0.4Mb. Higher resolution re-analysis confirmed no smaller imbalances of known pathogenicity relevant to fetal abnormalities",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr(1-22,X)x2"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX (Female)"
+                    }
+                ],
+                "clinical_implications": "Results consistent with normal female chromosome complement. No genetic imbalances detected to explain fetal abnormalities"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis performed to exclude triploidy",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Ploidy status",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female pattern, no evidence of triploidy",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Ploidy Status",
+                        "result_value": "Normal diploid"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "Other",
+                "other_test_type": "Microsatellite analysis",
+                "test_methodology": "Microsatellite analysis confirmed sample identity",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "variant",
+                "result_entity": "Sample identity markers",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Sample identity confirmed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sample Identity",
+                        "result_value": "Confirmed"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The array CGH analysis shows a normal female chromosome complement with no detectable genomic imbalances. These results do not identify a genetic cause for the reported fetal abnormalities",
+            "overall_recommendations": "Tissue sample stored for 12 weeks before disposal. Contact laboratory if further testing required"
+        }
+    }
+}

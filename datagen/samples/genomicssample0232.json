@@ -1,0 +1,99 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nPatient 1: [redacted name] (Parent 1)\nDOB: [redacted date]\nMRN: [redacted ID]\n\nPatient 2: [redacted name] (Parent 2)\nDOB: [redacted date]\nMRN: [redacted ID]\n\nOrdering Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nREFERRAL REASON\nCarrier testing for COL2A1-related skeletal dysplasia in parents of affected child with previously identified heterozygous variants c.1545C>A (p.Arg515Arg) and c.4358G>A (p.Arg1453Pro).\n\nCLINICAL INFORMATION\nThe couple's child was diagnosed with COL2A1-related skeletal dysplasia and found to carry two heterozygous variants in the COL2A1 gene: c.1545C>A (p.Arg515Arg) and c.4358G>A (p.Arg1453Pro). Parental testing was requested to determine inheritance pattern and provide recurrence risk assessment.\n\nMETHODOLOGY\nBidirectional Sanger sequencing was performed for targeted analysis of the familial COL2A1 variants. Genomic DNA was extracted from peripheral blood samples using standard protocols. PCR amplification was performed for exons 23 and 54 of the COL2A1 gene (NM_001844.5), followed by bidirectional sequencing using BigDye Terminator v3.1 chemistry on an ABI 3730xl DNA Analyzer. Sequence data were analyzed using Mutation Surveyor software v5.1.2 and compared to the reference sequence.\n\nRESULTS\n\nParent 1:\nCOL2A1 (NM_001844.5): c.1545C>A (p.Arg515Arg) - NOT DETECTED\nCOL2A1 (NM_001844.5): c.4358G>A (p.Arg1453Pro) - NOT DETECTED\n\nParent 2:\nCOL2A1 (NM_001844.5): c.1545C>A (p.Arg515Arg) - HETEROZYGOUS\nCOL2A1 (NM_001844.5): c.4358G>A (p.Arg1453Pro) - NOT DETECTED\n\nThe c.1545C>A variant is a synonymous change that does not alter the amino acid sequence and is classified as a benign polymorphism (rs2276455, MAF: 0.12 in gnomAD). The c.4358G>A (p.Arg1453Pro) variant results in substitution of arginine with proline at position 1453 in the C-propeptide domain of the COL2A1 protein.\n\nINTERPRETATION\nParent 2 is a carrier of the benign c.1545C>A polymorphism, which was inherited by the affected child. Neither parent carries the c.4358G>A (p.Arg1453Pro) variant in their peripheral blood lymphocytes. This finding suggests that the pathogenic c.4358G>A variant in the affected child either:\n1. Arose de novo\n2. Is present in one parent as germline mosaicism\n\nThe c.4358G>A variant is located in the last exon (exon 54) of COL2A1 within the C-propeptide domain. Mutations in this region have been reported in patients with various forms of skeletal dysplasia, including spondyloepiphyseal dysplasia congenita and Kniest dysplasia (Nishimura et al., 2005; Terhal et al., 2015).\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss these results and their implications\n2. The recurrence risk for future pregnancies is estimated at 1-2% due to the possibility of germline mosaicism\n3. Prenatal diagnosis is available for future pregnancies through amniocentesis or chorionic villus sampling\n4. Consider clinical evaluation of both parents for subtle skeletal features\n\nREFERENCES\nNishimura G, et al. (2005) The phenotypic spectrum of COL2A1 mutations. Hum Mutat 26:36-43.\nTerhal PA, et al. (2015) Mutation update for COL2A1 gene variants. Hum Mutat 36:1-11.\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Genetics Laboratory. The laboratory is certified under the Clinical Laboratory Improvement Amendments (CLIA) as qualified to perform high-complexity clinical laboratory testing.\n\nElectronically signed by:\n[redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Carrier testing for COL2A1-related skeletal dysplasia in parents of affected child with previously identified heterozygous variants c.1545C>A (p.Arg515Arg) and c.4358G>A (p.Arg1453Pro)",
+            "test_clinical_rationale": "Parental testing was requested to determine inheritance pattern and provide recurrence risk assessment",
+            "clinical_findings": [
+                {
+                    "type": "family_history",
+                    "value": "Child diagnosed with COL2A1-related skeletal dysplasia with heterozygous variants c.1545C>A (p.Arg515Arg) and c.4358G>A (p.Arg1453Pro)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Parent 1",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Bidirectional Sanger sequencing with PCR amplification of exons 23 and 54 of COL2A1 gene",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "COL2A1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_001844",
+                        "version": "5"
+                    }
+                ],
+                "result_region": "c.1545C>A (p.Arg515Arg) and c.4358G>A (p.Arg1453Pro)",
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "c.1545C>A Status",
+                        "result_value": "NOT DETECTED"
+                    },
+                    {
+                        "result_name": "c.4358G>A Status",
+                        "result_value": "NOT DETECTED"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Parent 2",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Bidirectional Sanger sequencing with PCR amplification of exons 23 and 54 of COL2A1 gene",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "COL2A1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_001844",
+                        "version": "5"
+                    }
+                ],
+                "result_region": "c.1545C>A (p.Arg515Arg)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous c.1545C>A (p.Arg515Arg) detected, c.4358G>A (p.Arg1453Pro) not detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Minor Allele Frequency",
+                        "result_value": 0.12,
+                        "result_units": "frequency"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "c.1545C>A Status",
+                        "result_value": "HETEROZYGOUS"
+                    },
+                    {
+                        "result_name": "c.4358G>A Status",
+                        "result_value": "NOT DETECTED"
+                    },
+                    {
+                        "result_name": "c.1545C>A Pathogenicity",
+                        "result_value": "Benign polymorphism"
+                    },
+                    {
+                        "result_name": "dbSNP ID",
+                        "result_value": "rs2276455"
+                    }
+                ],
+                "clinical_implications": "The c.1545C>A is a non-pathogenic polymorphism inherited by the affected child"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Neither parent carries the pathogenic c.4358G>A (p.Arg1453Pro) variant in peripheral blood. This suggests the variant either arose de novo in the child or is present as germline mosaicism in one parent. The variant is located in the C-propeptide domain where mutations are associated with skeletal dysplasia",
+            "overall_recommendations": "Genetic counseling recommended. Recurrence risk estimated at 1-2% due to possibility of germline mosaicism. Prenatal diagnosis available for future pregnancies through amniocentesis or chorionic villus sampling. Consider clinical evaluation of both parents for subtle skeletal features"
+        }
+    }
+}

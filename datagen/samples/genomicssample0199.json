@@ -1,0 +1,46 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY\n[redacted location] Hospital\n\nPATIENT: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSPECIMEN ID: [redacted ID]\nCOLLECTION DATE: [redacted date]\nREPORT DATE: [redacted date]\n\nTEST PERFORMED\nDNA Extraction and Storage\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood using standard laboratory protocols. The extracted DNA has been quantified and assessed for quality.\n\nRESULT\nDNA successfully extracted and stored at -80°C for potential future genetic testing.\n\nDNA Concentration: 125 ng/μL\nA260/A280 ratio: 1.85\nTotal yield: 62.5 μg\n\nSTORAGE INFORMATION\nThe extracted DNA sample is stored in the Molecular Genetics Laboratory biobank under specimen ID [redacted ID]. The sample is available for future genetic testing as clinically indicated.\n\nRECOMMENDATIONS\nPlease contact the laboratory if specific genetic testing is needed. Written consent may be required for certain test types.\n\nDISCLAIMERS\n• Sample identification relies on proper labeling at the time of collection. The laboratory cannot guarantee against sample mix-up prior to receipt.\n• For tests involving family relationships, non-paternity or other unexpected biological relationships may be detected.\n• While we strive for accuracy in all testing, no diagnostic test is 100% accurate. False positive and false negative results can occur.\n• This report has been reviewed for accuracy; however, transcription errors may occur. Please contact the laboratory with any questions.\n\nAuthorized by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": null,
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Genomic DNA extraction from peripheral blood using standard laboratory protocols",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "Genomic DNA",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "DNA successfully extracted and stored at -80°C for potential future genetic testing",
+                "quantitative_results": [
+                    {
+                        "result_name": "DNA Concentration",
+                        "result_value": 125.0,
+                        "result_units": "ng/μL"
+                    },
+                    {
+                        "result_name": "A260/A280 ratio",
+                        "result_value": 1.85,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Total yield",
+                        "result_value": 62.5,
+                        "result_units": "μg"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "DNA has been successfully extracted and stored for future use. No genetic testing was performed at this time",
+            "overall_recommendations": "Please contact the laboratory if specific genetic testing is needed. Written consent may be required for certain test types"
+        }
+    }
+}

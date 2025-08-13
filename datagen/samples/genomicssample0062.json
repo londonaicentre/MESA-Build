@@ -1,0 +1,75 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPATIENT: [redacted name]\nDATE OF BIRTH: [redacted date]\nMRN: [redacted ID]\nSPECIMEN TYPE: Fetal tissue\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INDICATION\nAnalysis of fetal tissue sample\n\nTEST PERFORMED\nOligonucleotide Array Comparative Genomic Hybridization (Array CGH)\n\nRESULT SUMMARY\nArray CGH on uncultured fetal tissue showed no imbalance of known fully penetrant pathogenicity. Results consistent with normal female chromosome complement.\n\nTECHNICAL DETAILS\nMethodology: Oligonucleotide array analysis performed using GeneScan design 085X platform containing approximately 60,000 probes distributed across the genome with a median resolution of 120kb. DNA was extracted from uncultured fetal tissue and processed according to manufacturer's protocols. Analysis was performed using GenomeView software. All genomic positions are reported based on GRCh37/hg19 reference sequence.\n\nSupplementary Testing: QF-PCR analysis showed no evidence of triploidy.\n\nRESULTS\nChromosomes 1-22: No copy number imbalances detected\nChromosome X: Two copies detected (consistent with female)\nChromosome Y: Not detected\n\nArray Formula: arr(1-22,X)x2\n\nINTERPRETATION\nNo clinically significant copy number abnormalities were detected. The results are consistent with a normal female chromosomal profile.\n\nLIMITATIONS\nThis test cannot detect balanced chromosomal rearrangements, regions of homozygosity that do not result in copy number change, or low-level mosaicism (<20%). Point mutations and small insertions/deletions below the resolution of the array will not be detected. Interpretation is based on current knowledge of genomic variants and may change as new information becomes available.\n\nRECOMMENDATIONS\nNo further chromosome analysis is needed for this sample.\n\nReported by: [redacted name], Ph.D.\nLaboratory Director: [redacted name], M.D., Ph.D.",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Analysis of fetal tissue sample",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue from pregnant patient",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Oligonucleotide array analysis using GeneScan design 085X platform with ~60,000 probes and 120kb median resolution. Analysis using GenomeView software. Positions based on GRCh37/hg19",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 1-22 and X",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No copy number imbalances detected. Results consistent with normal female chromosome complement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Number of probes",
+                        "result_value": 60000.0,
+                        "result_units": "probes"
+                    },
+                    {
+                        "result_name": "Median resolution",
+                        "result_value": 120.0,
+                        "result_units": "kb"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Formula",
+                        "result_value": "arr(1-22,X)x2"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX (Female)"
+                    }
+                ],
+                "clinical_implications": "No clinically significant abnormalities detected. Normal female chromosomal profile"
+            },
+            {
+                "test_subject": "Fetal tissue from pregnant patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Triploidy assessment",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No evidence of triploidy",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "Negative"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No clinically significant copy number abnormalities detected. Results consistent with normal female chromosomal profile",
+            "overall_recommendations": "No further chromosome analysis needed for this sample"
+        }
+    }
+}

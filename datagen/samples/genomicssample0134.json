@@ -1,0 +1,79 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSex: Female\nSample Type: Peripheral blood\nSample Received: [redacted date]\nReport Date: [redacted date]\n\nREFERRAL INFORMATION\nReferring Physician: Dr. [redacted name]\nReferral Reason: Carrier testing prior to fertility treatment. Partner affected with Cystic Fibrosis.\n\nCLINICAL INFORMATION\nThe patient is an adult female seeking carrier testing for Cystic Fibrosis prior to planned fertility treatment. Her partner has been diagnosed with Cystic Fibrosis. No personal history of CF-related symptoms reported.\n\nTEST PERFORMED\nCystic Fibrosis Carrier Screening\nMethodology: MultiFactor CF Kit - Multiplex PCR-based assay\n\nThis assay screens for 50 common pathogenic variants in the CFTR gene (NM_000492.4), including:\n- All 23 ACMG/ACOG recommended variants\n- Additional variants with population-specific frequencies\n\nDetection rates by ethnicity:\n- Caucasian: ~88%\n- South Asian: ~38%\n- Worldwide average: ~76%\n\nRESULTS\n\nCFTR Gene Analysis:\nNo pathogenic variants detected\n\nVariants Tested: 50 common CFTR pathogenic variants\nResult: NEGATIVE for all tested variants\n\nINTERPRETATION\nNo pathogenic variants were identified in the 50 CFTR variants analyzed. This negative result reduces but does not eliminate the possibility that this individual is a carrier of Cystic Fibrosis.\n\nBased on the patient's reported ethnicity and the detection rate of this assay, the residual carrier risk is estimated at approximately 1 in 122.\n\nGiven that the partner is affected with Cystic Fibrosis (obligate carrier of two CFTR pathogenic variants), the risk of having an affected child is approximately 1 in 244.\n\nTEST LIMITATIONS\n1. This assay detects only the 50 specified CFTR variants and will not detect other pathogenic variants\n2. Large deletions, duplications, or complex rearrangements are not detected by this methodology\n3. Variants in non-coding regions or deep intronic variants are not assessed\n4. Rare or private mutations specific to certain populations may not be included\n\nRECOMMENDATIONS\n1. Based on the current test results, prenatal diagnosis for Cystic Fibrosis is not indicated\n2. Genetic counseling is recommended to discuss:\n   - Residual carrier risk\n   - Reproductive options\n   - Limitations of current testing\n3. If the patient's ethnicity suggests lower detection rates with this panel, consider expanded CFTR sequencing\n4. Partner's specific CFTR variants should be documented for potential future targeted testing\n\nThis test was developed and validated by [redacted location] Molecular Genetics Laboratory.\nTest performed according to ACMG Standards and Guidelines for Clinical Genetics Laboratories.\n\nElectronically signed by:\n[redacted name], PhD, FACMG\nLaboratory Director\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Carrier testing prior to fertility treatment. Partner affected with Cystic Fibrosis",
+            "test_clinical_rationale": "Determine carrier status for Cystic Fibrosis to assess reproductive risk given partner's CF diagnosis",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult female seeking carrier testing"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "No personal history of CF-related symptoms"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Partner affected with Cystic Fibrosis"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "MultiFactor CF Kit - Multiplex PCR-based assay screening for 50 common pathogenic variants in CFTR gene",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000492",
+                        "version": "4"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected in 50 CFTR variants analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Number of Variants Tested",
+                        "result_value": 50.0,
+                        "result_units": "variants"
+                    },
+                    {
+                        "result_name": "Detection Rate Caucasian",
+                        "result_value": 88.0,
+                        "result_units": "percent"
+                    },
+                    {
+                        "result_name": "Detection Rate South Asian",
+                        "result_value": 38.0,
+                        "result_units": "percent"
+                    },
+                    {
+                        "result_name": "Detection Rate Worldwide",
+                        "result_value": 76.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Carrier Status",
+                        "result_value": "NEGATIVE for tested variants"
+                    }
+                ],
+                "clinical_implications": "Residual carrier risk reduced to approximately 1/122. Risk of affected child approximately 1/244 given partner's CF status"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No pathogenic variants identified in CFTR gene screening. Residual carrier risk estimated at 1/122. Given partner is affected with CF, risk of having affected child is approximately 1/244",
+            "overall_recommendations": "Prenatal diagnosis for Cystic Fibrosis not indicated based on current results. Genetic counseling recommended to discuss residual risk and reproductive options. Consider expanded CFTR sequencing if ethnicity suggests lower detection rates. Document partner's specific CFTR variants for potential future targeted testing"
+        }
+    }
+}

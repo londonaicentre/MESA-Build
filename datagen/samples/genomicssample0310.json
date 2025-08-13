@@ -1,0 +1,45 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Fragile X syndrome\n\nMETHODOLOGY\nPCR-based assay for detection of CGG repeat expansion in the FMR1 gene promoter region. This assay accurately determines the number of CGG repeats and can detect normal, premutation, and full mutation alleles. The normal range is 6-45 CGG repeats, premutation range is 55-200 repeats, and full mutations contain >200 repeats.\n\nRESULTS\nFMR1 CGG Repeat Analysis:\nAllele 1: 30 (±1) CGG repeats\n\nResult: NORMAL\n\nINTERPRETATION\nThis patient has a normal FMR1 allele with 30 (±1) CGG repeats, which is within the normal range (6-45 repeats). This result indicates that Fragile X syndrome due to FMR1 CGG repeat expansion is unlikely.\n\nIt should be noted that less than 1% of Fragile X syndrome cases may be caused by point mutations or other rearrangements within the FMR1 gene that are not detected by this PCR-based repeat expansion assay. If clinical suspicion remains high, additional testing such as FMR1 gene sequencing may be considered.\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Fragile X syndrome",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR-based assay for detection of CGG repeat expansion in the FMR1 gene promoter region",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "FMR1",
+                "gene_nomenclature": [],
+                "result_region": "CGG repeat region",
+                "result_status": "normal",
+                "result_description": "Normal FMR1 allele with 30 (±1) CGG repeats",
+                "quantitative_results": [
+                    {
+                        "result_name": "CGG Repeat Number",
+                        "result_value": 30.0,
+                        "result_units": "repeats"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Allele Classification",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Fragile X syndrome due to FMR1 CGG repeat expansion is unlikely. Less than 1% of Fragile X syndrome cases may be caused by point mutations or other rearrangements within the FMR1 gene that are not detected by this PCR-based repeat expansion assay"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal FMR1 allele detected, making Fragile X syndrome unlikely. However, rare cases (<1%) may be caused by mutations not detectable by this method",
+            "overall_recommendations": "If clinical suspicion remains high, additional testing such as FMR1 gene sequencing may be considered"
+        }
+    }
+}

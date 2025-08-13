@@ -1,0 +1,72 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nTesting for genetic susceptibility to BRCA-related cancer.\n\nMETHODOLOGY\nBidirectional DNA sequencing and Multiplex Ligation-dependent Probe Amplification (MLPA) analysis of BRCA1 and BRCA2 genes.\n\nSequencing: Complete analysis of all coding exons and intron-exon boundaries of BRCA1 (NM_007294.3) and BRCA2 (NM_000059.3) genes. Bidirectional Sanger sequencing provides >99% detection sensitivity for point mutations and small insertions/deletions.\n\nMLPA: Analysis performed using GeneScreen-C1 kit for BRCA1 exons 1A-24 and GeneDetect-B2 kit for BRCA2 exons 1-27. This technique detects large deletions and duplications not identifiable by sequencing.\n\nCombined detection rate: >98% of all known pathogenic BRCA1/BRCA2 mutations.\n\nRESULTS\n\nBRCA1 (GenBank U14680.1):\nNo pathogenic mutations detected\nAll 24 exons successfully sequenced\nNo large deletions or duplications detected by MLPA\n\nBRCA2 (GenBank U43746.1):\nNo pathogenic mutations detected\nAll 27 exons successfully sequenced\nNo large deletions or duplications detected by MLPA\n\nNomenclature: Based on GenBank reference sequences U14680.1 (BRCA1) and U43746.1 (BRCA2), with nucleotide position 1 corresponding to the first base of the translation initiation codon.\n\nSUMMARY\nNo pathogenic mutations were identified in either BRCA1 or BRCA2 genes. Based on these results, the patient is very unlikely to have a pathogenic mutation in the BRCA1 or BRCA2 genes.\n\nTECHNICAL NOTES\n1. This test detects >98% of pathogenic mutations in BRCA1 and BRCA2 genes\n2. Rare mutations in regulatory regions or deep intronic sequences may not be detected\n3. This test does not detect mutations in other genes associated with hereditary breast and ovarian cancer syndrome\n4. Genetic variants of uncertain significance (VUS) are reported separately if identified\n5. Testing limitations include inability to detect certain mutation types such as inversions or complex rearrangements\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Testing for genetic susceptibility to BRCA-related cancer",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Bidirectional DNA sequencing and Multiplex Ligation-dependent Probe Amplification (MLPA) analysis. Complete analysis of all coding exons and intron-exon boundaries with >99% detection sensitivity for point mutations and small insertions/deletions",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "BRCA1",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "GenBank",
+                        "identifier": "U14680",
+                        "version": "1"
+                    },
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_007294",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "Exons 1A-24",
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected. All 24 exons successfully sequenced. No large deletions or duplications detected by MLPA",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient very unlikely to have pathogenic mutation in BRCA1 gene"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Bidirectional DNA sequencing and Multiplex Ligation-dependent Probe Amplification (MLPA) analysis. Complete analysis of all coding exons and intron-exon boundaries with >99% detection sensitivity for point mutations and small insertions/deletions",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "BRCA2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "GenBank",
+                        "identifier": "U43746",
+                        "version": "1"
+                    },
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000059",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "Exons 1-27",
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected. All 27 exons successfully sequenced. No large deletions or duplications detected by MLPA",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient very unlikely to have pathogenic mutation in BRCA2 gene"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No pathogenic mutations were identified in either BRCA1 or BRCA2 genes. The patient is very unlikely to have a pathogenic mutation in the BRCA1 or BRCA2 genes",
+            "overall_recommendations": "This test detects >98% of pathogenic mutations in BRCA1 and BRCA2 genes. Rare mutations in regulatory regions or deep intronic sequences may not be detected. This test does not detect mutations in other genes associated with hereditary breast and ovarian cancer syndrome"
+        }
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "content": "FLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPATIENT INFORMATION\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Male\nSpecimen Type: Bone Marrow Aspirate\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Multiple myeloma\nClinical Details: Bone marrow aspirate with 8% plasma cells\nReferring Physician: Dr. [redacted name]\nReferring Institution: [redacted location]\n\nTEST PERFORMED\nInterphase FISH Analysis for Multiple Myeloma Panel\n\nMETHODOLOGY\nInterphase FISH analysis was performed on CD138+ enriched plasma cells from bone marrow aspirate using the following probe sets:\n1. IGH break apart probe (Vysis LSI IGH Dual Color Break Apart Rearrangement Probe)\n2. 1q21/SRD(1p36) dual color probe set\n3. Multi-color probe set for D5S23,D5S721/CEP9/CEP15\n4. CLL panel including TP53/ATM and D13S319/13q34/CEP12\n\nA minimum of 100 interphase nuclei were analyzed for each probe set when possible. Plasma cell enrichment was performed using CD138 immunomagnetic selection.\n\nRESULTS\n\nIGH/CCND1 Rearrangement [t(11;14)]:\nResult: POSITIVE\nAbnormal cells: 6/100 (6%)\nPattern: Split signal pattern consistent with IGH/CCND1 rearrangement\n\nTP53 (17p13.1):\nResult: UNINFORMATIVE - Low plasma cell count\n\nSRD (1p36):\nResult: UNINFORMATIVE - Low plasma cell count\n\nD13S319 (13q14):\nResult: UNINFORMATIVE - Low plasma cell count\n\n1q21 Region:\nResult: UNINFORMATIVE - Low plasma cell count\n\nATM (11q22.3):\nResult: UNINFORMATIVE - Low plasma cell count\n\nChromosomes 5, 9, and 15:\nResult: UNINFORMATIVE - Low plasma cell count\n\nTECHNICAL NOTES\nDue to the low plasma cell percentage (8%) in the bone marrow aspirate, analysis was limited. Only the IGH/CCND1 rearrangement analysis yielded interpretable results. Additional probes were uninformative due to insufficient plasma cell count for reliable analysis.\n\nINTERPRETATION\nInterphase FISH analysis detected an IGH/CCND1 rearrangement [t(11;14)] in 6% of cells analyzed. This is an established cytogenetic abnormality in multiple myeloma, typically associated with lymphoplasmacytic morphology and CD20 expression. The t(11;14) translocation results in overexpression of cyclin D1 and is found in approximately 15-20% of multiple myeloma cases.\n\nAnalysis for additional prognostic markers including TP53 deletion, 1p36 deletion, 13q14 deletion, 1q21 gain, ATM deletion, and hyperdiploidy was uninformative due to the low plasma cell count in the specimen.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Multiple myeloma evaluation",
+            "test_clinical_rationale": "Assessment of cytogenetic abnormalities for prognostic stratification in multiple myeloma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Multiple myeloma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Bone marrow aspirate with 8% plasma cells"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on CD138+ enriched plasma cells using IGH break apart probe",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "IGH/CCND1",
+                "gene_nomenclature": [],
+                "result_region": "t(11;14)",
+                "result_status": "abnormal",
+                "result_description": "IGH/CCND1 rearrangement positive in 6/100 cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Abnormal Cells",
+                        "result_value": 6.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage Abnormal",
+                        "result_value": 6.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "POSITIVE"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "Split signal pattern"
+                    }
+                ],
+                "clinical_implications": "IGH/CCND1 is established finding in multiple myeloma, associated with lymphoplasmacytic morphology and CD20 expression"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH using 1q21/SRD(1p36) dual color, multi-color probe set (D5S23,D5S721/CEP9/CEP15), and CLL panel (TP53/ATM & D13S319/13q34/CEP12)",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "Multiple loci",
+                "gene_nomenclature": [],
+                "result_region": "TP53 (17p13.1), SRD (1p36), D13S319 (13q14), 1q21 region, ATM (11q22.3), chromosomes 5, 9, and 15",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Analysis of TP53, SRD, D13S319, 1q21, ATM and chromosomes 5, 9, 15 uninformative due to low plasma cell count",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Test Status",
+                        "result_value": "UNINFORMATIVE"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Detection of IGH/CCND1 rearrangement [t(11;14)] confirms a cytogenetic abnormality found in 15-20% of multiple myeloma cases. This translocation results in cyclin D1 overexpression and is typically associated with lymphoplasmacytic morphology and CD20 expression. Additional prognostic markers could not be assessed due to low plasma cell count",
+            "overall_recommendations": "Consider repeat analysis with higher plasma cell yield for complete cytogenetic risk stratification"
+        }
+    }
+}

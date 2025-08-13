@@ -1,0 +1,72 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nSMA evaluation - Clinical suspicion of Spinal Muscular Atrophy\n\nMETHODOLOGY\nMultiplex Ligation-dependent Probe Amplification (MLPA) analysis was performed using the ProbeSet-60 kit (MRC-Holland, Amsterdam, Netherlands) according to manufacturer's protocols. This assay detects copy number variations in SMN1 exons 7 and 8, which are deleted in approximately 95% of SMA patients. DNA was extracted from peripheral blood using standard procedures. MLPA products were analyzed by capillary electrophoresis on an ABI 3730xl DNA Analyzer. Data analysis was performed using Coffalyser.Net software.\n\nRESULTS\nSMN1 Gene Copy Number Analysis:\n- SMN1 Exon 7: 2 copies detected (Normal: 2 copies)\n- SMN1 Exon 8: 2 copies detected (Normal: 2 copies)\n\nQuality Metrics:\n- DNA concentration: 85 ng/μL\n- DNA quality (A260/A280): 1.82\n- All control probes within expected ranges\n\nSUMMARY\nMLPA analysis demonstrates two copies of both SMN1 exon 7 and exon 8, indicating a normal copy number. This result makes the diagnosis of SMA due to homozygous SMN1 deletions extremely unlikely (<1% probability). The presence of two SMN1 copies effectively excludes the most common genetic cause of SMA.\n\nIt should be noted that this assay does not detect point mutations within the SMN1 gene, which account for approximately 3-5% of SMA cases. Additionally, this test cannot distinguish between individuals with two SMN1 copies on one chromosome (2+0 configuration) versus one copy on each chromosome (1+1 configuration), which has implications for carrier risk assessment.\n\nRECOMMENDATIONS\n1. If the clinical diagnosis of SMA remains definite despite these results, consider SMN1 point mutation screening by sequence analysis.\n2. DNA has been submitted for Prader-Willi syndrome and Myotonic Dystrophy testing as requested on the original requisition form.\n3. Genetic counseling is recommended to discuss these results and their implications.\n4. For carrier testing purposes, consider SMN1 dosage analysis with SMN2 copy number determination.\n\nTECHNICAL NOTES\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration (FDA). The FDA has determined that such clearance or approval is not necessary. This test is used for clinical purposes.\n\nLimitations:\n- Does not detect point mutations or small insertions/deletions in SMN1\n- Cannot determine cis/trans configuration of SMN1 copies\n- Does not assess SMN2 copy number (modifier of disease severity)\n- Rare polymorphisms may interfere with probe binding\n\nREFERENCES\n1. Prior TW, et al. (2020). Spinal Muscular Atrophy. GeneReviews®\n2. Schouten JP, et al. (2002). Relative quantification of 40 nucleic acid sequences by multiplex ligation-dependent probe amplification. Nucleic Acids Res. 30(12):e57\n3. ACMG Standards and Guidelines (2008). Carrier screening for spinal muscular atrophy. Genet Med. 10(11):840-842\n\nReport Authorized By:\n[redacted name], PhD, FACMG\nLaboratory Director\nCAP: [redacted ID] CLIA: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "SMA evaluation - Clinical suspicion of Spinal Muscular Atrophy",
+            "test_clinical_rationale": "To detect SMN1 exon 7 and 8 deletions which are present in approximately 95% of SMA patients",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) analysis using ProbeSet-60 kit with capillary electrophoresis on ABI 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SMN1",
+                "gene_nomenclature": [],
+                "result_region": "Exon 7",
+                "result_status": "normal",
+                "result_description": "2 copies detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": 2.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Normal copy number excludes homozygous SMN1 deletion"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) analysis using ProbeSet-60 kit with capillary electrophoresis on ABI 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SMN1",
+                "gene_nomenclature": [],
+                "result_region": "Exon 8",
+                "result_status": "normal",
+                "result_description": "2 copies detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": 2.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Normal copy number excludes homozygous SMN1 deletion"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "SMA due to SMN1 deletions extremely unlikely (<1% probability). The presence of two SMN1 copies effectively excludes the most common genetic cause of SMA. This assay does not detect point mutations within SMN1 gene, which account for approximately 3-5% of SMA cases",
+            "overall_recommendations": "If clinical diagnosis of SMA remains definite, consider SMN1 point mutation screening by sequence analysis. DNA submitted for Prader-Willi syndrome and Myotonic Dystrophy testing as requested. Genetic counseling recommended. For carrier testing purposes, consider SMN1 dosage analysis with SMN2 copy number determination"
+        }
+    }
+}

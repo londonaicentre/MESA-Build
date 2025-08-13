@@ -1,5 +1,5 @@
 ## Bootstrap Table Instructions
-The prompts below are used with a large language model chat interface to generate content for synthetic genomics reports.This is an intermediate step prior to generation of realistic documents. The output is a table where columns correspond to different document content types, and qualifiers for type of document, content style, and structure. Each row is subsequently given to an LLM to produce fake documents according to the description. This stage therefore introduces variability and coverage of different concepts into the documents being generated.
+The prompts below are used with a large language model chat interface to generate content for synthetic genomics reports. This is an intermediate step prior to generation of realistic documents. The output is a table where columns correspond to different document content types, and qualifiers for type of document, content style, and structure. Each row is subsequently given to an LLM to produce fake documents according to the description. This stage therefore introduces variability and coverage of different concepts into the documents being generated.
 
 ### Baseline prompt
 ```
@@ -22,6 +22,9 @@ Proband Info - Whose sample was tested (patient, relative, etc.)
 Clinical Implications - Interpretation of results for patient care
 Recommendations - Follow-up testing, referrals, or management suggestions
 Report style - This table will be used to generate synthetic reports. Describe a report style, that may include elements such as is conciseness, structure, and verbosity of clinical descriptions.
+
+The table should be structured as a csv file with the following headings:
+test_type,test_details,result_entities,result_description,clinical_context,disease_context,family_history,test_subject,clinical_implications,recommendations,report_style
 
 **Further Instructions**
 - Each example may contain multiple entities or results.

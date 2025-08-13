@@ -1,0 +1,112 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nPatient: [redacted name] (Fetus)\nMaternal Age: [redacted]\nGestational Age: 20 weeks\nSample Type: Amniotic fluid\nDate Collected: [redacted]\nDate Received: [redacted]\nDate Reported: [redacted]\nReferring Physician: Dr. [redacted name]\nLaboratory Number: [redacted ID]\n\nCLINICAL INDICATION\nPrenatal testing at 20 weeks gestation due to known parental chromosome rearrangement. Risk assessment for unbalanced chromosomal complement from parental balanced translocation.\n\nFAMILY HISTORY\nPaternal balanced reciprocal translocation between 9q and 10p\n\nTEST PERFORMED\nInterphase Fluorescence In Situ Hybridization (FISH)\n\nMETHODOLOGY\nInterphase FISH analysis was performed on uncultured amniotic fluid cells using the following probe set:\n- 9q34.3 (D9S325) - SpectrumOrange\n- 10p15.3 (D10S2488) - SpectrumGreen\n- Chromosome 10 centromere (cen10) - SpectrumAqua\n\nA minimum of 50 interphase nuclei were analyzed for each probe combination. This targeted approach was designed to detect potential unbalanced products of the known paternal t(9;10) translocation.\n\nRESULTS\n\nFISH Analysis:\nnuc ish 9q34.3(D9S325x2),10p15.3(D10S2488x2),10cen(cen10x2)\n\nInterpretation: Normal signal pattern observed\n- 9q34.3 (D9S325): 2 signals detected\n- 10p15.3 (D10S2488): 2 signals detected\n- 10 centromere (cen10): 2 signals detected\n\nNumber of cells analyzed: 100\nNumber of cells with normal pattern: 98 (98%)\n\nThe FISH results show a normal signal pattern with two copies each of 9q34.3, 10p15.3, and chromosome 10 centromere. This finding is consistent with either a normal chromosome complement or a balanced complement for chromosomes 9 and 10.\n\nPREVIOUS TESTING\nRapid aneuploidy PCR performed on this sample showed normal complement for chromosomes 13, 18, and 21.\n\nINTERPRETATION\nThe interphase FISH analysis demonstrates a normal signal pattern for the regions tested, indicating no evidence of an unbalanced chromosomal complement involving the breakpoints of the paternal t(9;10) translocation. This result suggests that the fetus has either:\n1. A normal chromosome complement (46,XX or 46,XY), or\n2. The same balanced translocation as the father\n\nBoth possibilities carry no increased risk for chromosomal imbalance-related abnormalities. The distinction between these two possibilities cannot be made by interphase FISH and would require karyotype analysis of cultured cells if clinically indicated.\n\nCLINICAL IMPLICATIONS\nThis result indicates no increased risk for chromosomal imbalance related to the parental balanced translocation. The fetus is not expected to have clinical features associated with partial monosomy or trisomy of chromosomes 9 or 10.\n\nRECOMMENDATIONS\n1. No further chromosome analysis is needed for this pregnancy\n2. Genetic counselling is recommended for this individual at reproductive age to discuss potential reproductive risks if they carry the balanced translocation\n3. Standard prenatal care and monitoring should continue\n4. Results should be discussed with a genetic counselor or clinical geneticist\n\nLIMITATIONS\nThis targeted FISH analysis is designed specifically to detect unbalanced products of the known parental translocation. It does not exclude other chromosomal abnormalities or genetic conditions. Interphase FISH cannot distinguish between a normal karyotype and a balanced translocation.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing at 20 weeks gestation due to known parental chromosome rearrangement",
+            "test_clinical_rationale": "Risk assessment for unbalanced chromosomal complement from parental balanced translocation",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Fetus at 20 weeks gestation"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Paternal balanced reciprocal translocation between 9q and 10p"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on uncultured amniotic fluid cells using probes for 9q34.3 (D9S325), 10p15.3 (D10S2488), and chromosome 10 centromere (cen10)",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "9",
+                "gene_nomenclature": [],
+                "result_region": "9q34.3(D9S325)",
+                "result_status": "normal",
+                "result_description": "Normal signal pattern with two copies of 9q34.3",
+                "quantitative_results": [
+                    {
+                        "result_name": "Signal Count",
+                        "result_value": 2.0,
+                        "result_units": "signals"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish 9q34.3(D9S325x2)"
+                    }
+                ],
+                "clinical_implications": "No evidence of unbalanced chromosomal complement involving chromosome 9"
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on uncultured amniotic fluid cells",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "10",
+                "gene_nomenclature": [],
+                "result_region": "10p15.3(D10S2488) and 10cen(cen10)",
+                "result_status": "normal",
+                "result_description": "Normal signal pattern with two copies each of 10p15.3 and chromosome 10 centromere",
+                "quantitative_results": [
+                    {
+                        "result_name": "10p15.3 Signal Count",
+                        "result_value": 2.0,
+                        "result_units": "signals"
+                    },
+                    {
+                        "result_name": "10cen Signal Count",
+                        "result_value": 2.0,
+                        "result_units": "signals"
+                    },
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Cells with Normal Pattern",
+                        "result_value": 98.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish 10p15.3(D10S2488x2),10cen(cen10x2)"
+                    }
+                ],
+                "clinical_implications": "No evidence of unbalanced chromosomal complement involving chromosome 10"
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Rapid aneuploidy PCR",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13, 18, 21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal complement for chromosomes 13, 18, and 21",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "No evidence of common aneuploidies"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Result suggests normal or balanced chromosome complement, indicating no increased risk for chromosomal imbalance related to parental translocation. The fetus is not expected to have clinical features associated with partial monosomy or trisomy of chromosomes 9 or 10",
+            "overall_recommendations": "No further chromosome analysis needed for this pregnancy. Genetic counselling recommended at reproductive age to discuss potential reproductive risks if they carry the balanced translocation. Standard prenatal care and monitoring should continue. Results should be discussed with a genetic counselor or clinical geneticist"
+        }
+    }
+}

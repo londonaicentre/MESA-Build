@@ -1,0 +1,43 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Cancer Center\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\n\nCLINICAL INFORMATION\nDiagnosis: Diffuse Large B-Cell Lymphoma (DLBCL)\nSpecimen Type: FNA inguinal lymph node\nDate Collected: [redacted date]\nDate Received: [redacted date]\n\nTEST REQUESTED\nFluorescence in situ hybridization (FISH) analysis\n\nCLINICAL HISTORY\nPatient with recently diagnosed DLBCL. Tissue obtained from fine needle aspiration of enlarged inguinal lymph node.\n\nTEST PERFORMED\nFISH studies on tissue sections\n\nMETHODOLOGY\nFluorescence in situ hybridization was performed on formalin-fixed paraffin-embedded tissue sections from the FNA specimen using standard protocols.\n\nRESULTS\n[Results pending]\n\nNOTE: FISH studies were requested in lieu of conventional G-banded chromosome analysis due to specimen type. Complete results will be issued in an amended report upon completion of analysis.\n\nPathologist: [redacted name], MD\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diffuse Large B-Cell Lymphoma (DLBCL)",
+            "test_clinical_rationale": "FISH analysis requested for DLBCL evaluation",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Diffuse Large B-Cell Lymphoma (DLBCL)"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Enlarged inguinal lymph node"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization on formalin-fixed paraffin-embedded tissue sections",
+                "sample_origin": "Inguinal lymph node",
+                "result_entity_type": "chromosome",
+                "result_entity": "FISH studies",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Results pending - complete results will be issued in amended report",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis requested for DLBCL evaluation. Results pending completion of analysis",
+            "overall_recommendations": "Complete results will be issued in an amended report upon completion of FISH analysis"
+        }
+    }
+}

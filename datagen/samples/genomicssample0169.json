@@ -1,0 +1,55 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\nAccreditation: CPA UK Ltd, ISO 15189:2012\n\nPatient: [redacted name]\nDOB: [redacted date]\nHospital No: [redacted ID]\nSpecimen: Peripheral blood\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL DETAILS\nInfant referred for cytogenetic analysis\n\nTEST REQUESTED\nG-banded chromosome analysis\n\nRESULT\nCulture failed - No material suitable for cytogenetic analysis\n\nThe blood sample was set up in culture for G-banded chromosome analysis. Unfortunately, the culture failed to yield metaphases suitable for analysis. No cytogenetic result can be provided from this sample.\n\nADDITIONAL INFORMATION\nSeparate PCR analysis was performed which showed normal complement for chromosomes 13, 18, and 21. This preliminary screening does not replace full karyotype analysis.\n\nRECOMMENDATION\nA repeat blood sample in lithium heparin (2-3ml) is required if G-banded chromosome analysis is still clinically indicated. Please ensure sample reaches the laboratory within 24 hours of collection.\n\nReported by: [redacted name]\nConsultant Clinical Scientist\nAuthorised by: [redacted name]\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Infant referred for cytogenetic analysis",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Infant"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Culture failed - No material suitable for cytogenetic analysis",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "No cytogenetic result can be provided from this sample"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR analysis for chromosome complement",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 13, 18, 21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal complement for chromosomes 13, 18, and 21",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "This preliminary screening does not replace full karyotype analysis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "G-banded chromosome analysis could not be completed due to culture failure. Preliminary PCR screening shows normal results for chromosomes 13, 18, and 21 only",
+            "overall_recommendations": "A repeat blood sample in lithium heparin (2-3ml) is required if G-banded chromosome analysis is still clinically indicated. Sample must reach laboratory within 24 hours of collection"
+        }
+    }
+}

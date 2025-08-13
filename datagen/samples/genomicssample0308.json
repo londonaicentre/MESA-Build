@@ -1,0 +1,100 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Children's Hospital\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nAge: 0 days\nSex: Male\nMedical Record Number: [redacted ID]\nSpecimen Type: Whole blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nNewborn male infant with suspected Down syndrome\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n- Chromosomes analyzed: 13, 18, and 21\n- Method: Multiplex QF-PCR analysis of short tandem repeat (STR) markers\n\nRESULTS\n\n**ABNORMAL RESULT DETECTED**\n\nChromosome 21: TRISOMY DETECTED\nInformative markers:\n- D21S11: Triallelic pattern (1:1:1 ratio)\n- D21S1437: Triallelic pattern (1:1:1 ratio)\n- D21S1435: Diallelic pattern (2:1 ratio)\n- D21S1442: Triallelic pattern (1:1:1 ratio)\n- D21S1411: Diallelic pattern (2:1 ratio)\n- D21S1446: Diallelic pattern (2:1 ratio)\n\nChromosome 13: Normal disomic pattern\nAll markers showed expected biallelic ratios\n\nChromosome 18: Normal disomic pattern\nAll markers showed expected biallelic ratios\n\nMOLECULAR KARYOTYPE: rsa(13,18)x2,(21)x3\n\nINTERPRETATION\nThis QF-PCR analysis demonstrates trisomy 21 (Down syndrome) with normal copy numbers for chromosomes 13 and 18. Six informative markers for chromosome 21 showed patterns consistent with three copies of chromosome 21, confirming the clinical suspicion of Down syndrome.\n\nThe triallelic patterns observed in markers D21S11, D21S1437, and D21S1442 indicate the presence of three different alleles, while the 2:1 diallelic patterns in markers D21S1435, D21S1411, and D21S1446 indicate dosage imbalance consistent with trisomy.\n\nLIMITATIONS\n- This test detects whole chromosome aneuploidies of chromosomes 13, 18, and 21 only\n- Low-level mosaicism (<20%) may not be detected\n- Structural chromosome abnormalities and balanced rearrangements are not detected\n- Aneuploidies of other chromosomes are not assessed by this test\n\nRECOMMENDATIONS\nFollow-up karyotype analysis of G-banded chromosomes from cultured blood lymphocytes is recommended to:\n1. Confirm the trisomy 21 finding\n2. Rule out structural abnormalities\n3. Assess for possible mosaicism\n4. Evaluate all other chromosomes\n\nGenetic counseling is recommended to discuss results, recurrence risks, and management options.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Newborn male infant with suspected Down syndrome",
+            "test_clinical_rationale": "Rapid aneuploidy detection to confirm suspected Down syndrome diagnosis",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Newborn male infant (0 days)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) - Multiplex QF-PCR analysis of short tandem repeat (STR) markers",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S11, D21S1437, D21S1435, D21S1442, D21S1411, D21S1446",
+                "result_status": "abnormal",
+                "result_description": "Trisomy 21 detected via six informative markers",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "D21S11 Pattern",
+                        "result_value": "Triallelic pattern (1:1:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1437 Pattern",
+                        "result_value": "Triallelic pattern (1:1:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1435 Pattern",
+                        "result_value": "Diallelic pattern (2:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1442 Pattern",
+                        "result_value": "Triallelic pattern (1:1:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1411 Pattern",
+                        "result_value": "Diallelic pattern (2:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1446 Pattern",
+                        "result_value": "Diallelic pattern (2:1 ratio)"
+                    },
+                    {
+                        "result_name": "Molecular Karyotype",
+                        "result_value": "rsa(13,18)x2,(21)x3"
+                    }
+                ],
+                "clinical_implications": "Results confirm Down syndrome diagnosis, consistent with referral indication"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal disomic pattern - All markers showed expected biallelic ratios",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal disomic pattern - All markers showed expected biallelic ratios",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis demonstrates trisomy 21 (Down syndrome) with normal copy numbers for chromosomes 13 and 18, confirming the clinical suspicion",
+            "overall_recommendations": "Follow-up karyotype analysis of G-banded chromosomes from cultured blood lymphocytes recommended to confirm trisomy 21, rule out structural abnormalities, assess for possible mosaicism, and evaluate all other chromosomes. Genetic counseling recommended to discuss results, recurrence risks, and management options"
+        }
+    }
+}

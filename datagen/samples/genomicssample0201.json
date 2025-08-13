@@ -1,0 +1,69 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen: Lung biopsy\nCollection Date: [redacted date]\nReceived: [redacted date]\nReported: [redacted date]\n\nCLINICAL HISTORY\nAdult female with lung adenocarcinoma. Tissue submitted for MET gene analysis to evaluate eligibility for targeted therapy.\n\nTEST PERFORMED\nMET Gene Status by Fluorescence In Situ Hybridization (FISH)\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the GeneTech DualProbe MET/SE7 assay. This probe set includes a red fluorophore targeting the MET gene locus at 7q31 and a green fluorophore targeting the chromosome 7 centromere (7cen). A total of 60 tumor cell nuclei were evaluated. MET amplification status was assessed using both MET/7cen ratio and absolute MET copy number criteria as per published guidelines (Cappuzzo et al., J Clin Oncol 2009).\n\nRESULTS\nMET/7cen ratio: 1.07\nMean MET copy number per cell: 2.40\nMean chromosome 7 centromere signals per cell: 2.24\n\nINTERPRETATION\nMET FISH NEGATIVE\n\nThe tumor shows no evidence of MET gene amplification by FISH analysis. Both the MET/7cen ratio (1.07) and mean MET copy number (2.40) fall below the thresholds for positivity. MET amplification is defined as MET/7cen ratio ≥2.0 or mean MET copy number ≥5.0 per cell.\n\nCLINICAL IMPLICATIONS\nThis patient's tumor is MET FISH negative, indicating the patient is unlikely to derive clinical benefit from MET tyrosine kinase inhibitors such as crizotinib, cabozantinib, or capmatinib in the context of MET amplification.\n\nRECOMMENDATIONS\nMET-targeted therapy is not indicated based on these FISH results. Alternative molecular profiling including comprehensive genomic profiling may be considered to identify other actionable alterations in this non-small cell lung cancer.\n\nElectronically signed by:\n[redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Adult female with lung adenocarcinoma. Tissue submitted for MET gene analysis to evaluate eligibility for targeted therapy",
+            "test_clinical_rationale": "Evaluate eligibility for targeted therapy",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Lung adenocarcinoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Adult female"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue sections using GeneTech DualProbe MET/SE7 assay",
+                "sample_origin": "Lung biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "MET",
+                "gene_nomenclature": [],
+                "result_region": "7q31",
+                "result_status": "normal",
+                "result_description": "No evidence of MET gene amplification by FISH analysis",
+                "quantitative_results": [
+                    {
+                        "result_name": "MET/7cen ratio",
+                        "result_value": 1.07,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Mean MET copy number",
+                        "result_value": 2.4,
+                        "result_units": "copies per cell"
+                    },
+                    {
+                        "result_name": "Mean chromosome 7 centromere signals",
+                        "result_value": 2.24,
+                        "result_units": "signals per cell"
+                    },
+                    {
+                        "result_name": "Cells analyzed",
+                        "result_value": 60.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "MET FISH Status",
+                        "result_value": "Negative"
+                    }
+                ],
+                "clinical_implications": "Patient is unlikely to derive clinical benefit from MET tyrosine kinase inhibitors such as crizotinib, cabozantinib, or capmatinib in the context of MET amplification"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This patient's tumor is MET FISH negative, indicating the patient is unlikely to derive clinical benefit from MET tyrosine kinase inhibitors",
+            "overall_recommendations": "MET-targeted therapy is not indicated based on these FISH results. Alternative molecular profiling including comprehensive genomic profiling may be considered to identify other actionable alterations in this non-small cell lung cancer"
+        }
+    }
+}

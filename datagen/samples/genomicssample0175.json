@@ -1,0 +1,60 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\n\nPATIENT: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSEX: Male\nORDERING PHYSICIAN: Dr. [redacted name]\nDATE OF COLLECTION: [redacted date]\nDATE OF REPORT: [redacted date]\n\nREFERRAL REASON\nBRAF mutation analysis requested for therapeutic decision-making in patient with suspected BRAF-associated malignancy.\n\nSPECIMEN\nFormalin-fixed paraffin-embedded (FFPE) tissue\nNeoplastic cell content: 80%\n\nMETHODOLOGY\nTargeted Sanger sequencing of BRAF exon 15 was performed following PCR amplification of DNA extracted from FFPE tissue. The assay specifically interrogates codon 600 and surrounding regions for activating variants. DNA was extracted using the QIAamp DNA FFPE Tissue Kit (Qiagen). PCR amplification was performed using primers flanking BRAF exon 15, followed by bidirectional Sanger sequencing on an Applied Biosystems 3730xl DNA Analyzer.\n\nAnalytical sensitivity: This assay can reliably detect the c.1799T>A p.(Val600Glu) variant at a minimum variant allele frequency of 20% in samples with adequate neoplastic cell content.\n\nRESULTS\n\nGene: BRAF (NM_004333.6)\nExon analyzed: Exon 15\nCodon 600 status: Wild-type\n\nNo activating BRAF variant detected in exon 15.\n\nNote: This assay has a detection sensitivity of 20% for the c.1799T>A p.(Val600Glu) variant. Variants present below this threshold cannot be excluded.\n\nCLINICAL IMPLICATIONS\nThe absence of detectable BRAF exon 15 activating mutations suggests this patient is unlikely to benefit from BRAF/MEK-targeted therapy. BRAF V600 mutations are actionable alterations in multiple cancer types including melanoma, colorectal carcinoma, and other malignancies. The wild-type BRAF status indicates that alternative therapeutic strategies should be considered.\n\nLIMITATIONS\n- This assay is limited to BRAF exon 15 and does not detect variants in other exons\n- Variants present at allele frequencies below 20% may not be detected\n- Rare variants outside the primer binding sites will not be amplified\n\nREFERENCES\n1. Davies H, et al. Mutations of the BRAF gene in human cancer. Nature. 2002;417(6892):949-54.\n2. Chapman PB, et al. Improved survival with vemurafenib in melanoma with BRAF V600E mutation. N Engl J Med. 2011;364(26):2507-16.\n\nElectronically signed by:\n[redacted name], MD, PhD\nMolecular Pathologist\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "BRAF mutation analysis requested for therapeutic decision-making in patient with suspected BRAF-associated malignancy",
+            "test_clinical_rationale": "BRAF exon 15 variant testing in tissue sample with 80% neoplastic cell nuclei",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Male patient"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Neoplastic cell content: 80%"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted Sanger sequencing of BRAF exon 15 following PCR amplification of DNA extracted from FFPE tissue",
+                "sample_origin": "Formalin-fixed paraffin-embedded (FFPE) tissue",
+                "result_entity_type": "gene",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_004333",
+                        "version": "6"
+                    }
+                ],
+                "result_region": "Exon 15, Codon 600",
+                "result_status": "normal",
+                "result_description": "No activating BRAF variant detected in exon 15",
+                "quantitative_results": [
+                    {
+                        "result_name": "Detection Sensitivity",
+                        "result_value": 20.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Codon 600 Status",
+                        "result_value": "Wild-type"
+                    }
+                ],
+                "clinical_implications": "Patient unlikely to benefit from BRAF/MEK-targeted therapy based on absence of activating BRAF mutations"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The absence of detectable BRAF exon 15 activating mutations suggests this patient is unlikely to benefit from BRAF/MEK-targeted therapy. BRAF V600 mutations are actionable alterations in multiple cancer types including melanoma, colorectal carcinoma, and other malignancies. The wild-type BRAF status indicates that alternative therapeutic strategies should be considered",
+            "overall_recommendations": "Alternative therapeutic strategies should be considered given wild-type BRAF status"
+        }
+    }
+}

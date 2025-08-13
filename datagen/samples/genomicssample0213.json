@@ -1,0 +1,54 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nPhysician: Dr. [redacted name]\n\nSPECIMEN TYPE: Peripheral blood\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INDICATION\nDown syndrome suspected\n\nPRIOR TESTING\nRapid PCR analysis for common aneuploidies previously performed (see separate report)\n\nTEST PERFORMED\nG-banded chromosome analysis\n\nMETHODOLOGY\nPeripheral blood lymphocytes were cultured, harvested, and G-banded according to standard protocols. Twenty metaphase cells were analyzed at a resolution of 450-550 bands.\n\nRESULT\nKaryotype: 46,XX\n\nNo evidence of trisomy 21 or other significant numerical or structural abnormalities detected.\n\nINTERPRETATION\nNormal female karyotype. This result excludes trisomy 21 (Down syndrome) and other detectable numerical and major structural chromosome abnormalities at the resolution of this analysis.\n\nLIMITATIONS\nThis test cannot detect balanced rearrangements that do not result in gain or loss of chromosomal material, low-level mosaicism (<10%), or submicroscopic deletions/duplications.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Down syndrome suspected",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis. Peripheral blood lymphocytes cultured, harvested, and G-banded according to standard protocols",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - No evidence of trisomy 21 or other significant numerical or structural abnormalities detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Band Resolution",
+                        "result_value": 500.0,
+                        "result_units": "bands"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Karyotype Result",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": "Normal female karyotype excluding trisomy 21 (Down syndrome) and other detectable numerical and major structural chromosome abnormalities"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype excluding numerical and major structural abnormalities. This result excludes Down syndrome and other chromosomal aneuploidies detectable at this resolution",
+            "overall_recommendations": "No specific recommendations provided. Test limitations include inability to detect balanced rearrangements, low-level mosaicism (<10%), or submicroscopic deletions/duplications"
+        }
+    }
+}

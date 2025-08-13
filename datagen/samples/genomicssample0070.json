@@ -1,0 +1,161 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY\nFLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted]\nSpecimen ID: [redacted ID]\n\nSPECIMEN DETAILS\nSpecimen Type: Lymph node biopsy\nDate Collected: [redacted]\nDate Received: [redacted]\nDate Reported: [redacted]\n\nCLINICAL INFORMATION\nClinical Diagnosis: Diffuse Large B-Cell Lymphoma (DLBCL), non-germinal center type\nReason for Referral: FISH analysis for B-cell lymphoma panel\n\nTEST PERFORMED\nInterphase FISH Analysis - B-Cell Lymphoma Panel\n\nMETHODOLOGY\nInterphase fluorescence in situ hybridization (FISH) was performed on formalin-fixed paraffin-embedded tissue sections using the following probe sets:\n• BCL6 (3q27) Break Apart Probe\n• MYC (8q24) Break Apart Probe\n• IGH/BCL2 Dual Color Dual Fusion Probe [t(14;18)]\n• IGH/MYC/CEP8 Tri-Color Probe\n\nA minimum of 200 interphase nuclei were analyzed for each probe set.\n\nRESULTS\n\nBCL6 (3q27) REARRANGEMENT STATUS: POSITIVE\n• Rearrangement detected in 85% of nuclei analyzed (170/200)\n• Normal signal pattern: 15% (30/200)\n• Cutoff for positive result: >10%\n\nMYC (8q24) REARRANGEMENT STATUS: NEGATIVE\n• No rearrangement detected\n• Copy number: 2-7 copies per nucleus (average 4.2)\n• Amplification pattern observed in 65% of cells\n\nIGH/BCL2 t(14;18) STATUS: NEGATIVE\n• No IGH/BCL2 fusion signals detected\n• BCL2 (18q21) copy number: 2-5 copies per nucleus (average 3.1)\n• IGH (14q32) copy number: 1-2 copies per nucleus\n• Loss of one IGH signal in 45% of cells analyzed\n\nIGH/MYC FUSION STATUS: NEGATIVE\n• No IGH/MYC fusion signals detected\n• CEP8 control signals: 2-4 per nucleus\n\nINTERPRETATION\nThis FISH analysis demonstrates:\n\n1. BCL6 gene rearrangement at 3q27, which is consistent with the diagnosis of Diffuse Large B-Cell Lymphoma (DLBCL) and is observed in approximately 30-40% of DLBCL cases.\n\n2. Absence of MYC rearrangement and IGH/BCL2 fusion, ruling out double-hit lymphoma involving these loci.\n\n3. Copy number alterations including:\n   • Multiple copies of MYC (2-7 copies) without rearrangement\n   • Multiple copies of BCL2 (2-5 copies) without IGH/BCL2 fusion\n   • Loss of one IGH signal in a subset of cells\n\nThe clinical significance of the observed copy number variations (increased MYC and BCL2 copies with IGH loss) in the absence of gene rearrangements is unclear. These findings may represent chromosomal instability or aneuploidy commonly seen in aggressive B-cell lymphomas.\n\nThe BCL6 rearrangement is consistent with DLBCL and other B-cell non-Hodgkin lymphomas. BCL6 rearrangements can occur in both germinal center and non-germinal center subtypes of DLBCL.\n\nReported by: [redacted name], Ph.D.\nLaboratory Director: [redacted name], M.D., Ph.D.\n[redacted location] Medical Center\nCAP Accredited Laboratory",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "FISH analysis for B-cell lymphoma panel",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Diffuse Large B-Cell Lymphoma (DLBCL), non-germinal center type"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase fluorescence in situ hybridization on formalin-fixed paraffin-embedded tissue sections",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "BCL6",
+                "gene_nomenclature": [],
+                "result_region": "3q27",
+                "result_status": "abnormal",
+                "result_description": "Rearrangement detected in 85% of nuclei analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Positive Nuclei",
+                        "result_value": 170.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Nuclei Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage Positive",
+                        "result_value": 85.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "POSITIVE"
+                    }
+                ],
+                "clinical_implications": "BCL6 rearrangement is consistent with DLBCL and other B-cell non-Hodgkin lymphomas"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH with MYC break apart probe",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "MYC",
+                "gene_nomenclature": [],
+                "result_region": "8q24",
+                "result_status": "uncertain_significance",
+                "result_description": "No rearrangement detected. 2-7 copies per nucleus",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number Range",
+                        "result_value": 4.2,
+                        "result_units": "average copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "NEGATIVE"
+                    },
+                    {
+                        "result_name": "Amplification Pattern",
+                        "result_value": "Present in 65% of cells"
+                    }
+                ],
+                "clinical_implications": "Clinical significance of multiple MYC copies without rearrangement is unclear"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH with IGH/BCL2 dual color dual fusion probe",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "variant",
+                "result_entity": "IGH/BCL2",
+                "gene_nomenclature": [],
+                "result_region": "t(14;18)",
+                "result_status": "normal",
+                "result_description": "No IGH/BCL2 fusion signals detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Fusion Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "BCL2",
+                "gene_nomenclature": [],
+                "result_region": "18q21",
+                "result_status": "uncertain_significance",
+                "result_description": "2-5 copies per nucleus",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number Average",
+                        "result_value": 3.1,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "Clinical significance of multiple BCL2 copies is unclear"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "IGH",
+                "gene_nomenclature": [],
+                "result_region": "14q32",
+                "result_status": "uncertain_significance",
+                "result_description": "Loss of one IGH signal in 45% of cells analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with IGH Loss",
+                        "result_value": 45.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "1-2 copies per nucleus"
+                    }
+                ],
+                "clinical_implications": "Clinical significance of single IGH copy loss is unclear"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "BCL6 rearrangement confirmed, consistent with DLBCL diagnosis. Absence of MYC rearrangement and IGH/BCL2 fusion rules out double-hit lymphoma. Copy number alterations (increased MYC and BCL2, IGH loss) may represent chromosomal instability common in aggressive B-cell lymphomas",
+            "overall_recommendations": "The BCL6 rearrangement is consistent with DLBCL and occurs in approximately 30-40% of cases. The clinical significance of the observed copy number variations without gene rearrangements requires correlation with other clinical and pathological findings"
+        }
+    }
+}

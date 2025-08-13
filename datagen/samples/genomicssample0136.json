@@ -1,0 +1,90 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Hospital\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nAge at Testing: 1 day\nMedical Record Number: [redacted ID]\nReferring Physician: Dr. [redacted name]\n\nCLINICAL INDICATION\nSuspected Down syndrome in newborn\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nRapid aneuploidy screening for chromosomes 13, 18, and 21\n\nSPECIMEN\nType: Whole blood\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nRESULT: ABNORMAL\n\nTrisomy 21 detected\n\nDETAILED FINDINGS\n\nChromosome 21: TRISOMY DETECTED\nFive informative markers demonstrated three alleles or diallelic ratios consistent with trisomy:\n• D21S11 (21q21.1): Triallelic pattern\n• D21S1409 (21q21.2): Diallelic ratio 2:1\n• D21S1435 (21q21.3): Triallelic pattern\n• D21S1442 (21q21.3): Diallelic ratio 2:1\n• D21S1411 (21q22.3): Triallelic pattern\n\nChromosome 13: Normal complement (two copies)\nAll markers showed normal biallelic patterns\n\nChromosome 18: Normal complement (two copies)\nAll markers showed normal biallelic patterns\n\nMOLECULAR KARYOTYPE\nrsa(13,18)x2,(21)x3\n\nINTERPRETATION\nThis QF-PCR analysis demonstrates trisomy for chromosome 21, which is diagnostic of Down syndrome. The finding of five informative markers with consistent trisomic patterns provides robust confirmation of the diagnosis. The normal complement for chromosomes 13 and 18 excludes trisomy 13 (Patau syndrome) and trisomy 18 (Edwards syndrome).\n\nThe molecular findings are consistent with the clinical suspicion of Down syndrome in this newborn patient.\n\nLIMITATIONS\n• This test detects whole chromosome aneuploidies only\n• Low-level mosaicism (<20%) may not be detected\n• Segmental imbalances, translocations, and other structural rearrangements are not detected by this method\n• This test does not exclude other chromosomal or genetic abnormalities\n\nRECOMMENDATIONS\n• Follow-up testing at a regional genetics laboratory is recommended for comprehensive genetic evaluation\n• Genetic counseling is advised to discuss implications for the family\n• Clinical correlation with phenotypic features is recommended\n\nAuthorized by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Suspected Down syndrome in newborn",
+            "test_clinical_rationale": "Rapid aneuploidy screening to confirm or exclude trisomy 21, 13, and 18",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Newborn, tested at 1 day of age"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy screening",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S11 (21q21.1), D21S1409 (21q21.2), D21S1435 (21q21.3), D21S1442 (21q21.3), D21S1411 (21q22.3)",
+                "result_status": "abnormal",
+                "result_description": "Trisomy 21 detected with five informative markers showing triallelic patterns or diallelic ratios consistent with trisomy",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "Trisomy"
+                    },
+                    {
+                        "result_name": "Molecular Karyotype",
+                        "result_value": "rsa(13,18)x2,(21)x3"
+                    }
+                ],
+                "clinical_implications": "Trisomy 21 is diagnostic of Down syndrome, consistent with clinical suspicion"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal complement (two copies) - all markers showed normal biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal complement (two copies) - all markers showed normal biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis confirms Down syndrome diagnosis through detection of trisomy 21. Normal results for chromosomes 13 and 18 exclude Patau and Edwards syndromes. Test limitations include inability to detect low-level mosaicism (<20%), segmental imbalances, or structural rearrangements",
+            "overall_recommendations": "Follow-up testing at a regional genetics laboratory is recommended for comprehensive genetic evaluation. Genetic counseling is advised to discuss implications for the family. Clinical correlation with phenotypic features is recommended"
+        }
+    }
+}

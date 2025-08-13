@@ -1,0 +1,146 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\nDepartment of Pathology and Laboratory Medicine\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL HISTORY\nThis 42-year-old never-smoker presents with a lung nodule identified on routine imaging. The patient reports minimal symptoms. Biopsy confirmed non-small cell lung carcinoma, adenocarcinoma subtype.\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\nMulti-gene break-apart probe panel for ALK, ROS1, and RET gene rearrangements\n\nMETHODOLOGY\nFISH analysis was performed on formalin-fixed, paraffin-embedded tumor tissue using break-apart probes for ALK (2p23), ROS1 (6q22), and RET (10q11.2). A minimum of 200 tumor cell nuclei were evaluated for each probe. Rearrangement is considered positive when ≥15% of tumor cells show split signals (>2 signal diameters apart) or isolated 3' signals.\n\nRESULTS\n\nRET Gene (10q11.2):\nResult: POSITIVE for rearrangement\nPercentage of cells with rearrangement: 25% (50/200 cells)\nPattern: Split signal pattern consistent with RET gene rearrangement\n\nALK Gene (2p23):\nResult: NEGATIVE for rearrangement\nPercentage of cells with rearrangement: 3% (6/200 cells)\nInterpretation: Below threshold for positivity\n\nROS1 Gene (6q22):\nResult: NEGATIVE for rearrangement\nPercentage of cells with rearrangement: 2% (4/200 cells)\nInterpretation: Below threshold for positivity\n\nINTERPRETATION\nThis tumor demonstrates RET gene rearrangement in 25% of analyzed cells, which is above the clinical threshold for positivity. No rearrangements were detected in ALK or ROS1 genes.\n\nRET rearrangements occur in approximately 1-2% of non-small cell lung carcinomas and are typically mutually exclusive with other oncogenic drivers. Common fusion partners include KIF5B and CCDC6, though the specific fusion partner cannot be determined by FISH methodology alone. RET rearrangements are enriched in never-smokers with adenocarcinoma histology, consistent with this patient's clinical presentation.\n\nCLINICAL IMPLICATIONS\nThe presence of RET rearrangement predicts sensitivity to selective RET inhibitors, which have demonstrated significant clinical activity in RET-rearranged NSCLC. FDA-approved RET inhibitors include selpercatinib and pralsetinib, both showing response rates of 60-70% in treatment-naïve patients.\n\nRECOMMENDATIONS\n1. Consider treatment with selective RET inhibitor therapy (selpercatinib or pralsetinib)\n2. Baseline assessments prior to RET inhibitor initiation:\n   - ECG for QT interval assessment\n   - Liver function tests\n   - Blood pressure monitoring\n   - Thyroid function tests\n3. During treatment monitoring:\n   - Regular blood pressure checks (hypertension is common)\n   - Periodic ECG monitoring for QT prolongation\n   - Liver function monitoring for potential hepatotoxicity\n   - Monitor for signs of pneumonitis\n4. Consider comprehensive genomic profiling to identify the specific RET fusion partner if clinically indicated\n\nReported by: [redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology\nElectronically signed: [redacted date and time]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "42-year-old never-smoker presents with a lung nodule identified on routine imaging",
+            "test_clinical_rationale": "Molecular characterization of non-small cell lung carcinoma for targeted therapy selection",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "42-year-old never-smoker"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Lung nodule identified on routine imaging"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Minimal symptoms"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung carcinoma, adenocarcinoma subtype"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using break-apart probes for ALK (2p23), ROS1 (6q22), and RET (10q11.2) on formalin-fixed, paraffin-embedded tumor tissue",
+                "sample_origin": "Lung tumor tissue",
+                "result_entity_type": "gene",
+                "result_entity": "RET",
+                "gene_nomenclature": [],
+                "result_region": "10q11.2",
+                "result_status": "abnormal",
+                "result_description": "POSITIVE for rearrangement - Split signal pattern consistent with RET gene rearrangement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Percentage of cells with rearrangement",
+                        "result_value": 25.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells with rearrangement",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "Positive"
+                    }
+                ],
+                "clinical_implications": "RET rearrangements occur in approximately 1-2% of non-small cell lung carcinomas and predict sensitivity to selective RET inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using break-apart probe",
+                "sample_origin": "Lung tumor tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "normal",
+                "result_description": "NEGATIVE for rearrangement - Below threshold for positivity",
+                "quantitative_results": [
+                    {
+                        "result_name": "Percentage of cells with rearrangement",
+                        "result_value": 3.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells with rearrangement",
+                        "result_value": 6.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "Negative"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using break-apart probe",
+                "sample_origin": "Lung tumor tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "NEGATIVE for rearrangement - Below threshold for positivity",
+                "quantitative_results": [
+                    {
+                        "result_name": "Percentage of cells with rearrangement",
+                        "result_value": 2.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells with rearrangement",
+                        "result_value": 4.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "Negative"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The presence of RET rearrangement predicts sensitivity to selective RET inhibitors, which have demonstrated significant clinical activity in RET-rearranged NSCLC. FDA-approved RET inhibitors include selpercatinib and pralsetinib, both showing response rates of 60-70% in treatment-naïve patients. RET rearrangements are typically mutually exclusive with other oncogenic drivers",
+            "overall_recommendations": "Consider treatment with selective RET inhibitor therapy (selpercatinib or pralsetinib). Baseline assessments: ECG for QT interval, liver function tests, blood pressure, thyroid function. During treatment: monitor blood pressure for hypertension, periodic ECG for QT prolongation, liver function for hepatotoxicity, and signs of pneumonitis. Consider comprehensive genomic profiling to identify specific RET fusion partner if clinically indicated"
+        }
+    }
+}

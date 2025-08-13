@@ -1,0 +1,40 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted name] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL INFORMATION\nReferring Physician: Dr. [redacted name]\nReferral Reason: Diagnostic testing for Cystic Fibrosis\nClinical Indication: Suspected Cystic Fibrosis\n\nTEST PERFORMED\nCFTR Gene Mutation Analysis by DNA Sequencing\n\nMETHODOLOGY\nDNA was extracted from peripheral blood using standard protocols. Targeted DNA sequencing was performed for CFTR exons 4, 6a, 7, 10, 11, 12, 13, 19, 20, 21 and partial intron 19. PCR amplification followed by bidirectional Sanger sequencing was utilized. This panel covers approximately 88% of Caucasian CF mutations, 56% of South Asian mutations, and 76% of worldwide mutations.\n\nRESULTS\nGene: CFTR (NM_000492.4)\nResult: No pathogenic mutations detected\n\nNo sequence variants were identified in the analyzed regions of the CFTR gene.\n\nTECHNICAL NOTES\nAll targeted exons and the partial intron 19 region were successfully amplified and sequenced with adequate coverage. Quality metrics met laboratory standards with >99% of bases achieving Q30 quality scores.\n\nINTERPRETATION\nNo mutations were detected in the sequenced CFTR regions. This analysis covered the most common Cystic Fibrosis mutations; however, it should be noted that approximately 2% of Caucasian CF patients may have negative results with this test due to coverage limitations. The absence of detectable mutations does not exclude a diagnosis of Cystic Fibrosis, as mutations may be present in regions not covered by this assay.\n\nLIMITATIONS\nThis test does not detect:\n- Mutations in CFTR exons not included in this panel\n- Deep intronic variants\n- Large deletions or duplications\n- Regulatory region variants\n- Mutations with allele frequencies below the detection threshold\n\nRECOMMENDATIONS\n1. If clinical suspicion for Cystic Fibrosis persists, consider extended mutation analysis at a specialist laboratory, including:\n   - Complete CFTR gene sequencing\n   - Deletion/duplication analysis\n   - Analysis of deep intronic variants\n2. Clinical correlation with sweat chloride testing and pulmonary function tests is recommended\n3. Genetic counseling may be beneficial to discuss test results and implications\n\nThis test was developed and its performance characteristics determined by [redacted name] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the FDA.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Cystic Fibrosis",
+            "test_clinical_rationale": "Suspected Cystic Fibrosis",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted DNA sequencing of CFTR exons 4, 6a, 7, 10, 11, 12, 13, 19, 20, 21 and partial intron 19. PCR amplification followed by bidirectional Sanger sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000492",
+                        "version": "4"
+                    }
+                ],
+                "result_region": "exons 4, 6a, 7, 10, 11, 12, 13, 19, 20, 21 and partial intron 19",
+                "result_status": "normal",
+                "result_description": "No pathogenic mutations detected in the analyzed regions of the CFTR gene",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Cystic Fibrosis diagnosis not confirmed. Approximately 2% of Caucasian CF patients may have negative results with this test due to coverage limitations"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No mutations detected in sequenced CFTR regions. This analysis covered approximately 88% of Caucasian CF mutations, 56% of South Asian mutations, and 76% of worldwide mutations. The absence of detectable mutations does not exclude a diagnosis of Cystic Fibrosis",
+            "overall_recommendations": "If clinical suspicion for Cystic Fibrosis persists, consider extended mutation analysis at a specialist laboratory including complete CFTR gene sequencing, deletion/duplication analysis, and analysis of deep intronic variants. Clinical correlation with sweat chloride testing and pulmonary function tests is recommended. Genetic counseling may be beneficial"
+        }
+    }
+}

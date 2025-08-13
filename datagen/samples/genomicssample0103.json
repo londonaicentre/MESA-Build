@@ -1,0 +1,105 @@
+{
+    "content": "COMPREHENSIVE ONCOLOGY GENOMIC PROFILING REPORT\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDate of Birth: [redacted date]\nSex: Male\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nInstitution: [redacted location]\n\nSPECIMEN INFORMATION\nSpecimen Type: Prostate tissue\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nPathologic Diagnosis: Mixed small cell neuroendocrine carcinoma and prostatic acinar adenocarcinoma\nTumor Content: ~40%\n\nTEST PERFORMED\nComprehensive Oncology NGS Panel\n- DNA Analysis: Hybrid capture-based target enrichment with parallel sequencing\n- RNA Analysis: Fusion panel (attempted)\n\nMETHODOLOGY\nDNA Extraction: Automated extraction kit from FFPE tissue\nLibrary Preparation: Hybrid capture-based target enrichment\nSequencing Platform: Next-generation sequencing\nBioinformatics Pipeline: Variant calling for SNVs, indels, CNVs\nMinimum Coverage Target: 500x\n\nRESULTS SUMMARY\n\nACTIONABLE FINDINGS\n1. BRCA2 c.9196C>T p.(Gln3066*) - Pathogenic variant detected\n   - Variant Allele Frequency: 67%\n   - Location: Exon 24\n   - Clinical Significance: FDA-approved therapies available (PARP inhibitors)\n\nDNA SEQUENCING RESULTS\n\nPathogenic/Likely Pathogenic Variants:\nGene\tVariant\tVAF\tExon\tProtein Change\tClassification\nBRCA2\tc.9196C>T\t67%\t24\tp.(Gln3066*)\tPathogenic\n\nQuality Metrics:\n- Mean Target Coverage: Below optimal\n- Genes with Reduced Coverage (<100x): BRCA1, ATM, CDK12\n- Overall Panel Performance: Suboptimal\n\nRNA FUSION ANALYSIS\nResult: Failed - Insufficient RNA quality\n\nVARIANT DETAILS\n\nBRCA2 c.9196C>T p.(Gln3066*)\n- Transcript: NM_000059.3\n- Consequence: Nonsense mutation resulting in premature stop codon\n- Population Frequency: <0.001% (gnomAD)\n- ClinVar Classification: Pathogenic\n- ACMG Classification: Pathogenic (PVS1, PM2, PP5)\n- Functional Impact: Loss of function due to protein truncation\n\nCLINICAL INTERPRETATION\n\nThe detected BRCA2 pathogenic variant (c.9196C>T) results in a premature stop codon and is associated with homologous recombination deficiency. This finding has therapeutic implications for prostate cancer management:\n\n1. PARP Inhibitor Sensitivity: Tumors with BRCA2 mutations demonstrate enhanced sensitivity to PARP inhibitors (e.g., olaparib, rucaparib)\n2. Platinum Sensitivity: May indicate increased responsiveness to platinum-based chemotherapy\n3. Germline Implications: The high variant allele frequency (67%) suggests this may be a germline variant\n\nLIMITATIONS\n1. Suboptimal sequencing coverage was observed across multiple genes including BRCA1, ATM, and CDK12, which may result in false-negative findings\n2. RNA fusion analysis failed due to insufficient RNA quality\n3. The mixed histology and moderate tumor content (40%) may affect variant detection sensitivity\n4. This assay does not distinguish between somatic and germline variants\n\nRECOMMENDATIONS\n1. Repeat testing on a separate tissue block is strongly recommended to confirm the BRCA2 variant before initiating targeted therapy\n2. Genetic counseling and germline testing are advised given the high VAF and clinical implications for family members\n3. Consider alternative specimen with higher tumor content if repeat testing is pursued\n4. Clinical correlation with patient history and other diagnostic findings is recommended\n\nThis test was developed and its performance characteristics determined by [redacted location]. It has not been cleared or approved by the FDA. The laboratory is certified under CLIA to perform high-complexity testing.\n\nElectronically signed by:\n[redacted name], MD, PhD\nMedical Director\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Comprehensive oncology genomic profiling for prostate cancer",
+            "test_clinical_rationale": "Identify actionable mutations for targeted therapy selection in mixed small cell neuroendocrine carcinoma and prostatic acinar adenocarcinoma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male patient"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Mixed small cell neuroendocrine carcinoma and prostatic acinar adenocarcinoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Tumor content ~40%"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Hybrid capture-based target enrichment with parallel sequencing using comprehensive oncology NGS panel",
+                "sample_origin": "Prostate tissue",
+                "result_entity_type": "variant",
+                "result_entity": "BRCA2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000059",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.9196C>T p.(Gln3066*) Exon 24",
+                "result_status": "abnormal",
+                "result_description": "Pathogenic BRCA2 variant detected at 67% VAF in exon 24",
+                "quantitative_results": [
+                    {
+                        "result_name": "Variant Allele Frequency",
+                        "result_value": 67.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "ACMG Classification",
+                        "result_value": "Pathogenic (PVS1, PM2, PP5)"
+                    }
+                ],
+                "clinical_implications": "BRCA2 pathogenic variant suggests potential benefit from PARP inhibitor therapy. May be germline variant"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "NGS panel with reduced coverage",
+                "sample_origin": "Prostate tissue",
+                "result_entity_type": "gene",
+                "result_entity": "BRCA1, ATM, CDK12",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Poor sequencing coverage noted across panel. Genes with reduced coverage (<100x): BRCA1, ATM, CDK12",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Coverage Quality",
+                        "result_value": "Suboptimal"
+                    }
+                ],
+                "clinical_implications": "Poor sequencing coverage limits confidence"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion panel",
+                "test_methodology": "RNA fusion analysis",
+                "sample_origin": "Prostate tissue",
+                "result_entity_type": "gene",
+                "result_entity": "RNA fusion panel",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "RNA fusion panel failed - Insufficient RNA quality",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The detected BRCA2 pathogenic variant indicates homologous recombination deficiency with therapeutic implications including PARP inhibitor sensitivity and potential platinum responsiveness. High VAF (67%) suggests possible germline origin. However, suboptimal coverage across multiple genes and failed RNA analysis limit comprehensive assessment",
+            "overall_recommendations": "Repeat testing on separate tissue block to confirm variant before clinical action. Genetic counseling advised to determine germline status. Consider alternative specimen with higher tumor content. Clinical correlation with patient history recommended"
+        }
+    }
+}

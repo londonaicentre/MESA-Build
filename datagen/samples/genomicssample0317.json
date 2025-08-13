@@ -1,0 +1,116 @@
+{
+    "content": "CYTOGENETICS LABORATORY\nMOLECULAR GENETICS REPORT\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Placental tissue (uncultured)\nSpecimen Collection Date: [redacted date]\nReport Date: [redacted date]\nReferring Physician: Dr. [redacted name]\nReferral Location: [redacted location]\n\nCLINICAL INDICATION\nDNA analysis requested on placental material from miscarriage. Fetal tissue submitted for chromosomal analysis.\n\nTEST PERFORMED\n1. Array Comparative Genomic Hybridization (Array CGH)\n   - Platform: GeneScan G2000\n   - Oligonucleotide array with approximately 60,000 genome-wide probes\n   - Reference genome: GRCh37/hg19\n   - Resolution: >1Mb for copy number changes\n\n2. Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR)\n   - Chromosomes analyzed: 13, 14, 15, 16, 18, 21, 22, X, Y\n   - Purpose: Rapid aneuploidy detection and triploidy exclusion\n\nRESULTS\n\nARRAY CGH FINDINGS:\narr[GRCh37] Xp22.31(6,457,402-8,032,120)x0\n\nA 1.575 Mb deletion was detected at Xp22.31 (genomic coordinates: 6,457,402-8,032,120)\nMale chromosome complement (XY) with nullisomy for the deleted region\nNo other copy number imbalances >1Mb detected\nNo other regions of known pathogenicity identified\n\nQF-PCR RESULTS:\nNormal male pattern confirmed\nNo evidence of triploidy\nNo aneuploidy detected for chromosomes 13, 14, 15, 16, 18, 21, 22\n\nGENES WITHIN DELETED REGION:\nThe deletion encompasses multiple genes including:\n- STS (Steroid Sulfatase; OMIM 300747) - Complete deletion\n- VCX3A, VCX2, VCX, PNPLA4, and additional genes\n\nINTERPRETATION\nThe 1.575 Mb deletion at Xp22.31 results in complete loss of the STS gene. Hemizygous deletion of STS in males is associated with X-linked ichthyosis (OMIM 308100), a skin disorder characterized by dark, scaly skin. This condition typically presents in infancy or early childhood with generalized scaling, particularly prominent on the extensor surfaces.\n\nWhile STS deletions can be associated with attention deficit hyperactivity disorder and autism spectrum disorders in some cases, this deletion is unlikely to be the primary cause of the miscarriage. The majority of males with STS deletions have normal prenatal development and are born at term.\n\nThe deletion may be inherited from a carrier mother or may have arisen de novo. Carrier females are typically asymptomatic or may have mild manifestations.\n\nRECOMMENDATIONS\n1. Maternal blood sample is recommended for array CGH analysis to determine if the deletion was inherited\n2. If maternal, the recurrence risk for future pregnancies would be 50% for male fetuses\n3. Genetic counseling is strongly advised to discuss:\n   - Inheritance pattern and recurrence risks\n   - Clinical implications of X-linked ichthyosis\n   - Prenatal testing options for future pregnancies\n4. Consider additional investigations for other potential causes of miscarriage\n\nThis analysis was performed in accordance with laboratory standards and has been reviewed by qualified personnel.\n\nAuthorized by: Dr. [redacted name], Clinical Cytogeneticist\nLaboratory Director: Dr. [redacted name]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "DNA analysis requested on placental material from miscarriage",
+            "test_clinical_rationale": "Fetal tissue submitted for chromosomal analysis",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Miscarriage"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Oligonucleotide array with approximately 60,000 genome-wide probes on GeneScan G2000 platform using GRCh37/hg19 reference",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "X",
+                "gene_nomenclature": [],
+                "result_region": "Xp22.31(6,457,402-8,032,120)",
+                "result_status": "abnormal",
+                "result_description": "1.575 Mb deletion detected at Xp22.31. Male chromosome complement with nullisomy for the deleted region",
+                "quantitative_results": [
+                    {
+                        "result_name": "Deletion Size",
+                        "result_value": 1.575,
+                        "result_units": "Mb"
+                    },
+                    {
+                        "result_name": "Deletion Start",
+                        "result_value": 6457402.0,
+                        "result_units": "genomic coordinate"
+                    },
+                    {
+                        "result_name": "Deletion End",
+                        "result_value": 8032120.0,
+                        "result_units": "genomic coordinate"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr[GRCh37] Xp22.31(6,457,402-8,032,120)x0"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    }
+                ],
+                "clinical_implications": "Complete loss of STS gene associated with X-linked ichthyosis (OMIM 308100). Unlikely to be the primary cause of miscarriage"
+            },
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) for chromosomes 13, 14, 15, 16, 18, 21, 22, X, Y",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "chromosome",
+                "result_entity": "Multiple chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "13, 14, 15, 16, 18, 21, 22, X, Y",
+                "result_status": "normal",
+                "result_description": "Normal male pattern confirmed. No evidence of triploidy or aneuploidy",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "Excluded"
+                    },
+                    {
+                        "result_name": "Aneuploidy Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal tissue",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Gene-level analysis within deleted region",
+                "sample_origin": "Placental tissue (uncultured)",
+                "result_entity_type": "gene",
+                "result_entity": "STS",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "OMIM",
+                        "identifier": "300747",
+                        "version": null
+                    }
+                ],
+                "result_region": "Xp22.31",
+                "result_status": "abnormal",
+                "result_description": "Complete deletion of STS (Steroid Sulfatase) gene",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Gene Status",
+                        "result_value": "Complete deletion"
+                    }
+                ],
+                "clinical_implications": "Hemizygous deletion of STS in males is associated with X-linked ichthyosis (OMIM 308100)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The 1.575 Mb deletion at Xp22.31 results in X-linked ichthyosis due to complete loss of the STS gene. While this will cause a skin disorder characterized by dark, scaly skin presenting in infancy or early childhood, it is unlikely to be the primary cause of the miscarriage. The deletion may be inherited from a carrier mother or may have arisen de novo",
+            "overall_recommendations": "Maternal blood sample recommended for array CGH analysis to determine inheritance. If maternal, recurrence risk would be 50% for male fetuses. Genetic counseling strongly advised to discuss inheritance pattern, recurrence risks, clinical implications of X-linked ichthyosis, and prenatal testing options for future pregnancies. Consider additional investigations for other potential causes of miscarriage"
+        }
+    }
+}

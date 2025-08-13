@@ -1,0 +1,66 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT DETAILS\nName: [redacted name]\nDOB: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Peripheral blood (EDTA)\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for suspected Merosin Deficient Congenital Muscular Dystrophy type 1A (MDC1A)\n\nCLINICAL INFORMATION\nPatient referred for molecular genetic testing due to clinical features suggestive of congenital muscular dystrophy. Elevated creatine kinase levels and muscle biopsy findings indicate possible merosin (laminin α2) deficiency.\n\nMETHODOLOGY\nLAMA2 gene mutation screen performed using:\n- Heteroduplex analysis for initial mutation detection\n- Direct DNA sequencing of all coding exons and intron-exon boundaries\n- Reference sequence: NM_000426.3\n- Analysis covers >99% of reported pathogenic variants in LAMA2\n\nRESULTS\nLAMA2 Gene Analysis:\nVariant detected: c.403C>T (p.Gln135X) in exon 4\nZygosity: Homozygous\nProtein effect: p.Gln135X (Glutamine to stop codon at position 135)\n\nThis nonsense mutation is predicted to result in a severely truncated laminin α2 protein, lacking the majority of functional domains required for basement membrane assembly and muscle fiber stability.\n\nINTERPRETATION\nThe homozygous c.403C>T (p.Gln135X) variant in LAMA2 is classified as PATHOGENIC based on:\n- Nonsense mutation creating premature termination codon\n- Loss of >95% of protein function\n- Previously reported in patients with MDC1A\n- Absent from population databases\n- Consistent with autosomal recessive inheritance pattern\n\nThis result confirms the clinical diagnosis of Merosin Deficient Congenital Muscular Dystrophy type 1A (MDC1A).\n\nCLINICAL IMPLICATIONS\nThe p.Gln135X mutation is likely pathogenic, confirming MDC1A diagnosis. This severe early-onset muscular dystrophy is characterized by:\n- Hypotonia and muscle weakness from birth\n- Elevated serum creatine kinase\n- White matter abnormalities on brain MRI\n- Normal intellectual development in most cases\n- Progressive respiratory insufficiency\n\nRECOMMENDATIONS\n1. Genetic counseling to discuss inheritance pattern and recurrence risks\n2. Prenatal diagnosis available for parents in future pregnancies\n3. Carrier testing available for family members if appropriate\n4. Multidisciplinary management including neurology, physiotherapy, and respiratory support\n5. Regular monitoring of respiratory function and nutritional status\n6. Consider brain MRI if not already performed\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for suspected Merosin Deficient Congenital Muscular Dystrophy type 1A (MDC1A)",
+            "test_clinical_rationale": "Patient referred for molecular genetic testing due to clinical features suggestive of congenital muscular dystrophy. Elevated creatine kinase levels and muscle biopsy findings indicate possible merosin (laminin α2) deficiency",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Clinical features suggestive of congenital muscular dystrophy"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Elevated creatine kinase levels"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Muscle biopsy findings indicate possible merosin (laminin α2) deficiency"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "LAMA2 gene mutation screen by heteroduplex analysis and direct DNA sequencing of all coding exons and intron-exon boundaries",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "LAMA2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000426",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.403C>T (p.Gln135X) in exon 4",
+                "result_status": "abnormal",
+                "result_description": "Homozygous nonsense mutation c.403C>T (p.Gln135X) in LAMA2 exon 4. Predicted to cause truncated protein",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Homozygous"
+                    },
+                    {
+                        "result_name": "Protein Effect",
+                        "result_value": "p.Gln135X (Glutamine to stop codon at position 135)"
+                    }
+                ],
+                "clinical_implications": "p.Gln135X mutation likely pathogenic, confirming MDC1A diagnosis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The homozygous p.Gln135X mutation confirms the clinical diagnosis of Merosin Deficient Congenital Muscular Dystrophy type 1A (MDC1A). This severe early-onset muscular dystrophy is characterized by hypotonia and muscle weakness from birth, elevated serum creatine kinase, white matter abnormalities on brain MRI, normal intellectual development in most cases, and progressive respiratory insufficiency",
+            "overall_recommendations": "Genetic counseling to discuss inheritance pattern and recurrence risks. Prenatal diagnosis available for parents in future pregnancies. Carrier testing available for family members if appropriate. Multidisciplinary management including neurology, physiotherapy, and respiratory support. Regular monitoring of respiratory function and nutritional status. Consider brain MRI if not already performed"
+        }
+    }
+}

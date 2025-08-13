@@ -1,0 +1,83 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nSample Type: Fetal sample\nSample ID: [redacted ID]\nReferring Clinician: Dr. [redacted name]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nTEST PERFORMED\nMultiplex Ligation-dependent Probe Amplification (MLPA) - Subtelomeric Screen\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) - Aneuploidy Screen\n\nMETHODOLOGY\nMLPA Analysis:\nDNA was extracted from the fetal sample using standard protocols. MLPA was performed using SALSA MLPA probemix P036 and P070 (MRC-Holland) containing probes for all subtelomeric regions. The analysis includes probes targeting the p and q arms of all chromosomes (1-22, X and Y). Fragment analysis was performed on an ABI 3730xl Genetic Analyzer. Data was analyzed using Coffalyser.Net software with normalization against reference samples.\n\nQF-PCR Analysis:\nQuantitative Fluorescence-PCR was performed for rapid aneuploidy detection using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, 21, X and Y. The following markers were analyzed:\n- Chromosome 13: D13S631, D13S258, D13S742\n- Chromosome 18: D18S535, D18S391, D18S858\n- Chromosome 21: D21S1435, D21S1411, D21S1446\n- Sex chromosomes: AMELX/Y, SRY, XHPRT, X22\n\nPCR products were analyzed by capillary electrophoresis on an ABI 3730xl Genetic Analyzer.\n\nRESULTS\n\nMLPA SUBTELOMERIC ANALYSIS:\nResult: No abnormality detected\n\nAll subtelomeric regions showed normal copy number (ratio 0.85-1.15) when compared to reference samples. No evidence of subtelomeric deletions or duplications was identified.\n\nDetailed probe ratios:\n- All p-arm subtelomeres: Normal (ratios 0.92-1.08)\n- All q-arm subtelomeres: Normal (ratios 0.89-1.11)\n- Internal control probes: Normal\n\nQF-PCR ANEUPLOIDY SCREEN:\nResult: No aneuploidy detected\n\nChromosome 13: Biallelic pattern consistent with disomy\nChromosome 18: Biallelic pattern consistent with disomy\nChromosome 21: Biallelic pattern consistent with disomy\nSex chromosomes: Pattern consistent with male karyotype (XY)\n- AMELX/Y: Two peaks detected (X and Y specific)\n- SRY: Present\n- X-linked markers: Single allele pattern\n\nTriploidy assessment: Diallelic ratios within normal range (1:1), excluding triploidy\n\nINTERPRETATION\nThe combined MLPA and QF-PCR analyses have excluded:\n1. Whole chromosome aneuploidy for chromosomes 13, 18, 21, X and Y\n2. Subtelomeric imbalances for all chromosomes\n3. Triploidy\n\nThe results are consistent with a male sex chromosome complement (XY).\n\nLIMITATIONS\n- This test does not detect balanced chromosomal rearrangements\n- Small deletions/duplications (<100kb) in non-subtelomeric regions will not be detected\n- Low-level mosaicism (<20%) may not be reliably detected\n- QF-PCR is limited to detection of aneuploidy for chromosomes 13, 18, 21, X and Y only\n- Maternal cell contamination cannot be completely excluded\n\nCLINICAL IMPLICATIONS\nThese results have excluded the most common chromosomal causes of developmental abnormalities including whole chromosome aneuploidy, subtelomeric imbalances, and triploidy. The male sex chromosome complement has been confirmed. However, this testing does not exclude all genetic causes of fetal abnormalities.\n\nAuthorized by: Dr. [redacted name], Clinical Scientist\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": null,
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "MLPA performed using SALSA MLPA probemix P036 and P070 containing probes for all subtelomeric regions. Fragment analysis on ABI 3730xl Genetic Analyzer with Coffalyser.Net software",
+                "sample_origin": "Fetal sample",
+                "result_entity_type": "chromosome",
+                "result_entity": "All chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "Subtelomeric regions (p and q arms)",
+                "result_status": "normal",
+                "result_description": "No abnormality detected. All subtelomeric regions showed normal copy number (ratio 0.85-1.15)",
+                "quantitative_results": [
+                    {
+                        "result_name": "p-arm subtelomere ratios",
+                        "result_value": 1.0,
+                        "result_units": "ratio range 0.92-1.08"
+                    },
+                    {
+                        "result_name": "q-arm subtelomere ratios",
+                        "result_value": 1.0,
+                        "result_units": "ratio range 0.89-1.11"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "Excluded subtelomeric imbalances for all chromosomes"
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-PCR using fluorescently labeled primers for STR markers on chromosomes 13, 18, 21, X and Y. Capillary electrophoresis on ABI 3730xl",
+                "sample_origin": "Fetal sample",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 13, 18, 21, X, Y",
+                "gene_nomenclature": [],
+                "result_region": "STR markers: D13S631, D13S258, D13S742, D18S535, D18S391, D18S858, D21S1435, D21S1411, D21S1446, AMELX/Y, SRY, XHPRT, X22",
+                "result_status": "normal",
+                "result_description": "No aneuploidy detected. Biallelic patterns consistent with disomy for chromosomes 13, 18, 21. Male karyotype (XY) confirmed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Disomy"
+                    },
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "Disomy"
+                    },
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "Disomy"
+                    },
+                    {
+                        "result_name": "Sex Chromosome Status",
+                        "result_value": "XY (Male)"
+                    },
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "Excluded"
+                    }
+                ],
+                "clinical_implications": "Excluded whole chromosome aneuploidy for chromosomes 13, 18, 21, X and Y. Excluded triploidy. Male sex chromosome complement confirmed"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The combined MLPA and QF-PCR analyses have excluded whole chromosome aneuploidy for chromosomes 13, 18, 21, X and Y, subtelomeric imbalances for all chromosomes, and triploidy. Male sex chromosome complement confirmed. These results exclude the most common chromosomal causes of developmental abnormalities",
+            "overall_recommendations": "This testing does not exclude all genetic causes of fetal abnormalities. Balanced chromosomal rearrangements, small deletions/duplications in non-subtelomeric regions, and low-level mosaicism would not be detected by these methods"
+        }
+    }
+}

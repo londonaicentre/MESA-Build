@@ -1,0 +1,72 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY\nFISH ANALYSIS REPORT\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Male\nSpecimen: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nChronic myeloid leukemia (CML) in chronic phase. Patient currently on tyrosine kinase inhibitor (TKI) therapy.\n\nTEST PERFORMED\nInterphase FISH analysis using BCR/ABL dual color dual fusion probe (Abbott Molecular)\n\nRESULT: ABNORMAL\n\nBCR/ABL translocation t(9;22)(q34;q11.2) DETECTED\n\nPositive cells: 19/100 (19%)\nNormal cells: 81/100 (81%)\n\nINTERPRETATION\nInterphase FISH analysis demonstrates the presence of BCR/ABL fusion signals in 19% of cells examined, consistent with the Philadelphia chromosome t(9;22)(q34;q11.2). This finding indicates persistent disease despite ongoing TKI therapy.\n\nThe dual fusion pattern observed confirms a standard BCR/ABL translocation. The 19% positivity represents a significant disease burden in the context of CML monitoring during treatment.\n\nCLINICAL CORRELATION\nThis result should be correlated with complete blood count, BCR/ABL quantitative RT-PCR, and clinical assessment. The persistence of 19% BCR/ABL positive cells may indicate suboptimal response to current TKI therapy. Consider BCR/ABL kinase domain mutation analysis if not recently performed.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Chronic myeloid leukemia (CML) in chronic phase. Patient currently on tyrosine kinase inhibitor (TKI) therapy",
+            "test_clinical_rationale": "Monitoring disease response during TKI treatment",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Elderly male patient"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "CML in chronic phase"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Currently on tyrosine kinase inhibitor (TKI) therapy"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using BCR/ABL dual color dual fusion probe (Abbott Molecular)",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "BCR/ABL",
+                "gene_nomenclature": [],
+                "result_region": "t(9;22)(q34;q11.2)",
+                "result_status": "abnormal",
+                "result_description": "BCR/ABL translocation t(9;22)(q34;q11.2) detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Positive cells",
+                        "result_value": 19.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage positive",
+                        "result_value": 19.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Fusion Pattern",
+                        "result_value": "Dual fusion"
+                    },
+                    {
+                        "result_name": "Translocation Type",
+                        "result_value": "Standard BCR/ABL translocation"
+                    }
+                ],
+                "clinical_implications": "Persistent disease despite ongoing TKI therapy. The 19% positivity represents a significant disease burden in the context of CML monitoring during treatment"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Persistence of 19% BCR/ABL positive cells indicates suboptimal response to current TKI therapy",
+            "overall_recommendations": "Correlate with complete blood count, BCR/ABL quantitative RT-PCR, and clinical assessment. Consider BCR/ABL kinase domain mutation analysis if not recently performed"
+        }
+    }
+}

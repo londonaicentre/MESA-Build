@@ -1,0 +1,45 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INDICATION\nHereditary motor and sensory neuropathy evaluation\n\nTEST PERFORMED\nQuantitative fluorescent multiplex PCR assay for PMP22 gene duplication/deletion\n\nMETHODOLOGY\nQuantitative fluorescent multiplex PCR analysis was performed to detect copy number variations in the PMP22 gene (peripheral myelin protein 22). This assay detects the common 1.4 Mb duplication and deletion on chromosome 17p11.2 associated with Charcot-Marie-Tooth disease type 1A (CMT1A) and hereditary neuropathy with liability to pressure palsies (HNPP), respectively. The test error rate is <1%.\n\nRESULTS\nPMP22 gene copy number: Normal (2 copies)\nNo PMP22 gene duplication or deletion detected\n\nINTERPRETATION\nThis patient does not carry the common 1.4 Mb duplication of chromosome 17p11.2 containing the PMP22 gene that accounts for approximately 70% of CMT1A cases. The absence of this duplication does not exclude a diagnosis of CMT1A or other forms of Charcot-Marie-Tooth disease.\n\nRECOMMENDATIONS\nIf clinical findings continue to support a diagnosis of CMT1 (demyelinating form), consider:\n1. Point mutation screening in the PMP22 gene\n2. Sequence analysis of the P0 (MPZ) gene\n3. Comprehensive CMT gene panel testing if indicated\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the FDA.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Hereditary motor and sensory neuropathy evaluation",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative fluorescent multiplex PCR analysis to detect copy number variations in the PMP22 gene",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "PMP22",
+                "gene_nomenclature": [],
+                "result_region": "chromosome 17p11.2",
+                "result_status": "normal",
+                "result_description": "No PMP22 gene duplication or deletion detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": 2.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "Test Error Rate",
+                        "result_value": 1.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "This patient does not carry the common 1.4 Mb duplication of chromosome 17p11.2 containing the PMP22 gene that accounts for approximately 70% of CMT1A cases"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "CMT1A diagnosis not confirmed by this test. The absence of PMP22 duplication does not exclude a diagnosis of CMT1A or other forms of Charcot-Marie-Tooth disease",
+            "overall_recommendations": "If clinical findings continue to support a diagnosis of CMT1 (demyelinating form), consider: 1. Point mutation screening in the PMP22 gene 2. Sequence analysis of the P0 (MPZ) gene 3. Comprehensive CMT gene panel testing if indicated"
+        }
+    }
+}

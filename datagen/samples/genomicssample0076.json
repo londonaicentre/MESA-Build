@@ -1,0 +1,68 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted name] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nEvaluation for microsatellite instability in caecal adenocarcinoma\n\nCLINICAL INFORMATION\nAdult patient with caecal adenocarcinoma. Tissue submitted for microsatellite instability analysis as part of Lynch syndrome evaluation.\n\nSPECIMEN\nFormalin-fixed paraffin-embedded (FFPE) caecal adenocarcinoma tissue\nReference normal tissue from adjacent non-neoplastic colonic mucosa\n\nMETHODOLOGY\nMicrosatellite Instability (MSI) Analysis by PCR\n\nDNA was extracted from both tumor and matched normal tissue using standard protocols. MSI analysis was performed using the GeneTech MSI Analysis System, which evaluates five quasi-monomorphic mononucleotide repeat markers:\n- BAT-25\n- BAT-26\n- NR-21\n- NR-24\n- MONO-27\n\nPCR amplification was performed using fluorescently labeled primers, and fragment analysis was conducted on an automated capillary electrophoresis system. The electropherograms from tumor and normal samples were compared to assess for instability at each marker.\n\nRESULTS\n\nMicrosatellite Instability Status: MICROSATELLITE STABLE (MSS)\n\nMarker Analysis:\nBAT-25: Stable\nBAT-26: Stable\nNR-21: Stable\nNR-24: Stable\nMONO-27: Stable\n\nAll five microsatellite markers demonstrated stable patterns with no evidence of instability when comparing tumor to normal tissue.\n\nINTERPRETATION\nThe tumor demonstrates microsatellite stability (MSS) with no evidence of microsatellite instability at any of the five markers tested. This result indicates no evidence of a mismatch repair gene defect in this tumor.\n\nCLINICAL IMPLICATIONS\nThe MSS result is not suggestive of Lynch syndrome. Approximately 85% of colorectal carcinomas are microsatellite stable. The absence of MSI does not exclude the possibility of hereditary cancer syndromes caused by mechanisms other than mismatch repair deficiency.\n\nEXPLANATORY NOTES\nMicrosatellite instability (MSI) testing is used to screen for defects in the DNA mismatch repair system. High-frequency MSI (MSI-H) is found in approximately 15% of colorectal carcinomas and is associated with Lynch syndrome in the hereditary setting or MLH1 promoter hypermethylation in the sporadic setting. The GeneTech MSI Analysis System has been validated to have >95% concordance with the Bethesda panel for MSI detection.\n\nThis test was developed and its performance characteristics determined by [redacted name] Medical Center Laboratory. It has not been cleared or approved by the FDA. The laboratory is certified under CLIA to perform high-complexity testing.\n\nElectronically signed by:\n[redacted name], MD, PhD\nDirector, Molecular Pathology\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Evaluation for microsatellite instability in caecal adenocarcinoma",
+            "test_clinical_rationale": "Tissue submitted for microsatellite instability analysis as part of Lynch syndrome evaluation",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Caecal adenocarcinoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Adult patient with caecal adenocarcinoma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR analysis of five microsatellite markers using GeneTech MSI Analysis System with fluorescently labeled primers and capillary electrophoresis",
+                "sample_origin": "Caecal adenocarcinoma tissue",
+                "result_entity_type": "variant",
+                "result_entity": "Microsatellite markers",
+                "gene_nomenclature": [],
+                "result_region": "BAT-25, BAT-26, NR-21, NR-24, MONO-27",
+                "result_status": "normal",
+                "result_description": "All five microsatellite markers stable (MSS). No microsatellite instability detected in tumor sample",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "MSI Status",
+                        "result_value": "MSS (Microsatellite Stable)"
+                    },
+                    {
+                        "result_name": "BAT-25",
+                        "result_value": "Stable"
+                    },
+                    {
+                        "result_name": "BAT-26",
+                        "result_value": "Stable"
+                    },
+                    {
+                        "result_name": "NR-21",
+                        "result_value": "Stable"
+                    },
+                    {
+                        "result_name": "NR-24",
+                        "result_value": "Stable"
+                    },
+                    {
+                        "result_name": "MONO-27",
+                        "result_value": "Stable"
+                    }
+                ],
+                "clinical_implications": "MSS result indicates no evidence of mismatch repair gene defect. Not suggestive of Lynch syndrome"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The MSS result is not suggestive of Lynch syndrome. Approximately 85% of colorectal carcinomas are microsatellite stable. The absence of MSI does not exclude the possibility of hereditary cancer syndromes caused by mechanisms other than mismatch repair deficiency",
+            "overall_recommendations": "No specific recommendations provided in the report"
+        }
+    }
+}

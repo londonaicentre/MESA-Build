@@ -1,0 +1,90 @@
+{
+    "content": "GENETIC LABORATORY REPORT\n\nPatient Information:\nName: [redacted name]\nDate of Birth: [redacted date]\nSex: Female\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\n\nReferring Physician: Dr. [redacted name]\nDepartment: Pediatric Genetics\nHospital: [redacted location]\n\nCLINICAL INFORMATION\nReason for Referral: Infant referred for genetic evaluation\nClinical Indication: Suspected Down Syndrome (T21)\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nTrisomy Screening Panel\n\nMETHODOLOGY\nQF-PCR analysis was performed on genomic DNA extracted from whole blood to assess copy number of chromosomes 13, 18, and 21. Multiple short tandem repeat (STR) markers were amplified for each chromosome:\n- Chromosome 13: D13S631, D13S258, D13S742, D13S628\n- Chromosome 18: D18S535, D18S391, D18S390, D18S386\n- Chromosome 21: D21S1435, D21S1411, D21S1412, D21S1437\n\nFluorescent PCR products were analyzed by capillary electrophoresis. Peak area ratios were calculated to determine chromosome copy number.\n\nRESULTS\nChromosome 13: Normal diallelic pattern observed for all informative markers\nChromosome 18: Normal diallelic pattern observed for all informative markers\nChromosome 21: Normal diallelic pattern observed for all informative markers\n\nResult Summary: rsa(13,18,21)×2\n\nINTERPRETATION\nNormal complement for chromosomes 13, 18, and 21. No abnormalities detected. This result excludes non-mosaic trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), and trisomy 21 (Down syndrome) in this patient.\n\nLIMITATIONS\n- This test is designed to detect complete trisomies of chromosomes 13, 18, and 21\n- Low-level mosaicism (<20%) may not be detected\n- Segmental imbalances, balanced rearrangements, and other chromosomal abnormalities are not detected by this method\n- Abnormalities of other chromosomes are not assessed\n\nCLINICAL IMPLICATIONS\nNormal chromosomal complement for tested chromosomes. No evidence of trisomy conditions including Down syndrome.\n\nRECOMMENDATIONS\nFull chromosome analysis to follow this preliminary report. If clinical suspicion remains high, comprehensive chromosomal microarray or karyotype analysis is recommended to evaluate for other chromosomal abnormalities not detected by this targeted screening test.\n\nTest performed by: [redacted name], Clinical Scientist\nAuthorized by: Dr. [redacted name], Laboratory Director\nReport Date: [redacted date]\n\nThis test was developed and its performance characteristics determined by [redacted location] Clinical Genetics Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration.",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Infant referred for genetic evaluation",
+            "test_clinical_rationale": "Suspected Down Syndrome (T21)",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Female infant"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of genomic DNA with multiple STR markers for chromosomes 13, 18, and 21",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed for all informative markers",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of genomic DNA with multiple STR markers for chromosomes 13, 18, and 21",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S535, D18S391, D18S390, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed for all informative markers",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) analysis of genomic DNA with multiple STR markers for chromosomes 13, 18, and 21",
+                "sample_origin": "Whole blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1437",
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed for all informative markers",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2"
+                    },
+                    {
+                        "result_name": "Result Summary",
+                        "result_value": "rsa(13,18,21)×2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal chromosomal complement for tested chromosomes. No evidence of trisomy conditions including Down syndrome",
+            "overall_recommendations": "Full chromosome analysis to follow this preliminary report. If clinical suspicion remains high, comprehensive chromosomal microarray or karyotype analysis is recommended to evaluate for other chromosomal abnormalities not detected by this targeted screening test"
+        }
+    }
+}

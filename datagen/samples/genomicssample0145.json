@@ -1,0 +1,40 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted name] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Peripheral Blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Tay-Sachs disease\n\nTEST PERFORMED\nHEXA Gene Sequencing\n\nMETHODOLOGY\nDNA was extracted from peripheral blood using standard protocols. Targeted sequencing of the HEXA gene was performed covering the entire coding region and splice sites. All 14 exons and flanking intronic sequences were amplified by PCR and sequenced bidirectionally using Sanger sequencing methodology. Sequence data was analyzed and compared to the reference sequence HEXA NM_000520.4 (NCBI RefSeq).\n\nTechnical Note: This analysis detects point mutations and small insertions/deletions within the coding regions and splice sites of the HEXA gene. Large deletions, duplications, or rearrangements would not be detected by this methodology. Deletion/duplication analysis was not performed as part of this test.\n\nRESULTS\nGene: HEXA (NM_000520.4)\nResult: No pathogenic variants detected\n\nNo mutations were identified in the HEXA gene by DNA sequencing. All coding exons and splice sites showed normal sequence.\n\nINTERPRETATION\nNo HEXA mutations were identified by sequencing analysis. This result significantly reduces but does not eliminate the possibility of Tay-Sachs disease in this patient. Approximately 95% of pathogenic variants in the HEXA gene are detectable by sequencing; however, deep intronic variants, large deletions/duplications, or complex rearrangements would not be detected by this method.\n\nLIMITATIONS\n- This test does not detect large deletions or duplications of the HEXA gene\n- Deep intronic variants outside the regions analyzed are not detected\n- Variants in regulatory regions are not assessed\n- No additional mutation analysis is currently available through our laboratory\n\nRECOMMENDATIONS\nIf clinical suspicion for Tay-Sachs disease remains high, consider:\n- Hexosaminidase A enzyme activity testing\n- Deletion/duplication analysis of the HEXA gene if available through specialized laboratories\n- Clinical correlation with patient presentation\n\nThis test was developed and its performance characteristics determined by [redacted name] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration.\n\nElectronically signed by:\n[redacted name], PhD, FACMG\nLaboratory Director\nCAP: [redacted ID] CLIA: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Tay-Sachs disease",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted sequencing of the HEXA gene covering entire coding region and splice sites using PCR amplification and bidirectional Sanger sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "HEXA",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000520",
+                        "version": "4"
+                    }
+                ],
+                "result_region": "All 14 exons and flanking intronic sequences",
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected. All coding exons and splice sites showed normal sequence",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "No HEXA mutations identified. This result significantly reduces but does not eliminate the possibility of Tay-Sachs disease. Approximately 95% of pathogenic variants are detectable by sequencing"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No HEXA mutations were identified by sequencing analysis. This significantly reduces but does not eliminate the possibility of Tay-Sachs disease. Deep intronic variants, large deletions/duplications, or complex rearrangements would not be detected by this method",
+            "overall_recommendations": "If clinical suspicion for Tay-Sachs disease remains high, consider: Hexosaminidase A enzyme activity testing, Deletion/duplication analysis of the HEXA gene if available through specialized laboratories, Clinical correlation with patient presentation"
+        }
+    }
+}

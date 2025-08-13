@@ -1,0 +1,39 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INDICATION\nPossible cystic fibrosis, infertility investigation\n\nTEST PERFORMED\nCystic Fibrosis Common Mutation Panel\n\nMETHODOLOGY\nTargeted mutation analysis was performed for the following common CFTR gene mutations:\n- c.1521_1523delCTT (p.Phe508del, delta F508)\n- c.1652G>A (p.Gly551Asp, G551D)\n- c.1657C>T (p.Arg553X, R553X)\n- c.1624G>T (p.Gly542X, G542X)\n- c.350G>A (p.Arg117His, R117H)\n\nThis assay would also detect c.1519_1521delATC (p.Ile507del, delta I507) if present.\n\nDNA was extracted from peripheral blood and analyzed using allele-specific PCR followed by capillary electrophoresis.\n\nRESULTS\n1. No pathogenic variants detected in the CFTR gene for the mutations tested\n2. Genotype: Negative for all tested mutations\n\nINTERPRETATION\nThis patient does not carry any of the common cystic fibrosis mutations included in this panel. These results reduce but do not eliminate the possibility of being a CF carrier, as this panel detects approximately 85-90% of CF mutations in individuals of Northern European descent.\n\nLIMITATIONS\n- This test only screens for specific known mutations and does not sequence the entire CFTR gene\n- Rare or population-specific mutations would not be detected\n- Detection rate varies by ethnicity\n- Does not detect large deletions/duplications or intronic variants\n\nCLINICAL CORRELATION\nNegative results for common CF mutations reduce carrier risk. In the context of infertility investigation, other causes should be considered. If clinical suspicion for CF remains high, comprehensive CFTR gene sequencing may be warranted.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Possible cystic fibrosis, infertility investigation",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted mutation analysis using allele-specific PCR followed by capillary electrophoresis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [],
+                "result_region": "c.1521_1523delCTT (p.Phe508del), c.1652G>A (p.Gly551Asp), c.1657C>T (p.Arg553X), c.1624G>T (p.Gly542X), c.350G>A (p.Arg117His)",
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected in the CFTR gene for the mutations tested",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Genotype",
+                        "result_value": "Negative for all tested mutations"
+                    }
+                ],
+                "clinical_implications": "These results reduce but do not eliminate the possibility of being a CF carrier, as this panel detects approximately 85-90% of CF mutations in individuals of Northern European descent"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Negative results for common CF mutations reduce carrier risk. In the context of infertility investigation, other causes should be considered",
+            "overall_recommendations": "If clinical suspicion for CF remains high, comprehensive CFTR gene sequencing may be warranted"
+        }
+    }
+}

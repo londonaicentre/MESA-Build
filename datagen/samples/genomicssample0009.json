@@ -1,0 +1,58 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Cord blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nAbnormal prenatal ultrasound demonstrating congenital heart defect. Karyotype analysis requested to evaluate for chromosomal abnormalities.\n\nTEST PERFORMED\nHigh-resolution G-banded karyotype analysis\nMethodology: Cultured cord blood lymphocytes were harvested and G-banded using trypsin-Giemsa staining. Analysis performed at >550 band resolution.\n\nRESULT\nKaryotype: 46,XY,del(4)(p16.3)\n\nABNORMAL MALE KARYOTYPE\n\nDETAILED FINDINGS\nChromosome analysis revealed a male karyotype with 46 chromosomes. A terminal deletion of the short arm of chromosome 4 at band p16.3 was identified in all 20 metaphases examined. The deletion breakpoint appears to be within band 4p16.3, with loss of all distal chromosomal material.\n\nBand-level analysis:\n- Breakpoint: 4p16.3\n- Deleted region: 4p16.3→4pter\n- All other chromosomes appear structurally normal\n- No evidence of mosaicism detected\n\nINTERPRETATION\nThe terminal deletion of chromosome 4p16.3 identified in this fetus is consistent with Wolf-Hirschhorn syndrome (WHS, OMIM #194190). This chromosomal abnormality involves loss of the critical region at 4p16.3, which includes the WHSC1 and WHSC2 genes among others.\n\nClinical features associated with Wolf-Hirschhorn syndrome include:\n- Prenatal and postnatal growth restriction\n- Intellectual disability (typically severe)\n- Characteristic facial features (\"Greek warrior helmet\" appearance)\n- Congenital heart defects (present in ~50% of cases)\n- Seizures (>90% of cases)\n- Skeletal abnormalities\n- Genitourinary anomalies\n\nThe congenital heart defect identified on prenatal ultrasound is consistent with the Wolf-Hirschhorn syndrome phenotype. Common cardiac manifestations include atrial septal defects, ventricular septal defects, and pulmonary stenosis.\n\nPrognosis depends on the size of the deletion and associated malformations. Mortality is highest in the first two years of life, primarily related to cardiac complications and respiratory infections.\n\nRECOMMENDATIONS\n1. Genetic counseling to discuss diagnosis, prognosis, and recurrence risk\n2. Parental karyotype analysis recommended to determine if the deletion is de novo or inherited from a balanced translocation carrier parent\n3. If pregnancy continues:\n   - Referral to pediatric cardiology for comprehensive cardiac evaluation and management planning\n   - Referral to pediatric neurology for seizure risk assessment and management\n   - Multidisciplinary team coordination including developmental pediatrics\n   - Early intervention services planning\n4. Prenatal diagnosis available for future pregnancies\n\nTEST LIMITATIONS\nThis analysis was performed at >550 band resolution. Smaller deletions, duplications, or rearrangements below this resolution may not be detected. This test does not detect point mutations, methylation abnormalities, or low-level mosaicism (<10%).\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Abnormal prenatal ultrasound demonstrating congenital heart defect",
+            "test_clinical_rationale": "Karyotype analysis requested to evaluate for chromosomal abnormalities",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Abnormal prenatal ultrasound demonstrating congenital heart defect"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "High-resolution G-banded karyotype analysis using cultured cord blood lymphocytes with trypsin-Giemsa staining at >550 band resolution",
+                "sample_origin": "Cord blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "4",
+                "gene_nomenclature": [],
+                "result_region": "del(4)(p16.3)",
+                "result_status": "abnormal",
+                "result_description": "Terminal deletion of the short arm of chromosome 4 at band p16.3 with loss of all distal chromosomal material",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XY,del(4)(p16.3)"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    },
+                    {
+                        "result_name": "Deletion Type",
+                        "result_value": "Terminal deletion"
+                    }
+                ],
+                "clinical_implications": "Consistent with Wolf-Hirschhorn syndrome (WHS, OMIM #194190) involving loss of critical region at 4p16.3 including WHSC1 and WHSC2 genes"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Terminal deletion of chromosome 4p16.3 consistent with Wolf-Hirschhorn syndrome. Associated with prenatal and postnatal growth restriction, intellectual disability (typically severe), characteristic facial features, congenital heart defects (50% of cases), seizures (>90% of cases), skeletal abnormalities, and genitourinary anomalies. The identified congenital heart defect is consistent with this diagnosis",
+            "overall_recommendations": "Genetic counseling to discuss diagnosis, prognosis, and recurrence risk. Parental karyotype analysis to determine if deletion is de novo or inherited. If pregnancy continues: referral to pediatric cardiology for cardiac evaluation, referral to pediatric neurology for seizure risk assessment, multidisciplinary team coordination, and early intervention services planning. Prenatal diagnosis available for future pregnancies"
+        }
+    }
+}

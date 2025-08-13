@@ -1,0 +1,143 @@
+{
+    "content": "FLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n[redacted location] Medical Center\nDepartment of Cytogenetics and Molecular Pathology\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge/Sex: 63-year-old male\nMRN: [redacted ID]\nSpecimen Type: Peri-renal mass biopsy\nClinical Diagnosis: Diffuse Large B-cell Lymphoma (DLBCL)\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nAnalysis of peri-renal mass biopsy from patient with diffuse large B-cell lymphoma to assess for genetic rearrangements associated with high-grade B-cell NHL.\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the following probe sets:\n• IGH/MYC/CEP 8 Tri-Color Dual Fusion Translocation Probe (Abbott Molecular)\n• IGH/BCL2 Dual Color Dual Fusion Translocation Probe (Abbott Molecular)\n• BCL6 Dual Color Break Apart Rearrangement Probe (Abbott Molecular)\n• MYC Break Apart Rearrangement Probe (Abbott Molecular)\n\nAnalysis was correlated with CD79a immunostain to identify B-cell populations. A minimum of 100 interphase nuclei were examined for each probe set.\n\nRESULTS\n\n1. MYC (8q24) Rearrangement Analysis:\n   - MYC Break Apart: POSITIVE for rearrangement\n   - IGH-MYC t(8;14) Fusion: NEGATIVE\n   - Abnormal signal pattern: 1F1O1G (78/100 cells)\n   - Interpretation: MYC rearrangement present with non-IGH partner\n\n2. IGH-BCL2 t(14;18) Analysis:\n   - Result: POSITIVE for IGH-BCL2 fusion\n   - Abnormal signal pattern: 1F1O1G1R (82/100 cells)\n   - Interpretation: Presence of t(14;18)(q32;q21) rearrangement\n\n3. BCL6 (3q27) Rearrangement Analysis:\n   - Result: POSITIVE for rearrangement\n   - Abnormal signal pattern: 1F1O1G (75/100 cells)\n   - Interpretation: BCL6 gene rearrangement detected\n\n4. CEP 8 Analysis:\n   - Result: Normal diploid pattern (2 signals)\n\nINTERPRETATION\nThis FISH analysis reveals an abnormal result with triple concurrent rearrangements:\n• MYC rearrangement without IGH-MYC fusion (non-IG partner)\n• IGH-BCL2 fusion [t(14;18)]\n• BCL6 rearrangement\n\nThis rare genetic profile of concurrent MYC, IGH-BCL2, and BCL6 rearrangements in high-grade B-cell NHL is typically associated with poor prognosis. The presence of MYC rearrangement with a non-immunoglobulin partner, combined with BCL2 and BCL6 alterations, represents a complex karyotype that may influence therapeutic decisions and clinical outcomes.\n\nThe findings should be correlated with morphologic, immunophenotypic, and clinical features for comprehensive patient management.\n\nReported by: [redacted name], Ph.D., FACMG\nReviewed by: [redacted name], M.D., Ph.D.",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Analysis of peri-renal mass biopsy from patient with diffuse large B-cell lymphoma to assess for genetic rearrangements associated with high-grade B-cell NHL",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "63-year-old male"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Diffuse Large B-cell Lymphoma (DLBCL)"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Peri-renal mass"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue using IGH/MYC/CEP 8 Tri-Color Dual Fusion, IGH/BCL2 Dual Color Dual Fusion, BCL6 Dual Color Break Apart, and MYC Break Apart probes",
+                "sample_origin": "Peri-renal mass biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "MYC",
+                "gene_nomenclature": [],
+                "result_region": "8q24",
+                "result_status": "abnormal",
+                "result_description": "MYC rearrangement present with non-IGH partner",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Rearrangement",
+                        "result_value": 78.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Examined",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "MYC Break Apart",
+                        "result_value": "POSITIVE"
+                    },
+                    {
+                        "result_name": "IGH-MYC Fusion",
+                        "result_value": "NEGATIVE"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "1F1O1G"
+                    }
+                ],
+                "clinical_implications": "MYC rearrangement with non-immunoglobulin partner associated with poor prognosis in high-grade B-cell NHL"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using IGH/BCL2 Dual Color Dual Fusion probe",
+                "sample_origin": "Peri-renal mass biopsy",
+                "result_entity_type": "variant",
+                "result_entity": "IGH-BCL2",
+                "gene_nomenclature": [],
+                "result_region": "t(14;18)(q32;q21)",
+                "result_status": "abnormal",
+                "result_description": "Positive for IGH-BCL2 fusion",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Fusion",
+                        "result_value": 82.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Examined",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Fusion Status",
+                        "result_value": "POSITIVE"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "1F1O1G1R"
+                    }
+                ],
+                "clinical_implications": "t(14;18) rearrangement is a hallmark of follicular lymphoma but also found in subset of DLBCL"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using BCL6 Dual Color Break Apart probe",
+                "sample_origin": "Peri-renal mass biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "BCL6",
+                "gene_nomenclature": [],
+                "result_region": "3q27",
+                "result_status": "abnormal",
+                "result_description": "BCL6 gene rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Rearrangement",
+                        "result_value": 75.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Cells Examined",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "POSITIVE"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "1F1O1G"
+                    }
+                ],
+                "clinical_implications": "BCL6 rearrangement commonly found in DLBCL"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This rare genetic profile of concurrent MYC, IGH-BCL2, and BCL6 rearrangements in high-grade B-cell NHL is typically associated with poor prognosis. The presence of MYC rearrangement with a non-immunoglobulin partner, combined with BCL2 and BCL6 alterations, represents a complex karyotype that may influence therapeutic decisions and clinical outcomes",
+            "overall_recommendations": "The findings should be correlated with morphologic, immunophenotypic, and clinical features for comprehensive patient management"
+        }
+    }
+}

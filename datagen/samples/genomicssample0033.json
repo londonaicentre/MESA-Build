@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nPhysician: Dr. [redacted name]\n\nSPECIMEN TYPE: Peripheral blood\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nTEST PERFORMED\nKaryotype Analysis - G-banded Chromosome Study\n\nMETHODOLOGY\nPeripheral blood lymphocytes were cultured, harvested, and G-banded according to standard cytogenetic protocols. Metaphase chromosomes were analyzed at the 400-550 band level resolution.\n\nRESULT\n46,XX\n\nNormal female karyotype\n\nINTERPRETATION\nG-banded chromosome analysis reveals a normal female karyotype with no evidence of trisomy 21 or other significant chromosomal abnormalities. Twenty metaphase cells were analyzed. The analysis quality was sufficient to exclude numerical abnormalities and major structural rearrangements.\n\nThis study supersedes the previous rapid FISH analysis performed on [redacted date].\n\nCLINICAL CORRELATION\nNo chromosomal abnormalities consistent with Down syndrome or other major chromosomal disorders were detected.\n\nLIMITATIONS\nThis analysis can detect numerical abnormalities and structural rearrangements larger than approximately 5-10 Mb. Smaller deletions, duplications, or balanced rearrangements may not be detected by this methodology.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Evaluation for Down syndrome",
+            "test_clinical_rationale": "Rule out trisomy 21 and other chromosomal abnormalities",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis at 400-550 band level resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - Normal female karyotype with no evidence of trisomy 21 or other significant chromosomal abnormalities",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Chromosome Count",
+                        "result_value": "46"
+                    }
+                ],
+                "clinical_implications": "No chromosomal abnormalities consistent with Down syndrome or other major chromosomal disorders"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal karyotype excludes Down syndrome (trisomy 21) and other major chromosomal abnormalities. Analysis quality sufficient to exclude numerical and major structural abnormalities only",
+            "overall_recommendations": "This study supersedes the previous rapid FISH analysis. Small deletions, duplications, or balanced rearrangements below 5-10 Mb may not be detected by this methodology"
+        }
+    }
+}

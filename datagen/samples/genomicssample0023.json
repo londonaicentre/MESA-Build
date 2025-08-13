@@ -1,0 +1,87 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPatient: [redacted name]\nSex: Female\nDOB: [redacted date]\nHospital No: [redacted ID]\nLab Reference: [redacted ID]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Familial Hypercholesterolaemia\n\nMETHODOLOGY\nNext-generation sequencing (NGS) analysis of LDLR, PCSK9, LDLRAP1 genes and APOB exon 26 was performed. The analysis included all coding exons and splice sites with ±10bp flanking intronic sequences. Target enrichment was achieved using in-solution hybridization capture technology. Sequencing was performed on an Illumina platform with minimum coverage of 30x across target regions.\n\nBioinformatic analysis included:\n- Variant calling and annotation using validated analysis software\n- Read depth analysis for detection of exonic copy number variants (CNVs)\n- Examination of the LDLR promoter region\n- Filtering of variants based on population frequency, predicted pathogenicity, and clinical relevance\n\nRESULTS\nGene\t\tResult\nLDLR\t\tNo pathogenic variants detected\nPCSK9\t\tNo pathogenic variants detected\nLDLRAP1\t\tNo pathogenic variants detected\nAPOB (exon 26)\tNo pathogenic variants detected\n\nNo copy number variants were detected in the analyzed genes.\n\nTECHNICAL NOTES\nThis test has a predicted detection rate of 99% for pathogenic sequence variants in the coding regions and canonical splice sites of the analyzed genes. The test may not detect:\n- Deep intronic variants\n- Large structural rearrangements\n- Variants in regulatory regions (except LDLR promoter)\n- Low-level mosaicism (<20%)\n\nSUMMARY\nNo pathogenic sequence variants were identified in the LDLR, PCSK9, LDLRAP1 genes or APOB exon 26. The diagnosis of Familial Hypercholesterolaemia has not been confirmed by genetic testing in this patient.\n\nIt should be noted that a negative genetic test does not exclude a clinical diagnosis of Familial Hypercholesterolaemia, as approximately 20-40% of patients with a clinical diagnosis do not have an identifiable genetic cause using current testing methods.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Familial Hypercholesterolaemia",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Female patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing with in-solution hybridization capture, including coding exons, splice sites with ±10bp flanking sequences, read depth analysis for CNVs, and LDLR promoter examination",
+                "sample_origin": null,
+                "result_entity_type": "gene",
+                "result_entity": "LDLR",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing with in-solution hybridization capture",
+                "sample_origin": null,
+                "result_entity_type": "gene",
+                "result_entity": "PCSK9",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing with in-solution hybridization capture",
+                "sample_origin": null,
+                "result_entity_type": "gene",
+                "result_entity": "LDLRAP1",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Next-generation sequencing with in-solution hybridization capture",
+                "sample_origin": null,
+                "result_entity_type": "exon",
+                "result_entity": "APOB",
+                "gene_nomenclature": [],
+                "result_region": "exon 26",
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The diagnosis of Familial Hypercholesterolaemia has not been confirmed by genetic testing. A negative genetic test does not exclude a clinical diagnosis of Familial Hypercholesterolaemia, as approximately 20-40% of patients with a clinical diagnosis do not have an identifiable genetic cause using current testing methods",
+            "overall_recommendations": "Continue clinical management based on phenotype and cardiovascular risk assessment"
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nTEST PERFORMED\nKaryotype Analysis - Follow-up to Rapid PCR\n\nCLINICAL INDICATION\nFollow-up karyotype analysis as per protocol following rapid aneuploidy PCR screening performed on [redacted date].\n\nMETHODOLOGY\nG-banded chromosome analysis was performed on cultured peripheral blood lymphocytes. Twenty metaphase cells were analyzed at a resolution of 450-550 bands. This analysis follows the initial rapid PCR testing for common aneuploidies (chromosomes 13, 18, 21, X, and Y) previously reported.\n\nRESULTS\nKaryotype: 46,XX\n\nNormal female karyotype. No numerical or structural chromosome abnormalities detected at the resolution of this analysis.\n\nINTERPRETATION\nThis G-banded karyotype analysis confirms the normal female result obtained by rapid PCR testing. No additional chromosome abnormalities were identified.\n\nLIMITATIONS\nThis analysis cannot detect abnormalities smaller than the resolution of the banding pattern (approximately 5-10 Mb), low-level mosaicism (<20%), or balanced rearrangements that do not result in visible changes to the banding pattern.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Follow-up karyotype analysis as per protocol following rapid aneuploidy PCR screening",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis performed on cultured peripheral blood lymphocytes at 450-550 band resolution",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - Normal female karyotype. No numerical or structural chromosome abnormalities detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Karyotype Result",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": "Confirms normal female result obtained by rapid PCR testing"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal female karyotype confirmed, consistent with prior rapid PCR results. No chromosome abnormalities identified",
+            "overall_recommendations": "No additional cytogenetic testing indicated based on these results"
+        }
+    }
+}

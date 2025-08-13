@@ -1,0 +1,40 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL INFORMATION\nReferring Physician: Dr. [redacted name]\nReferral Reason: Diagnostic testing for Cystic Fibrosis\nClinical Indication: Suspected Cystic Fibrosis\n\nTEST PERFORMED\nTargeted CFTR Gene Sequencing Panel\n\nTEST DESCRIPTION\nTargeted DNA sequencing analysis was performed on selected regions of the CFTR gene (NM_000492.4). The test includes sequencing of 10 CFTR exons (4, 6a, 7, 10-13, 19-21) and partial intron 19. This panel covers pathogenic variants accounting for:\n• 87.65% of disease-causing variants in individuals of Caucasian ancestry\n• 56.41% of disease-causing variants in individuals of South Asian ancestry\n• 76% of disease-causing variants worldwide\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood. Target regions were amplified by PCR and sequenced bidirectionally using Sanger sequencing. Sequence data was analyzed against the CFTR reference sequence NM_000492.4.\n\nRESULTS\nGene: CFTR (Cystic Fibrosis Transmembrane Conductance Regulator)\nResult: No pathogenic variants detected in the screened CFTR regions\n\nAll analyzed exons showed normal sequence without evidence of pathogenic variants.\n\nTECHNICAL NOTES\n• Coverage: All targeted regions achieved >20x coverage with Q30 scores >85%\n• Variant detection sensitivity: >99% for single nucleotide variants and small insertions/deletions (<20bp) in covered regions\n• This screening method yields negative results in approximately 6% of patients with confirmed Cystic Fibrosis\n\nINTERPRETATION\nNo pathogenic variants were identified in the analyzed regions of the CFTR gene. This negative result does not exclude a diagnosis of Cystic Fibrosis, as this targeted panel does not interrogate all possible disease-causing variants in CFTR.\n\nLIMITATIONS\n• This test does not sequence the entire CFTR gene\n• Large deletions/duplications and deep intronic variants are not detected by this method\n• Variants in non-covered regions will not be identified\n• Rare or population-specific variants may not be included in this panel\n\nCLINICAL IMPLICATIONS\nCystic Fibrosis diagnosis is not confirmed by this genetic test. However, as the test covers only a partial spectrum of CFTR variants, the condition cannot be completely ruled out based on these results alone.\n\nRECOMMENDATIONS\n1. Clinical correlation is recommended. If clinical suspicion for Cystic Fibrosis persists based on symptoms and other diagnostic tests (sweat chloride, pancreatic function), consider referral for comprehensive CFTR variant screening at a specialized laboratory\n2. Comprehensive CFTR sequencing including all exons, intron-exon boundaries, and deletion/duplication analysis may identify variants not covered by this panel\n3. Genetic counseling is recommended to discuss test results and implications for the patient and family members\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the FDA. The laboratory is certified under CLIA to perform high-complexity testing.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Cystic Fibrosis",
+            "test_clinical_rationale": "Suspected Cystic Fibrosis",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted DNA sequencing of 10 CFTR exons (4, 6a, 7, 10-13, 19-21) and partial intron 19 using PCR amplification and bidirectional Sanger sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CFTR",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000492",
+                        "version": "4"
+                    }
+                ],
+                "result_region": "Exons 4, 6a, 7, 10-13, 19-21 and partial intron 19",
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected in the screened CFTR regions",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "CF diagnosis not confirmed by this test. As test covers only partial variant spectrum, condition cannot be completely ruled out"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No pathogenic variants identified in analyzed CFTR regions. This negative result does not exclude Cystic Fibrosis diagnosis as this targeted panel covers 87.65% of Caucasian, 56.41% of South Asian, and 76% of worldwide CF-causing variants. Negative results expected in ~6% of CF patients with this screening method",
+            "overall_recommendations": "Clinical correlation recommended. If clinical suspicion for CF persists based on symptoms and other diagnostic tests, consider referral for comprehensive CFTR variant screening at specialized laboratory. Comprehensive CFTR sequencing including all exons, intron-exon boundaries, and deletion/duplication analysis may identify variants not covered by this panel. Genetic counseling recommended"
+        }
+    }
+}

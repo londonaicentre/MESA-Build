@@ -1,0 +1,68 @@
+{
+    "content": "CYTOGENETICS LABORATORY\nFLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge/Sex: Elderly male\nMRN: [redacted ID]\nSpecimen Type: Bone marrow aspirate\nDate Collected: [redacted date]\nDate Received: [redacted date] (4 days post-collection)\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nInvestigation for suspected myeloma\n\nTEST PERFORMED\nInterphase FISH analysis for IGH gene rearrangement\n\nMETHODOLOGY\nCD138+ plasma cells were isolated from bone marrow aspirate using immunomagnetic separation (AutoMACS, Miltenyi Biotec). Interphase FISH was performed using dual-color break-apart probes for the IGH locus at 14q32 (Abbott Molecular). The IGH probe set consists of a 3' IGH probe labeled in SpectrumOrange and a 5' IGH probe labeled in SpectrumGreen. In normal cells, two fusion signals are observed. Rearrangement of the IGH locus results in separation of the orange and green signals.\n\nRESULTS\n\nIGH Break-Apart Probe (14q32):\nResult: NEGATIVE for IGH rearrangement\nCells analyzed: 100\nNormal pattern (2 fusion signals): 100/100 cells (100%)\nAbnormal pattern (1R1G1F): 0/100 cells (0%)\n\nTECHNICAL NOTES\n- CD138+ cell separation yielded insufficient cells for complete myeloma FISH panel analysis\n- Only IGH rearrangement testing could be performed due to limited cell yield\n- Sample age (4 days from collection to processing) may have affected cell viability and recovery\n- The following tests could not be performed due to insufficient material:\n  * del(13q14) / monosomy 13\n  * del(17p13.1) / TP53\n  * t(4;14) FGFR3/IGH\n  * t(11;14) CCND1/IGH\n  * t(14;16) IGH/MAF\n  * Hyperdiploidy panel\n\nINTERPRETATION\nNo IGH locus rearrangement was detected in the 100 cells analyzed. IGH rearrangements are found in approximately 50-60% of multiple myeloma cases and are associated with various partner chromosomes including 11q13 (CCND1), 4p16 (FGFR3), 16q23 (MAF), and others.\n\nLIMITATIONS\n1. This analysis was limited to IGH break-apart probe only due to insufficient cell yield\n2. Cryptic insertion events or small rearrangements below the resolution of FISH would not be detected by this methodology\n3. The sensitivity of this test is limited by the number of cells analyzed and the purity of the plasma cell population\n4. Sample age may have impacted cell quality and test performance\n\nRECOMMENDATIONS\nDue to limited cell yield preventing complete myeloma FISH panel analysis, correlation with other laboratory findings including serum protein electrophoresis, immunofixation, free light chain analysis, and bone marrow morphology is recommended. If clinically indicated, repeat bone marrow sampling with prompt processing (within 24-48 hours) may improve cell yield for comprehensive FISH analysis.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Investigation for suspected myeloma",
+            "test_clinical_rationale": "Detection of IGH rearrangements associated with multiple myeloma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Elderly male patient"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Suspected myeloma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH using dual-color break-apart probes for IGH locus on CD138+ purified cells from bone marrow aspirate",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "IGH",
+                "gene_nomenclature": [],
+                "result_region": "14q32",
+                "result_status": "normal",
+                "result_description": "No IGH locus rearrangement in 100 cells analyzed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Normal Pattern Cells",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Sample Age",
+                        "result_value": 4.0,
+                        "result_units": "days"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "IGH Rearrangement Status",
+                        "result_value": "NEGATIVE"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "2 fusion signals (normal)"
+                    }
+                ],
+                "clinical_implications": "No detectable IGH rearrangements associated with myeloma in analyzable sample"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No IGH rearrangement detected in analyzed cells. IGH rearrangements are found in 50-60% of multiple myeloma cases. Limited analysis due to insufficient cell yield prevents comprehensive myeloma genetic assessment",
+            "overall_recommendations": "Limited cell yield prevented complete panel analysis. Cryptic insertion events would not be detected by methodology used. Correlation with other laboratory findings recommended. Consider repeat bone marrow sampling with prompt processing if clinically indicated"
+        }
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nReferring Clinician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nDown syndrome investigation\n\nTEST PERFORMED\nG-banded chromosome analysis\n\nPRELIMINARY TESTING\nRapid PCR for aneuploidy detection was performed prior to karyotype analysis. Results indicated no evidence of trisomy 21, 18, or 13.\n\nRESULT\nKaryotype: 46,XX\n\nNormal female karyotype. No trisomy 21 or other major chromosomal abnormalities detected.\n\nMETHOD\nPeripheral blood lymphocytes were cultured and harvested according to standard protocols. G-banded metaphase chromosomes were analyzed at a resolution of 450-550 bands. A minimum of 20 cells were examined.\n\nQUALITY STATEMENT\nThis analysis meets laboratory quality standards with adequate metaphase quality and band resolution for detection of numerical and structural chromosomal abnormalities.\n\nINTERPRETATION\nThis result excludes Down syndrome and other major chromosomal abnormalities detectable by conventional karyotyping. The normal karyotype finding is consistent with the preliminary rapid PCR results.\n\nLIMITATIONS\nThis test cannot detect chromosomal mosaicism below 10% or subtle structural rearrangements below the resolution of conventional cytogenetics.\n\nAuthorized by: [redacted name], Clinical Scientist\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Down syndrome investigation",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Rapid PCR for aneuploidy detection",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 21, 18, 13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No evidence of trisomy 21, 18, or 13",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis at 450-550 band resolution from cultured peripheral blood lymphocytes",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female karyotype. No trisomy 21 or other major chromosomal abnormalities detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Examined",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": "Excludes Down syndrome and other major chromosomal abnormalities"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This result excludes Down syndrome and other major chromosomal abnormalities detectable by conventional karyotyping",
+            "overall_recommendations": "No specific recommendations provided"
+        }
+    }
+}

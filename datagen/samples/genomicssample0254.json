@@ -1,0 +1,54 @@
+{
+    "content": "ONCOLOGY GENETICS LABORATORY REPORT\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nAge/Sex: 40 year old male\nSpecimen Type: Bone Marrow Aspirate\nSpecimen ID: [redacted ID]\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nEvaluation for suspected myeloma in patient with plasmacytoma. Assessment requested for potential progression to multiple myeloma.\n\nTEST ORDERED\nMyeloma FISH Panel\n- t(11;14) CCND1/IGH\n- t(4;14) FGFR3/IGH\n- t(14;16) IGH/MAF\n- del(17p) TP53\n- del(13q) RB1\n- Hyperdiploidy assessment\n\nTEST METHODOLOGY\nFluorescence in situ hybridization (FISH) analysis using plasma cell enrichment by CD138+ magnetic bead selection followed by cytoplasmic immunoglobulin light chain staining.\n\nRESULT\nTEST NOT PERFORMED\n\nREASON FOR TEST CANCELLATION\nInsufficient plasma cells in bone marrow aspirate specimen. Flow cytometry analysis revealed only 1% plasma cells in the submitted sample. A minimum of 10% plasma cells is required for reliable FISH analysis after CD138+ enrichment.\n\nCOMMENT\nThe submitted bone marrow aspirate contains inadequate numbers of plasma cells (1%) for FISH analysis. This low plasma cell percentage precludes meaningful assessment of myeloma-associated cytogenetic abnormalities including IGH translocations, hyperdiploidy, and high-risk deletions.\n\nIn patients with plasmacytoma being evaluated for progression to multiple myeloma, cytogenetic analysis provides important prognostic information. The inability to perform this testing limits risk stratification capabilities.\n\nRECOMMENDATIONS\nNo further testing is possible on the current sample due to insufficient plasma cell content. If clinically indicated, consider:\n- Repeat bone marrow biopsy targeting areas of increased disease burden\n- Evaluation of alternative sites if focal lesions are present\n- Correlation with serum/urine protein electrophoresis and free light chain analysis\n- Clinical and radiographic monitoring for disease progression\n\nThis result has been reviewed and electronically signed by:\n[redacted name], MD, PhD\nDirector, Oncology Genetics Laboratory\n[redacted location] Medical Center",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Evaluation for suspected myeloma in patient with plasmacytoma",
+            "test_clinical_rationale": "Assessment requested for potential progression to multiple myeloma",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Plasmacytoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "40 year old male"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization (FISH) analysis using plasma cell enrichment by CD138+ magnetic bead selection followed by cytoplasmic immunoglobulin light chain staining",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "Myeloma FISH Panel",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Test not performed - Insufficient plasma cells (1%) in bone marrow aspirate for FISH analysis",
+                "quantitative_results": [
+                    {
+                        "result_name": "Plasma Cell Percentage",
+                        "result_value": 1.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Test Status",
+                        "result_value": "Not Performed"
+                    }
+                ],
+                "clinical_implications": "Unable to assess myeloma-associated genetic abnormalities due to inadequate sample. This limits risk stratification capabilities for progression to multiple myeloma"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The low plasma cell percentage (1%) in the bone marrow aspirate precludes meaningful assessment of myeloma-associated cytogenetic abnormalities including IGH translocations, hyperdiploidy, and high-risk deletions. This limits prognostic information and risk stratification in this patient with plasmacytoma being evaluated for progression to multiple myeloma",
+            "overall_recommendations": "No further testing possible on current sample. Consider repeat bone marrow biopsy targeting areas of increased disease burden, evaluation of alternative sites if focal lesions present, correlation with serum/urine protein electrophoresis and free light chain analysis, and clinical/radiographic monitoring for disease progression"
+        }
+    }
+}

@@ -1,0 +1,129 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted name] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nReferring Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INFORMATION\nMaternal Age: 38 years\nGestational Age: 15 weeks (by ultrasound dating)\nIndication for Testing: Advanced maternal age; prenatal screening for common chromosomal trisomies\nSample Type: Uncultured amniotic fluid\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for Rapid Aneuploidy Detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniotic fluid cells using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, and 21. Multiple informative markers were analyzed for each chromosome:\n\n- Chromosome 13: D13S631, D13S258, D13S742, D13S628\n- Chromosome 18: D18S535, D18S391, D18S390, D18S386\n- Chromosome 21: D21S1435, D21S1411, D21S1412, D21S1437\n\nAdditionally, amelogenin was analyzed for sex chromosome determination. Peak area ratios were calculated for all informative markers. Normal diallelic patterns show peak ratios between 0.8-1.4, while triallelic patterns or skewed ratios >1.8 or <0.65 indicate trisomy.\n\nRESULTS\n\nChromosome 13: Normal female pattern\n- All markers showed normal biallelic patterns\n- Peak ratios within normal range (0.85-1.15)\n- No evidence of trisomy 13\n\nChromosome 18: Normal female pattern\n- All markers showed normal biallelic patterns\n- Peak ratios within normal range (0.82-1.18)\n- No evidence of trisomy 18\n\nChromosome 21: Normal female pattern\n- All markers showed normal biallelic patterns\n- Peak ratios within normal range (0.88-1.12)\n- No evidence of trisomy 21\n\nSex Chromosomes: Female (XX)\n- Amelogenin showed single X peak\n- No Y chromosome material detected\n\nINTERPRETATION\nQF-PCR analysis demonstrates a normal female chromosomal complement for chromosomes 13, 18, and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome) was detected in this fetal sample.\n\nLIMITATIONS\n1. This test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, and 21 only. Other chromosomal abnormalities are not assessed.\n2. Low-level mosaicism (<20%) may not be reliably detected by this methodology.\n3. Structural chromosomal abnormalities, including segmental imbalances, deletions, duplications, or balanced rearrangements, cannot be detected.\n4. Maternal cell contamination, if present at significant levels, could potentially mask fetal abnormalities.\n5. This test does not screen for single gene disorders or other genetic conditions.\n\nRECOMMENDATIONS\nBased on these results, no additional chromosome analysis is indicated for this sample. The normal QF-PCR results significantly reduce the risk for the common autosomal trisomies. However, this test does not eliminate the possibility of other chromosomal or genetic abnormalities. Clinical correlation and genetic counseling are recommended to discuss these results in the context of other prenatal screening findings.\n\nIf ultrasound abnormalities are detected later in pregnancy, or if there are other clinical concerns, additional testing such as chromosomal microarray analysis may be considered.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD\nCAP Accredited Laboratory #[redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Advanced maternal age; prenatal screening for common chromosomal trisomies",
+            "test_clinical_rationale": "Prenatal screening in 15-week pregnancy based on ultrasound dating",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal Age: 38 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Gestational Age: 15 weeks (by ultrasound dating)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal amniotic fluid sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers on chromosomes 13, 18, and 21",
+                "sample_origin": "Uncultured amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "D13S631, D13S258, D13S742, D13S628",
+                "result_status": "normal",
+                "result_description": "Normal female pattern - All markers showed normal biallelic patterns",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio Range",
+                        "result_value": 1.15,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Trisomy 13 Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetal amniotic fluid sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Uncultured amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S535, D18S391, D18S390, D18S386",
+                "result_status": "normal",
+                "result_description": "Normal female pattern - All markers showed normal biallelic patterns",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio Range",
+                        "result_value": 1.18,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Trisomy 18 Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetal amniotic fluid sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat (STR) markers",
+                "sample_origin": "Uncultured amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": "D21S1435, D21S1411, D21S1412, D21S1437",
+                "result_status": "normal",
+                "result_description": "Normal female pattern - All markers showed normal biallelic patterns",
+                "quantitative_results": [
+                    {
+                        "result_name": "Peak Ratio Range",
+                        "result_value": 1.12,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Trisomy 21 Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            },
+            {
+                "test_subject": "Fetal amniotic fluid sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Amelogenin analysis for sex chromosome determination",
+                "sample_origin": "Uncultured amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Sex chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "Amelogenin",
+                "result_status": "normal",
+                "result_description": "Female (XX) - single X peak detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Determination",
+                        "result_value": "Female (XX)"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis demonstrates a normal female chromosomal complement for chromosomes 13, 18, and 21. Results suggest normal chromosomal complement for tested chromosomes, significantly reducing the risk for common autosomal trisomies",
+            "overall_recommendations": "No additional chromosome analysis indicated for this sample. Clinical correlation and genetic counseling recommended to discuss results in context of other prenatal screening findings. If ultrasound abnormalities detected later or other clinical concerns arise, additional testing such as chromosomal microarray analysis may be considered"
+        }
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient ID: [redacted ID]\nSample Type: Fetal tissue (uncultured solid tissue)\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Analysis of fetal tissue\n\nTESTS PERFORMED\n1. Multiplex Ligation-dependent Probe Amplification (MLPA) - Subtelomere screening\n2. Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) - Aneuploidy screening\n\nMETHODOLOGY\nMLPA Analysis:\n- SALSA MLPA P036 and P070 Human Telomere kits used for comprehensive subtelomeric region analysis\n- Covers all chromosome subtelomere regions (1p-22p, 1q-22q, Xp/q, Yp/q)\n- DNA extracted from uncultured solid tissue\n- Fragment analysis performed on ABI 3730 Genetic Analyzer\n- Data analyzed using Coffalyser.Net software\n\nQF-PCR Analysis:\n- Multiplex QF-PCR for rapid aneuploidy detection\n- Chromosomes analyzed: 13, 18, 21, X and Y\n- STR markers used:\n  - Chromosome 13: D13S631, D13S634, D13S742\n  - Chromosome 18: D18S535, D18S391, D18S390\n  - Chromosome 21: D21S1435, D21S1411, D21S1446\n  - X chromosome: AMELX, DXS6803, DXS6809\n  - Y chromosome: AMELY, SRY\n- Analysis performed on uncultured tissue DNA\n\nRESULTS\n\nMLPA SUBTELOMERE ANALYSIS\nResult: No abnormality detected\n- All subtelomeric regions show normal copy number (ratio 0.85-1.15)\n- No deletions or duplications identified\n- Quality metrics within acceptable range\n\nQF-PCR ANEUPLOIDY SCREENING\nResult: No abnormality detected\n- Chromosome 13: Normal diallelic pattern\n- Chromosome 18: Normal diallelic pattern\n- Chromosome 21: Normal diallelic pattern\n- Sex chromosomes: Female pattern (XX)\n  - AMELX: Single peak consistent with two X chromosomes\n  - No Y chromosome markers detected\n- No evidence of triploidy\n\nINTERPRETATION\nThe combined MLPA and QF-PCR analyses show:\n- No imbalance found in tested regions\n- Results consistent with female sex chromosome complement (46,XX)\n- No evidence of triploidy, aneuploidy or subtelomere imbalance\n- Normal female genetic complement detected\n\nTECHNICAL LIMITATIONS\n1. Maternal cell contamination: While no evidence of maternal contamination was detected, low-level contamination cannot be completely excluded\n2. Mosaicism: Low-level mosaicism (<20%) may not be detected with these methods\n3. Small segment imbalance: Deletions or duplications smaller than the probe coverage regions will not be detected\n4. Balanced rearrangements: These techniques do not detect balanced chromosomal rearrangements\n5. Detection sensitivity: QF-PCR is limited to chromosomes 13, 18, 21, X and Y; other aneuploidies would not be detected\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Scientist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Analysis of fetal tissue",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification using SALSA MLPA P036 and P070 Human Telomere kits for comprehensive subtelomeric region analysis",
+                "sample_origin": "Fetal tissue (uncultured solid tissue)",
+                "result_entity_type": "chromosome",
+                "result_entity": "All chromosome subtelomere regions",
+                "gene_nomenclature": [],
+                "result_region": "1p-22p, 1q-22q, Xp/q, Yp/q",
+                "result_status": "normal",
+                "result_description": "No abnormality detected. All subtelomeric regions show normal copy number",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number Ratio",
+                        "result_value": 1.0,
+                        "result_units": "ratio (0.85-1.15)"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "No deletions or duplications identified in subtelomeric regions"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection using STR markers",
+                "sample_origin": "Fetal tissue (uncultured solid tissue)",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 13, 18, 21, X and Y",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No abnormality detected. Normal diallelic patterns for chromosomes 13, 18, 21. Female pattern (XX) for sex chromosomes",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosome Complement",
+                        "result_value": "Female (XX)"
+                    },
+                    {
+                        "result_name": "Triploidy Status",
+                        "result_value": "No evidence of triploidy"
+                    }
+                ],
+                "clinical_implications": "Results consistent with female sex chromosome complement. No evidence of triploidy, aneuploidy or subtelomere imbalance"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal female genetic complement detected. Mosaicism or small segment imbalance may not be detected with these methods",
+            "overall_recommendations": "No specific recommendations provided. Technical limitations include potential for undetected maternal contamination, low-level mosaicism (<20%), small segment imbalances, and balanced rearrangements"
+        }
+    }
+}

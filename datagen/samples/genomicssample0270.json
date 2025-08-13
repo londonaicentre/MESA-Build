@@ -1,0 +1,19 @@
+{
+    "content": "GENETIC TESTING REQUEST FORM\nExternal Laboratory Services\n\nPATIENT INFORMATION\nName: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSex: [redacted]\nPatient Type: Pediatric\n\nREQUESTING PROVIDER\nProvider Name: [redacted name]\nInstitution: [redacted location]\nDepartment: Pediatrics\nPhone: [redacted number]\nDate of Request: [redacted date]\n\nSAMPLE INFORMATION\nSample Type: EDTA Blood\nCollection Date: [redacted date]\nSample ID: [redacted ID]\n\nCLINICAL INFORMATION\nReason for Referral: Evaluation for possible Oculocutaneous Albinism\n\nClinical Features: Not specified\n\nFamily History: Not provided\n\nTEST REQUESTED\nTest Name: Oculocutaneous Albinism Gene Panel\nTest Type: DNA Sequencing Analysis\nMethodology: Next-generation sequencing of genes associated with Oculocutaneous Albinism\n\nGenes to be analyzed:\n- TYR (Tyrosinase)\n- OCA2 (Oculocutaneous Albinism II)\n- TYRP1 (Tyrosinase-related protein 1)\n- SLC45A2 (Solute carrier family 45 member 2)\n- SLC24A5 (Solute carrier family 24 member 5)\n- C10orf11 (Chromosome 10 open reading frame 11)\n- GPR143 (G protein-coupled receptor 143)\n\nADDITIONAL TESTING OPTIONS\n☐ Deletion/duplication analysis\n☐ Single gene testing only (specify): ___________\n☐ Expedited testing required\n\nCONSENT\n☐ Informed consent obtained\n☐ Consent form attached\n\nBILLING INFORMATION\nInsurance: [redacted]\nAuthorization Number: [redacted ID]\n\nSPECIAL INSTRUCTIONS\nNone\n\nProvider Signature: ___________________ Date: ___________\n\nFOR LABORATORY USE ONLY\nDate Received: ___________\nCondition of Sample: ___________\nTest Initiated: ___________",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Evaluation for possible Oculocutaneous Albinism",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Pediatric patient"
+                }
+            ]
+        },
+        "biomarker_test_results": null,
+        "clinical_outcome": null
+    }
+}

@@ -1,0 +1,113 @@
+{
+    "content": "MOLECULAR CYTOGENETICS REPORT\n[redacted name] Hospital NHS Foundation Trust\nDepartment of Haematology-Oncology Genetics\n\nPATIENT: [redacted name]\nDOB: [redacted]\nMRN: [redacted ID]\nREFERRING CLINICIAN: Dr [redacted name]\nDATE OF COLLECTION: [redacted]\nDATE OF REPORT: [redacted]\nSPECIMEN TYPE: Lymph node biopsy\nSPECIMEN ID: [redacted ID]\n\nCLINICAL DETAILS\nDiffuse large B-cell lymphoma (DLBCL) with previous history of follicular lymphoma (FL). Lymph node biopsy submitted for molecular cytogenetic analysis.\n\nTEST PERFORMED\nInterphase fluorescence in situ hybridisation (FISH) analysis\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed paraffin-embedded tissue sections using the following probe sets:\n• GeneMark IGH/MYC/CEP8 tri-colour dual fusion probe\n• IGH/BCL2 dual colour dual fusion probe\n• BCL6 dual colour break apart probe\n• MYC dual colour break apart probe\n\nAnalysis was performed on areas of tumour identified by correlation with CD20 immunostained slides. A minimum of 100 nuclei were scored for each probe set.\n\nRESULTS - ABNORMAL\n\nIGH/BCL2 t(14;18) rearrangement: POSITIVE\n• Fusion signals detected in 78% of nuclei analysed (78/100)\n• Pattern consistent with t(14;18)(q32;q21) translocation\n\nMYC (8q24) rearrangement: NEGATIVE\n• No evidence of MYC rearrangement\n• Normal signal pattern in 96% of nuclei (96/100)\n\nBCL6 (3q27) rearrangement: NEGATIVE\n• No evidence of BCL6 rearrangement\n• Normal signal pattern in 94% of nuclei (94/100)\n\nINTERPRETATION\nThis analysis demonstrates the presence of an IGH/BCL2 [t(14;18)] rearrangement. No MYC (8q24) or BCL6 (3q27) rearrangements were detected.\n\nThe IGH/BCL2 rearrangement is recognised in both follicular lymphoma and diffuse large B-cell lymphoma. This finding is consistent with transformation from the patient's previous follicular lymphoma.\n\nIt should be noted that dual-colour break-apart probes may not detect cryptic insertion events in a small percentage of cases.\n\nThis test was performed in a UKAS accredited laboratory (CPA reference: [redacted ID]).\n\nReported by: [redacted name], Clinical Scientist\nAuthorised by: Dr [redacted name], Consultant Haematologist\nDate: [redacted]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diffuse large B-cell lymphoma (DLBCL) with previous history of follicular lymphoma (FL)",
+            "test_clinical_rationale": "Molecular cytogenetic analysis to identify chromosomal rearrangements in lymphoma",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Diffuse large B-cell lymphoma (DLBCL)"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Previous history of follicular lymphoma (FL)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed paraffin-embedded tissue sections with GeneMark IGH/MYC/CEP8 tri-colour dual fusion, IGH/BCL2 dual colour dual fusion, BCL6 dual colour break apart, and MYC dual colour break apart probes. Analysis correlated with CD20 immunostained slides",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "IGH/BCL2",
+                "gene_nomenclature": [],
+                "result_region": "t(14;18)(q32;q21)",
+                "result_status": "abnormal",
+                "result_description": "IGH/BCL2 [t(14;18)] rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Positive Nuclei",
+                        "result_value": 78.0,
+                        "result_units": "percent"
+                    },
+                    {
+                        "result_name": "Total Nuclei Analysed",
+                        "result_value": 100.0,
+                        "result_units": "nuclei"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "POSITIVE"
+                    }
+                ],
+                "clinical_implications": "IGH/BCL2 rearrangement is recognised in both follicular lymphoma and diffuse large B-cell lymphoma"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with MYC dual colour break apart probe",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "MYC",
+                "gene_nomenclature": [],
+                "result_region": "8q24",
+                "result_status": "normal",
+                "result_description": "No MYC (8q24) rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Normal Signal Pattern",
+                        "result_value": 96.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with BCL6 dual colour break apart probe",
+                "sample_origin": "Lymph node biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "BCL6",
+                "gene_nomenclature": [],
+                "result_region": "3q27",
+                "result_status": "normal",
+                "result_description": "No BCL6 (3q27) rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Normal Signal Pattern",
+                        "result_value": 94.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The presence of IGH/BCL2 rearrangement is consistent with transformation from the patient's previous follicular lymphoma. Dual-colour break-apart probes may not detect cryptic insertion events in a small percentage of cases",
+            "overall_recommendations": "No specific recommendations provided"
+        }
+    }
+}

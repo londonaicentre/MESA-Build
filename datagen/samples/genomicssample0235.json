@@ -1,0 +1,64 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen ID: [redacted ID]\n\nSPECIMEN INFORMATION\nSpecimen Type: Amniotic fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\nGestational Age at Collection: 15 weeks\n\nCLINICAL INDICATION\nPrenatal testing for chromosomal abnormalities\nScreening for Down syndrome and other aneuploidies\n\nTEST PERFORMED\nConventional Cytogenetic Analysis - G-banded Karyotype\n\nMETHODOLOGY\nAmniotic fluid cells were cultured according to standard protocols. Metaphase chromosomes were harvested and G-banded using trypsin-Giemsa staining. A minimum of 20 metaphase cells were analyzed at the 400-550 band resolution level. Five cells were fully karyotyped and documented.\n\nRESULTS\nKaryotype: 46,XX\n\nINTERPRETATION\nNormal female chromosomal complement identified. No evidence of trisomy 21 (Down syndrome) or other numerical or structural chromosomal abnormalities detected in the cells analyzed. All chromosomes appear normal in number and structure at the resolution of this analysis.\n\nCells Analyzed: 20\nCells Karyotyped: 5\nBand Resolution: 400-550\n\nCLINICAL CORRELATION\nThis result indicates a chromosomally normal female fetus. The normal karyotype excludes common chromosomal causes of intellectual disability and birth defects detectable by conventional cytogenetic analysis, including:\n- Trisomy 21 (Down syndrome)\n- Trisomy 18 (Edwards syndrome)\n- Trisomy 13 (Patau syndrome)\n- Sex chromosome aneuploidies\n- Large structural rearrangements\n\nLIMITATIONS\nG-banded karyotype analysis cannot detect:\n- Microdeletions or microduplications smaller than 5-10 Mb\n- Single gene disorders\n- Low-level mosaicism (<10%)\n- Uniparental disomy\n- Methylation abnormalities\n\nRECOMMENDATIONS\nThis result supersedes any previous rapid aneuploidy screening results (e.g., QF-PCR, FISH) performed on this pregnancy. No additional cytogenetic testing is indicated based on these findings. Continue routine prenatal care as recommended by the referring physician.\n\nFor detection of submicroscopic chromosomal abnormalities or single gene disorders, chromosomal microarray analysis or other molecular genetic testing may be considered if clinically indicated.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director\n\nThis test was developed and its performance characteristics determined by [redacted location] Cytogenetics Laboratory. It has not been cleared or approved by the FDA. The FDA has determined that such clearance or approval is not necessary.",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing for chromosomal abnormalities. Screening for Down syndrome and other aneuploidies",
+            "test_clinical_rationale": "Detection of numerical and structural chromosomal abnormalities in prenatal sample",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "15 weeks gestation"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Amniotic fluid sample",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis using trypsin-Giemsa staining at 400-550 band resolution",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XX - Normal female chromosomal complement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Cells Karyotyped",
+                        "result_value": 5.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Band Resolution",
+                        "result_value": 450.0,
+                        "result_units": "bands"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Chromosome Count",
+                        "result_value": "46"
+                    }
+                ],
+                "clinical_implications": "Normal karyotype excludes common chromosomal causes of intellectual disability and birth defects including trisomy 21 (Down syndrome), trisomy 18, trisomy 13, sex chromosome aneuploidies, and large structural rearrangements"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Chromosomally normal female fetus. No evidence of trisomy 21 or other numerical or structural chromosomal abnormalities detectable by conventional cytogenetic analysis",
+            "overall_recommendations": "This result supersedes any previous rapid aneuploidy screening results. No additional cytogenetic testing indicated. Continue routine prenatal care. Chromosomal microarray analysis may be considered if clinically indicated for detection of submicroscopic abnormalities"
+        }
+    }
+}

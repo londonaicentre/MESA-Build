@@ -1,0 +1,177 @@
+{
+    "content": "MOLECULAR ONCOLOGY REPORT\n[redacted location] Cancer Center\nDepartment of Pathology and Laboratory Medicine\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Male\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Metastatic non-small cell lung cancer\nSpecimen Site: Acetabular lesion\nSpecimen Type: Formalin-fixed paraffin-embedded (FFPE) tissue\nTumor Content: 20%\n\nTEST PERFORMED\nComprehensive Oncology Panel - DNA and RNA Analysis\n\nMETHODOLOGY\nThis comprehensive oncology assay utilizes molecular barcoded primer technology with an integrated sequencer platform. DNA and RNA were extracted from FFPE tissue using automated extraction kits. The assay interrogates 45 genes for DNA variants including single nucleotide variants (SNVs), insertions/deletions (indels), and splicing alterations, and 17 fusion kinase genes for RNA fusions and oncogenic isoforms. The analytical sensitivity is ≥5% variant allele frequency with a minimum coverage depth of 100×.\n\nDNA PANEL RESULTS\n\nGene\tExons Tested\tResult\tCoverage\nEGFR\t18-21\tNo variants detected\t245×\nKRAS\t2-4 (codons 12, 13, 59, 61, 117, 146)\tNo variants detected\t312×\nBRAF\t11, 15\tNo variants detected\t289×\n\nAdditional genes tested (partial list): AKT1, ALK, APC, ATM, CDH1, CDKN2A, CSF1R, CTNNB1, ERBB2, ERBB4, ESR1, FBXW7, FGFR1, FGFR2, FGFR3, FLT3, GNA11, GNAQ, GNAS, HNF1A, HRAS, IDH1, IDH2, JAK2, JAK3, KIT, MAP2K1, MET, MLH1, MPL, NOTCH1, NPM1, NRAS, PDGFRA, PIK3CA, PTEN, PTPN11, RB1, SMAD4, SMARCB1, SMO, SRC, STK11, TP53, TSC1, VHL\n\nRNA FUSION PANEL RESULTS\n\nGene\tFusion/Alteration Tested\tResult\nALK\tFusions with multiple partners\tNot detected\nROS1\tFusions with multiple partners\tNot detected\nRET\tFusions with multiple partners\tNot detected\nMET\tExon 14 skipping\tNot detected\nNTRK1\tFusions with multiple partners\tNot detected\nNTRK2\tFusions with multiple partners\tNot detected\nNTRK3\tFusions with multiple partners\tNot detected\n\nAdditional fusion genes tested: BRAF, EGFR, ERBB2, ESR1, FGFR1, FGFR2, FGFR3, PDGFRA, PPARG, RAF1\n\nQUALITY METRICS\nDNA Input: 50 ng\nRNA Input: 40 ng\nMean Coverage Depth: 278×\nUniformity (>0.2× mean): 98.5%\nOn-Target Rate: 96.2%\n\nINTERPRETATION\nNo clinically actionable variants were identified in this comprehensive molecular profiling analysis. Specifically:\n\n1. DNA analysis revealed no variants in EGFR (exons 18-21), KRAS (codons 12, 13, 59, 61, 117, 146), or BRAF (V600), indicating this tumor is unlikely to respond to EGFR tyrosine kinase inhibitors (e.g., erlotinib, gefitinib, osimertinib), MEK inhibitors, or BRAF inhibitors.\n\n2. RNA analysis did not detect fusions involving ALK, ROS1, RET, MET, or NTRK1/2/3, nor MET exon 14 skipping alterations. Therefore, the patient is unlikely to benefit from targeted therapies directed against these alterations, including ALK inhibitors (e.g., alectinib, crizotinib), ROS1 inhibitors (e.g., crizotinib, entrectinib), RET inhibitors (e.g., selpercatinib), MET inhibitors (e.g., capmatinib, tepotinib), or NTRK inhibitors (e.g., larotrectinib, entrectinib).\n\nLIMITATIONS\n• This assay has a limit of detection of ≥5% variant allele frequency\n• Low tumor content may affect sensitivity\n• Not all exons of all genes are covered\n• Complex structural variants may not be detected\n• Results should be interpreted in conjunction with clinical and pathological findings\n\nElectronically signed by: Dr. [redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Metastatic non-small cell lung cancer with acetabular lesion",
+            "test_clinical_rationale": "Comprehensive molecular profiling to identify targetable alterations for precision therapy selection",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Metastatic non-small cell lung cancer"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Acetabular lesion"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform, automated DNA extraction from FFPE tissue",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "EGFR",
+                "gene_nomenclature": [],
+                "result_region": "Exons 18-21",
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Coverage",
+                        "result_value": 245.0,
+                        "result_units": "x"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from EGFR tyrosine kinase inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "KRAS",
+                "gene_nomenclature": [],
+                "result_region": "Exons 2-4 (codons 12, 13, 59, 61, 117, 146)",
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Coverage",
+                        "result_value": 312.0,
+                        "result_units": "x"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from MEK inhibitor therapy"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [],
+                "result_region": "Exons 11, 15",
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Coverage",
+                        "result_value": 289.0,
+                        "result_units": "x"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from BRAF inhibitor therapy"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion panel",
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform, automated RNA extraction from FFPE tissue",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No fusions detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from ALK inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion panel",
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No fusions detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from ROS1 inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion panel",
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "RET",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No fusions detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from RET inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion panel",
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "MET",
+                "gene_nomenclature": [],
+                "result_region": "Exon 14",
+                "result_status": "normal",
+                "result_description": "No exon 14 skipping detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from MET inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "RNA fusion panel",
+                "test_methodology": "Molecular barcoded primer technology with integrated sequencer platform",
+                "sample_origin": "Acetabular lesion",
+                "result_entity_type": "gene",
+                "result_entity": "NTRK1/2/3",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No fusions detected in NTRK1, NTRK2, or NTRK3",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Patient unlikely to benefit from NTRK inhibitors"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No clinically actionable variants identified. Patient unlikely to benefit from targeted therapies including EGFR, MEK, BRAF, ALK, ROS1, RET, MET, or NTRK inhibitors based on molecular profiling results",
+            "overall_recommendations": "Consider immunotherapy or chemotherapy options as no targetable alterations were identified. Results should be interpreted in conjunction with clinical and pathological findings"
+        }
+    }
+}

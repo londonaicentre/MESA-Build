@@ -1,0 +1,50 @@
+{
+    "content": "MOLECULAR GENETICS REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nTesting for familial COL4A3 likely pathogenic variant previously identified in offspring. Clinical suspicion of Alport syndrome with autosomal recessive inheritance pattern.\n\nCLINICAL INFORMATION\nThe patient's offspring has been diagnosed with Alport syndrome and carries a COL4A3 c.1262G>A p.(Gly421Asp) mutation. Testing requested to determine carrier status of parent and clarify inheritance pattern.\n\nMETHODOLOGY\nTargeted DNA sequencing was performed to detect the presence of the familial COL4A3 variant c.1262G>A p.(Gly421Asp). Genomic DNA was extracted from peripheral blood leukocytes. PCR amplification of COL4A3 exon 19 was performed followed by bidirectional Sanger sequencing. Sequence analysis was performed using reference sequence NM_000091.4.\n\nRESULTS\nGene: COL4A3 (NM_000091.4)\nVariant tested: c.1262G>A p.(Gly421Asp)\nResult: NOT DETECTED\n\nThe patient is negative for the COL4A3 c.1262G>A p.(Gly421Asp) mutation previously identified in their offspring.\n\nSUMMARY AND INTERPRETATION\nThe familial likely pathogenic variant COL4A3 c.1262G>A p.(Gly421Asp) was not detected in this parent. This result indicates that the patient does not carry this specific familial mutation.\n\nIn the context of suspected autosomal recessive Alport syndrome in the offspring, this finding suggests that:\n1. The tested parent is not the source of the c.1262G>A variant\n2. The offspring likely inherited this variant from the other parent\n3. A second causative mutation remains unidentified and may be present in either parent\n\nAutosomal recessive Alport syndrome requires biallelic pathogenic variants in COL4A3 or COL4A4. The absence of the known familial variant in this parent does not exclude carrier status for a different pathogenic variant.\n\nRECOMMENDATIONS\n1. Testing of the other parent for the COL4A3 c.1262G>A p.(Gly421Asp) variant is recommended\n2. Comprehensive COL4A3/COL4A4 sequencing and deletion/duplication analysis may be considered for both parents to identify potential second mutation\n3. Familial variant testing is available for other at-risk relatives\n4. Genetic counseling is strongly advised before pursuing additional testing to discuss inheritance patterns, recurrence risks, and testing options\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Clinical Genetics Laboratory. The laboratory is certified under Clinical Laboratory Improvement Amendments (CLIA) for high-complexity testing.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Testing for familial COL4A3 likely pathogenic variant previously identified in offspring. Clinical suspicion of Alport syndrome with autosomal recessive inheritance pattern",
+            "test_clinical_rationale": "Testing requested to determine carrier status of parent and clarify inheritance pattern",
+            "clinical_findings": [
+                {
+                    "type": "family_history",
+                    "value": "Offspring has been diagnosed with Alport syndrome and carries a COL4A3 c.1262G>A p.(Gly421Asp) mutation"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "parent",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted DNA sequencing with PCR amplification of COL4A3 exon 19 followed by bidirectional Sanger sequencing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "COL4A3",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000091",
+                        "version": "4"
+                    }
+                ],
+                "result_region": "c.1262G>A p.(Gly421Asp)",
+                "result_status": "normal",
+                "result_description": "Familial likely pathogenic variant not detected. Patient negative for COL4A3 c.1262G>A p.(Gly421Asp) mutation",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Variant Status",
+                        "result_value": "Not Detected"
+                    }
+                ],
+                "clinical_implications": "Patient does not carry familial mutation. In autosomal recessive inheritance scenario, second causative mutation remains unidentified"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The tested parent does not carry the COL4A3 c.1262G>A variant found in their offspring. In suspected autosomal recessive Alport syndrome, the offspring likely inherited this variant from the other parent, and a second causative mutation remains unidentified",
+            "overall_recommendations": "Testing of the other parent for the COL4A3 c.1262G>A variant is recommended. Comprehensive COL4A3/COL4A4 sequencing and deletion/duplication analysis may be considered for both parents. Familial variant testing available for relatives. Genetic counseling advised before testing"
+        }
+    }
+}

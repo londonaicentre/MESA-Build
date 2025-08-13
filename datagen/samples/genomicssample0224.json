@@ -1,0 +1,49 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT: [redacted name]\nDATE OF BIRTH: [redacted date]\nMEDICAL RECORD: [redacted ID]\nSPECIMEN TYPE: Amniotic fluid\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing following abnormal rapid PCR findings suggestive of trisomy 21.\n\nTEST PERFORMED\nG-banded chromosome analysis at 400-550 band resolution\n\nRESULT\n47,XX,+21\n\nINTERPRETATION\nThis female fetus has trisomy 21 (three copies of chromosome 21), consistent with Down syndrome. This karyotype confirms the preliminary diagnosis indicated by rapid PCR testing.\n\nTwenty metaphases were analyzed from two independent cultures. All cells showed the same abnormal female karyotype with an extra chromosome 21.\n\nCLINICAL IMPLICATIONS\nThe presence of trisomy 21 is associated with Down syndrome, characterized by intellectual disability, characteristic facial features, and increased risk for congenital heart defects, gastrointestinal abnormalities, and other medical conditions. The severity and specific features cannot be predicted from the karyotype alone.\n\nRECOMMENDATIONS\n1. Genetic counseling is strongly advised to discuss the implications of this diagnosis\n2. If pregnancy is terminated, follow-up cytogenetic studies on fetal tissue are recommended to confirm the diagnosis\n3. Parental karyotyping is not indicated as this appears to be primary trisomy 21\n4. For future pregnancies, prenatal diagnosis should be offered due to increased risk for chromosome abnormalities\n5. Maternal age-related aneuploidy risk counseling for subsequent pregnancies\n\nThis analysis was performed according to ACMG standards and guidelines for constitutional cytogenomic microarray analysis.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing following abnormal rapid PCR findings suggestive of trisomy 21",
+            "test_clinical_rationale": "Confirmation of preliminary trisomy 21 diagnosis from rapid PCR testing",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis at 400-550 band resolution",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Female karyotype with trisomy 21 (three copies of chromosome 21)",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "47,XX,+21"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    }
+                ],
+                "clinical_implications": "Trisomy 21 is associated with Down syndrome, characterized by intellectual disability, characteristic facial features, and increased risk for congenital heart defects, gastrointestinal abnormalities, and other medical conditions"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Confirmed diagnosis of Down syndrome (trisomy 21) in female fetus. This confirms the preliminary diagnosis from rapid PCR testing. The severity and specific features cannot be predicted from the karyotype alone",
+            "overall_recommendations": "Genetic counseling strongly advised. If pregnancy terminated, follow-up cytogenetic studies on fetal tissue recommended. Parental karyotyping not indicated as this appears to be primary trisomy 21. Prenatal diagnosis offered for future pregnancies due to increased aneuploidy risk. Maternal age-related aneuploidy risk counseling for subsequent pregnancies"
+        }
+    }
+}

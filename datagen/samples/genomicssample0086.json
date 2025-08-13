@@ -1,0 +1,101 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT DETAILS\nPatient 1: [redacted name] (Mother)\nDOB: [redacted date]\nLab ID: [redacted ID]\n\nPatient 2: [redacted name] (Father)\nDOB: [redacted date]\nLab ID: [redacted ID]\n\nDate of Report: [redacted date]\nReferring Clinician: Dr. [redacted name]\nReferral Date: [redacted date]\n\nREFERRAL REASON\nSpinal Muscular Atrophy (SMA) carrier testing requested for both parents following diagnosis of SMA in their child. The affected child has been confirmed to have homozygous deletion of SMN1 exons 7 and 8.\n\nCLINICAL INFORMATION\nThe couple's first child was diagnosed with SMA Type 1 at 4 months of age following presentation with progressive weakness and hypotonia. Genetic testing confirmed homozygous deletion of SMN1 exons 7 and 8. Parents are seeking carrier status confirmation and genetic counseling regarding recurrence risk for future pregnancies.\n\nMETHODOLOGY\nMultiplex Ligation-dependent Probe Amplification (MLPA) analysis was performed using the GenePro P021 kit to determine SMN1 exon 7 and exon 8 copy number. This assay detects deletions and duplications of the SMN1 gene and can distinguish between SMN1 and the highly homologous SMN2 gene. DNA was extracted from peripheral blood samples using standard protocols. The MLPA reaction products were analyzed by capillary electrophoresis and copy number determined by comparison to control samples.\n\nRESULTS\n\nPatient 1 (Mother):\nSMN1 Exon 7: 1 copy detected (Normal: 2 copies)\nSMN1 Exon 8: 1 copy detected (Normal: 2 copies)\nSMN2 copy number: 2 copies\n\nPatient 2 (Father):\nSMN1 Exon 7: 1 copy detected (Normal: 2 copies)\nSMN1 Exon 8: 1 copy detected (Normal: 2 copies)\nSMN2 copy number: 1 copy\n\nQuality metrics: All control probes showed expected ratios. Sample quality adequate.\n\nSUMMARY\nBoth parents show heterozygous deletion of SMN1 exons 7 and 8, confirming carrier status for Spinal Muscular Atrophy. This finding is consistent with the homozygous deletion identified in their affected child.\n\nThe carrier frequency for SMA in the general population is approximately 1 in 40-60. With both parents confirmed as carriers, the recurrence risk for each future pregnancy is:\n- 25% affected with SMA\n- 50% carrier\n- 25% unaffected non-carrier\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss reproductive options and recurrence risks\n2. Prenatal diagnosis by MLPA testing is available for future pregnancies from 11 weeks gestation via chorionic villus sampling or from 15 weeks via amniocentesis\n3. Preimplantation genetic testing (PGT-M) is also available\n4. Carrier testing can be offered to extended family members (siblings of both parents have a 50% risk of being carriers)\n5. SMN2 copy number has been determined as this can influence phenotype severity if prenatal testing identifies an affected fetus\n\nThis test has been performed in an accredited laboratory (ISO 15189).\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Spinal Muscular Atrophy (SMA) carrier testing requested for both parents following diagnosis of SMA in their child",
+            "test_clinical_rationale": "Parents are seeking carrier status confirmation and genetic counseling regarding recurrence risk for future pregnancies",
+            "clinical_findings": [
+                {
+                    "type": "family_history",
+                    "value": "Child diagnosed with SMA Type 1 at 4 months of age with progressive weakness and hypotonia"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Affected child has homozygous deletion of SMN1 exons 7 and 8"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Mother",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) analysis using GenePro P021 kit with capillary electrophoresis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SMN1",
+                "gene_nomenclature": [],
+                "result_region": "Exons 7 and 8",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous deletion of SMN1 exons 7 and 8 detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "SMN1 Exon 7 Copy Number",
+                        "result_value": 1.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "SMN1 Exon 8 Copy Number",
+                        "result_value": 1.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "SMN2 Copy Number",
+                        "result_value": 2.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Carrier Status",
+                        "result_value": "SMA Carrier"
+                    }
+                ],
+                "clinical_implications": "Confirmed carrier status for Spinal Muscular Atrophy"
+            },
+            {
+                "test_subject": "Father",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) analysis using GenePro P021 kit with capillary electrophoresis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SMN1",
+                "gene_nomenclature": [],
+                "result_region": "Exons 7 and 8",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous deletion of SMN1 exons 7 and 8 detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "SMN1 Exon 7 Copy Number",
+                        "result_value": 1.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "SMN1 Exon 8 Copy Number",
+                        "result_value": 1.0,
+                        "result_units": "copies"
+                    },
+                    {
+                        "result_name": "SMN2 Copy Number",
+                        "result_value": 1.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Carrier Status",
+                        "result_value": "SMA Carrier"
+                    }
+                ],
+                "clinical_implications": "Confirmed carrier status for Spinal Muscular Atrophy"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Both parents confirmed as SMA carriers with heterozygous deletion of SMN1 exons 7 and 8. Recurrence risk for each future pregnancy is 25% affected with SMA, 50% carrier, and 25% unaffected non-carrier",
+            "overall_recommendations": "Genetic counseling recommended to discuss reproductive options. Prenatal diagnosis by MLPA testing available from 11 weeks gestation via CVS or 15 weeks via amniocentesis. Preimplantation genetic testing available. Carrier testing can be offered to extended family members (siblings have 50% carrier risk). SMN2 copy number determined to help predict phenotype severity if future pregnancy affected"
+        }
+    }
+}

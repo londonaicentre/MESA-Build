@@ -1,0 +1,85 @@
+{
+    "content": "MOLECULAR ONCOLOGY REPORT\n[redacted name] Cancer Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Non-small cell lung cancer, possible large cell neuroendocrine carcinoma\nSpecimen Type: Right lung biopsy\nEstimated Tumor Content: 20%\n\nTEST PERFORMED\nComprehensive Solid Tumor Panel - DNA and RNA Analysis\n\nMETHODOLOGY\nDNA Analysis: Targeted next-generation sequencing of hotspot regions and full coding sequences across 45 cancer-related genes using molecular barcoded primers and amplicon-based library preparation. Sequencing performed on integrated platform with 5% variant allele frequency (VAF) detection limit.\n\nRNA Analysis: Targeted RNA sequencing for detection of gene fusions and splice variants in 17 kinase genes using molecular barcoded primers.\n\nSample Processing: Automated nucleic acid extraction and purification from formalin-fixed paraffin-embedded (FFPE) tissue.\n\nQuality Requirements: Minimum 100× coverage depth required for variant calling.\n\nQUALITY ASSESSMENT\nDNA Quality: FAILED - Insufficient amplicon coverage across target regions\nRNA Quality: FAILED - RNA degradation below acceptable threshold\nTumor Content: 20% (minimum 20% recommended)\n\nTEST RESULTS\n\nDNA PANEL ANALYSIS: FAILED\nGenes Attempted: EGFR, KRAS, BRAF, ALK, ROS1, RET, MET, NTRK1/2/3, and 35 additional genes\nResult: Unable to complete analysis due to reduced amplicon coverage. Variant detection for activating mutations, resistance mutations, and other clinically relevant alterations could not be performed.\n\nRNA PANEL ANALYSIS: FAILED\nFusions/Splice Variants Attempted: ALK fusions, ROS1 fusions, RET fusions, MET exon 14 skipping, NTRK1/2/3 fusions, and 12 additional fusion targets\nResult: Unable to complete analysis due to insufficient RNA quality. Fusion detection and splice variant analysis could not be performed.\n\nACTIONABLE FINDINGS\nNone identified - test failure\n\nCLINICAL IMPLICATIONS\nThe failed analysis prevents determination of eligibility for the following FDA-approved targeted therapies:\n- EGFR inhibitors (erlotinib, gefitinib, afatinib, osimertinib, dacomitinib)\n- ALK inhibitors (crizotinib, ceritinib, alectinib, brigatinib, lorlatinib)\n- ROS1 inhibitors (crizotinib, entrectinib)\n- BRAF/MEK inhibitors (dabrafenib/trametinib)\n- RET inhibitors (selpercatinib, pralsetinib)\n- MET inhibitors (capmatinib, tepotinib)\n- NTRK inhibitors (larotrectinib, entrectinib)\n- KRAS G12C inhibitors (sotorasib, adagrasib)\n\nRECOMMENDATIONS\n1. Consider repeat testing using material from a separate specimen if clinically indicated\n2. Alternative specimen with higher tumor content (>30%) may improve test success rate\n3. Fresh frozen tissue or cytology specimens may provide better nucleic acid quality\n4. If repeat molecular testing is not feasible, consider immunohistochemistry for ALK and ROS1 as alternative screening methods\n\nTEST LIMITATIONS\n- This assay requires minimum tumor content of 20% and adequate nucleic acid quality\n- Detection limit is 5% VAF for single nucleotide variants and small insertions/deletions\n- Large genomic rearrangements outside targeted regions will not be detected\n- RNA degradation in FFPE specimens may limit fusion detection sensitivity\n\nElectronically signed by: Dr. [redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Non-small cell lung cancer, possible large cell neuroendocrine carcinoma",
+            "test_clinical_rationale": "Determination of eligibility for targeted therapies in NSCLC",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer, possible large cell neuroendocrine carcinoma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Right lung biopsy sample with 20% estimated tumor content"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted next-generation sequencing of hotspot regions and full coding sequences across 45 cancer-related genes using molecular barcoded primers and amplicon-based library preparation on integrated platform",
+                "sample_origin": "Right lung biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "EGFR, KRAS, BRAF, ALK, ROS1, RET, MET, NTRK",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Unable to complete analysis due to reduced amplicon coverage",
+                "quantitative_results": [
+                    {
+                        "result_name": "VAF Detection Limit",
+                        "result_value": 5.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Minimum Coverage Requirement",
+                        "result_value": 100.0,
+                        "result_units": "x"
+                    },
+                    {
+                        "result_name": "Tumor Content",
+                        "result_value": 20.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "DNA Quality",
+                        "result_value": "FAILED - Insufficient amplicon coverage"
+                    }
+                ],
+                "clinical_implications": "Actionability for targeted inhibitors (EGFR/MEK/BRAF/ALK/ROS1/RET/MET/NTRK) undetermined due to test failure"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted RNA sequencing for detection of gene fusions and splice variants in 17 kinase genes using molecular barcoded primers",
+                "sample_origin": "Right lung biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "ALK, ROS1, RET, MET, NTRK",
+                "gene_nomenclature": [],
+                "result_region": "fusions and MET exon 14 skipping",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Unable to complete analysis due to insufficient RNA quality",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "RNA Quality",
+                        "result_value": "FAILED - RNA degradation below acceptable threshold"
+                    }
+                ],
+                "clinical_implications": "Fusion detection and splice variant analysis could not be performed"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The failed analysis prevents determination of eligibility for FDA-approved targeted therapies including EGFR, ALK, ROS1, BRAF/MEK, RET, MET, NTRK, and KRAS G12C inhibitors",
+            "overall_recommendations": "Consider repeat testing using material from a separate specimen if clinically indicated. Alternative specimen with higher tumor content (>30%) may improve test success rate. Fresh frozen tissue or cytology specimens may provide better nucleic acid quality. If repeat molecular testing is not feasible, consider immunohistochemistry for ALK and ROS1 as alternative screening methods"
+        }
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Chorionic villus sample\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPrenatal testing\n\nTEST PERFORMED\nInterphase Fluorescence In Situ Hybridization (FISH) Analysis\n\nMETHODOLOGY\nInterphase FISH was performed on uncultured chorionic villus cells using a chromosome 18 centromere-specific probe (D18Z1). A minimum of 100 interphase nuclei were scored for the presence of chromosome 18 signals.\n\nProbe Details:\n- D18Z1 (18p11.1-q11.1): Spectrum Green\n- Manufacturer: Abbott Molecular\n\nRESULT: ABNORMAL\n\nFISH FINDINGS\nChromosome 18 Analysis:\n- Total nuclei analyzed: 105\n- Nuclei with 3 signals: 96 (91.4%)\n- Nuclei with 2 signals: 9 (8.6%)\n\nResult: nuc ish (D18Z1)x3[96/105]\n\nINTERPRETATION\nThe FISH analysis demonstrates three chromosome 18 signals in 91.4% of nuclei examined, which is consistent with trisomy 18 (Edwards syndrome) in the fetal cells. The presence of 8.6% cells with two signals likely represents maternal cell contamination or technical artifact.\n\nThis result confirms trisomy 18 and is consistent with previous QF-PCR results.\n\nCLINICAL CORRELATION\nTrisomy 18 is associated with severe intellectual disability, congenital malformations affecting multiple organ systems, and poor prognosis. The majority of affected pregnancies result in spontaneous loss, and liveborn infants typically have a median survival of less than two weeks.\n\nRECOMMENDATIONS\n1. Full karyotype analysis from cultured chorionic villus cells is in progress and will be reported separately to confirm the diagnosis and rule out structural abnormalities\n2. Genetic counseling is recommended to discuss the implications of this diagnosis\n3. If pregnancy termination is elected, tissue submission is recommended for confirmation of findings\n4. Maternal age-related recurrence risk counseling should be provided\n\nLIMITATIONS\nThis test is limited to detection of numerical abnormalities of chromosome 18. Structural rearrangements, mosaicism below the detection threshold, and abnormalities of other chromosomes would not be detected by this targeted FISH analysis.\n\nAuthorized by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH performed on uncultured chorionic villus cells using chromosome 18 centromere-specific probe (D18Z1)",
+                "sample_origin": "Chorionic villus",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18Z1 (18p11.1-q11.1)",
+                "result_status": "abnormal",
+                "result_description": "Three chromosome 18 signals in 91.4% of nuclei examined, consistent with trisomy 18",
+                "quantitative_results": [
+                    {
+                        "result_name": "Nuclei with 3 signals",
+                        "result_value": 96.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total nuclei analyzed",
+                        "result_value": 105.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage with trisomy",
+                        "result_value": 91.4,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish (D18Z1)x3[96/105]"
+                    },
+                    {
+                        "result_name": "Diagnosis",
+                        "result_value": "Trisomy 18 (Edwards syndrome)"
+                    }
+                ],
+                "clinical_implications": "Confirms trisomy 18, consistent with previous QF-PCR results. Associated with severe intellectual disability, congenital malformations, and poor prognosis"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Trisomy 18 is associated with severe intellectual disability, congenital malformations affecting multiple organ systems, and poor prognosis. The majority of affected pregnancies result in spontaneous loss, and liveborn infants typically have a median survival of less than two weeks",
+            "overall_recommendations": "Full karyotype analysis from cultured chorionic villus cells is in progress. Genetic counseling recommended. If pregnancy termination is elected, tissue submission recommended for confirmation. Maternal age-related recurrence risk counseling should be provided"
+        }
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\nReferring Physician: Dr. [redacted name]\n\nREFERRAL REASON\nHearing loss - genetic evaluation requested\n\nMETHODOLOGY\nTargeted PCR assay for MT-RNR1 m.1555A>G variant\n\nDNA was extracted from peripheral blood using standard protocols. The mitochondrial MT-RNR1 gene region encompassing position m.1555 was amplified by PCR. Variant detection was performed using BsmAI restriction enzyme digestion, which specifically cleaves the wild-type sequence. The m.1555A>G variant abolishes the BsmAI recognition site, allowing differentiation between wild-type and variant alleles.\n\nMethod Limitations: This assay may not reliably detect low-level heteroplasmy (<15%). Only the specific m.1555A>G variant is assessed by this method.\n\nRESULTS\nMT-RNR1 (mitochondrial genome): m.1555A>G variant NOT DETECTED\n\nThe pathogenic m.1555A>G variant in the MT-RNR1 gene was not identified in this patient. This variant is associated with predisposition to aminoglycoside-induced hearing loss and non-syndromic sensorineural hearing loss.\n\nSUMMARY\nThe absence of the m.1555A>G variant excludes this specific genetic cause for the patient's hearing loss. However, this result does not rule out other genetic causes of hearing loss, as numerous genes are associated with hereditary hearing impairment.\n\nThe m.1555A>G variant in MT-RNR1 is a well-established cause of maternally inherited non-syndromic hearing loss and increased susceptibility to aminoglycoside-induced ototoxicity (Prezant et al., 1993, Nat Genet 4:289-294; Estivill et al., 1998, Am J Hum Genet 62:27-35).\n\nFOLLOW-UP\nGiven the negative result for this specific variant, the sample has been forwarded for comprehensive genetic testing using our Non-syndromic Hearing Loss Panel, which includes sequencing and deletion/duplication analysis of over 100 genes associated with hereditary hearing loss. Results from this expanded testing are pending and will be reported separately.\n\nThis report has been reviewed and approved by:\n[redacted name], PhD, FACMG\nLaboratory Director\nCAP#: [redacted ID] CLIA#: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Hearing loss - genetic evaluation requested",
+            "test_clinical_rationale": "Evaluation for genetic causes of hearing loss",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Hearing loss"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Targeted PCR assay with BsmAI restriction enzyme digestion for variant detection",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "MT-RNR1",
+                "gene_nomenclature": [],
+                "result_region": "m.1555A>G",
+                "result_status": "normal",
+                "result_description": "m.1555A>G variant NOT DETECTED",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Variant Status",
+                        "result_value": "Not Detected"
+                    }
+                ],
+                "clinical_implications": "Absence of m.1555A>G variant excludes this specific genetic cause for hearing loss. This variant is associated with predisposition to aminoglycoside-induced hearing loss and non-syndromic sensorineural hearing loss"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The absence of the m.1555A>G variant excludes this specific genetic cause for the patient's hearing loss. However, this result does not rule out other genetic causes of hearing loss, as numerous genes are associated with hereditary hearing impairment",
+            "overall_recommendations": "Sample has been forwarded for comprehensive genetic testing using Non-syndromic Hearing Loss Panel, which includes sequencing and deletion/duplication analysis of over 100 genes associated with hereditary hearing loss. Results from this expanded testing are pending"
+        }
+    }
+}

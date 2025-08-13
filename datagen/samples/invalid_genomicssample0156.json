@@ -1,0 +1,45 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Cancer Center\n\nPATIENT INFORMATION\nName: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\n\nSPECIMEN DETAILS\nSpecimen Type: Bone marrow aspirate\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Myeloma\nReferring Physician: Dr. [redacted name]\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) analysis on CD138+ purified cells\n\nMETHODOLOGY\nCD138+ plasma cells were isolated from bone marrow aspirate using immunomagnetic selection. FISH analysis was performed on purified CD138+ cells using the following probe panel for myeloma:\n- IGH/FGFR3 dual fusion probe\n- IGH/MAF dual fusion probe\n- IGH/CCND1 dual fusion probe\n- 1p32/1q21 probe\n- TP53/CEP17 probe\n- 13q14/13q34 probe\n\nMinimum of 200 interphase nuclei analyzed per probe set.\n\nRESULTS\nFISH analysis on bone marrow CD138+ purified cells completed.\n\nDetailed FISH results to follow in supplemental report.\n\nNOTE\nG-banded chromosome analysis not required. Sample processed for FISH studies only.\n\nAuthorized by: Dr. [redacted name], Director of Cytogenetics\nElectronically signed: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Myeloma",
+            "test_clinical_rationale": "FISH analysis for myeloma-associated cytogenetic abnormalities",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Myeloma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "CD138+ plasma cells isolated from bone marrow aspirate using immunomagnetic selection. FISH analysis performed on purified CD138+ cells using myeloma probe panel",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "other",
+                "result_entity": "CD138+ cells",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "FISH analysis on bone marrow CD138+ purified cells completed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Minimum nuclei analyzed",
+                        "result_value": 200,
+                        "result_units": "nuclei per probe set"
+                    }
+                ],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FISH analysis completed on CD138+ purified plasma cells for detection of myeloma-associated cytogenetic abnormalities",
+            "overall_recommendations": "G-banded chromosome analysis not required. Sample processed for FISH studies only"
+        }
+    }
+}

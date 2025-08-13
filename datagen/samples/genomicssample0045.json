@@ -1,0 +1,70 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT DETAILS\nName: [redacted name]\nDOB: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Peripheral blood (EDTA)\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nTesting for Autosomal Dominant Hereditary Spastic Paraplegia (AD-HSP)\n\nCLINICAL INFORMATION\nIndex patient referred for genetic testing for hereditary spastic paraplegia.\n\nMETHODOLOGY\nDirect sequencing for SPAST gene point mutations:\n- Entire SPAST coding region including intron-exon boundaries screened\n- Fluorescent DNA sequencing methodology employed\n- Detection rate >98% for point mutations\n\nMLPA analysis for copy number variants:\n- GeneScan MLPA kit X165 utilized\n- All SPAST exons tested\n- 13/14 coding exons of SPG3a gene tested\n- Analysis for exon deletions and duplications\n\nRESULTS\n\nSPAST gene analysis (NM_014946.3):\nSequence variant detected: c.1536G>T (p.Glu512Asp)\nLocation: Exon 13\nZygosity: Heterozygous\nClassification: Pathogenic\n\nSPG3a gene analysis:\nNo pathogenic variants detected\nNo copy number variants detected\n\nBioinformatics Analysis:\n- In silico prediction tools indicate damaging effect\n- Variant previously reported in affected individuals with HSP\n- Absent from population databases\n- Located in functionally important AAA ATPase domain\n\nSUMMARY\nA heterozygous pathogenic variant c.1536G>T (p.Glu512Asp) has been detected in exon 13 of the SPAST gene. This result is consistent with the clinical diagnosis of hereditary spastic paraplegia. The detected variant has been previously reported in multiple affected individuals and is predicted to be pathogenic by bioinformatics analysis.\n\nSPAST mutations are the most common cause of autosomal dominant HSP, accounting for approximately 40% of AD-HSP cases. Combined with SPG3a mutations, these two genes account for ~50% of all AD-HSP cases.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss inheritance pattern and recurrence risks\n2. Cascade testing is available for at-risk family members\n3. Prenatal testing is available for this variant\n4. Presymptomatic testing should be undertaken with appropriate genetic counseling\n\nMETHODOLOGICAL NOTES\nThis test detects point mutations and small insertions/deletions in the SPAST gene with >98% sensitivity. Large deletions/duplications are detected by MLPA analysis. Rare variants in non-coding regions or deep intronic variants may not be detected by this methodology.\n\nREFERENCES\n1. Hazan J et al. (1999) Spastin, a new AAA protein, is altered in the most frequent form of autosomal dominant spastic paraplegia. Nat Genet 23:296-303\n2. Solowska JM & Baas PW (2015) Hereditary spastic paraplegia SPG4: what is known and not known about the disease. Brain 138:2471-2484\n\nAuthorized by: [redacted name], Clinical Scientist\nReport checked by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Testing for Autosomal Dominant Hereditary Spastic Paraplegia (AD-HSP)",
+            "test_clinical_rationale": "Index patient referred for genetic testing for hereditary spastic paraplegia",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Index patient"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Direct sequencing for SPAST gene point mutations - Entire SPAST coding region including intron-exon boundaries screened using fluorescent DNA sequencing methodology with >98% detection rate",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "SPAST",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_014946",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.1536G>T (p.Glu512Asp) in exon 13",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous variant c.1536G>T (p.Glu512Asp) detected in SPAST exon 13",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Result consistent with HSP clinical diagnosis. Variant previously reported in affected individuals and predicted pathogenic by bioinformatics analysis. Located in functionally important AAA ATPase domain"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "MLPA analysis using GeneScan MLPA kit X165 to test all SPAST exons and 13/14 coding exons of SPG3a gene for deletions/duplications",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SPAST and SPG3a",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No copy number variants detected in SPAST or SPG3a genes",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Pathogenic SPAST variant detected, confirming diagnosis of autosomal dominant hereditary spastic paraplegia. SPAST mutations account for ~40% of AD-HSP cases, and combined with SPG3a mutations account for ~50% of all AD-HSP cases",
+            "overall_recommendations": "Genetic counseling recommended to discuss inheritance pattern and recurrence risks. Cascade testing available for at-risk family members. Prenatal testing available for this variant. Presymptomatic testing should be undertaken with appropriate genetic counseling"
+        }
+    }
+}

@@ -1,0 +1,76 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReferral Reason: Azoospermia evaluation\nClinical Details: Adult male presenting with azoospermia\n\nTEST PERFORMED\nY Chromosome Microdeletion Analysis\nMethodology: Multiplex PCR analysis performed according to European Molecular Genetics Quality Network (EMQN) guidelines for Y chromosome microdeletion testing. DNA extracted from peripheral blood lymphocytes. PCR amplification of sequence-tagged sites (STS) markers spanning the AZF regions and control loci.\n\nRESULTS\n\nMARKER ANALYSIS:\n\nRegion\tMarker\tResult\nControl\tSRY (Yp11.31)\tPresent\nControl\tAmelogenin X (Xp22.2)\tPresent\nControl\tAmelogenin Y (Yp11.2)\tPresent\nAZFa\tsY84\tPresent\nAZFa\tsY86\tPresent\nAZFb\tsY127\tPresent\nAZFb\tsY134\tPresent\nAZFc\tsY254\tABSENT\nAZFc\tsY255\tABSENT\n\nSUMMARY: Complete deletion of the AZFc region detected\n\nINTERPRETATION\nThis patient demonstrates a complete deletion of the AZFc region on the Y chromosome, with intact AZFa and AZFb regions. The presence of SRY and both X and Y amelogenin markers confirms normal male sex chromosome complement and adequate DNA quality.\n\nAZFc deletions are the most common Y chromosome microdeletions associated with male infertility, accounting for approximately 60% of all AZF deletions. This deletion results in impaired spermatogenesis with phenotypes ranging from azoospermia to severe oligospermia.\n\nClinical studies indicate that spermatozoa can be retrieved in approximately 50% of men with AZFc deletions through testicular sperm extraction (TESE), making intracytoplasmic sperm injection (ICSI) a potential therapeutic option. However, it is important to note that male offspring conceived through assisted reproductive technology would inherit the Y chromosome deletion and consequently have a high risk of impaired spermatogenesis.\n\nRECOMMENDATIONS\n1. G-banded chromosome analysis is recommended as Y chromosome microdeletions can rarely be associated with cytogenetic abnormalities\n2. Genetic counseling is strongly advised to discuss:\n   - Reproductive options including ICSI with testicular sperm extraction\n   - Risk of transmission to male offspring\n   - Implications for family members\n3. Paternal testing should be considered to determine whether the deletion is inherited or de novo, which would clarify recurrence risk for other male family members\n4. Referral to reproductive endocrinology for comprehensive fertility evaluation and management\n\nTest performed by: [redacted name], PhD\nReviewed by: [redacted name], MD, PhD\nLaboratory Director: [redacted name], MD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Azoospermia evaluation",
+            "test_clinical_rationale": "Adult male presenting with azoospermia",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult male presenting with azoospermia"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Multiplex PCR analysis performed according to European Molecular Genetics Quality Network (EMQN) guidelines for Y chromosome microdeletion testing",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Y chromosome",
+                "gene_nomenclature": [],
+                "result_region": "AZFc region",
+                "result_status": "abnormal",
+                "result_description": "Complete deletion of the AZFc region detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "SRY (Yp11.31)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "Amelogenin X (Xp22.2)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "Amelogenin Y (Yp11.2)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "sY84 (AZFa)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "sY86 (AZFa)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "sY127 (AZFb)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "sY134 (AZFb)",
+                        "result_value": "Present"
+                    },
+                    {
+                        "result_name": "sY254 (AZFc)",
+                        "result_value": "ABSENT"
+                    },
+                    {
+                        "result_name": "sY255 (AZFc)",
+                        "result_value": "ABSENT"
+                    }
+                ],
+                "clinical_implications": "AZFc deletions are the most common Y chromosome microdeletions associated with male infertility. This deletion results in impaired spermatogenesis with phenotypes ranging from azoospermia to severe oligospermia. Spermatozoa can be retrieved in approximately 50% of men with AZFc deletions through TESE, making ICSI a potential option. Male offspring would inherit the deletion and have high risk of impaired spermatogenesis."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Complete AZFc deletion detected causing impaired spermatogenesis and azoospermia. Approximately 50% chance of sperm retrieval through TESE for potential ICSI. Male offspring would inherit the Y chromosome deletion with consequent fertility impairment",
+            "overall_recommendations": "G-banded chromosome analysis recommended due to rare association with cytogenetic abnormalities. Genetic counseling strongly advised to discuss reproductive options, transmission risk to male offspring, and family implications. Paternal testing should be considered to determine if deletion is inherited or de novo. Referral to reproductive endocrinology for comprehensive fertility evaluation and management"
+        }
+    }
+}

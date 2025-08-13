@@ -1,0 +1,59 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\nFluorescence In Situ Hybridization (FISH) Analysis\n\nPATIENT: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nAGE/SEX: 73-year-old male\nORDERING PHYSICIAN: Dr. [redacted name]\nDATE COLLECTED: [redacted date]\nDATE RECEIVED: [redacted date]\nDATE REPORTED: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Newly diagnosed lung adenocarcinoma\nReason for testing: Molecular characterization for targeted therapy selection\n\nSPECIMEN\nType: Formalin-fixed paraffin-embedded tissue\nSite: Lung\nBlock ID: [redacted ID]\n\nTEST PERFORMED\nFluorescence in situ hybridization (FISH) for:\n- ALK (2p23) rearrangement\n- ROS1 (6q22) rearrangement\n\nMETHODOLOGY\nFISH analysis was performed on 4-micron tissue sections using the following probes:\n- ALK: Vysis ALK Break Apart FISH Probe Kit (Abbott Molecular)\n- ROS1: Vysis ROS1 Break Apart FISH Probe Kit (Abbott Molecular)\n\nProcedure: Tissue sections were deparaffinized, pretreated, and hybridized with fluorescent probes according to manufacturer's protocols. Signal patterns were evaluated using fluorescence microscopy.\n\nRESULTS\n\nALK FISH: ANALYSIS INCOMPLETE - INSUFFICIENT TUMOR CELLS\nROS1 FISH: ANALYSIS INCOMPLETE - INSUFFICIENT TUMOR CELLS\n\nThe tissue sections submitted for analysis contained insufficient viable tumor cells for reliable FISH interpretation. Multiple areas were examined, but adequate tumor cell density could not be achieved for either ALK or ROS1 testing. A minimum of 50 tumor cells is required for accurate assessment.\n\nINTERPRETATION\nMolecular characterization for ALK and ROS1 rearrangements could not be completed due to insufficient tumor cellularity in the submitted specimen. These analyses are critical for identifying patients who may benefit from targeted therapy with ALK or ROS1 inhibitors.\n\nRECOMMENDATIONS\nA new tissue biopsy with adequate tumor content is recommended for completion of ALK and ROS1 FISH testing. Alternative testing methods such as next-generation sequencing (NGS) on a new specimen may also be considered for comprehensive molecular profiling.\n\nPathologist: Dr. [redacted name]\nElectronically signed: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Molecular characterization for targeted therapy selection",
+            "test_clinical_rationale": "Molecular characterization for targeted therapy selection",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "73-year-old male"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Newly diagnosed lung adenocarcinoma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization on 4-micron tissue sections using Vysis ALK Break Apart FISH Probe Kit (Abbott Molecular)",
+                "sample_origin": "Lung",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "ANALYSIS INCOMPLETE - INSUFFICIENT TUMOR CELLS",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Molecular characterization for targeted therapy selection not possible due to sample limitations"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization on 4-micron tissue sections using Vysis ROS1 Break Apart FISH Probe Kit (Abbott Molecular)",
+                "sample_origin": "Lung",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "ANALYSIS INCOMPLETE - INSUFFICIENT TUMOR CELLS",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Molecular characterization for targeted therapy selection not possible due to sample limitations"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Molecular characterization for ALK and ROS1 rearrangements could not be completed due to insufficient tumor cellularity. These analyses are critical for identifying patients who may benefit from targeted therapy with ALK or ROS1 inhibitors",
+            "overall_recommendations": "A new tissue biopsy with adequate tumor content is recommended for completion of ALK and ROS1 FISH testing. Alternative testing methods such as next-generation sequencing (NGS) on a new specimen may also be considered for comprehensive molecular profiling"
+        }
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nREFERRING PHYSICIAN\nDr. [redacted name]\n[redacted location] Medical Associates\n\nCLINICAL INDICATION\nCarrier testing for Tay-Sachs disease\n\nTEST PERFORMED\nTargeted DNA sequencing for common HEXA variants\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood leukocytes. Targeted sequencing was performed for the following variants in the HEXA gene (NM_000520.6):\n- c.1274_1277dupTATC (p.Tyr427fs) - Ashkenazi Jewish founder mutation\n- c.1421+1G>C - Ashkenazi Jewish founder mutation  \n- c.805G>A (p.Gly269Ser) - Ashkenazi Jewish founder mutation\n- c.739C>T (p.Arg247Trp) - Common UK variant\n- Pseudo-deficiency variant screening\n\nSequencing was performed using Sanger sequencing methodology with bidirectional analysis. All variants are described according to Human Genome Variation Society (HGVS) nomenclature guidelines.\n\nRESULTS\n\nHEXA Gene Analysis:\nNo pathogenic sequence variants detected\n\nVariants Tested:\n- c.1274_1277dupTATC (p.Tyr427fs): Not detected\n- c.1421+1G>C: Not detected\n- c.805G>A (p.Gly269Ser): Not detected\n- c.739C>T (p.Arg247Trp): Not detected\n- Pseudo-deficiency variant: Not detected\n\nINTERPRETATION\nNo pathogenic variants were identified in the HEXA gene for the common mutations tested. This result indicates that the patient is not a carrier of the most common Tay-Sachs disease mutations, including the three Ashkenazi Jewish founder mutations that account for approximately 98% of carriers in the Ashkenazi Jewish population, and the common UK variant.\n\nRISK ASSESSMENT\nBased on these results, the patient's carrier risk for Tay-Sachs disease is reduced to approximately 1 in 520. This residual risk reflects the possibility of rare pathogenic variants not covered by this targeted analysis.\n\nRECOMMENDATIONS\nThe current testing has analyzed the most common pathogenic variants in HEXA. If further risk reduction is desired, comprehensive HEXA gene sequencing of all coding regions and splice sites is available. This expanded testing would detect rare variants not included in the current panel.\n\nGenetic counseling is recommended to discuss these results, residual risk, and testing options for family members if indicated.\n\nTECHNICAL NOTES\nThis test detects approximately 98% of Tay-Sachs disease carriers in the Ashkenazi Jewish population and 95% of carriers in the general population. The analytical sensitivity and specificity of this assay are >99%.\n\nVariant nomenclature follows HGVS guidelines using HEXA reference sequence NM_000520.6.\n\nREFERENCES\n1. Kaback M, et al. Tay-Sachs disease--carrier screening, prenatal diagnosis, and the molecular era. JAMA. 1993;270(19):2307-15.\n2. Myerowitz R, Costigan FC. The major defect in Ashkenazi Jews with Tay-Sachs disease is an insertion in the gene for the alpha-chain of beta-hexosaminidase. J Biol Chem. 1988;263(35):18587-9.\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the U.S. Food and Drug Administration.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Carrier testing for Tay-Sachs disease",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Targeted DNA sequencing using Sanger sequencing methodology with bidirectional analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "HEXA",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000520",
+                        "version": "6"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic sequence variants detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "c.1274_1277dupTATC (p.Tyr427fs)",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "c.1421+1G>C",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "c.805G>A (p.Gly269Ser)",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "c.739C>T (p.Arg247Trp)",
+                        "result_value": "Not detected"
+                    },
+                    {
+                        "result_name": "Pseudo-deficiency variant",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "Not a carrier of the most common Tay-Sachs disease mutations. Carrier risk reduced to approximately 1 in 520"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Patient is not a carrier of common HEXA variants tested, including three Ashkenazi Jewish founder mutations and common UK variant. Residual carrier risk for Tay-Sachs disease is approximately 1 in 520",
+            "overall_recommendations": "Comprehensive HEXA gene sequencing of all coding regions and splice sites is available if further risk reduction is desired. Genetic counseling recommended to discuss results, residual risk, and testing options for family members"
+        }
+    }
+}

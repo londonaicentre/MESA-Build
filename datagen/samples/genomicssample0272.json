@@ -1,0 +1,72 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Peripheral blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nREFERRAL REASON\nDiagnostic testing for Fragile X syndrome\n\nTEST DESCRIPTION\nPCR-based assay for CGG repeat expansion analysis in the FMR1 gene (FRAXA) and GCC repeat expansion analysis in the FMR2 gene (FRAXE). This test detects expansions in the promoter regions of both genes associated with Fragile X syndrome and FRAXE intellectual disability.\n\nMethodology: PCR amplification with capillary electrophoresis for accurate sizing of CGG repeats in FMR1 and GCC repeats in FMR2. The assay can reliably detect normal, intermediate, premutation, and full mutation ranges.\n\nRESULTS\n\nFMR1 Gene Analysis (FRAXA)\nCGG Repeat Size: 29 repeats\nInterpretation: NORMAL RANGE\n\nFMR2 Gene Analysis (FRAXE)\nGCC Repeat Size: 16 repeats\nInterpretation: NORMAL RANGE\n\nNo pathogenic expansions detected in either FMR1 or FMR2 genes.\n\nSUMMARY\nMolecular testing for Fragile X syndrome (FRAXA) and FRAXE-associated intellectual disability shows normal repeat sizes in both FMR1 and FMR2 genes. These results significantly reduce the likelihood of Fragile X syndrome to less than 1%.\n\nCLINICAL IMPLICATIONS\nThe absence of CGG expansion in FMR1 and GCC expansion in FMR2 makes the diagnosis of Fragile X syndrome or FRAXE-associated intellectual disability highly unlikely. However, it should be noted that rare cases (<1%) of Fragile X syndrome may be caused by point mutations, deletions, or other rearrangements within the FMR1 gene that are not detectable by this PCR-based expansion analysis.\n\nTECHNICAL NOTES\nRepeat Size Reference Ranges:\n\nFMR1 (FRAXA):\n- Normal: 5-44 CGG repeats\n- Intermediate: 45-54 CGG repeats\n- Premutation: 55-200 CGG repeats\n- Full mutation: >200 CGG repeats\n\nFMR2 (FRAXE):\n- Normal: 6-30 GCC repeats\n- Intermediate: 31-60 GCC repeats\n- Full mutation: >200 GCC repeats\n\nTest Limitations:\n- This assay detects only CGG/GCC repeat expansions\n- Point mutations, deletions, or rearrangements are not detected\n- Mosaicism may affect interpretation\n- Very large expansions may fail to amplify\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for Fragile X syndrome",
+            "test_clinical_rationale": "PCR-based assay for CGG repeat expansion analysis in the FMR1 gene (FRAXA) and GCC repeat expansion analysis in the FMR2 gene (FRAXE) to detect expansions associated with Fragile X syndrome and FRAXE intellectual disability",
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification with capillary electrophoresis for accurate sizing of CGG repeats in FMR1 and GCC repeats in FMR2",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "FMR1",
+                "gene_nomenclature": [],
+                "result_region": "CGG repeat region (FRAXA)",
+                "result_status": "normal",
+                "result_description": "CGG Repeat Size: 29 repeats - NORMAL RANGE",
+                "quantitative_results": [
+                    {
+                        "result_name": "CGG Repeat Size",
+                        "result_value": 29.0,
+                        "result_units": "repeats"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Interpretation",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "No pathogenic expansion detected in FMR1 gene"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification with capillary electrophoresis for accurate sizing of CGG repeats in FMR1 and GCC repeats in FMR2",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "FMR2",
+                "gene_nomenclature": [],
+                "result_region": "GCC repeat region (FRAXE)",
+                "result_status": "normal",
+                "result_description": "GCC Repeat Size: 16 repeats - NORMAL RANGE",
+                "quantitative_results": [
+                    {
+                        "result_name": "GCC Repeat Size",
+                        "result_value": 16.0,
+                        "result_units": "repeats"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Interpretation",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": "No pathogenic expansion detected in FMR2 gene"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The absence of CGG expansion in FMR1 and GCC expansion in FMR2 makes the diagnosis of Fragile X syndrome or FRAXE-associated intellectual disability highly unlikely. Likelihood of Fragile X syndrome reduced to less than 1%. Rare cases (<1%) may be caused by point mutations, deletions, or other rearrangements within the FMR1 gene that are not detectable by this PCR-based expansion analysis",
+            "overall_recommendations": "No specific recommendations provided"
+        }
+    }
+}

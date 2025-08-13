@@ -1,0 +1,58 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY\nFLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen Type: Urine (ThinPrep)\nCollection Date: [redacted date]\nReceived Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INDICATION\nElderly male patient with bladder tumor and left ureter filling defect. Recent urine cytology (Paris category 3) suggests possible instrumentation effect or low grade urothelial carcinoma. FISH analysis requested to evaluate for chromosomal abnormalities associated with bladder cancer.\n\nTEST PERFORMED\nUroVysion Bladder Cancer Kit (GeneTech BCA-300)\nFluorescence in situ hybridization (FISH) analysis\n\nMETHODOLOGY\nFISH analysis was attempted using the FDA-approved UroVysion Bladder Cancer Kit on ThinPrep-processed urine specimen. This multi-target, multicolor FISH probe set is designed to detect aneuploidy for chromosomes 3, 7, 17, and loss of the 9p21 locus.\n\nProbe Set:\n- CEP3 (SpectrumRed): Chromosome 3 centromere\n- CEP7 (SpectrumGreen): Chromosome 7 centromere\n- CEP17 (SpectrumAqua): Chromosome 17 centromere\n- LSI 9p21 (SpectrumGold): 9p21 locus\n\nRESULT\nTEST FAILED - INSUFFICIENT CELLULAR MATERIAL\n\nThe ThinPrep slide contained insufficient urothelial cells for FISH analysis. Multiple areas of the slide were examined, but adequate numbers of morphologically abnormal cells required for UroVysion scoring criteria could not be identified. A minimum of 25 morphologically abnormal cells is required for analysis per manufacturer guidelines.\n\nCells observed: <5 urothelial cells identified\nAnalysis: Not performed due to insufficient cellularity\n\nINTERPRETATION\nFISH assessment for bladder cancer-associated chromosomal abnormalities could not be performed due to insufficient cellular material on the ThinPrep slide. This technical failure prevents evaluation of aneuploidy patterns that would aid in the detection and monitoring of bladder cancer.\n\nLIMITATIONS\nThe UroVysion test requires adequate cellularity with morphologically abnormal cells for accurate interpretation. Low cellularity samples may result in false-negative results or test failure as occurred in this case.\n\nRECOMMENDATIONS\nConsider repeat urine collection with attention to:\n- First morning void specimen preferred\n- Adequate hydration prior to collection\n- Collection of sufficient volume (minimum 50 mL)\n- Prompt processing to preserve cellular integrity\n\nAlternative testing options include repeat cystoscopy with directed biopsy or enhanced cystoscopy techniques.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Elderly male patient with bladder tumor and left ureter filling defect",
+            "test_clinical_rationale": "FISH analysis requested to evaluate for chromosomal abnormalities associated with bladder cancer",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Elderly male patient"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Bladder tumor and left ureter filling defect"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Recent urine cytology (Paris category 3) suggests possible instrumentation effect or low grade urothelial carcinoma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "UroVysion Bladder Cancer Kit (GeneTech BCA-300) - multi-target, multicolor FISH probe set to detect aneuploidy for chromosomes 3, 7, 17, and loss of 9p21 locus",
+                "sample_origin": "Urine (ThinPrep)",
+                "result_entity_type": "chromosome",
+                "result_entity": "UroVysion FISH panel",
+                "gene_nomenclature": [],
+                "result_region": "Chromosomes 3, 7, 17 centromeres and 9p21 locus",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "TEST FAILED - INSUFFICIENT CELLULAR MATERIAL. The ThinPrep slide contained insufficient urothelial cells for FISH analysis",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Observed",
+                        "result_value": 5.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Test Status",
+                        "result_value": "Failed - Insufficient cellularity"
+                    }
+                ],
+                "clinical_implications": "FISH assessment for bladder cancer-associated chromosomal abnormalities could not be performed due to insufficient cellular material"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Unable to assess chromosomal abnormalities associated with bladder cancer due to insufficient sample. This prevents evaluation of aneuploidy patterns that would aid in detection and monitoring of bladder cancer",
+            "overall_recommendations": "Consider repeat urine collection with first morning void specimen, adequate hydration, minimum 50 mL volume, and prompt processing. Alternative testing options include repeat cystoscopy with directed biopsy or enhanced cystoscopy techniques"
+        }
+    }
+}

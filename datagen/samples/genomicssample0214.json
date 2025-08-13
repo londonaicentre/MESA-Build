@@ -1,0 +1,94 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nReferring Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INDICATION\nUltrasound abnormalities detected during pregnancy. Screening for chromosomal trisomies (13, 18, 21).\n\nSPECIMEN\nFetal sample obtained via amniocentesis at 32 weeks gestation\nSpecimen Type: Uncultured amniotic fluid\nSpecimen ID: [redacted ID]\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured amniotic fluid cells using fluorescently labeled primers for short tandem repeat (STR) markers specific to chromosomes 13, 18, and 21. Multiple informative markers were analyzed for each chromosome to detect trisomy, monosomy, and triploidy. DNA was extracted using standard protocols and amplified using multiplex PCR. Fragment analysis was performed on an automated genetic analyzer.\n\nRESULTS\nChromosome 13: Normal diallelic pattern observed\nChromosome 18: Normal diallelic pattern observed  \nChromosome 21: Normal diallelic pattern observed\n\nMolecular Karyotype: rsa(13,18,21)×2\n\nINTERPRETATION\nNo abnormality detected. QF-PCR analysis shows a normal complement for chromosomes 13, 18, and 21. No evidence of trisomy 13 (Patau syndrome), trisomy 18 (Edwards syndrome), or trisomy 21 (Down syndrome) was identified in this fetal sample.\n\nLIMITATIONS\nThis test is designed to detect whole chromosome aneuploidies of chromosomes 13, 18, and 21 only. It does not detect:\n- Structural chromosome abnormalities\n- Segmental imbalances or microdeletions/duplications\n- Low-level mosaicism (<20%)\n- Aneuploidies of other chromosomes\n- Single gene disorders\n- Maternal cell contamination cannot be completely excluded\n\nRECOMMENDATIONS\nGiven the ultrasound abnormalities noted, follow-up testing at a genomic laboratory is recommended to investigate other potential genetic causes. Options may include chromosomal microarray analysis or comprehensive genomic testing.\n\nThis report has been reviewed and authorized by:\n[redacted name], PhD, FACMG\nLaboratory Director",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Ultrasound abnormalities detected during pregnancy. Screening for chromosomal trisomies (13, 18, 21)",
+            "test_clinical_rationale": "Rapid aneuploidy detection for common chromosomal trisomies in context of abnormal prenatal ultrasound findings",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Ultrasound abnormalities during pregnancy"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "32 weeks gestation"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 13 (Patau syndrome)"
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 18 (Edwards syndrome)"
+            },
+            {
+                "test_subject": "Fetal sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for short tandem repeat markers",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal diallelic pattern observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2"
+                    },
+                    {
+                        "result_name": "Molecular Karyotype",
+                        "result_value": "rsa(13,18,21)×2"
+                    }
+                ],
+                "clinical_implications": "No evidence of trisomy 21 (Down syndrome)"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "No chromosomal abnormalities detected for tested chromosomes 13, 18, and 21. The test does not detect structural abnormalities, segmental imbalances, low-level mosaicism (<20%), aneuploidies of other chromosomes, or single gene disorders",
+            "overall_recommendations": "Given the ultrasound abnormalities noted, follow-up testing at a genomic laboratory is recommended to investigate other potential genetic causes. Options may include chromosomal microarray analysis or comprehensive genomic testing"
+        }
+    }
+}

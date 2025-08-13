@@ -1,0 +1,69 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\nFluorescence In Situ Hybridization (FISH) Analysis\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge/Sex: 49-year-old female\nMedical Record: [redacted ID]\nSpecimen Type: Breast tissue\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nHER2 status assessment in breast cancer\n\nTEST PERFORMED\nHER2/neu (ERBB2) Gene Amplification by FISH\n\nMETHODOLOGY\nInterphase FISH analysis was performed using GenProbe XR-2000 ERBB2/SE 17 dual-color probe. This probe hybridizes to the HER2/neu (ERBB2) gene locus at 17q12 (orange signal) and to the chromosome 17 centromere (green signal).\n\nRESULTS\n\nCells Analyzed: 60\nMean HER2 Copy Number: 6.23 per cell\nMean Chromosome 17 Centromere: 1.73 per cell\nHER2/Chr17 Ratio: 3.60\n\nINTERPRETATION: POSITIVE FOR HER2 AMPLIFICATION\n\nThe HER2/Chr17 ratio of 3.60 exceeds the threshold of ≥2.0, indicating HER2 gene amplification.\nThe mean HER2 copy number of 6.23 per cell also meets the alternative criterion of ≥6.0 signals/cell for HER2 positivity.\n\nThis result indicates HER2-amplified breast cancer by both ratio and copy number criteria according to ASCO/CAP guidelines.\n\nPathologist: [redacted name], MD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "HER2 status assessment in breast cancer",
+            "test_clinical_rationale": null,
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "49-year-old female"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Breast cancer"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using GenProbe XR-2000 ERBB2/SE 17 dual-color probe",
+                "sample_origin": "Breast tissue",
+                "result_entity_type": "gene",
+                "result_entity": "HER2 (ERBB2)",
+                "gene_nomenclature": [],
+                "result_region": "17q12",
+                "result_status": "abnormal",
+                "result_description": "HER2 amplification present",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 60.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "HER2/Chr17 Ratio",
+                        "result_value": 3.6,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Mean HER2 Copy Number",
+                        "result_value": 6.23,
+                        "result_units": "signals per cell"
+                    },
+                    {
+                        "result_name": "Mean Chromosome 17 Centromere",
+                        "result_value": 1.73,
+                        "result_units": "signals per cell"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "HER2 Status",
+                        "result_value": "Positive for HER2 Amplification"
+                    }
+                ],
+                "clinical_implications": "HER2 positive by both ratio and copy number criteria. Indicates HER2-amplified breast cancer"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This result indicates HER2-amplified breast cancer by both ratio and copy number criteria according to ASCO/CAP guidelines",
+            "overall_recommendations": "HER2-targeted therapy eligibility should be considered based on this positive result"
+        }
+    }
+}

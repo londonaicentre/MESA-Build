@@ -1,0 +1,147 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Chorionic villi (uncultured)\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Increased screening risk with nuchal translucency >4mm at <14 weeks gestation\nUltrasound Findings: Skin edema and atrioventricular septal defect (AVSD) noted\nGestational Age: <14 weeks\n\nTEST PERFORMED\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) for rapid aneuploidy detection\n\nMETHODOLOGY\nQF-PCR analysis was performed on uncultured chorionic villi to detect aneuploidies of chromosomes 13, 18, 21, X and Y. Multiple short tandem repeat (STR) markers were assessed for each chromosome:\n- Chromosome 13: D13S631, D13S258, D13S742, D13S628\n- Chromosome 18: D18S391, D18S390, D18S535, D18S386\n- Chromosome 21: D21S11, D21S1437, D21S1409, D21S1435, D21S1442, D21S1411\n- Sex chromosomes: AMELX/Y, X22, DXYS218, SRY\n\nLIMITATIONS\nThis test may not detect low-level mosaicism (<20%), segmental imbalances, balanced rearrangements, or polyploidy. Results should be confirmed by conventional karyotyping.\n\nRESULTS\n\nABNORMAL RESULT DETECTED\n\nMolecular Karyotype: rsa(X,13,18)x2,(21)x3\n\nChromosome 21: TRISOMY 21 DETECTED\nInformative markers:\n- D21S11: Triallelic pattern (1:1:1 ratio)\n- D21S1437: Triallelic pattern (1:1:1 ratio)\n- D21S1409: Diallelic pattern (2:1 ratio)\n- D21S1435: Triallelic pattern (1:1:1 ratio)\n- D21S1442: Diallelic pattern (2:1 ratio)\n- D21S1411: Diallelic pattern (2:1 ratio)\n\nChromosome 13: Normal female pattern\nAll markers showed normal biallelic patterns\n\nChromosome 18: Normal female pattern\nAll markers showed normal biallelic patterns\n\nSex Chromosomes: Female (XX)\nAMELX: Single peak consistent with XX\nSRY: Absent\n\nINTERPRETATION\nThis QF-PCR analysis has detected trisomy 21 in the fetal sample. Six informative chromosome 21 markers confirmed the presence of three copies of chromosome 21, consistent with Down syndrome. The normal complement for chromosomes 13 and 18 was confirmed. The sex chromosome pattern indicates a female fetus.\n\nThe trisomy 21 finding is consistent with the ultrasound abnormalities reported, including increased nuchal translucency, skin edema, and atrioventricular septal defect, which are commonly associated with Down syndrome.\n\nRECOMMENDATIONS\n1. Follow-up karyotype analysis of G-banded chromosomes from cultured chorionic villi is recommended to confirm this result and exclude any additional chromosomal abnormalities not detectable by QF-PCR\n2. Genetic counseling should be offered to discuss the implications of this diagnosis\n3. Further detailed ultrasound examination may be considered to assess for additional features of Down syndrome\n\nReported by: [redacted name], Clinical Scientist\nAuthorised by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Increased screening risk with nuchal translucency >4mm at <14 weeks gestation",
+            "test_clinical_rationale": "Rapid aneuploidy detection for chromosomes 13, 18, 21, X and Y in context of abnormal ultrasound findings",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Nuchal translucency >4mm at <14 weeks gestation"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Skin edema"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Atrioventricular septal defect (AVSD)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) analysis on uncultured chorionic villi using multiple STR markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Trisomy 21 detected. Six informative chromosome 21 markers confirmed the presence of three copies",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "Trisomy"
+                    },
+                    {
+                        "result_name": "D21S11 Pattern",
+                        "result_value": "Triallelic (1:1:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1437 Pattern",
+                        "result_value": "Triallelic (1:1:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1409 Pattern",
+                        "result_value": "Diallelic (2:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1435 Pattern",
+                        "result_value": "Triallelic (1:1:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1442 Pattern",
+                        "result_value": "Diallelic (2:1 ratio)"
+                    },
+                    {
+                        "result_name": "D21S1411 Pattern",
+                        "result_value": "Diallelic (2:1 ratio)"
+                    }
+                ],
+                "clinical_implications": "Trisomy 21 (Down syndrome), consistent with ultrasound findings including increased nuchal translucency, skin edema, and AVSD"
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis using STR markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female pattern. All markers showed normal biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis using STR markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female pattern. All markers showed normal biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis using AMELX/Y, X22, DXYS218, SRY markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "Sex chromosomes",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Female (XX) pattern confirmed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosome Pattern",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "AMELX",
+                        "result_value": "Single peak"
+                    },
+                    {
+                        "result_name": "SRY",
+                        "result_value": "Absent"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "QF-PCR analysis detected trisomy 21 (Down syndrome) in the fetal sample, consistent with the abnormal ultrasound findings. The presence of increased nuchal translucency, skin edema, and AVSD are commonly associated features of Down syndrome",
+            "overall_recommendations": "Follow-up karyotype analysis of G-banded chromosomes from cultured chorionic villi recommended to confirm result and exclude additional abnormalities. Genetic counseling should be offered. Further detailed ultrasound examination may be considered to assess for additional features of Down syndrome"
+        }
+    }
+}

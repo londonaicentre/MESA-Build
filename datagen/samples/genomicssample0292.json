@@ -1,0 +1,91 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Service\n\nPATIENT DETAILS\nName: [redacted name]\nDOB: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Peripheral blood\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nTesting for known familial pathogenic mutation in COL4A5 gene. Family has previously identified pathogenic COL4A5 mutation (duplication of exons 10-24), identified in 2011. Patient referred for carrier status determination.\n\nCLINICAL INFORMATION\nAdult patient referred for carrier testing of familial COL4A5 mutation associated with Alport syndrome. Family history significant for pathogenic COL4A5 duplication (exons 10-24) segregating in the family.\n\nMETHODOLOGY\nMultiplex Ligation-dependent Probe Amplification (MLPA) analysis was performed using MRC-Holland SALSA MLPA probemix kits:\n- P191-B1 COL4A5 (exons 1-51)\n- P192-B1 COL4A6 (exons 1-2)\n\nNote: Probes for COL4A5 exons 8, 25, and 40 are not available in the current kit version.\n\nReference sequences:\n- COL4A5: NM_000495.1\n- COL4A6: NM_001847.2\n\nDNA was extracted from peripheral blood using standard protocols. MLPA reactions were performed according to manufacturer's instructions. Fragment analysis was carried out on an ABI 3730xl genetic analyzer. Data analysis was performed using Coffalyser.Net software.\n\nRESULTS\nTargeted testing for the familial pathogenic COL4A5 mutation (duplication of exons 10-24) was performed.\n\nCOL4A5 MLPA analysis:\n- Exons 10-24: Normal copy number detected (ratio 0.95-1.05)\n- All other analyzed exons: Normal copy number\n- Quality metrics: All control probes within acceptable range\n\nCOL4A6 MLPA analysis:\n- Exons 1-2: Normal copy number detected\n\nCONCLUSION\nThe familial pathogenic COL4A5 duplication (exons 10-24) was NOT detected in this individual.\n\nSUMMARY AND INTERPRETATION\nThis individual is not a carrier of the familial pathogenic COL4A5 mutation (duplication of exons 10-24). This result indicates that the patient has not inherited the mutation that causes Alport syndrome in this family. The risk of passing this specific mutation to offspring is therefore negligible.\n\nThe absence of the familial mutation significantly reduces but does not completely eliminate the risk of Alport syndrome, as de novo mutations or mutations in other genes associated with the condition remain a theoretical possibility.\n\nRECOMMENDATIONS\n1. No specific follow-up for Alport syndrome is indicated based on these results\n2. Genetic counseling is recommended to discuss the implications of this result\n3. Carrier testing and prenatal diagnosis remain available to other at-risk family members\n4. Family members who wish to pursue testing should be referred to clinical genetics services\n\nLIMITATIONS\nThis analysis is specific for the detection of copy number changes in COL4A5 and COL4A6. Point mutations, small insertions/deletions, and deep intronic variants would not be detected by this method. Probes for exons 8, 25, and 40 of COL4A5 were not available; however, these exons are not involved in the familial mutation.\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Testing for known familial pathogenic mutation in COL4A5 gene",
+            "test_clinical_rationale": "Patient referred for carrier status determination",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult patient referred for carrier testing"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Family has previously identified pathogenic COL4A5 mutation (duplication of exons 10-24), identified in 2011"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Family history significant for pathogenic COL4A5 duplication (exons 10-24) segregating in the family"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) analysis using MRC-Holland SALSA MLPA probemix kits P191-B1 and P192-B1",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "COL4A5",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000495",
+                        "version": "1"
+                    }
+                ],
+                "result_region": "exons 10-24",
+                "result_status": "normal",
+                "result_description": "The familial pathogenic COL4A5 duplication (exons 10-24) was NOT detected in this individual",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number Ratio",
+                        "result_value": 1.0,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Mutation Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "Individual is not a carrier of the familial pathogenic COL4A5 mutation associated with Alport syndrome"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "MLPA",
+                "other_test_type": null,
+                "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) analysis using MRC-Holland SALSA MLPA probemix kit P192-B1",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "COL4A6",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_001847",
+                        "version": "2"
+                    }
+                ],
+                "result_region": "exons 1-2",
+                "result_status": "normal",
+                "result_description": "Normal copy number detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "Normal"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "This individual is not a carrier of the familial pathogenic COL4A5 mutation (duplication of exons 10-24). The risk of passing this specific mutation to offspring is therefore negligible. The absence of the familial mutation significantly reduces but does not completely eliminate the risk of Alport syndrome",
+            "overall_recommendations": "No specific follow-up for Alport syndrome is indicated based on these results. Genetic counseling is recommended to discuss the implications of this result. Carrier testing and prenatal diagnosis remain available to other at-risk family members. Family members who wish to pursue testing should be referred to clinical genetics services"
+        }
+    }
+}

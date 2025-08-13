@@ -1,0 +1,72 @@
+{
+    "content": "ONCOLOGY GENETICS LABORATORY REPORT\n[redacted location] Cancer Centre\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge/Sex: Elderly male\nMRN: [redacted ID]\nSpecimen Type: Bone marrow aspirate\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL DETAILS\nReason for Referral: Known smouldering myeloma with rising paraprotein levels\nClinical History: Patient has established diagnosis of smouldering myeloma. Recent laboratory investigations demonstrate increasing paraprotein levels, raising concern for progression to active multiple myeloma.\n\nTEST PERFORMED\nInterphase Fluorescence In Situ Hybridization (FISH)\nMethodology: FISH analysis performed on CD138+ immunomagnetically purified plasma cells from bone marrow aspirate using the following probe:\n- ATM (11q22.3) probe (Abbott Molecular)\n- TP53 (17p13.1) probe (Abbott Molecular)\n\nTECHNICAL DETAILS\nCD138+ cell separation yield: Suboptimal\nCells analyzed: 100 interphase nuclei\nHybridization efficiency: >95%\n\nRESULTS\n\nATM (11q22.3) FISH Analysis:\nResult: ABNORMAL\nPattern: nuc ish (ATMx3)[68/100]\nInterpretation: Three copies of ATM (11q22.3) detected in 68% of analyzed cells\n\nTP53 (17p13.1) FISH Analysis:\nResult: Unable to complete due to insufficient cell yield\n\nADDITIONAL FINDINGS\nThe CD138+ separation yielded insufficient cells for completion of the standard myeloma FISH panel. Only ATM and partial TP53 analysis could be performed.\n\nThe finding of ATM gain aligns with previous cytogenetic results showing additional numerical abnormalities in this patient.\n\nINTERPRETATION\nThe presence of three copies of ATM (11q22.3) in 68% of analyzed plasma cells represents a clonal abnormality. ATM gain is a recognized cytogenetic abnormality in multiple myeloma and may be associated with disease progression. This finding, in the context of rising paraprotein levels, suggests evolution from smouldering to active multiple myeloma.\n\nLIMITATIONS\n- Incomplete FISH panel due to low CD138+ cell yield\n- Unable to assess for other prognostically significant abnormalities including del(17p), t(4;14), t(14;16), and 1q gain\n\nReported by: [redacted name], PhD\nAuthorized by: [redacted name], MD, FRCPC",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Known smouldering myeloma with rising paraprotein levels",
+            "test_clinical_rationale": "Recent laboratory investigations demonstrate increasing paraprotein levels, raising concern for progression to active multiple myeloma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Elderly male"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Known smouldering myeloma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Rising paraprotein levels"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on CD138+ immunomagnetically purified plasma cells using ATM (11q22.3) and TP53 probes",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "ATM",
+                "gene_nomenclature": [],
+                "result_region": "11q22.3",
+                "result_status": "abnormal",
+                "result_description": "Three copies of ATM (11q22.3) detected in 68% of analyzed cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with ATM gain",
+                        "result_value": 68.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total cells analyzed",
+                        "result_value": 100.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "ATM copy number",
+                        "result_value": 3.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish (ATMx3)[68/100]"
+                    },
+                    {
+                        "result_name": "Hybridization efficiency",
+                        "result_value": ">95%"
+                    }
+                ],
+                "clinical_implications": "ATM gain is a recognized cytogenetic abnormality in multiple myeloma and may be associated with disease progression"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The presence of ATM (11q22.3) gain in 68% of plasma cells represents a clonal abnormality. This finding, in the context of rising paraprotein levels, suggests evolution from smouldering to active multiple myeloma",
+            "overall_recommendations": "Incomplete FISH panel due to low CD138+ cell yield. Unable to assess for other prognostically significant abnormalities including del(17p), t(4;14), t(14;16), and 1q gain"
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Hospital NHS Trust\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Number: [redacted ID]\n\nCLINICAL DETAILS\nDiagnosis: IgG Kappa Multiple Myeloma\nClinical History: Post 6 cycles of CTD (Cyclophosphamide, Thalidomide, Dexamethasone) therapy\n\nSPECIMEN DETAILS\nSpecimen Type: Bone marrow aspirate\nSample Processing: CD138+ purified cells\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nTEST REQUESTED\nFISH studies only\n\nCHROMOSOME ANALYSIS\nG-banded chromosome analysis: NOT PERFORMED\n\nReason: Sample consisted of CD138+ purified cells from bone marrow aspirate. As per request, only FISH studies were to be performed on this specimen. No conventional cytogenetic analysis was undertaken.\n\nRECOMMENDATIONS\nFISH studies to be performed as requested. Results will be reported separately.\n\nReported by: [redacted name]\nConsultant Clinical Scientist\n\nAuthorised by: [redacted name]\nConsultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "IgG Kappa Multiple Myeloma, post 6 cycles of CTD therapy",
+            "test_clinical_rationale": "FISH studies requested for multiple myeloma evaluation",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "IgG Kappa Multiple Myeloma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Post 6 cycles of CTD (Cyclophosphamide, Thalidomide, Dexamethasone) therapy"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis",
+                "sample_origin": "Bone marrow aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "No chromosome analysis performed as FISH studies only were requested",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Test Status",
+                        "result_value": "Not Performed"
+                    },
+                    {
+                        "result_name": "Sample Type",
+                        "result_value": "CD138+ purified cells"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "G-banded chromosome analysis was not performed on this CD138+ purified cell sample as only FISH studies were requested",
+            "overall_recommendations": "FISH studies to be performed as requested. Results will be reported separately"
+        }
+    }
+}

@@ -1,0 +1,114 @@
+{
+    "content": "FLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPATIENT INFORMATION\nPatient: [redacted name]\nAge/Sex: 49 years/Male\nMRN: [redacted ID]\nSpecimen Type: Lymph node tissue\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nClinical History: Lymph node tissue submitted for investigation of suspected lymphoma\nClinical Question: Evaluate for plasmablastic high grade lymphoma; differential diagnosis includes Burkitt lymphoma, diffuse large B-cell lymphoma (DLBCL), or B-cell lymphoma with intermediate features\n\nTEST PERFORMED\nInterphase FISH analysis performed using the following probe sets:\n- Tri-color dual fusion probe for IGH/MYC [t(8;14)] rearrangement\n- Dual color break apart probe for BCL6 (3q27) rearrangement\n- Tri-color dual fusion probe for IGH/BCL2 [t(14;18)] rearrangement\n\nAnalysis was performed on interphase nuclei and correlated with CD10 immunostained slide to ensure evaluation of appropriate cell population.\n\nRESULTS\n\n1. IGH/MYC REARRANGEMENT STATUS\nProbe: IGH (14q32) SpectrumGreen / MYC (8q24) SpectrumOrange\nResult: POSITIVE for IGH/MYC [t(8;14)] rearrangement\nSignal Pattern: 1R1G2F (1 red, 1 green, 2 fusion signals)\nCells Analyzed: 200 interphase nuclei\nAbnormal Cells: 92% (184/200)\n\n2. BCL6 REARRANGEMENT STATUS\nProbe: BCL6 (3q27) Dual Color Break Apart\nResult: ABNORMAL signal pattern detected\nSignal Pattern: Loss of telomeric probe signal\nCells Analyzed: 200 interphase nuclei\nAbnormal Cells: 88% (176/200)\n\n3. IGH/BCL2 REARRANGEMENT STATUS\nProbe: IGH (14q32) SpectrumGreen / BCL2 (18q21) SpectrumOrange\nResult: NEGATIVE for IGH/BCL2 [t(14;18)] rearrangement\nSignal Pattern: 2R2G (normal pattern)\nCells Analyzed: 200 interphase nuclei\n\nINTERPRETATION\nThis lymph node specimen demonstrates:\n\n1. Presence of IGH/MYC [t(8;14)] rearrangement, which is characteristically seen in Burkitt lymphoma but can also occur in other high-grade B-cell lymphomas including:\n   - Diffuse large B-cell lymphoma (DLBCL)\n   - Plasmablastic lymphoma\n   - High-grade B-cell lymphoma with MYC and BCL2 and/or BCL6 rearrangements\n   - B-cell lymphoma, unclassifiable, with features intermediate between DLBCL and Burkitt lymphoma\n\n2. BCL6 locus abnormality with loss of the telomeric probe signal. This pattern may represent:\n   - BCL6 rearrangement with loss of the derivative chromosome\n   - Partial deletion of the BCL6 locus\n   The clinical significance of this BCL6 abnormality in the context of IGH/MYC rearrangement is unclear and requires correlation with morphologic and immunophenotypic findings.\n\n3. Absence of IGH/BCL2 [t(14;18)] rearrangement, which helps exclude the possibility of \"double-hit\" lymphoma with concurrent MYC and BCL2 rearrangements.\n\nThese findings should be interpreted in conjunction with morphologic features, immunophenotype, and clinical presentation to establish the final diagnosis.\n\nReported by: [redacted name], Ph.D.\nReviewed by: [redacted name], M.D.",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Lymph node tissue submitted for investigation of suspected lymphoma",
+            "test_clinical_rationale": "Evaluate for plasmablastic high grade lymphoma; differential diagnosis includes Burkitt lymphoma, diffuse large B-cell lymphoma (DLBCL), or B-cell lymphoma with intermediate features",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "49 years/Male"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with tri-color dual fusion probe, correlated with CD10 immunostained slide",
+                "sample_origin": "Lymph node tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "IGH/MYC",
+                "gene_nomenclature": [],
+                "result_region": "t(8;14)",
+                "result_status": "abnormal",
+                "result_description": "POSITIVE for IGH/MYC [t(8;14)] rearrangement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "nuclei"
+                    },
+                    {
+                        "result_name": "Abnormal Cells",
+                        "result_value": 92.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "1R1G2F (1 red, 1 green, 2 fusion signals)"
+                    }
+                ],
+                "clinical_implications": "IGH/MYC rearrangement characteristically seen in Burkitt lymphoma but can also occur in DLBCL, plasmablastic lymphoma, and B-cell lymphoma with intermediate features"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with dual color break apart probe",
+                "sample_origin": "Lymph node tissue",
+                "result_entity_type": "gene",
+                "result_entity": "BCL6",
+                "gene_nomenclature": [],
+                "result_region": "3q27",
+                "result_status": "abnormal",
+                "result_description": "ABNORMAL signal pattern detected with loss of telomeric probe signal",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "nuclei"
+                    },
+                    {
+                        "result_name": "Abnormal Cells",
+                        "result_value": 88.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "Loss of telomeric probe signal"
+                    }
+                ],
+                "clinical_implications": "BCL6 abnormality may represent rearrangement with derivative chromosome loss or partial locus deletion. Clinical significance unclear in context of IGH/MYC rearrangement"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis with tri-color dual fusion probe",
+                "sample_origin": "Lymph node tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "IGH/BCL2",
+                "gene_nomenclature": [],
+                "result_region": "t(14;18)",
+                "result_status": "normal",
+                "result_description": "NEGATIVE for IGH/BCL2 [t(14;18)] rearrangement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "nuclei"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "2R2G (normal pattern)"
+                    }
+                ],
+                "clinical_implications": "Absence of IGH/BCL2 rearrangement helps exclude double-hit lymphoma with concurrent MYC and BCL2 rearrangements"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Presence of IGH/MYC rearrangement with BCL6 abnormality in a high-grade B-cell lymphoma. The IGH/MYC rearrangement is characteristic of Burkitt lymphoma but can occur in other high-grade B-cell lymphomas. Absence of BCL2 rearrangement excludes double-hit lymphoma",
+            "overall_recommendations": "These findings should be interpreted in conjunction with morphologic features, immunophenotype, and clinical presentation to establish the final diagnosis"
+        }
+    }
+}

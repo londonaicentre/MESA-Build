@@ -1,0 +1,74 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nSpecimen ID: [redacted ID]\nSpecimen Type: Hair roots\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRING PHYSICIAN\nDr. [redacted name]\n[redacted location] Nephrology Associates\n\nCLINICAL INFORMATION\nReason for Referral: Diagnostic testing for X-linked Alport syndrome\nClinical History: Patient presents with clinical features suggestive of Alport syndrome. Previous genetic testing identified a COL4A5 c.4995-11_4995-5delTTATTTC variant of uncertain significance. This cDNA analysis was requested to assess the functional impact of this intronic variant on COL4A5 splicing.\n\nTEST PERFORMED\nCOL4A5 cDNA Transcript Analysis\n\nMETHODOLOGY\nRNA was extracted from hair root samples using standard protocols. Reverse transcription was performed to generate cDNA, followed by PCR amplification of the COL4A5 transcript region spanning exons 49-52. PCR products were analyzed by Sanger sequencing to assess splicing patterns. The reference sequence used was NM_000495.5.\n\nBioinformatic tools utilized:\n- SpliceAI v1.3 for splice site prediction\n- Human Splicing Finder v3.1\n- MaxEntScan for splice site strength analysis\n\nRESULTS\nVariant Detected: COL4A5 c.4995-11_4995-5delTTATTTC (heterozygous)\n\ncDNA Analysis Results:\nThe analysis revealed abnormal splicing of COL4A5 transcript in the patient sample. Sequencing of the cDNA product demonstrated retention of intron 50 sequences, indicating that the c.4995-11_4995-5delTTATTTC variant disrupts the normal splice acceptor site.\n\nSpecifically:\n- Wild-type transcript: Normal splicing from exon 50 to exon 51 observed\n- Mutant transcript: Partial/complete inclusion of intron 50 detected\n- Consequence: The aberrant transcript is predicted to result in a frameshift and premature termination codon\n\nBioinformatic Analysis:\n- SpliceAI delta score: 0.89 (high confidence for splice disruption)\n- MaxEntScan: Acceptor site score reduced from 8.9 to 2.1\n- HSF: Predicted broken acceptor site\n\nINTERPRETATION\nThe COL4A5 c.4995-11_4995-5delTTATTTC variant causes aberrant splicing with retention of intron 50 sequences in the mature transcript. This splicing defect is predicted to disrupt the critical α5(IV) collagen chain domain, specifically affecting the collagenous domain that is essential for basement membrane assembly and function.\n\nBased on the functional evidence from this cDNA analysis demonstrating a deleterious effect on splicing, combined with the clinical presentation, this variant is reclassified from uncertain significance to LIKELY PATHOGENIC according to ACMG/AMP guidelines (PS3, PM2, PP3, PP4).\n\nThis finding confirms the molecular diagnosis of X-linked Alport syndrome (OMIM #301050).\n\nCLINICAL IMPLICATIONS\nX-linked Alport syndrome is a progressive hereditary nephritis characterized by progressive kidney disease, sensorineural hearing loss, and ocular abnormalities. Males are typically more severely affected than females. The identification of this pathogenic variant in COL4A5 confirms the clinical diagnosis and has important implications for:\n\n1. Clinical Management: Regular monitoring of renal function, hearing, and ocular examinations\n2. Treatment: ACE inhibitors or ARBs may slow progression of kidney disease\n3. Prognosis: Variable, but males often progress to end-stage renal disease by the third to fourth decade\n4. Genetic Counseling: X-linked inheritance pattern with implications for family members\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss inheritance patterns and recurrence risks\n2. Carrier testing is available for at-risk female family members\n3. Prenatal testing is available for future pregnancies if indicated\n4. Clinical screening (urinalysis, audiometry, ophthalmologic examination) for at-risk family members\n5. Referral to nephrology for ongoing management and monitoring\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Genetics Laboratory. It has not been cleared or approved by the FDA. The laboratory is certified under CLIA to perform high-complexity testing.\n\nReport Authorized By:\n[redacted name], PhD, FACMG\nLaboratory Director\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Diagnostic testing for X-linked Alport syndrome",
+            "test_clinical_rationale": "Previous genetic testing identified a COL4A5 c.4995-11_4995-5delTTATTTC variant of uncertain significance. This cDNA analysis was requested to assess the functional impact of this intronic variant on COL4A5 splicing",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Patient presents with clinical features suggestive of Alport syndrome"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "COL4A5 cDNA transcript analysis",
+                "test_methodology": "RNA extraction from hair roots, reverse transcription to cDNA, PCR amplification of COL4A5 transcript region spanning exons 49-52, followed by Sanger sequencing",
+                "sample_origin": "Hair roots",
+                "result_entity_type": "variant",
+                "result_entity": "COL4A5",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000495",
+                        "version": "5"
+                    }
+                ],
+                "result_region": "c.4995-11_4995-5delTTATTTC",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous variant causing abnormal splicing with retention of intron 50 sequences",
+                "quantitative_results": [
+                    {
+                        "result_name": "SpliceAI delta score",
+                        "result_value": 0.89,
+                        "result_units": "score"
+                    },
+                    {
+                        "result_name": "MaxEntScan acceptor site score (wild-type)",
+                        "result_value": 8.9,
+                        "result_units": "score"
+                    },
+                    {
+                        "result_name": "MaxEntScan acceptor site score (mutant)",
+                        "result_value": 2.1,
+                        "result_units": "score"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Likely Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    },
+                    {
+                        "result_name": "Splicing Effect",
+                        "result_value": "Partial/complete inclusion of intron 50"
+                    }
+                ],
+                "clinical_implications": "Variant disrupts normal splicing causing inclusion of intron 50 in COL4A5 transcript, predicted to disrupt critical α5(IV) collagen chain domain affecting basement membrane assembly and function"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "COL4A5 variant classified as likely pathogenic, confirming X-linked Alport syndrome diagnosis. This is a progressive hereditary nephritis with kidney disease, hearing loss, and ocular abnormalities. Males typically more severely affected, often progressing to end-stage renal disease by third to fourth decade",
+            "overall_recommendations": "Genetic counseling recommended for inheritance patterns and recurrence risks. Carrier testing available for at-risk female family members. Prenatal testing available for future pregnancies if indicated. Clinical screening (urinalysis, audiometry, ophthalmologic examination) for at-risk family members. Referral to nephrology for ongoing management and monitoring"
+        }
+    }
+}

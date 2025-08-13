@@ -1,0 +1,80 @@
+{
+    "content": "PRENATAL CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: Not applicable (fetal sample)\nSample Type: Fetal tissue\nSample ID: [redacted ID]\nReferring Clinician: Dr. [redacted name]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPrenatal genetic testing of fetal tissue following detection of fetal abnormalities. Suspected chromosomal abnormalities or genetic disorders related to fetal development.\n\nTEST PERFORMED\nOligonucleotide Array Comparative Genomic Hybridization (Array CGH)\n- Platform: GeneScan 4500\n- Array design: ~60,000 genome-wide oligonucleotide probes\n- Median resolution: 120kb\n- Analysis software: GenomeView\n- Reference genome: GRCh37/hg19\n\nQuantitative Fluorescence-Polymerase Chain Reaction (QF-PCR)\n- Assessment for triploidy\n\nRESULTS\n\nARRAY CGH ANALYSIS\nResult: arr(1-22,X)x2\nInterpretation: Normal female chromosome complement\n\nNo copy number imbalances detected.\n- Chromosomes 1-22: Normal copy number (x2)\n- Chromosome X: Normal copy number (x2)\n- Chromosome Y: Not detected (consistent with female)\n\nQF-PCR ANALYSIS\nResult: No evidence of triploidy\nAll markers showed normal diallelic patterns consistent with diploid female karyotype.\n\nTECHNICAL SUMMARY\n- DNA quality: Satisfactory\n- Array quality metrics: Pass\n- Call rate: >99%\n- Derivative log ratio spread (DLRS): 0.18\n\nINTERPRETATION\nThis analysis shows a normal female chromosome complement with no detectable chromosomal abnormalities. No imbalances greater than 1Mb were identified. No smaller imbalances of known pathogenicity or relevance to fetal abnormalities were detected.\n\nThe normal array CGH result indicates that no detectable chromosomal abnormalities could explain the fetal abnormalities observed on ultrasound.\n\nLIMITATIONS\nThis test cannot detect:\n- Balanced chromosomal rearrangements (translocations, inversions)\n- Low-level mosaicism (<20%)\n- Point mutations or small insertions/deletions\n- Methylation abnormalities or uniparental disomy\n- Polyploidy other than triploidy\n\nRECOMMENDATIONS\nNo further chromosome analysis is indicated for this sample based on these results. If clinical suspicion remains high, consideration may be given to:\n- Targeted gene sequencing if specific genetic syndrome suspected\n- Parental karyotyping if balanced rearrangement suspected\n- Clinical genetics consultation for further evaluation\n\nReported by: [redacted name], Clinical Scientist\nAuthorized by: [redacted name], Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal genetic testing of fetal tissue following detection of fetal abnormalities",
+            "test_clinical_rationale": "Suspected chromosomal abnormalities or genetic disorders related to fetal development",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Fetal abnormalities detected on ultrasound"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample, female fetus",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Oligonucleotide array comparative genomic hybridization with ~60,000 genome-wide probes on GeneScan 4500 platform, 120kb median resolution, analyzed with GenomeView software using GRCh37/hg19 reference",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Chromosomes 1-22 and X",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female chromosome complement (arr(1-22,X)x2). No abnormalities detected on array CGH",
+                "quantitative_results": [
+                    {
+                        "result_name": "Call Rate",
+                        "result_value": 99.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "DLRS",
+                        "result_value": 0.18,
+                        "result_units": "ratio"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX (Female)"
+                    },
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr(1-22,X)x2"
+                    }
+                ],
+                "clinical_implications": "Normal female chromosome complement indicates no detectable chromosomal abnormalities that could explain the fetal abnormalities"
+            },
+            {
+                "test_subject": "Fetal tissue sample, female fetus",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence-Polymerase Chain Reaction (QF-PCR) for triploidy assessment",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Genome-wide ploidy",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No evidence of triploidy. All markers showed normal diallelic patterns consistent with diploid female karyotype",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Ploidy Status",
+                        "result_value": "Diploid"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal female chromosome complement with no detectable chromosomal abnormalities. Imbalances >1Mb excluded. No smaller imbalances of known pathogenicity or relevance to fetal abnormalities detected. The normal result indicates that no detectable chromosomal abnormalities could explain the observed fetal abnormalities",
+            "overall_recommendations": "No further chromosome analysis indicated for this sample. If clinical suspicion remains high, consider targeted gene sequencing if specific genetic syndrome suspected, parental karyotyping if balanced rearrangement suspected, or clinical genetics consultation for further evaluation"
+        }
+    }
+}

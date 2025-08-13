@@ -1,0 +1,43 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY\n[redacted location] Regional Genetics Centre\n[redacted location] NHS Foundation Trust\n\nLaboratory Accreditation: CPA UK Ltd. Accreditation No. [redacted ID]\nISO 15189:2012 Medical Laboratories\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nAge: 33 years\nSex: Female\nHospital No: [redacted ID]\nSpecimen No: [redacted ID]\n\nCLINICAL INFORMATION\nClinical Diagnosis: Ovary diffuse large B-cell lymphoma (DLBCL)\nSpecimen Type: Ovary biopsy tissue sections\nDate Received: [redacted date]\nReferring Clinician: Dr. [redacted name]\nReferring Hospital: [redacted location]\n\nTEST REQUESTED\nFluorescence in situ hybridization (FISH) analysis\n\nCLINICAL NOTES\nThis 33-year-old female patient presents with ovarian diffuse large B-cell lymphoma. FISH analysis requested for molecular characterization of the lymphoma. As per clinical recommendation, G-banded chromosome analysis not required; sample for FISH studies only.\n\nTEST METHODOLOGY\nFluorescence in situ hybridization (FISH) performed on formalin-fixed paraffin-embedded (FFPE) ovary biopsy tissue sections using standard protocols.\n\n[RESULTS SECTION PENDING]\n\nAuthorized by: [redacted name]\nConsultant Clinical Scientist\nDate: [redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Ovary diffuse large B-cell lymphoma (DLBCL)",
+            "test_clinical_rationale": "FISH analysis requested for molecular characterization of the lymphoma",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "33-year-old female"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Ovary diffuse large B-cell lymphoma (DLBCL)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridization (FISH) performed on formalin-fixed paraffin-embedded (FFPE) ovary biopsy tissue sections",
+                "sample_origin": "Ovary biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "Not specified",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Results pending - incomplete report",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Molecular characterization of ovarian DLBCL pending FISH analysis results",
+            "overall_recommendations": "G-banded chromosome analysis not required; sample for FISH studies only"
+        }
+    }
+}

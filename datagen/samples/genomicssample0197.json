@@ -1,0 +1,58 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: Not applicable (fetus)\nMedical Record Number: [redacted ID]\nSpecimen Type: Chorionic villi\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRING PHYSICIAN\nDr. [redacted name]\n[redacted location] Maternal-Fetal Medicine\n\nCLINICAL INDICATION\nSuspected Down Syndrome (T21)\n12 weeks gestation per ultrasound\n\nPRIOR TESTING\nRapid PCR analysis of uncultured chorionic villi performed (see separate report)\n\nMETHOD\nTargeted G-banded chromosome analysis of chromosome 21\nPost rapid PCR of uncultured chorionic villi\nAnalysis performed at 400-550 band resolution\n15 metaphases examined\n\nRESULTS\nKaryotype: 47,XX,+21\n\nTargeted G-banded analysis confirmed primary trisomy 21\nFemale sex chromosome complement (XX)\nConsistent with Down syndrome\n\nINTERPRETATION\nThis analysis reveals an abnormal female karyotype with trisomy 21, diagnostic of Down syndrome. The presence of three copies of chromosome 21 in all cells examined indicates primary (complete) trisomy 21, which typically results from nondisjunction during meiosis or less commonly from a post-zygotic mitotic error.\n\nDown syndrome is associated with intellectual disability, characteristic facial features, congenital heart defects (40-50% of cases), gastrointestinal anomalies, and increased risk for leukemia and early-onset Alzheimer disease. The phenotypic expression is variable.\n\nThe risk of trisomy 21 increases with maternal age. This is typically a de novo event with a low recurrence risk (approximately 1% above the maternal age-related risk) for future pregnancies.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss the implications of this diagnosis\n2. Parental karyotyping is not indicated as this appears to be primary trisomy 21\n3. For future pregnancies:\n   - Increased aneuploidy risk should be considered\n   - Recommend biochemical screening and detailed ultrasound monitoring\n   - Prenatal diagnosis (CVS or amniocentesis) is available if desired\n4. Fetal echocardiography is recommended given the increased risk of cardiac anomalies\n5. Consultation with pediatric specialists may be beneficial for pregnancy management and postnatal care planning\n\nThis report has been reviewed and electronically signed by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\nBoard Certified Clinical Cytogeneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Suspected Down Syndrome (T21)",
+            "test_clinical_rationale": "Confirmation of suspected trisomy 21 following initial screening",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "12 weeks gestation per ultrasound"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "Targeted G-banded chromosome analysis of chromosome 21, post rapid PCR of uncultured chorionic villi",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "abnormal",
+                "result_description": "Primary trisomy 21 confirmed. Female sex chromosome complement (XX). Consistent with Down syndrome",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Examined",
+                        "result_value": 15.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Karyotype",
+                        "result_value": "47,XX,+21"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Trisomy Type",
+                        "result_value": "Primary (complete) trisomy 21"
+                    }
+                ],
+                "clinical_implications": "Diagnostic of Down syndrome. Primary trisomy 21 from nondisjunction during meiosis or post-zygotic mitotic error. Associated with intellectual disability, characteristic facial features, congenital heart defects, gastrointestinal anomalies, and increased risk for leukemia and early-onset Alzheimer disease"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Abnormal result confirming Down syndrome diagnosis. Primary trisomy 21 typically results from de novo event with low recurrence risk (approximately 1% above maternal age-related risk) for future pregnancies",
+            "overall_recommendations": "Genetic counseling recommended. Parental karyotyping not indicated. For future pregnancies: consider increased aneuploidy risk, recommend biochemical screening and detailed ultrasound monitoring, prenatal diagnosis available if desired. Fetal echocardiography recommended. Consultation with pediatric specialists for pregnancy management and postnatal care planning"
+        }
+    }
+}

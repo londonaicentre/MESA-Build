@@ -1,0 +1,72 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Centre\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMRN: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nPersistent eosinophilia (>1,500 eosinophils/μL for >6 months)\nAssociated symptoms: Fatigue, pruritus\nClinical suspicion: Hypereosinophilic syndrome\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\nProbe: PDGFRA/CHIC2/FIP1L1 Deletion Probe (Vysis)\n\nMETHODOLOGY\nFISH analysis was performed on interphase nuclei from peripheral blood specimens using a commercially available probe set designed to detect deletions involving the CHIC2 locus at 4q12. This probe set consists of:\n- SpectrumOrange labeled probe spanning the CHIC2 gene region\n- SpectrumGreen labeled control probe centromeric to PDGFRA\n\nThe deletion of CHIC2 results in fusion of FIP1L1 and PDGFRA genes, creating the FIP1L1-PDGFRA fusion oncogene.\n\nRESULTS\nFISH Result: nuc ish del(4)(q12q12)(CHIC2-)\n\nABNORMAL - CHIC2 deletion detected\n\nQuantitative Analysis:\n- Total nuclei analyzed: 200\n- Nuclei with CHIC2 deletion: 90\n- Percentage of cells with deletion: 45%\n- Normal signal pattern (2O/2G): 110 cells (55%)\n- Abnormal signal pattern (1O/2G): 90 cells (45%)\n\nINTERPRETATION\nThe FISH analysis demonstrates deletion of the CHIC2 locus in 45% of interphase nuclei examined. This finding is consistent with the presence of the cryptic FIP1L1-PDGFRA fusion gene, which results from an interstitial deletion at 4q12.\n\nThe FIP1L1-PDGFRA fusion creates a constitutively active tyrosine kinase that drives eosinophil proliferation and is diagnostic of myeloid neoplasm with eosinophilia and rearrangement of PDGFRA, a distinct entity within the myeloproliferative neoplasm category according to the WHO classification.\n\nCLINICAL SIGNIFICANCE\nThis molecular abnormality:\n1. Confirms the diagnosis of myeloid neoplasm with eosinophilia and PDGFRA rearrangement\n2. Distinguishes this condition from reactive eosinophilia and other hypereosinophilic syndromes\n3. Predicts excellent response to imatinib mesylate therapy\n4. Indicates need for cardiac evaluation due to risk of eosinophil-mediated cardiac damage\n\nRECOMMENDATIONS\n1. Initiate imatinib mesylate therapy at low dose (100-400mg daily)\n   - Most patients achieve complete hematologic and molecular remission\n   - Lower doses are typically effective compared to CML treatment\n2. Perform baseline echocardiogram to assess for cardiac involvement\n3. Monitor complete blood count weekly initially, then monthly once stable\n4. Consider molecular monitoring by RT-PCR for FIP1L1-PDGFRA transcript if available\n5. Long-term imatinib therapy is recommended to maintain remission\n6. Monitor for potential cardiac complications of hypereosinophilia\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Persistent eosinophilia (>1,500 eosinophils/μL for >6 months)",
+            "test_clinical_rationale": "Clinical suspicion: Hypereosinophilic syndrome",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Persistent eosinophilia (>1,500 eosinophils/μL for >6 months)"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Fatigue"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Pruritus"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "FISH analysis using PDGFRA/CHIC2/FIP1L1 deletion probe (Vysis) on interphase nuclei from peripheral blood",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "CHIC2",
+                "gene_nomenclature": [],
+                "result_region": "4q12",
+                "result_status": "abnormal",
+                "result_description": "CHIC2 deletion detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Total Nuclei Analyzed",
+                        "result_value": 200.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Nuclei with CHIC2 Deletion",
+                        "result_value": 90.0,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Percentage of Cells with Deletion",
+                        "result_value": 45.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish del(4)(q12q12)(CHIC2-)"
+                    },
+                    {
+                        "result_name": "Signal Pattern",
+                        "result_value": "Abnormal (1O/2G in 45% of cells)"
+                    }
+                ],
+                "clinical_implications": "Deletion consistent with FIP1L1-PDGFRA fusion gene, diagnostic of myeloid neoplasm with eosinophilia and PDGFRA rearrangement. Predicts excellent response to imatinib therapy."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "FIP1L1-PDGFRA fusion confirms diagnosis of myeloid neoplasm with eosinophilia and PDGFRA rearrangement, a myeloproliferative neoplasm subtype. This distinguishes the condition from reactive eosinophilia and other hypereosinophilic syndromes. Indicates excellent prognosis with imatinib therapy.",
+            "overall_recommendations": "Initiate imatinib mesylate therapy at low dose (100-400mg daily). Perform baseline echocardiogram to assess for cardiac involvement. Monitor complete blood count weekly initially, then monthly. Consider molecular monitoring by RT-PCR for FIP1L1-PDGFRA transcript. Long-term imatinib therapy recommended to maintain remission. Monitor for cardiac complications of hypereosinophilia."
+        }
+    }
+}

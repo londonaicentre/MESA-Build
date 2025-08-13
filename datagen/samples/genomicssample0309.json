@@ -1,0 +1,143 @@
+{
+    "content": "PRENATAL GENETIC TESTING REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nMedical Record Number: [redacted ID]\nReferring Physician: Dr. [redacted name]\nDate of Collection: [redacted date]\nDate of Report: [redacted date]\n\nCLINICAL INFORMATION\nMaternal Age: 34 years\nIndication for Testing: Prenatal testing with ultrasound findings\nSample Type: Chorionic villus sample (CVS)\nGestational Age: [redacted]\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR)\nAneuploidy screening for chromosomes 13, 18, 21, X and Y\nMethodology: QF-PCR analysis performed on uncultured chorionic villi using fluorescently labeled STR markers\n\nRESULTS\n\nCHROMOSOME 18 - ABNORMAL\nMarker\t\tAllele 1\tAllele 2\tAllele 3\tRatio\tInterpretation\nD18S976\t\t142\t\t146\t\t150\t\t1:1:1\tTrisomy\nD18S1002\t156\t\t160\t\t164\t\t1:1:1\tTrisomy\nD18S847\t\t178\t\t182\t\t-\t\t2:1\t\tTrisomy\nD18S978\t\t204\t\t208\t\t212\t\t1:1:1\tTrisomy\nD18S386\t\t224\t\t228\t\t-\t\t2:1\t\tTrisomy\nD18S390\t\t186\t\t190\t\t194\t\t1:1:1\tTrisomy\n\nCHROMOSOME 13 - NORMAL\nAll markers show normal biallelic patterns\n\nCHROMOSOME 21 - NORMAL\nAll markers show normal biallelic patterns\n\nSEX CHROMOSOMES - XY (MALE)\nAMELOGENIN: X and Y peaks present\nSRY: Positive\n\nINTERPRETATION\nThis QF-PCR analysis demonstrates trisomy for chromosome 18 across six informative markers, consistent with Edwards syndrome. The pattern observed does not confirm meiotic origin of the non-disjunction. Chromosomes 13 and 21 show normal disomic patterns. Sex chromosome complement is consistent with male fetus (XY).\n\nThe ultrasound findings are consistent with these genetic results.\n\nLIMITATIONS\n- QF-PCR cannot exclude the possibility of a normal cell line (mosaicism)\n- This test does not detect balanced chromosomal rearrangements\n- Analysis is limited to chromosomes 13, 18, 21, X and Y\n- Maternal cell contamination cannot be completely excluded\n\nRECOMMENDATIONS\n1. G-banded karyotype analysis of cultured chorionic villi to follow for confirmation and to exclude mosaicism\n2. Genetic counseling is strongly recommended to discuss:\n   - Implications of trisomy 18 diagnosis\n   - Correlation with ultrasound findings\n   - Pregnancy management options\n   - Recurrence risks for future pregnancies\n\nThis report has been reviewed and authorized by:\n[redacted name], PhD, FACMG\nDirector, Cytogenetics Laboratory\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Prenatal testing with ultrasound findings",
+            "test_clinical_rationale": "Aneuploidy screening for chromosomes 13, 18, 21, X and Y",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Maternal Age: 34 years"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Chorionic villus sample (CVS)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal sample from CVS",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis performed on uncultured chorionic villi using fluorescently labeled STR markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "18",
+                "gene_nomenclature": [],
+                "result_region": "D18S976, D18S1002, D18S847, D18S978, D18S386, D18S390",
+                "result_status": "abnormal",
+                "result_description": "Trisomy for chromosome 18 across six informative markers, consistent with Edwards syndrome",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 18 Status",
+                        "result_value": "Trisomy"
+                    },
+                    {
+                        "result_name": "D18S976 Pattern",
+                        "result_value": "1:1:1 Trisomy"
+                    },
+                    {
+                        "result_name": "D18S1002 Pattern",
+                        "result_value": "1:1:1 Trisomy"
+                    },
+                    {
+                        "result_name": "D18S847 Pattern",
+                        "result_value": "2:1 Trisomy"
+                    },
+                    {
+                        "result_name": "D18S978 Pattern",
+                        "result_value": "1:1:1 Trisomy"
+                    },
+                    {
+                        "result_name": "D18S386 Pattern",
+                        "result_value": "2:1 Trisomy"
+                    },
+                    {
+                        "result_name": "D18S390 Pattern",
+                        "result_value": "1:1:1 Trisomy"
+                    }
+                ],
+                "clinical_implications": "Edwards syndrome (Trisomy 18) - ultrasound findings are consistent with these genetic results"
+            },
+            {
+                "test_subject": "Fetal sample from CVS",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "All markers show normal biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 13 Status",
+                        "result_value": "Normal disomic"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal sample from CVS",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "21",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "All markers show normal biallelic patterns",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Chromosome 21 Status",
+                        "result_value": "Normal disomic"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "Fetal sample from CVS",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "QF-PCR analysis with AMELOGENIN and SRY markers",
+                "sample_origin": "Chorionic villi",
+                "result_entity_type": "chromosome",
+                "result_entity": "Sex chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "X and Y",
+                "result_status": "normal",
+                "result_description": "Male sex chromosomes detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosome Complement",
+                        "result_value": "XY (Male)"
+                    },
+                    {
+                        "result_name": "AMELOGENIN",
+                        "result_value": "X and Y peaks present"
+                    },
+                    {
+                        "result_name": "SRY",
+                        "result_value": "Positive"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Trisomy 18 (Edwards syndrome) detected. The pattern observed does not confirm meiotic origin of the non-disjunction. QF-PCR cannot exclude the possibility of a normal cell line (mosaicism)",
+            "overall_recommendations": "G-banded karyotype analysis of cultured chorionic villi to follow for confirmation and to exclude mosaicism. Genetic counseling is strongly recommended to discuss implications of trisomy 18 diagnosis, correlation with ultrasound findings, pregnancy management options, and recurrence risks for future pregnancies"
+        }
+    }
+}

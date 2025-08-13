@@ -1,0 +1,67 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Regional Genetics Laboratory\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nDate of Birth: [redacted date]\nHospital Number: [redacted ID]\nSpecimen Type: Amniotic Fluid\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nMaternal Age: 35 years\nGestation: 17 weeks\nIndication for Testing: Advanced maternal age screening for chromosomal abnormalities\nPrevious Testing: Rapid PCR analysis performed\n\nTEST PERFORMED\nG-banded Chromosome Analysis (Karyotype)\n\nMETHODOLOGY\nAmniotic fluid cells were cultured using standard in situ culture techniques. Metaphase chromosomes were harvested and G-banded using trypsin-Giemsa staining. A minimum of 20 metaphase cells from at least two independent cultures were analyzed at a resolution of approximately 450-550 bands per haploid set.\n\nRESULTS\n\nKaryotype: 46,XX\n\nINTERPRETATION\nNormal female karyotype.\n\nNo evidence of trisomy 21 (Down syndrome) or other numerical chromosomal abnormalities detected.\nNo major structural chromosomal rearrangements identified within the resolution limits of this analysis.\n\nTEST LIMITATIONS\nThis analysis is sufficient to exclude numerical abnormalities and major structural rearrangements. However, the following limitations apply:\n- Small deletions or duplications (<5-10 Mb) may not be detected\n- Low-level mosaicism (<20%) may not be detected\n- Balanced rearrangements without phenotypic effect may not be detected\n- Single gene disorders cannot be excluded by this test\n- Uniparental disomy cannot be detected by standard karyotyping\n\nCLINICAL CORRELATION\nThis normal female karyotype result indicates the absence of detectable chromosomal abnormalities within the resolution limits of conventional cytogenetic analysis. The risk for Down syndrome and other major chromosomal abnormalities is significantly reduced but not eliminated.\n\nThis result supersedes the rapid PCR analysis previously performed on this specimen.\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss these results in the context of the pregnancy\n2. Routine prenatal care should continue\n3. If ultrasound abnormalities are detected later in pregnancy, additional testing such as chromosomal microarray analysis may be considered\n4. No further cytogenetic testing is indicated based on current findings\n\nAuthorized by: [redacted name], PhD, FACMG\nLaboratory Director\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Advanced maternal age screening for chromosomal abnormalities",
+            "test_clinical_rationale": "Screening for Down syndrome (trisomy 21) and other chromosomal abnormalities",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "35-year-old pregnant woman"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "17 weeks gestation"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Previous rapid PCR analysis performed"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetus",
+                "test_type": "Karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded chromosome analysis using trypsin-Giemsa staining at 450-550 band resolution",
+                "sample_origin": "Amniotic fluid",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Normal female karyotype (46,XX). No evidence of trisomy 21 or other chromosomal abnormalities",
+                "quantitative_results": [
+                    {
+                        "result_name": "Chromosome Count",
+                        "result_value": 46.0,
+                        "result_units": "chromosomes"
+                    },
+                    {
+                        "result_name": "Metaphases Analyzed",
+                        "result_value": 20.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XX"
+                    },
+                    {
+                        "result_name": "Karyotype Result",
+                        "result_value": "46,XX"
+                    }
+                ],
+                "clinical_implications": "Normal female karyotype indicates absence of detectable chromosomal abnormalities within test resolution limits"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Normal female karyotype result indicates the absence of detectable chromosomal abnormalities within the resolution limits of conventional cytogenetic analysis. The risk for Down syndrome and other major chromosomal abnormalities is significantly reduced but not eliminated",
+            "overall_recommendations": "Genetic counseling recommended to discuss results. Continue routine prenatal care. If ultrasound abnormalities detected later, consider chromosomal microarray analysis. No further cytogenetic testing indicated based on current findings. This result supersedes the rapid PCR analysis previously performed"
+        }
+    }
+}

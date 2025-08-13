@@ -1,0 +1,81 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen Type: Peripheral Blood\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INDICATION\nEvaluation for possible sex chromosome abnormalities, specifically Klinefelter syndrome\n\nTEST PERFORMED\nQuantitative Fluorescence Polymerase Chain Reaction (QF-PCR) for Sex Chromosome Analysis\n\nMETHODOLOGY\nDNA was extracted from peripheral blood. QF-PCR analysis was performed using fluorescently labeled primers for multiple polymorphic markers on the X and Y chromosomes. The following markers were analyzed:\n- X chromosome: AMELX, DXS6809, DXS6803, DXS8377, HPRT\n- Y chromosome: AMELY, SRY, DYS448, DYS391\n\nPeak areas and ratios were calculated to determine chromosome copy number.\n\nRESULTS\nX chromosome markers: Single allele peaks detected, consistent with one X chromosome\nY chromosome markers: Present with normal peak heights\nSRY gene: Detected at expected location on Yp11.31\nAMEL X:Y ratio: 1:1\n\nINTERPRETATION\nResults are consistent with a normal male sex chromosome complement (46,XY). The presence of the SRY gene sequence on Yp11.31 confirms normal Y chromosome structure. Klinefelter syndrome (47,XXY) is excluded based on these findings.\n\nTEST LIMITATIONS\nThis test is designed to detect common sex chromosome aneuploidies. Low-level mosaicism (<20%) may not be detected. Structural rearrangements or segmental imbalances that do not affect marker regions will not be identified by this methodology.\n\nRECOMMENDATIONS\nArray CGH analysis is pending and will provide additional information regarding submicroscopic chromosomal imbalances.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Evaluation for possible sex chromosome abnormalities, specifically Klinefelter syndrome",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR) using fluorescently labeled primers for multiple polymorphic markers on X and Y chromosomes",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "X chromosome",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Single allele peaks detected, consistent with one X chromosome",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "Normal (1 copy)"
+                    }
+                ],
+                "clinical_implications": "No sex chromosome abnormality detected"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Y chromosome",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "Present with normal peak heights",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Presence",
+                        "result_value": "Present"
+                    }
+                ],
+                "clinical_implications": "No sex chromosome abnormality detected"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence Polymerase Chain Reaction (QF-PCR)",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SRY",
+                "gene_nomenclature": [],
+                "result_region": "Yp11.31",
+                "result_status": "normal",
+                "result_description": "Detected at expected location on Yp11.31",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Gene Status",
+                        "result_value": "Present"
+                    }
+                ],
+                "clinical_implications": "Confirms normal Y chromosome structure"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Results consistent with normal male sex chromosome complement (46,XY). Klinefelter syndrome (47,XXY) excluded",
+            "overall_recommendations": "Array CGH analysis pending to provide additional information regarding submicroscopic chromosomal imbalances"
+        }
+    }
+}

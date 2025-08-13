@@ -1,0 +1,85 @@
+{
+    "content": "CYTOGENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Clinical Genetics\n\nPATIENT INFORMATION\nPatient ID: [redacted ID]\nSpecimen Type: Fetal tissue\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INDICATION\nFetal loss specimen analysis\n\nTEST PERFORMED\nOligonucleotide Array Comparative Genomic Hybridization (Array CGH)\n\nMETHODOLOGY\nGenomic DNA was extracted from fetal tissue and analyzed using oligonucleotide array CGH. The GeneTech 60K array design was utilized, providing approximately 60,000 oligonucleotide probes across the genome with a median resolution of 120kb. Analysis was performed using the GRCh37/hg19 human genome reference assembly. Data was processed and interpreted using ChromaSoft analysis software version 3.2. Copy number variations were called based on log2 ratio thresholds of +0.3 for gains and -0.3 for losses.\n\nQuality metrics:\n- DNA concentration: 85 ng/μL\n- A260/A280 ratio: 1.82\n- Derivative log ratio spread (DLRS): 0.18\n\nRESULTS\n\nArray CGH Result: arr[GRCh37] (20)x3\n\nABNORMAL - Complete trisomy of chromosome 20 detected\n\nDetailed Findings:\n- Chromosome 20: Three copies detected across entire chromosome (pter-qter)\n- Log2 ratio: +0.58 (consistent with trisomy)\n- Size: Complete chromosome (~63 Mb)\n- All other autosomes: Normal copy number (2n)\n- Sex chromosomes: XY complement detected\n\nAdditional Testing:\nQuantitative Fluorescence PCR (QF-PCR) was performed to exclude triploidy:\n- Result: Disomic pattern for chromosomes 13, 18, 21, X and Y\n- Interpretation: Triploidy excluded\n\nNo other clinically significant copy number imbalances were detected at the resolution of this array.\n\nCLINICAL INTERPRETATION\nThe array CGH analysis reveals complete trisomy of chromosome 20 in this fetal tissue sample. Chromosome 20 trisomy is a rare chromosomal abnormality that is typically incompatible with survival to term. This finding provides a likely explanation for the fetal loss.\n\nComplete autosomal trisomies (excluding chromosomes 13, 18, and 21) are almost invariably lethal in utero, with most resulting in first trimester miscarriage. Trisomy 20 specifically has been reported in spontaneous abortion specimens but is not compatible with live birth when present in non-mosaic form.\n\nThe finding most likely represents a sporadic meiotic nondisjunction event. The risk of recurrence in future pregnancies is considered to be low (approximately 1% above the maternal age-related risk).\n\nRECOMMENDATIONS\n1. Genetic counseling is recommended to discuss these results and their implications for future pregnancies\n2. Consider parental karyotype analysis to exclude a balanced chromosome 20 rearrangement that could predispose to unbalanced offspring\n3. Prenatal diagnosis options (CVS or amniocentesis) should be discussed for future pregnancies\n4. Preimplantation genetic testing (PGT-A) may be considered if pursuing assisted reproduction\n\nLIMITATIONS\n- This array has a resolution of approximately 120kb and will not detect balanced rearrangements, low-level mosaicism (<20%), or copy number variants smaller than the probe coverage\n- Array CGH cannot detect polyploidy, however QF-PCR was performed to address this limitation\n- Point mutations and small insertions/deletions are not detected by this methodology\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Fetal loss specimen analysis",
+            "test_clinical_rationale": "To identify potential genetic cause of fetal loss",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Fetal loss"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "Other",
+                "other_test_type": "Array CGH",
+                "test_methodology": "Oligonucleotide array CGH using GeneTech 60K array design with 120kb median resolution, GRCh37/hg19 reference, analyzed with ChromaSoft software",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "20",
+                "gene_nomenclature": [],
+                "result_region": "Complete chromosome (pter-qter)",
+                "result_status": "abnormal",
+                "result_description": "Complete trisomy of chromosome 20 detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Log2 Ratio",
+                        "result_value": 0.58,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Chromosome Size",
+                        "result_value": 63.0,
+                        "result_units": "Mb"
+                    },
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": 3.0,
+                        "result_units": "copies"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr[GRCh37] (20)x3"
+                    },
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    }
+                ],
+                "clinical_implications": "Chromosome 20 trisomy is typically incompatible with survival to term and likely caused the fetal loss"
+            },
+            {
+                "test_subject": "Fetal tissue sample",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Quantitative Fluorescence PCR (QF-PCR) for chromosomes 13, 18, 21, X and Y",
+                "sample_origin": "Fetal tissue",
+                "result_entity_type": "chromosome",
+                "result_entity": "Multiple chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "13, 18, 21, X, Y",
+                "result_status": "normal",
+                "result_description": "Disomic pattern detected, triploidy excluded",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Ploidy Status",
+                        "result_value": "Diploid"
+                    }
+                ],
+                "clinical_implications": "Excludes triploidy as cause of fetal loss"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Complete trisomy 20 identified as likely cause of fetal loss. This represents a sporadic meiotic nondisjunction event with low recurrence risk (approximately 1% above maternal age-related risk)",
+            "overall_recommendations": "Genetic counseling recommended. Consider parental karyotype analysis to exclude balanced chromosome 20 rearrangement. Discuss prenatal diagnosis options for future pregnancies. Consider preimplantation genetic testing if pursuing assisted reproduction"
+        }
+    }
+}

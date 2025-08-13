@@ -1,0 +1,97 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted name] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen Number: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL HISTORY\nDiagnosis: Non-small cell lung cancer (NSCLC)\nReason for Testing: Molecular profiling for targeted therapy eligibility\n\nTEST PERFORMED\nFluorescence In Situ Hybridization (FISH) Analysis\n- ALK Gene Rearrangement Analysis\n- ROS1 Gene Rearrangement Analysis\n\nMETHODOLOGY\nInterphase FISH analysis was performed on formalin-fixed, paraffin-embedded tissue sections using dual color break apart probes:\n- ALK (2p23) Break Apart FISH Probe\n- ROS1 (6q22) Break Apart FISH Probe\n\nFifty (50) interphase nuclei were analyzed for each probe set. Results were correlated with corresponding immunostained slides.\n\nRESULTS\n\nALK GENE ANALYSIS (2p23)\nResult: NEGATIVE for ALK rearrangement\n- Cells with intact ALK signals: 48/50 (96%)\n- Cells with split signals: 2/50 (4%)\n- ALK copy number: 2-4 copies per cell detected\n\nROS1 GENE ANALYSIS (6q22)\nResult: NEGATIVE for ROS1 rearrangement\n- Cells with intact ROS1 signals: 49/50 (98%)\n- Cells with split signals: 1/50 (2%)\n- ROS1 copy number: 2-4 copies per cell detected\n\nINTERPRETATION CRITERIA\nALK Rearrangement Classification:\n- Positive: ≥15% of cells showing split signals (separation of 3' and 5' signals by ≥2 signal diameters) or isolated 3' signal\n- Negative: <15% of cells with split or isolated signals\n- Equivocal: Results at or near cutoff requiring additional testing\n\nROS1 Rearrangement Classification:\n- Positive: ≥15% of cells showing split signals or isolated 3' signal\n- Negative: <15% of cells with split or isolated signals\n\nINTERPRETATION\nNo evidence of ALK gene rearrangement was identified per standard criteria. The increased copy number of ALK (2-4 copies) is commonly observed in NSCLC; however, the clinical significance of this finding remains unclear.\n\nNo evidence of ROS1 gene rearrangement was identified. The observed copy number variation (2-4 copies) for ROS1 is of uncertain clinical significance.\n\nCLINICAL IMPLICATIONS\nThis patient's tumor is negative for both ALK and ROS1 rearrangements, indicating that the patient would not be expected to benefit from ALK-targeted therapies (such as crizotinib, ceritinib, or alectinib) or ROS1-targeted therapies. The increased copy numbers observed for both genes have unclear clinical significance and do not currently influence treatment decisions.\n\nReported by: [redacted name], M.D.\nBoard Certified in Anatomic Pathology and Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Molecular profiling for targeted therapy eligibility",
+            "test_clinical_rationale": "Molecular profiling for targeted therapy eligibility",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Non-small cell lung cancer (NSCLC)"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed, paraffin-embedded tissue sections using dual color break apart probes, correlated with immunostained slides",
+                "sample_origin": "Lung tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": "2p23",
+                "result_status": "normal",
+                "result_description": "NEGATIVE for ALK rearrangement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with intact signals",
+                        "result_value": 96.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells with split signals",
+                        "result_value": 4.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2-4 copies per cell"
+                    }
+                ],
+                "clinical_implications": "No evidence of ALK gene rearrangement. Increased copy number commonly observed in NSCLC with unclear clinical significance"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on formalin-fixed, paraffin-embedded tissue sections using dual color break apart probes, correlated with immunostained slides",
+                "sample_origin": "Lung tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": "6q22",
+                "result_status": "normal",
+                "result_description": "NEGATIVE for ROS1 rearrangement",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with intact signals",
+                        "result_value": 98.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells with split signals",
+                        "result_value": 2.0,
+                        "result_units": "%"
+                    },
+                    {
+                        "result_name": "Cells analyzed",
+                        "result_value": 50.0,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number",
+                        "result_value": "2-4 copies per cell"
+                    }
+                ],
+                "clinical_implications": "No evidence of ROS1 gene rearrangement. Copy number variation of uncertain clinical significance"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Patient's tumor is negative for both ALK and ROS1 rearrangements, indicating that the patient would not be expected to benefit from ALK-targeted therapies (such as crizotinib, ceritinib, or alectinib) or ROS1-targeted therapies. The increased copy numbers observed for both genes have unclear clinical significance and do not currently influence treatment decisions",
+            "overall_recommendations": "Patient is not eligible for ALK or ROS1 targeted therapies based on these results"
+        }
+    }
+}

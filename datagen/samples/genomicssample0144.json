@@ -1,0 +1,52 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPATIENT INFORMATION\nName: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSex: Female\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Suspected adenocarcinoma of caecum requiring MSI testing\nClinical History: Elderly female patient with adenocarcinoma of caecum. Patient meets BETHESDA criteria for Lynch Syndrome testing.\n\nSPECIMEN INFORMATION\nSpecimen Type 1: Tumor tissue from right hemicolectomy\nTumor Content: 80% neoplastic cells\nSpecimen Type 2: Peripheral blood\n\nTEST PERFORMED\nMicrosatellite Instability (MSI) Analysis by PCR\n\nMETHODOLOGY\nMicrosatellite instability testing was attempted using the GeneTech MSI Analysis System. This assay employs multiplex PCR amplification of five quasi-monomorphic mononucleotide repeat markers: BAT-25, BAT-26, NR-21, NR-24, and MONO-27. These markers are highly sensitive for the detection of microsatellite instability associated with defective DNA mismatch repair.\n\nThe assay protocol involves:\n- DNA extraction from both tumor tissue and matched normal blood sample\n- PCR amplification using fluorescently labeled primers\n- Capillary electrophoresis for fragment analysis\n- Comparison of allelic patterns between tumor and normal DNA\n\nMSI-High is defined as instability in ≥2 of the 5 markers\nMSI-Low is defined as instability in 1 of the 5 markers\nMSS (Microsatellite Stable) is defined as no instability detected\n\nRESULTS\nTEST FAILED - TECHNICAL FAILURE\n\nDespite multiple attempts, PCR amplification failed for all five microsatellite markers in both the tumor tissue and blood samples:\n- BAT-25: No amplification\n- BAT-26: No amplification\n- NR-21: No amplification\n- NR-24: No amplification\n- MONO-27: No amplification\n\nQuality control markers also failed to amplify, indicating inadequate DNA quality or quantity for analysis.\n\nINTERPRETATION\nMicrosatellite instability status could not be determined due to technical failure. The DNA extracted from both tumor and blood samples failed to amplify during PCR, preventing assessment of microsatellite stability. This technical failure impacts the ability to evaluate for Lynch Syndrome through MSI testing.\n\nTECHNICAL NOTES\nPossible causes of amplification failure include:\n- DNA degradation due to formalin fixation or storage conditions\n- Presence of PCR inhibitors\n- Insufficient DNA quantity despite spectrophotometric measurements\n\nCLINICAL IMPLICATIONS\nThe inability to determine MSI status limits the molecular evaluation for Lynch Syndrome in this patient. MSI testing is a critical component in the screening algorithm for hereditary nonpolyposis colorectal cancer (Lynch Syndrome). Without this information, clinical management decisions regarding genetic counseling, germline testing, and family screening cannot be fully informed by MSI status.\n\nLIMITATIONS\nThis test cannot detect all causes of Lynch Syndrome. Approximately 10-15% of Lynch Syndrome cases may have normal MSI status. Additionally, technical failures as encountered in this case prevent any determination of MSI status.\n\nReported by: [redacted name], PhD\nLaboratory Director: [redacted name], MD, PhD\nCAP: [redacted ID] | CLIA: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Suspected adenocarcinoma of caecum requiring MSI testing",
+            "test_clinical_rationale": "Patient meets BETHESDA criteria for Lynch Syndrome testing",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Elderly female patient"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Adenocarcinoma of caecum"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Right hemicolectomy with 80% neoplastic cells"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "PCR",
+                "other_test_type": null,
+                "test_methodology": "Microsatellite instability testing using GeneTech MSI Analysis System with multiplex PCR amplification of five quasi-monomorphic mononucleotide repeat markers",
+                "sample_origin": "Tumor tissue from right hemicolectomy and peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "Microsatellite markers",
+                "gene_nomenclature": [],
+                "result_region": "BAT-25, BAT-26, NR-21, NR-24, MONO-27",
+                "result_status": "failed_or_inconclusive",
+                "result_description": "PCR amplification failed for all five microsatellite markers in both tumor and blood samples. No amplification detected. Quality control markers also failed.",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Test Status",
+                        "result_value": "Failed - Technical Failure"
+                    }
+                ],
+                "clinical_implications": "The inability to determine MSI status limits the molecular evaluation for Lynch Syndrome. This impacts clinical management decisions regarding genetic counseling, germline testing, and family screening."
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Microsatellite instability status could not be determined due to technical failure. This prevents assessment of Lynch Syndrome through MSI testing, limiting molecular evaluation for hereditary nonpolyposis colorectal cancer",
+            "overall_recommendations": "Unable to provide MSI-based recommendations due to test failure. Alternative testing approaches or repeat sampling may be considered for Lynch Syndrome evaluation"
+        }
+    }
+}

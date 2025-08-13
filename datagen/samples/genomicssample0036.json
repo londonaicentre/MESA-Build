@@ -1,0 +1,204 @@
+{
+    "content": "MOLECULAR CYTOGENETICS LABORATORY\nFLUORESCENCE IN SITU HYBRIDIZATION (FISH) REPORT\n\nPATIENT INFORMATION\nPatient Name: [redacted name]\nMedical Record Number: [redacted ID]\nDate of Birth: [redacted date]\nSpecimen Type: Bone Marrow Aspirate\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nCLINICAL INFORMATION\nReason for Referral: Myeloma with inadequate response to treatment. Sample for clinical trial enrollment.\nClinical Diagnosis: Multiple myeloma\n\nTEST PERFORMED\nInterphase FISH Analysis for Multiple Myeloma Panel\n\nMETHODOLOGY\nInterphase FISH analysis was performed on cultured and uncultured bone marrow cells using the following probe sets:\n• GeneProbe LSI D5S23, D5S721/CEP 9/CEP 15\n• GeneTrack IGH Plus Breakapart Probe\n• GeneTrack CKS1B/CDKN2C(P18)\n• OmniPath CLL Kit (DLEU 13q14/13q34, TP53 17p13.1, ATM 11q22.3)\n\nA minimum of 100 interphase nuclei were analyzed for each probe set. Results are reported as the number of abnormal cells per 100 cells examined.\n\nRESULTS\n\nABNORMAL FINDINGS:\n\n1. MONOSOMY 13\n   Probe: DLEU (13q14)/13q34\n   Result: Loss of chromosome 13 detected in 87/100 cells (87%)\n   Normal Range: <5%\n\n2. CKS1B GAIN\n   Probe: CKS1B (1q21)\n   Result: Gain of 1-2 additional copies detected in 81/100 cells (81%)\n   Normal Range: <5%\n\n3. HYPERDIPLOIDY\n   a) CDKN2C (1p32.3): Additional copies in 25/100 cells (25%)\n   b) D5S23/D5S721 (5p15.2): Additional copies in 64/100 cells (64%)\n   c) CEP9: Additional copies in 74/100 cells (74%)\n   d) CEP15: Additional copies in 70/100 cells (70%)\n\nNORMAL FINDINGS:\n\n4. IGH REARRANGEMENT\n   Probe: IGH (14q32) Breakapart\n   Result: No rearrangement detected\n   Normal signal pattern in 100/100 cells examined\n\n5. TP53 DELETION\n   Probe: TP53 (17p13.1)\n   Result: No deletion detected\n   Normal diploid pattern in 100/100 cells examined\n\n6. ATM STATUS\n   Probe: ATM (11q22.3)\n   Result: Normal diploid pattern\n   No deletion detected in 100/100 cells examined\n\nINTERPRETATION\nThis FISH analysis reveals multiple cytogenetic abnormalities characteristic of multiple myeloma:\n\n• Monosomy 13 (87% of cells): Associated with more aggressive disease course\n• Gain of 1q21/CKS1B (81% of cells): Associated with disease progression and adverse prognosis\n• Hyperdiploidy with gains of chromosomes 5, 9, and 15: Generally associated with standard risk myeloma when not accompanied by high-risk features\n• Absence of IGH rearrangement and TP53 deletion: Favorable prognostic indicators\n\nThe combination of monosomy 13 and 1q gain represents an intermediate to high-risk cytogenetic profile in multiple myeloma. These findings provide important disease characterization for clinical trial stratification and treatment planning.\n\nLIMITATIONS\nDual-color break-apart probes will not detect rearrangements from cryptic insertion events, which may occur in a small percentage of cases. This analysis is limited to the genomic regions interrogated by the specific probes used.\n\nReported by: [redacted name], PhD, FACMG\nLaboratory Director: [redacted name], MD, PhD",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Myeloma with inadequate response to treatment. Sample for clinical trial enrollment.",
+            "test_clinical_rationale": "Disease characterization for clinical trial stratification and treatment planning",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Multiple myeloma"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Inadequate response to treatment"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis on cultured and uncultured bone marrow cells using GeneProbe LSI D5S23, D5S721/CEP 9/CEP 15, GeneTrack IGH Plus Breakapart Probe, GeneTrack CKS1B/CDKN2C(P18), and OmniPath CLL Kit",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "13",
+                "gene_nomenclature": [],
+                "result_region": "DLEU (13q14)/13q34",
+                "result_status": "abnormal",
+                "result_description": "Loss of chromosome 13 detected in 87/100 cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with Monosomy 13",
+                        "result_value": 87.0,
+                        "result_units": "cells per 100"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Cytogenetic Abnormality",
+                        "result_value": "Monosomy 13"
+                    }
+                ],
+                "clinical_implications": "Associated with more aggressive disease course"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis using GeneTrack CKS1B probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "CKS1B",
+                "gene_nomenclature": [],
+                "result_region": "1q21",
+                "result_status": "abnormal",
+                "result_description": "Gain of 1-2 additional copies detected in 81/100 cells",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with CKS1B Gain",
+                        "result_value": 81.0,
+                        "result_units": "cells per 100"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "Gain"
+                    }
+                ],
+                "clinical_implications": "Associated with disease progression and adverse prognosis"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH analysis for hyperdiploidy markers",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "chromosome",
+                "result_entity": "Multiple chromosomes",
+                "gene_nomenclature": [],
+                "result_region": "CDKN2C (1p32.3), D5S23/D5S721 (5p15.2), CEP9, CEP15",
+                "result_status": "abnormal",
+                "result_description": "Hyperdiploidy detected with gains of chromosomes 5, 9, and 15",
+                "quantitative_results": [
+                    {
+                        "result_name": "Cells with CDKN2C gain",
+                        "result_value": 25.0,
+                        "result_units": "cells per 100"
+                    },
+                    {
+                        "result_name": "Cells with D5S23/D5S721 gain",
+                        "result_value": 64.0,
+                        "result_units": "cells per 100"
+                    },
+                    {
+                        "result_name": "Cells with CEP9 gain",
+                        "result_value": 74.0,
+                        "result_units": "cells per 100"
+                    },
+                    {
+                        "result_name": "Cells with CEP15 gain",
+                        "result_value": 70.0,
+                        "result_units": "cells per 100"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Ploidy Status",
+                        "result_value": "Hyperdiploid"
+                    }
+                ],
+                "clinical_implications": "Generally associated with standard risk myeloma when not accompanied by high-risk features"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH using IGH breakapart probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "IGH",
+                "gene_nomenclature": [],
+                "result_region": "14q32",
+                "result_status": "normal",
+                "result_description": "No rearrangement detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Normal cells",
+                        "result_value": 100.0,
+                        "result_units": "cells per 100"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Rearrangement Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "Favorable prognostic indicator"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH using TP53 probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "TP53",
+                "gene_nomenclature": [],
+                "result_region": "17p13.1",
+                "result_status": "normal",
+                "result_description": "No deletion detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Normal cells",
+                        "result_value": 100.0,
+                        "result_units": "cells per 100"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Deletion Status",
+                        "result_value": "Not detected"
+                    }
+                ],
+                "clinical_implications": "Favorable prognostic indicator"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Interphase FISH using ATM probe",
+                "sample_origin": "Bone Marrow Aspirate",
+                "result_entity_type": "gene",
+                "result_entity": "ATM",
+                "gene_nomenclature": [],
+                "result_region": "11q22.3",
+                "result_status": "normal",
+                "result_description": "Normal diploid pattern",
+                "quantitative_results": [
+                    {
+                        "result_name": "Normal cells",
+                        "result_value": 100.0,
+                        "result_units": "cells per 100"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Copy Number Status",
+                        "result_value": "Normal diploid"
+                    }
+                ],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The combination of monosomy 13 and 1q gain represents an intermediate to high-risk cytogenetic profile in multiple myeloma. These findings provide important disease characterization for clinical trial stratification and treatment planning",
+            "overall_recommendations": "Dual-color break-apart probes will not detect rearrangements from cryptic insertion events, which may occur in a small percentage of cases"
+        }
+    }
+}

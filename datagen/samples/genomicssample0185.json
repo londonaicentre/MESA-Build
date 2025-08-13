@@ -1,0 +1,151 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted name] Medical Center\nDepartment of Pathology and Laboratory Medicine\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INFORMATION\nDiagnosis: Lung adenocarcinoma favored\nSpecimen Type: FFPE tissue from pelvic bone biopsy\nEstimated Tumor Content: 40%\n\nTEST PERFORMED\nComprehensive Molecular Profiling Assay\n- DNA Panel: 45 genes\n- RNA Panel: 17 fusion kinase genes (attempted)\n\nMETHODOLOGY\nThis assay utilizes barcoded primer technology with an integrated sequencer platform for simultaneous detection of mutations, insertions/deletions, and gene rearrangements. DNA sequencing has a detection threshold of ≥5% variant allele frequency with minimum 100x coverage. RNA analysis targets fusion transcripts in 17 kinase genes.\n\nRESULTS SUMMARY\n\nDNA PANEL - COMPLETED\nKey Actionable Genes Tested:\n• EGFR (NM_005228.5): No variants detected\n• KRAS (NM_033360.4): No variants detected  \n• BRAF (NM_004333.6): No variants detected\n\nAdditional genes analyzed (complete list available upon request): No clinically significant variants detected in the examined regions of the 45-gene panel.\n\nRNA PANEL - FAILED\nTargeted Fusion/Rearrangement Genes:\n• ALK\n• ROS1\n• RET\n• MET\n• NTRK1/2/3\n• Additional kinase genes (12 total)\n\nResult: Analysis could not be completed due to insufficient RNA quality\n\nQUALITY INDICATORS\nDNA Quality: Adequate\nDNA Quantity: Sufficient\nMean Coverage Depth: 342x\nRNA Quality: Poor (RIN <2.0)\nRNA Quantity: Insufficient for analysis\n\nCLINICAL INTERPRETATION\nThe absence of detectable variants in EGFR, KRAS, and BRAF suggests this tumor is unlikely to respond to EGFR tyrosine kinase inhibitors (e.g., erlotinib, gefitinib, osimertinib), MEK inhibitors, or BRAF inhibitors.\n\nThe RNA panel failure prevents assessment of ALK, ROS1, RET, MET, and NTRK gene rearrangements. Therefore, potential benefit from ALK inhibitors (e.g., alectinib, crizotinib), ROS1 inhibitors (e.g., entrectinib, crizotinib), RET inhibitors (e.g., selpercatinib), MET inhibitors, or NTRK inhibitors cannot be determined from this specimen.\n\nRECOMMENDATIONS\nGiven the RNA panel failure, consider repeat testing using material from a separate specimen if clinically indicated, particularly to assess for targetable gene fusions that occur in 10-15% of lung adenocarcinomas.\n\nASSAY LIMITATIONS\n• This assay detects variants present at ≥5% allele frequency\n• Not all exons/introns of all genes are sequenced\n• Complex structural variants may not be detected\n• RNA quality issues may prevent fusion detection\n• Results should be interpreted in context of all clinical and pathological findings\n\nElectronically signed by:\n[redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Lung adenocarcinoma favored",
+            "test_clinical_rationale": "Comprehensive molecular profiling to identify targetable mutations and gene rearrangements for treatment selection",
+            "clinical_findings": [
+                {
+                    "type": "morbidity",
+                    "value": "Lung adenocarcinoma favored"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Pelvic bone biopsy with 40% estimated tumor content"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular profiling assay using barcoded primer technology and integrated sequencer platform with detection threshold ≥5% and minimum 100x coverage",
+                "sample_origin": "Pelvic bone biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "EGFR",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_005228",
+                        "version": "5"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Unlikely to respond to EGFR tyrosine kinase inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular profiling assay using barcoded primer technology and integrated sequencer platform with detection threshold ≥5% and minimum 100x coverage",
+                "sample_origin": "Pelvic bone biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "KRAS",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_033360",
+                        "version": "4"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Unlikely to respond to MEK inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular profiling assay using barcoded primer technology and integrated sequencer platform with detection threshold ≥5% and minimum 100x coverage",
+                "sample_origin": "Pelvic bone biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_004333",
+                        "version": "6"
+                    }
+                ],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No variants detected",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": "Unlikely to respond to BRAF inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Molecular profiling assay using barcoded primer technology and integrated sequencer platform",
+                "sample_origin": "Pelvic bone biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "45-gene panel",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No clinically significant variants detected in the examined regions",
+                "quantitative_results": [
+                    {
+                        "result_name": "Mean Coverage Depth",
+                        "result_value": 342.0,
+                        "result_units": "x"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "DNA Quality",
+                        "result_value": "Adequate"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "RNA fusion analysis targeting 17 kinase genes",
+                "sample_origin": "Pelvic bone biopsy",
+                "result_entity_type": "gene",
+                "result_entity": "RNA fusion panel (ALK, ROS1, RET, MET, NTRK)",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "failed_or_inconclusive",
+                "result_description": "Analysis could not be completed due to insufficient RNA quality",
+                "quantitative_results": [
+                    {
+                        "result_name": "RNA Integrity Number",
+                        "result_value": 2.0,
+                        "result_units": "RIN"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "RNA Quality",
+                        "result_value": "Poor"
+                    },
+                    {
+                        "result_name": "RNA Quantity",
+                        "result_value": "Insufficient for analysis"
+                    }
+                ],
+                "clinical_implications": "Potential benefit from ALK, ROS1, RET, MET, or NTRK inhibitors cannot be determined"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The absence of detectable variants in EGFR, KRAS, and BRAF suggests this tumor is unlikely to respond to EGFR tyrosine kinase inhibitors, MEK inhibitors, or BRAF inhibitors. ALK/ROS1/RET/MET/NTRK inhibitor actionability remains undetermined due to RNA panel failure",
+            "overall_recommendations": "Consider repeat testing using material from a separate specimen if clinically indicated, particularly to assess for targetable gene fusions that occur in 10-15% of lung adenocarcinomas"
+        }
+    }
+}

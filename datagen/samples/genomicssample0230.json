@@ -1,0 +1,130 @@
+{
+    "content": "MOLECULAR PATHOLOGY REPORT\n[redacted location] Cancer Center\nDepartment of Pathology and Laboratory Medicine\n\nPatient: [redacted name]\nMRN: [redacted ID]\nDOB: [redacted date]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nCollection Date: [redacted date]\nReport Date: [redacted date]\n\nCLINICAL INDICATION\nLung adenocarcinoma genetic profiling for treatment guidance\n\nSPECIMEN TYPE\nFormalin-fixed paraffin-embedded tissue\n\nTEST PERFORMED\nCombined FISH and Molecular Analysis - Rapid-Amplicon EGFR Pathway Panel\n\nMETHODOLOGY\nNext-Generation Sequencing: Targeted amplicon-based sequencing of BRAF, KRAS, EGFR, NRAS genes performed on Illumina NextSeq platform. Custom bioinformatics pipeline utilized for alignment, variant calling, and annotation. Minimum variant allele frequency detection threshold: 5%.\n\nFluorescence In Situ Hybridization (FISH): Break apart probes used for ALK (2p23) and ROS1 (6q22) rearrangement assessment. A minimum of 50 tumor nuclei evaluated per probe set.\n\nRESULTS SUMMARY\n\nPATHOGENIC VARIANTS DETECTED:\n1. BRAF c.1799T>A, p.(Val600Glu) - Allele Frequency: 15%\n2. KRAS c.35G>T, p.(Gly12Val) - Allele Frequency: 19%\n\nFISH ANALYSIS:\n- ALK rearrangement: NEGATIVE (2-4 copies of intact ALK gene observed)\n- ROS1 rearrangement: NEGATIVE\n\nADDITIONAL FINDINGS:\n- EGFR: No pathogenic variants detected. Note: Low coverage for codons 854-875 limiting detection sensitivity in this region\n- NRAS: No pathogenic variants detected\n- Other BRAF regions: No additional therapeutic/prognostic variants identified\n\nDETAILED RESULTS\n\nGene\tVariant\tProtein Change\tAllele Frequency\tClinical Significance\nBRAF\tc.1799T>A\tp.Val600Glu\t15%\tPathogenic - Activating mutation\nKRAS\tc.35G>T\tp.Gly12Val\t19%\tPathogenic - Activating mutation\nEGFR\tNo variants detected\t-\t-\tSee coverage limitation note\nNRAS\tNo variants detected\t-\t-\t-\n\nCOVERAGE ANALYSIS\nAll targeted regions achieved >500x coverage except EGFR codons 854-875 (average coverage 45x)\n\nCLINICAL INTERPRETATION\n\nBRAF V600E Mutation (15% AF):\nThe BRAF V600E mutation results in constitutive activation of the MAPK signaling pathway. In non-small cell lung cancer (NSCLC), this alteration may predict response to BRAF inhibitors, particularly when used in combination with MEK inhibitors. FDA-approved combination therapies include dabrafenib plus trametinib.\n\nKRAS G12V Mutation (19% AF):\nKRAS mutations are associated with primary resistance to EGFR tyrosine kinase inhibitors in NSCLC. The presence of this mutation suggests the patient is unlikely to benefit from EGFR-targeted therapies. KRAS G12V may also impact response to certain immunotherapy approaches.\n\nALK and ROS1 Status:\nNegative FISH results indicate the patient is unlikely to benefit from ALK inhibitors (e.g., alectinib, crizotinib) or ROS1 inhibitors.\n\nASSAY LIMITATIONS\n- This assay detects single nucleotide variants and small insertions/deletions in targeted regions only\n- Large insertions, deletions, or complex rearrangements may not be detected by NGS component\n- Low coverage in EGFR codons 854-875 may result in false-negative results for variants in this region\n- Variants below 5% allele frequency may not be reliably detected\n\nElectronically signed by:\n[redacted name], MD, PhD\nBoard Certified in Molecular Genetic Pathology",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Lung adenocarcinoma genetic profiling for treatment guidance",
+            "test_clinical_rationale": null,
+            "clinical_findings": []
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "Combined FISH and molecular analysis using Rapid-Amplicon EGFR Pathway Panel",
+                "test_methodology": "Targeted amplicon-based sequencing on Illumina NextSeq platform with custom bioinformatics pipeline for alignment, variant calling, and annotation",
+                "sample_origin": "Formalin-fixed paraffin-embedded tissue",
+                "result_entity_type": "variant",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [],
+                "result_region": "c.1799T>A, p.(Val600Glu)",
+                "result_status": "abnormal",
+                "result_description": "BRAF V600E mutation detected, activating tyrosine kinase pathway",
+                "quantitative_results": [
+                    {
+                        "result_name": "Allele Frequency",
+                        "result_value": 15.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Clinical Significance",
+                        "result_value": "Pathogenic - Activating mutation"
+                    }
+                ],
+                "clinical_implications": "BRAF V600E may respond to BRAF inhibitors, particularly when used in combination with MEK inhibitors. FDA-approved combination therapies include dabrafenib plus trametinib"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "Combined FISH and molecular analysis using Rapid-Amplicon EGFR Pathway Panel",
+                "test_methodology": "Targeted amplicon-based sequencing on Illumina NextSeq platform with custom bioinformatics pipeline",
+                "sample_origin": "Formalin-fixed paraffin-embedded tissue",
+                "result_entity_type": "variant",
+                "result_entity": "KRAS",
+                "gene_nomenclature": [],
+                "result_region": "c.35G>T, p.(Gly12Val)",
+                "result_status": "abnormal",
+                "result_description": "KRAS G12V mutation detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Allele Frequency",
+                        "result_value": 19.0,
+                        "result_units": "%"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Clinical Significance",
+                        "result_value": "Pathogenic - Activating mutation"
+                    }
+                ],
+                "clinical_implications": "KRAS mutations are associated with primary resistance to EGFR tyrosine kinase inhibitors in NSCLC. The presence of this mutation suggests the patient is unlikely to benefit from EGFR-targeted therapies"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Break apart probes for ALK (2p23) rearrangement assessment",
+                "sample_origin": "Formalin-fixed paraffin-embedded tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ALK",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "ALK rearrangement negative; 2-4 copies of intact ALK gene observed",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "ALK Rearrangement Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": "Patient unlikely to benefit from ALK inhibitors (e.g., alectinib, crizotinib)"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "FISH",
+                "other_test_type": null,
+                "test_methodology": "Break apart probes for ROS1 (6q22) rearrangement assessment",
+                "sample_origin": "Formalin-fixed paraffin-embedded tissue",
+                "result_entity_type": "gene",
+                "result_entity": "ROS1",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "ROS1 rearrangement negative",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "ROS1 Rearrangement Status",
+                        "result_value": "NEGATIVE"
+                    }
+                ],
+                "clinical_implications": "Patient unlikely to benefit from ROS1 inhibitors"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "Other",
+                "other_test_type": "Combined FISH and molecular analysis using Rapid-Amplicon EGFR Pathway Panel",
+                "test_methodology": "Targeted amplicon-based sequencing on Illumina NextSeq platform",
+                "sample_origin": "Formalin-fixed paraffin-embedded tissue",
+                "result_entity_type": "gene",
+                "result_entity": "EGFR",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "No pathogenic variants detected. Low coverage for codons 854-875 limiting detection in this region",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "BRAF V600E mutation may predict response to BRAF/MEK inhibitor combination therapy. KRAS G12V mutation associated with resistance to EGFR tyrosine kinase inhibitors. Negative ALK and ROS1 FISH results indicate patient unlikely to benefit from ALK/ROS1 targeted therapies",
+            "overall_recommendations": "No specific recommendations beyond treatment implications of detected variants"
+        }
+    }
+}

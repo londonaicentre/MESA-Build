@@ -1,0 +1,86 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\n\nPatient: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSpecimen ID: [redacted ID]\nOrdering Physician: Dr. [redacted name]\nDate Collected: [redacted date]\nDate Reported: [redacted date]\n\nREFERRAL REASON\nTesting for activating variant in BRAF exon 15 in melanoma tissue.\n\nTEST DESCRIPTION\nSanger sequencing of PCR amplified DNA from formalin-fixed paraffin-embedded (FFPE) tissue targeting BRAF exon 15, codon 600 and surrounding region. This assay detects common activating variants in the BRAF gene associated with melanoma and response to targeted therapy.\n\nRESULTS\nBRAF (NM_004333.6):\n- c.1799T>A p.(Val600Glu): NOT DETECTED\n- c.1798_1799delGTinsAA p.(Val600Lys): DETECTED at very low level\n\nThe BRAF c.1798_1799delGTinsAA p.(Val600Lys) pathogenic variant was detected at very low level in this sample. Neoplastic cell content was estimated at approximately 15% of total nuclei in the specimen analyzed.\n\nSUMMARY\nThe detected BRAF c.1798_1799delGTinsAA p.(Val600Lys) pathogenic variant affects the same codon as the common c.1799T>A p.(Val600Glu) activating variant. This variant results in substitution of valine with lysine at codon 600 and leads to constitutive activation of the BRAF kinase. BRAF p.Val600Lys variants are found in approximately 5-6% of BRAF-mutated melanomas and are associated with response to BRAF inhibitor therapy (Chapman et al., N Engl J Med 2011;364:2507-16; Long et al., Lancet Oncol 2014;15:323-32).\n\nThe low variant allele frequency observed may be due to low neoplastic cell content in the specimen or tumor heterogeneity. Clinical correlation is recommended.\n\nTest performed by: [redacted name], PhD\nReviewed by: [redacted name], MD, PhD\nCAP: [redacted ID] | CLIA: [redacted ID]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Testing for activating variant in BRAF exon 15 in melanoma tissue",
+            "test_clinical_rationale": "Detection of common activating variants in the BRAF gene associated with melanoma and response to targeted therapy",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult female patient"
+                },
+                {
+                    "type": "morbidity",
+                    "value": "Melanoma"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Sanger sequencing of PCR amplified DNA from formalin-fixed paraffin-embedded (FFPE) tissue",
+                "sample_origin": "FFPE tissue",
+                "result_entity_type": "variant",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_004333",
+                        "version": "6"
+                    }
+                ],
+                "result_region": "c.1799T>A p.(Val600Glu)",
+                "result_status": "normal",
+                "result_description": "NOT DETECTED",
+                "quantitative_results": [],
+                "categorical_results": [],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "Sanger sequencing of PCR amplified DNA from formalin-fixed paraffin-embedded (FFPE) tissue",
+                "sample_origin": "FFPE tissue",
+                "result_entity_type": "variant",
+                "result_entity": "BRAF",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_004333",
+                        "version": "6"
+                    }
+                ],
+                "result_region": "c.1798_1799delGTinsAA p.(Val600Lys)",
+                "result_status": "abnormal",
+                "result_description": "DETECTED at very low level",
+                "quantitative_results": [
+                    {
+                        "result_name": "Neoplastic Cell Content",
+                        "result_value": 15.0,
+                        "result_units": "percent"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Detection Level",
+                        "result_value": "Very low level"
+                    }
+                ],
+                "clinical_implications": "This variant affects the same codon as the common c.1799T>A p.(Val600Glu) activating variant and leads to constitutive activation of the BRAF kinase. Found in approximately 5-6% of BRAF-mutated melanomas and associated with response to BRAF inhibitor therapy"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The detected BRAF c.1798_1799delGTinsAA p.(Val600Lys) pathogenic variant results in substitution of valine with lysine at codon 600, leading to constitutive activation of the BRAF kinase. This variant is associated with melanoma and response to BRAF inhibitor therapy. The low variant allele frequency may be due to low neoplastic cell content or tumor heterogeneity",
+            "overall_recommendations": "Clinical correlation is recommended"
+        }
+    }
+}

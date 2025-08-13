@@ -1,0 +1,300 @@
+{
+    "content": "MOLECULAR GENETICS LABORATORY REPORT\n[redacted location] Medical Center\nDepartment of Medical Genetics\n\nPATIENT INFORMATION\nName: [redacted name]\nDOB: [redacted date]\nMRN: [redacted ID]\nSex: Female\nSpecimen Type: Peripheral blood\nDate Collected: [redacted date]\nDate Received: [redacted date]\nDate Reported: [redacted date]\n\nREFERRING PHYSICIAN\n[redacted name], MD\n[redacted location] Hospital\n\nCLINICAL INDICATION\nAdult female with complex multisystem disorder including intellectual disability, delayed motor development, diabetes insipidus, pericentral retinitis pigmentosa, ptosis, exocrine pancreatic insufficiency, proximal tubulopathy, seizures, ataxia, thenar/hypothenar abnormalities, primary amenorrhea, premature ovarian insufficiency, myopia, and episodic vomiting. Previous whole genome sequencing performed through national genomic research initiative identified variants requiring clinical confirmation.\n\nTEST PERFORMED\nSanger sequencing confirmation of variants in PMM2, AQP2, and CACNA1A genes\n\nMETHODOLOGY\nGenomic DNA was extracted from peripheral blood using standard protocols. PCR amplification and bidirectional Sanger sequencing were performed for the following regions:\n- PMM2 (NM_000303.3): Exons 3 and 5\n- AQP2 (NM_000486.6): Exons 1 and 4\n- CACNA1A (NM_001127221.2): Exon 4\n\nSequencing was performed on an Applied Biosystems 3730xl DNA Analyzer. Data analysis was performed using Mutation Surveyor software v5.1.2.\n\nRESULTS\n\nPROBAND RESULTS:\n\n1. PMM2 (NM_000303.3)\n   - c.305A>G p.(Tyr102Cys) - HETEROZYGOUS\n     Classification: Likely Pathogenic\n     Located in exon 3\n   - c.442G>A p.(Asp148Asn) - HETEROZYGOUS\n     Classification: Pathogenic\n     Located in exon 5\n\n2. AQP2 (NM_000486.6)\n   - c.707_720dup p.(Glu241fs) - HETEROZYGOUS\n     Classification: Likely Pathogenic\n     14bp duplication in exon 4 causing frameshift\n   - c.34G>A p.(Ala12Thr) - HETEROZYGOUS\n     Classification: Variant of Uncertain Significance (VUS)\n     Located in exon 1\n\n3. CACNA1A (NM_001127221.2)\n   - c.359A>G p.(His120Arg) - HETEROZYGOUS\n     Classification: Variant of Uncertain Significance (VUS)\n     Located in exon 4\n\nMATERNAL RESULTS:\n\n1. PMM2 (NM_000303.3)\n   - c.305A>G p.(Tyr102Cys) - NOT DETECTED\n   - c.442G>A p.(Asp148Asn) - HETEROZYGOUS\n\n2. AQP2 (NM_000486.6)\n   - c.707_720dup p.(Glu241fs) - HETEROZYGOUS\n   - c.34G>A p.(Ala12Thr) - NOT DETECTED\n\n3. CACNA1A (NM_001127221.2)\n   - c.359A>G p.(His120Arg) - NOT DETECTED\n\nINTERPRETATION\n\nPMM2 Analysis:\nThe proband carries two heterozygous variants in PMM2. The c.442G>A p.(Asp148Asn) variant is a well-established pathogenic variant associated with congenital disorder of glycosylation type Ia (PMM2-CDG). The c.305A>G p.(Tyr102Cys) variant is classified as likely pathogenic based on computational predictions and rarity in population databases. The mother carries only the c.442G>A variant, indicating the c.305A>G variant was either inherited from the father or arose de novo. Phase determination is required to confirm these variants are in trans (on opposite chromosomes), which would be consistent with autosomal recessive PMM2-CDG.\n\nAQP2 Analysis:\nThe proband carries a likely pathogenic frameshift variant (c.707_720dup) and a VUS (c.34G>A). The frameshift variant is predicted to result in premature protein truncation and is consistent with nephrogenic diabetes insipidus. The mother also carries the frameshift variant. The c.34G>A variant's clinical significance remains uncertain. AQP2-related nephrogenic diabetes insipidus typically follows autosomal recessive inheritance, though dominant forms exist.\n\nCACNA1A Analysis:\nThe c.359A>G p.(His120Arg) variant is classified as a VUS. This variant has insufficient evidence to determine pathogenicity. CACNA1A variants are associated with episodic ataxia type 2, familial hemiplegic migraine, and spinocerebellar ataxia type 6. The variant was not detected in the mother.\n\nCLINICAL CORRELATION\nThe genetic findings provide molecular support for several of the proband's clinical features:\n- PMM2 variants (if confirmed in trans) explain the multisystem features consistent with PMM2-CDG\n- AQP2 frameshift variant supports the diabetes insipidus diagnosis\n- CACNA1A VUS requires additional evidence to determine relevance to ataxia and seizures\n\nRECOMMENDATIONS\n1. Paternal testing is strongly recommended to:\n   - Determine phase of PMM2 variants (confirm trans configuration)\n   - Assess inheritance of AQP2 c.34G>A variant\n   - Determine inheritance of CACNA1A variant\n\n2. Transferrin isoelectric focusing or carbohydrate-deficient transferrin analysis to support PMM2-CDG diagnosis\n\n3. Genetic counseling to discuss:\n   - Inheritance patterns and recurrence risks\n   - Implications for family members\n   - Available carrier testing for at-risk relatives\n\n4. Consider functional studies for VUS interpretation if clinically indicated\n\n5. Periodic variant reclassification review as new evidence emerges\n\nThis test was developed and its performance characteristics determined by [redacted location] Medical Center Molecular Genetics Laboratory. It has not been cleared or approved by the FDA.\n\nElectronically signed by:\n[redacted name], PhD, FACMG\nLaboratory Director\n[redacted date]",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Adult female with complex multisystem disorder including intellectual disability, delayed motor development, diabetes insipidus, pericentral retinitis pigmentosa, ptosis, exocrine pancreatic insufficiency, proximal tubulopathy, seizures, ataxia, thenar/hypothenar abnormalities, primary amenorrhea, premature ovarian insufficiency, myopia, and episodic vomiting",
+            "test_clinical_rationale": "Previous whole genome sequencing performed through national genomic research initiative identified variants requiring clinical confirmation",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "Adult female"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Intellectual disability"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Delayed motor development"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Diabetes insipidus"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Pericentral retinitis pigmentosa"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Ptosis"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Exocrine pancreatic insufficiency"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Proximal tubulopathy"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Seizures"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Ataxia"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Thenar/hypothenar abnormalities"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Primary amenorrhea"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Premature ovarian insufficiency"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Myopia"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Episodic vomiting"
+                },
+                {
+                    "type": "family_history",
+                    "value": "Mother asymptomatic"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "PMM2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000303",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.305A>G p.(Tyr102Cys)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous variant detected in exon 3",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Likely Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Associated with congenital disorder of glycosylation type Ia when in trans with another pathogenic variant"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "PMM2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000303",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.442G>A p.(Asp148Asn)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous variant detected in exon 5",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Well-established pathogenic variant associated with congenital disorder of glycosylation type Ia (PMM2-CDG)"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "AQP2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000486",
+                        "version": "6"
+                    }
+                ],
+                "result_region": "c.707_720dup p.(Glu241fs)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous 14bp duplication in exon 4 causing frameshift",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Likely Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Predicted to result in premature protein truncation, consistent with nephrogenic diabetes insipidus"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "AQP2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000486",
+                        "version": "6"
+                    }
+                ],
+                "result_region": "c.34G>A p.(Ala12Thr)",
+                "result_status": "uncertain_significance",
+                "result_description": "Heterozygous variant detected in exon 1",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Variant of Uncertain Significance (VUS)"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Clinical significance remains uncertain"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "CACNA1A",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_001127221",
+                        "version": "2"
+                    }
+                ],
+                "result_region": "c.359A>G p.(His120Arg)",
+                "result_status": "uncertain_significance",
+                "result_description": "Heterozygous variant detected in exon 4",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Variant of Uncertain Significance (VUS)"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Insufficient evidence to determine pathogenicity; CACNA1A variants associated with episodic ataxia type 2, familial hemiplegic migraine, and spinocerebellar ataxia type 6"
+            },
+            {
+                "test_subject": "mother",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "PMM2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000303",
+                        "version": "3"
+                    }
+                ],
+                "result_region": "c.442G>A p.(Asp148Asn)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Mother is carrier for pathogenic PMM2 variant"
+            },
+            {
+                "test_subject": "mother",
+                "test_type": "DNA",
+                "other_test_type": null,
+                "test_methodology": "PCR amplification and bidirectional Sanger sequencing on Applied Biosystems 3730xl DNA Analyzer",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "variant",
+                "result_entity": "AQP2",
+                "gene_nomenclature": [
+                    {
+                        "nomenclature_system": "RefSeq",
+                        "identifier": "NM_000486",
+                        "version": "6"
+                    }
+                ],
+                "result_region": "c.707_720dup p.(Glu241fs)",
+                "result_status": "abnormal",
+                "result_description": "Heterozygous variant detected",
+                "quantitative_results": [],
+                "categorical_results": [
+                    {
+                        "result_name": "Pathogenicity",
+                        "result_value": "Likely Pathogenic"
+                    },
+                    {
+                        "result_name": "Zygosity",
+                        "result_value": "Heterozygous"
+                    }
+                ],
+                "clinical_implications": "Mother is carrier for likely pathogenic AQP2 variant"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "The genetic findings provide molecular support for several of the proband's clinical features. PMM2 variants (if confirmed in trans) explain the multisystem features consistent with PMM2-CDG. AQP2 frameshift variant supports the diabetes insipidus diagnosis. CACNA1A VUS requires additional evidence to determine relevance to ataxia and seizures",
+            "overall_recommendations": "Paternal testing is strongly recommended to determine phase of PMM2 variants (confirm trans configuration), assess inheritance of AQP2 c.34G>A variant, and determine inheritance of CACNA1A variant. Transferrin isoelectric focusing or carbohydrate-deficient transferrin analysis to support PMM2-CDG diagnosis. Genetic counseling to discuss inheritance patterns, recurrence risks, implications for family members, and available carrier testing for at-risk relatives. Consider functional studies for VUS interpretation if clinically indicated. Periodic variant reclassification review as new evidence emerges"
+        }
+    }
+}
