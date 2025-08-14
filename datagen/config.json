@@ -1,0 +1,10 @@
+{
+    "sonnet4": {
+        "model": "us.anthropic.claude-sonnet-4-20250514-v1:0",
+        "region": "us-east-1"
+    },
+    "opus4": {
+        "model": "us.anthropic.cclaude-opus-4-20250514-v1:0",
+        "region": "us-east-1"
+    }
+}
