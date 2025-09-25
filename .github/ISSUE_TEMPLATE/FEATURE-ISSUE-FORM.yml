@@ -1,0 +1,16 @@
+name: Feature
+description: Raise a feature request
+type: Feature
+projects: ["londonaicentre/15"]
+body:
+  - type: input
+    id: short-description
+    attributes:
+      label: Description
+  - type: checkboxes
+    id: project-admin
+    attributes:
+      label: Assign the relevant Milestone to this feature request
+      options:
+        - label: I confirm I have created/selected a Milestone corresponding to an AIC user story for this feature request
+          required: true
