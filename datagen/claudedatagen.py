@@ -1,24 +1,103 @@
+import argparse
 import litellm
-litellm.suppress_debug_info = True # suppress unhelpful library output on rate limit error
+
+litellm.suppress_debug_info = (
+    True  # suppress unhelpful library output on rate limit error
+)
 from litellm import completion, RateLimitError
-import pandas as pd
-import json
+import os
+import sys
 import re
 import time
-import os
+import json
+import random
+import pandas as pd
 from dotenv import load_dotenv
 from pathlib import Path
-import sys
-import random
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from schema.genomicextractmodel import GenomicTestReport
 
-# load api key
-load_dotenv()
-BEDROCK_API_KEY = os.getenv("BEDROCK_API_KEY")
-os.environ["AWS_REGION_NAME"] = "us-east-1"
-BEDROCK_MODEL = "us.anthropic.claude-sonnet-4-20250514-v1:0"
+
+def load_config(configlocation="config.json"):
+    try:
+        with open(configlocation, "r") as file:
+            config = json.load(file)
+            print("Successfully loaded config file.")
+            return config
+    except FileNotFoundError:
+        print("Failed to load {configlocation}")
+        raise
+    except json.JSONDecodeError as json_error:
+        print(f"Failed to parse {configlocation} as it has {json_error}")
+        raise
+    except Exception as e:
+        print(f"Failed to load {configlocation} due to {e}")
+        raise
+
+
+def parse_CLI_args() -> argparse.Namespace:
+    """Parse command line arguments
+
+    Returns:
+        args : Namespace
+            Namespace of passed command line argument inputs
+    """
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "model_name",
+        type=str,
+        default="sonnet4",
+        help="Name of model to use, eg sonnet4 or opus4",
+    )
+    parser.add_argument(
+        "sample_size",
+        type=int,
+        default=10,
+        help="Number of samples to generate",
+    )
+    parser.add_argument(
+        "-b",
+        "--backfill",
+        type=bool,
+        default=False,
+        help="Generate samples for skipped indices",
+    )
+    arguments = parser.parse_args()
+    return arguments
+
+
+def generate_system_prompt() -> str:
+    ## CREATE SYSTEM PROMPT
+    # schema
+    with open("../schema/genomicextractmodel.py", "r") as f:
+        schema_content = f.read()
+        # TODO: see if converting raw text into actual Pydantic model object works better
+
+    # examples
+    examples_path = Path("examples")
+    e1 = ""
+    e2 = ""
+    try:
+        with open(examples_path / "e1.json", "r") as f:
+            e1 = f.read()
+        with open(examples_path / "e2.json", "r") as f:
+            e2 = f.read()
+    except FileNotFoundError as e:
+        print(f"Warning: Could not load example file: {e}")
+
+    # prompt
+    with open("systemprompt.md", "r") as f:
+        system_prompt_template = f.read()
+
+    # create full system prompt using replace instead of format to avoid issues with curly braces
+    system_prompt = (
+        system_prompt_template.replace("{schema_content}", schema_content)
+        .replace("{e1}", e1)
+        .replace("{e2}", e2)
+    )
+    return system_prompt
 
 
 def extract_json_from_response(response):
@@ -67,39 +146,24 @@ def validate_with_pydantic(output_data):
         return False, None
 
 
-def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
+def process_bootstrap_rows(
+    system_prompt: str,
+    model_name: str,
+    bootstrap_file,
+    output_dir: str,
+    sample_size: int = 10,
+) -> None:
     """
-    Process rows from bootstrap.csv and generate synthetic genomic reports
+    Process rows from bootstrap.csv and generate the requested number of samples.
+
+    Args:
+        model_name (str): Name of model to use on AWS Bedrock.
+        bootstrap_file: path to file with sample configuration
+        output_dir (str): path to output folder
+        sample_size (int): number of samples to generate
+        examples_dir (str): path to example files
     """
     df = pd.read_csv(bootstrap_file)
-
-    ## CREATE SYSTEM PROMPT
-    # schema
-    with open("../schema/genomicextractmodel.py", "r") as f:
-        schema_content = f.read()
-
-    # examples
-    examples_path = Path(examples_dir)
-    e1 = ""
-    e2 = ""
-    try:
-        with open(examples_path / "e1.json", "r") as f:
-            e1 = f.read()
-        with open(examples_path / "e2.json", "r") as f:
-            e2 = f.read()
-    except FileNotFoundError as e:
-        print(f"Warning: Could not load example file: {e}")
-
-    # prompt
-    with open("systemprompt.md", "r") as f:
-        system_prompt_template = f.read()
-
-    # create full system prompt using replace instead of format to avoid issues with curly braces
-    system_prompt = (
-        system_prompt_template.replace("{schema_content}", schema_content)
-        .replace("{e1}", e1)
-        .replace("{e2}", e2)
-    )
 
     ## PROCESS ROWS
 
@@ -109,111 +173,220 @@ def process_bootstrap_rows(bootstrap_file, output_dir, examples_dir="examples"):
     successful_generations = 0
     failed_generations = 0
 
+    if samples_exist > sample_size:
+        print(
+            f"Requested number of samples have already been generated in {output_dir}."
+        )
+        exit()
+
+    max_samples = len(df.index)
+    if sample_size > max_samples:
+        print(
+            f"Requested number of samples is more than number of templates for generation. \
+                Will create {max_samples} samples instead of {sample_size}"
+        )
+        sample_size = max_samples
+
     for idx, row in df.iterrows():
-        print(f"Processing row {idx + samples_exist + 1}/{len(df)}")
-
-        try:
-            user_prompt = f"""Please generate a genomic laboratory report based on the following test scenario:
-
-            Test Type: {row['test_type']}
-            Test Details: {row['test_details']}
-            Result Entities: {row['result_entities']}
-            Result Description: {row['result_description']}
-            Clinical Context: {row['clinical_context']}
-            Disease Context: {row['disease_context']}
-            Family History: {row['family_history']}
-            Test Subject: {row['test_subject']}
-            Clinical Implications: {row['clinical_implications']}
-            Recommendations: {row['recommendations']}
-            Report Style: {row['report_style']}
-
-            Generate a realistic genomic laboratory report incorporating all these details.
-            Then extract the information into the structured schema format."""
-
-            max_retries = 5
-            for attempt in range(max_retries + 1):
-                try:
-                    message = completion(
-                        model=BEDROCK_MODEL,
-                        max_tokens=8192,
-                        temperature=0.001,
-                        messages=[
-                            {"content": system_prompt, "role": "system"},
-                            {"content": user_prompt, "role": "user"},
-                        ],
-                        api_key=os.environ["BEDROCK_API_KEY"],
-                    )
-                    break
-                except RateLimitError:
-                    if attempt == max_retries: raise
-                    # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
-                    delay = random.uniform(0, min(60, 2 ** attempt))
-                    print('hit rate limit, waiting ' + str(round(delay, 2)) + ' seconds (retry ' + str(attempt + 1) + ')')
-                    time.sleep(delay)
-  
-            json_output = extract_json_from_response(message.choices[0].message.content)
-
-            if json_output is not None:
-                if (
-                    not isinstance(json_output, dict)
-                    or "content" not in json_output
-                    or "output" not in json_output
-                ):
-                    print(
-                        f"Invalid schema format in output for row {idx + samples_exist + 1}"
-                    )
-                    failed_generations += 1
-                    continue
-
-                # validate against schema
-                is_valid, validated_output = validate_with_pydantic(
-                    json_output["output"]
-                )
-
-                if is_valid:
-                    # Convert Pydantic model to dict for JSON serialization
-                    json_output["output"] = validated_output.model_dump()
-
-                    output_filename = os.path.join(
-                        output_dir, f"genomicssample{idx + samples_exist + 1:04d}.json"
-                    )
-
-                    try:
-                        with open(output_filename, "w", encoding="utf-8") as f:
-                            json.dump(json_output, f, indent=4, ensure_ascii=False)
-                        print(f"Successfully saved output to {output_filename}")
-                        successful_generations += 1
-                    except Exception as e:
-                        print(f"Error saving JSON to file: {e}")
-                        failed_generations += 1
-                else:
-                    print(
-                        f"Pydantic validation failed for row {idx + samples_exist + 1}"
-                    )
-                    # for debugging later
-                    debug_filename = os.path.join(
-                        output_dir,
-                        f"invalid_genomicssample{idx + samples_exist + 1:04d}.json",
-                    )
-                    with open(debug_filename, "w", encoding="utf-8") as f:
-                        json.dump(json_output, f, indent=4, ensure_ascii=False)
-                    failed_generations += 1
-            else:
-                print(
-                    f"Skipping file save for row {idx + 1} due to JSON parsing failure"
-                )
-                print("Claude response:", message.content)
-                failed_generations += 1
-
-        except Exception as e:
-            print(f"Error processing row {idx + 1}: {e}")
-            failed_generations += 1
+        # Skip rows for which samples have been generated
+        if idx < samples_exist:
             continue
+
+        # Stop generating samples when requested amount is reached
+        if idx == sample_size:
+            print(f"Generated the requested number of samples, {sample_size}.")
+            break
+
+        if generate_sample(system_prompt, model_name, df, idx):
+            successful_generations += 1
+        else:
+            failed_generations += 1
 
     print(
         f"Processing complete: {successful_generations} successful, {failed_generations} failed"
     )
 
 
+def find_missing_idx(folder_name, sample_size) -> list[int]:
+    """For a given folder and expected number of samples, identifies indices for which no sample was generated.
+
+    Args:
+        folder_name (str): Path to the output folder.
+        sample_size (int): Expected number of samples.
+
+    Returns:
+        list[int]: List of indices without a sample generated.
+    """
+    all_files = os.listdir(folder_name)
+    filenames = [file.strip(".json").strip("genomicssample") for file in all_files]
+
+    missing_idx = []
+    for idx in range(sample_size):
+        if f"{idx + 1:04d}" not in filenames:
+            # print(f"Sample missing for index {idx+1}")
+            missing_idx.append(idx)
+
+    return missing_idx
+
+
+def backfill(system_prompt, model_name, idx_list) -> None:
+    """Generate samples for the missing indices.
+
+    Args:
+        system_prompt (str): _description_
+        model_name (str): Name of model to use on AWS Bedrock.
+        idx_list (list[int]): List of indices for a sample to be generated.
+    """
+
+    df = pd.read_csv("bootstrap.csv")
+
+    successful_generations = 0
+    failed_generations = 0
+
+    for idx in idx_list:
+        print(f"Processing row {idx + 1}")
+        if generate_sample(system_prompt, model_name, df, idx):
+            successful_generations += 1
+        else:
+            failed_generations += 1
+
+    print(
+        f"Processing complete: {successful_generations} successful, {failed_generations} failed"
+    )
+
+
+def generate_sample(system_prompt, model_name, df, idx) -> bool:
+    """Generate synthetic genomic reports.
+
+    Args:
+        system_prompt (str): _description_
+        model_name (str): Name of model to use on AWS Bedrock.
+        df (pandas.DataFrame): template for sample report generation.
+        idx (int): Index for row to be processed from template.
+    """
+
+    row = df.iloc[idx]
+
+    try:
+        user_prompt = f"""Please generate a genomic laboratory report based on the following test scenario:
+
+        Test Type: {row['test_type']}
+        Test Details: {row['test_details']}
+        Result Entities: {row['result_entities']}
+        Result Description: {row['result_description']}
+        Clinical Context: {row['clinical_context']}
+        Disease Context: {row['disease_context']}
+        Family History: {row['family_history']}
+        Test Subject: {row['test_subject']}
+        Clinical Implications: {row['clinical_implications']}
+        Recommendations: {row['recommendations']}
+        Report Style: {row['report_style']}
+
+        Generate a realistic genomic laboratory report incorporating all these details.
+        Then extract the information into the structured schema format."""
+
+        max_retries = 5
+        for attempt in range(max_retries + 1):
+            try:
+                message = completion(
+                    model=model_name,
+                    max_tokens=8192,
+                    temperature=0.001,
+                    messages=[
+                        {"content": system_prompt, "role": "system"},
+                        {"content": user_prompt, "role": "user"},
+                    ],
+                    api_key=os.environ["BEDROCK_API_KEY"],
+                )
+                break
+            except RateLimitError:
+                if attempt == max_retries:
+                    raise
+                # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+                delay = random.uniform(0, min(60, 2**attempt))
+                print(
+                    "hit rate limit, waiting "
+                    + str(round(delay, 2))
+                    + " seconds (retry "
+                    + str(attempt + 1)
+                    + ")"
+                )
+                time.sleep(delay)
+
+        json_output = extract_json_from_response(message.choices[0].message.content)
+
+        if json_output is not None:
+            if (
+                not isinstance(json_output, dict)
+                or "content" not in json_output
+                or "output" not in json_output
+            ):
+                print(f"Invalid schema format in output for row {idx + 1}")
+                return False
+
+            # validate against schema
+            is_valid, validated_output = validate_with_pydantic(json_output["output"])
+
+            if is_valid:
+                # Convert Pydantic model to dict for JSON serialization
+                json_output["output"] = validated_output.model_dump()
+
+                output_filename = os.path.join(
+                    "samples_sonnet4/", f"genomicssample{idx + 1:04d}.json"
+                )
+
+                try:
+                    with open(output_filename, "w", encoding="utf-8") as f:
+                        json.dump(json_output, f, indent=4, ensure_ascii=False)
+                    print(f"Successfully saved output to {output_filename}")
+                    return True
+                except Exception as e:
+                    print(f"Error saving JSON to file: {e}")
+                    return False
+            else:
+                print(f"Pydantic validation failed for row {idx + 1}")
+                # for debugging later
+                debug_filename = os.path.join(
+                    "samples_sonnet4/",
+                    f"invalid_genomicssample{idx + 1:04d}.json",
+                )
+                with open(debug_filename, "w", encoding="utf-8") as f:
+                    json.dump(json_output, f, indent=4, ensure_ascii=False)
+                return False
+        else:
+            print(f"Skipping file save for row {idx + 1} due to JSON parsing failure")
+            print("Claude response:", message.content)
+            return False
+
+    except Exception as e:
+        print(f"Error processing row {idx + 1}: {e}")
+        return False
+
+
 if __name__ == "__main__":
-    process_bootstrap_rows("bootstrap.csv", "samples_sonnet4/")
+    # Read the arguments from CLI
+    args = parse_CLI_args()
+
+    # load api key
+    load_dotenv()
+    BEDROCK_API_KEY = os.getenv("BEDROCK_API_KEY")
+
+    # Load credentials from config file
+    config = load_config()
+
+    BEDROCK_MODEL = config[args.model_name]["model"]
+    os.environ["AWS_REGION_NAME"] = config[args.model_name]["region"]
+    folder_name = f"samples_{args.model_name}/"
+
+    system_prompt = generate_system_prompt()
+
+    if args.backfill:
+        missing_idx = find_missing_idx(folder_name, args.sample_size)
+        print(f"There are {len(missing_idx)} samples missing")
+
+        backfill(system_prompt, BEDROCK_MODEL, missing_idx)
+
+    else:
+        process_bootstrap_rows(
+            system_prompt, BEDROCK_MODEL, "bootstrap.csv", folder_name, args.sample_size
+        )
