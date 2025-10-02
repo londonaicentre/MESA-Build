@@ -46,8 +46,7 @@ def parse_CLI_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-m",
-        "--model_name",
+        "model_name",
         type=str,
         default="sonnet4",
         help="Name of model to use, eg sonnet4 or opus4",
@@ -60,11 +59,18 @@ def parse_CLI_args() -> argparse.Namespace:
         help="Number of samples to generate",
     )
     parser.add_argument(
-        "-b",
-        "--bootstrap",
+        "-t",
+        "--template",
         type=str,
         default="bootstrap.csv",
         help="Path to file with sample template",
+    )
+    parser.add_argument(
+        "-b",
+        "--batch",
+        type=bool,
+        default=False,
+        help="Whether to process sample generation request as a batch job",
     )
     parser.add_argument(
         "-f",
@@ -88,11 +94,17 @@ def generate_system_prompt() -> str:
     examples_path = Path("examples")
     e1 = ""
     e2 = ""
+    e3 = ""
+    e4 = ""
     try:
         with open(examples_path / "e1.json", "r") as f:
             e1 = f.read()
         with open(examples_path / "e2.json", "r") as f:
             e2 = f.read()
+        with open(examples_path / "e3.json", "r") as f:
+            e3 = f.read()
+        with open(examples_path / "e4.json", "r") as f:
+            e4 = f.read()
     except FileNotFoundError as e:
         print(f"Warning: Could not load example file: {e}")
 
@@ -105,6 +117,8 @@ def generate_system_prompt() -> str:
         system_prompt_template.replace("{schema_content}", schema_content)
         .replace("{e1}", e1)
         .replace("{e2}", e2)
+        .replace("{e3}", e3)
+        .replace("{e4}", e4)
     )
     return system_prompt
 
@@ -163,14 +177,15 @@ def process_bootstrap_rows(
     sample_size: int = 10,
 ) -> None:
     """
-    Process rows from bootstrap.csv and generate the requested number of samples.
+    Process rows from the specified bootstrap file and generate the requested number of samples.
 
     Args:
+        system_prompt (str): _description_
         model_name (str): Name of model to use on AWS Bedrock.
-        bootstrap_file: path to file with sample configuration
-        output_dir (str): path to output folder
-        sample_size (int): number of samples to generate
-        examples_dir (str): path to example files
+        bootstrap_file (str): Path to file with sample configuration.
+        output_dir (str): Path to output folder.
+        sample_size (int): Number of samples to generate.
+        examples_dir (str): Path to example files.
     """
     df = pd.read_csv(bootstrap_file)
 
@@ -238,16 +253,17 @@ def find_missing_idx(folder_name, sample_size) -> list[int]:
     return missing_idx
 
 
-def backfill(system_prompt, model_name, idx_list) -> None:
+def backfill(system_prompt, model_name, bootstrap_file, idx_list) -> None:
     """Generate samples for the missing indices.
 
     Args:
         system_prompt (str): _description_
         model_name (str): Name of model to use on AWS Bedrock.
+        bootstrap_file (str): Path to bootstrap file.
         idx_list (list[int]): List of indices for a sample to be generated.
     """
 
-    df = pd.read_csv("bootstrap.csv")
+    df = pd.read_csv(bootstrap_file)
 
     successful_generations = 0
     failed_generations = 0
@@ -389,13 +405,18 @@ if __name__ == "__main__":
 
     system_prompt = generate_system_prompt()
 
-    if args.backfill:
+    if args.batch:
+        # Process all samples from bootstrap file in batch mode
+        pass
+    elif args.backfill:
+        # Generate samples for missed indices in the bootstrap file specified
         missing_idx = find_missing_idx(folder_name, args.sample_size)
         print(f"There are {len(missing_idx)} samples missing")
 
-        backfill(system_prompt, BEDROCK_MODEL, missing_idx)
+        backfill(system_prompt, BEDROCK_MODEL, args.bootstrap, missing_idx)
 
     else:
+        # Generate samples from bootstrap file
         process_bootstrap_rows(
-            system_prompt, BEDROCK_MODEL, "bootstrap.csv", folder_name, args.sample_size
+            system_prompt, BEDROCK_MODEL, args.bootstrap, folder_name, args.sample_size
         )
