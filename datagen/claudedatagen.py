@@ -46,19 +46,28 @@ def parse_CLI_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "model_name",
+        "-m",
+        "--model_name",
         type=str,
         default="sonnet4",
         help="Name of model to use, eg sonnet4 or opus4",
     )
     parser.add_argument(
-        "sample_size",
+        "-s",
+        "--sample_size",
         type=int,
         default=10,
         help="Number of samples to generate",
     )
     parser.add_argument(
         "-b",
+        "--bootstrap",
+        type=str,
+        default="bootstrap.csv",
+        help="Path to file with sample template",
+    )
+    parser.add_argument(
+        "-f",
         "--backfill",
         type=bool,
         default=False,
