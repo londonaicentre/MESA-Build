@@ -71,9 +71,8 @@ def parse_CLI_args() -> argparse.Namespace:
 def generate_system_prompt() -> str:
     ## CREATE SYSTEM PROMPT
     # schema
-    with open("../schema/genomicextractmodel.py", "r") as f:
+    with open("../schema/schema_v03.json", "r") as f:
         schema_content = f.read()
-        # TODO: see if converting raw text into actual Pydantic model object works better
 
     # examples
     examples_path = Path("examples")
