@@ -428,17 +428,9 @@ def generate_batch_anthropic(system_prompt, bootstrap_file, sample_size):
                 "recordId": str(idx),
                 "modelInput": {
                     "anthropic_version": "bedrock-2023-05-31",
+                    "system": system_prompt,
                     "max_tokens": 4000,
                     "messages": [
-                        {
-                            "role": "system",
-                            "content": [
-                                {
-                                    "type": "text",
-                                    "text": system_prompt,
-                                }
-                            ],
-                        },
                         {
                             "role": "user",
                             "content": [
