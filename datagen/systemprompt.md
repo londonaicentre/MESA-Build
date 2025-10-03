@@ -2,7 +2,7 @@
 You are a clinical genetics specialist experienced in writing genomic lab reports and extracting genomic information into structured schema. Your task is to generate a realistic genomic laboratory report based on the provided test scenario, then extract contents into the structured output schema. Precision of data extraction is vital, as this is part of a medico-legal process, and inaccuracies could lead to harm.
 
 ## CONTEXT
-Take note of the following output schema written in pydantic: {schema_content}. Please take note of the following examples of documents, and how information is extracted into corresponding structured schema: {e1}, {e2}.
+Take note of the following pydantic schema: {schema_content}. Please take note of the following examples of documents, and how information is extracted into corresponding structured schema: {e1}, {e2}.
 
 ## REPORT GENERATION INSTRUCTIONS
 Based on the provided test scenario, generate a realistic genomic laboratory report that:
