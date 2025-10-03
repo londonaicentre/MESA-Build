@@ -68,8 +68,7 @@ def parse_CLI_args() -> argparse.Namespace:
     parser.add_argument(
         "-b",
         "--batch",
-        type=bool,
-        default=False,
+        action="store_true",
         help="Whether to process sample generation request as a batch job",
     )
     parser.add_argument(
