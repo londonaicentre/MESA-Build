@@ -14,9 +14,11 @@ import random
 import pandas as pd
 from dotenv import load_dotenv
 from pathlib import Path
+from datetime import datetime
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from schema.genomicextractmodel import GenomicTestReport
+from utils.aws import start_batch_inference, upload_file
 
 
 def load_config(configlocation="config.json"):
@@ -69,7 +71,7 @@ def parse_CLI_args() -> argparse.Namespace:
         "-b",
         "--batch",
         action="store_true",
-        help="Whether to process sample generation request as a batch job",
+        help="Whether to process sample generation request as a batch job. Requires AWS credentials.",
     )
     parser.add_argument(
         "-f",
@@ -472,10 +474,24 @@ if __name__ == "__main__":
         batch_jsonl = generate_batch_anthropic(
             system_prompt, args.template, args.sample_size
         )
+        job_id = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
         # Upload to S3 bucket
-        # TODO
+        upload_file(
+            os.environ["AWS_REGION_NAME"],
+            config[args.model_name]["batch_file"],
+            os.getenv("BUCKET"),
+            config[args.model_name]["batch_file"],
+            job_id + '/input'
+        )
         # Generate samples in batch mode
-        # TODO
+        start_batch_inference(
+            os.environ['AWS_REGION_NAME'], 
+            job_id, 
+            BEDROCK_MODEL, 
+            os.getenv("BEDROCK_EXECUTION_ROLE"), 
+            os.getenv("BUCKET"), 
+            config[args.model_name]["batch_file"]
+        )
 
     elif args.backfill:
         # Generate samples for missed indices in the bootstrap file specified

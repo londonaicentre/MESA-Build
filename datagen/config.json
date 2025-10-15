@@ -1,10 +1,12 @@
 {
     "sonnet4": {
-        "model": "us.anthropic.claude-sonnet-4-20250514-v1:0",
-        "region": "us-east-1"
+        "model": "global.anthropic.claude-sonnet-4-20250514-v1:0",
+        "region": "us-east-1",
+        "batch_file": "anthropic_batch_job.jsonl"
     },
     "opus4": {
-        "model": "us.anthropic.cclaude-opus-4-20250514-v1:0",
-        "region": "us-east-1"
+        "model": "us.anthropic.claude-opus-4-20250514-v1:0",
+        "region": "us-east-1",
+        "batch_file": "anthropic_batch_job.jsonl"
     }
 }
