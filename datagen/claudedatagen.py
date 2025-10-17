@@ -14,9 +14,11 @@ import random
 import pandas as pd
 from dotenv import load_dotenv
 from pathlib import Path
+from datetime import datetime
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from schema.genomicextractmodel import GenomicTestReport
+from utils.aws import start_batch_inference, upload_file
 
 
 def load_config(configlocation="config.json"):
@@ -52,13 +54,27 @@ def parse_CLI_args() -> argparse.Namespace:
         help="Name of model to use, eg sonnet4 or opus4",
     )
     parser.add_argument(
-        "sample_size",
+        "-s",
+        "--sample_size",
         type=int,
         default=10,
         help="Number of samples to generate",
     )
     parser.add_argument(
+        "-t",
+        "--template",
+        type=str,
+        default="bootstrap.csv",
+        help="Path to file with sample template",
+    )
+    parser.add_argument(
         "-b",
+        "--batch",
+        action="store_true",
+        help="Whether to process sample generation request as a batch job. Requires AWS credentials.",
+    )
+    parser.add_argument(
+        "-f",
         "--backfill",
         type=bool,
         default=False,
@@ -79,11 +95,17 @@ def generate_system_prompt() -> str:
     examples_path = Path("examples")
     e1 = ""
     e2 = ""
+    e3 = ""
+    e4 = ""
     try:
         with open(examples_path / "e1.json", "r") as f:
             e1 = f.read()
         with open(examples_path / "e2.json", "r") as f:
             e2 = f.read()
+        with open(examples_path / "e3.json", "r") as f:
+            e3 = f.read()
+        with open(examples_path / "e4.json", "r") as f:
+            e4 = f.read()
     except FileNotFoundError as e:
         print(f"Warning: Could not load example file: {e}")
 
@@ -96,8 +118,32 @@ def generate_system_prompt() -> str:
         system_prompt_template.replace("{schema_content}", schema_content)
         .replace("{e1}", e1)
         .replace("{e2}", e2)
+        .replace("{e3}", e3)
+        .replace("{e4}", e4)
     )
     return system_prompt
+
+
+def generate_user_prompt(row: dict) -> str:
+    ## CREATE USER PROMPT
+    user_prompt = f"""Please generate a genomic laboratory report based on the following test scenario:
+
+        Test Type: {row['test_type']}
+        Test Details: {row['test_details']}
+        Result Entities: {row['result_entities']}
+        Result Description: {row['result_description']}
+        Clinical Context: {row['clinical_context']}
+        Disease Context: {row['disease_context']}
+        Family History: {row['family_history']}
+        Test Subject: {row['test_subject']}
+        Clinical Implications: {row['clinical_implications']}
+        Recommendations: {row['recommendations']}
+        Report Style: {row['report_style']}
+
+        Generate a realistic genomic laboratory report incorporating all these details.
+        Then extract the information into the structured schema format."""
+
+    return user_prompt
 
 
 def extract_json_from_response(response):
@@ -154,14 +200,15 @@ def process_bootstrap_rows(
     sample_size: int = 10,
 ) -> None:
     """
-    Process rows from bootstrap.csv and generate the requested number of samples.
+    Process rows from the specified bootstrap file and generate the requested number of samples.
 
     Args:
+        system_prompt (str): _description_
         model_name (str): Name of model to use on AWS Bedrock.
-        bootstrap_file: path to file with sample configuration
-        output_dir (str): path to output folder
-        sample_size (int): number of samples to generate
-        examples_dir (str): path to example files
+        bootstrap_file (str): Path to file with sample configuration.
+        output_dir (str): Path to output folder.
+        sample_size (int): Number of samples to generate.
+        examples_dir (str): Path to example files.
     """
     df = pd.read_csv(bootstrap_file)
 
@@ -229,16 +276,17 @@ def find_missing_idx(folder_name, sample_size) -> list[int]:
     return missing_idx
 
 
-def backfill(system_prompt, model_name, idx_list) -> None:
+def backfill(system_prompt, model_name, bootstrap_file, idx_list) -> None:
     """Generate samples for the missing indices.
 
     Args:
         system_prompt (str): _description_
         model_name (str): Name of model to use on AWS Bedrock.
+        bootstrap_file (str): Path to bootstrap file.
         idx_list (list[int]): List of indices for a sample to be generated.
     """
 
-    df = pd.read_csv("bootstrap.csv")
+    df = pd.read_csv(bootstrap_file)
 
     successful_generations = 0
     failed_generations = 0
@@ -268,22 +316,7 @@ def generate_sample(system_prompt, model_name, df, idx) -> bool:
     row = df.iloc[idx]
 
     try:
-        user_prompt = f"""Please generate a genomic laboratory report based on the following test scenario:
-
-        Test Type: {row['test_type']}
-        Test Details: {row['test_details']}
-        Result Entities: {row['result_entities']}
-        Result Description: {row['result_description']}
-        Clinical Context: {row['clinical_context']}
-        Disease Context: {row['disease_context']}
-        Family History: {row['family_history']}
-        Test Subject: {row['test_subject']}
-        Clinical Implications: {row['clinical_implications']}
-        Recommendations: {row['recommendations']}
-        Report Style: {row['report_style']}
-
-        Generate a realistic genomic laboratory report incorporating all these details.
-        Then extract the information into the structured schema format."""
+        user_prompt = generate_user_prompt(row)
 
         max_retries = 5
         for attempt in range(max_retries + 1):
@@ -363,6 +396,61 @@ def generate_sample(system_prompt, model_name, df, idx) -> bool:
         return False
 
 
+def generate_batch_anthropic(system_prompt, bootstrap_file, sample_size):
+    """Generate batch request file for Anthropic model.
+
+    Args:
+        system_prompt (str): _description_
+        bootstrap_file (str): Path to bootstrap file.
+        sample_size (int): Number of samples to be generated.
+    """
+
+    fn = "anthropic_batch_job.jsonl"
+
+    df = pd.read_csv(bootstrap_file)
+    max_samples = len(df.index)
+
+    if sample_size > max_samples:
+        print(
+            f"Requested number of samples is more than number of templates for generation. \
+                Will create {max_samples} samples instead of {sample_size}"
+        )
+        sample_size = max_samples
+
+    with open(fn, "w") as outfile:
+        for idx, row in df.iterrows():
+            # Stop generating samples when requested amount is reached
+            if idx == sample_size:
+                print(f"Generated the requested number of samples, {sample_size}.")
+                break
+
+            user_prompt = generate_user_prompt(row)
+
+            record = {
+                "recordId": str(idx),
+                "modelInput": {
+                    "anthropic_version": "bedrock-2023-05-31",
+                    "system": system_prompt,
+                    "max_tokens": 4000,
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": user_prompt,
+                                }
+                            ],
+                        },
+                    ],
+                },
+            }
+
+            print(json.dumps(record), file=outfile)
+
+    return fn
+
+
 if __name__ == "__main__":
     # Read the arguments from CLI
     args = parse_CLI_args()
@@ -380,13 +468,40 @@ if __name__ == "__main__":
 
     system_prompt = generate_system_prompt()
 
-    if args.backfill:
+    if args.batch:
+        # Process all samples from bootstrap file in batch mode
+        # Create batch instruction JSONL file
+        batch_jsonl = generate_batch_anthropic(
+            system_prompt, args.template, args.sample_size
+        )
+        job_id = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
+        # Upload to S3 bucket
+        upload_file(
+            os.environ["AWS_REGION_NAME"],
+            config[args.model_name]["batch_file"],
+            os.getenv("BUCKET"),
+            config[args.model_name]["batch_file"],
+            job_id + '/input'
+        )
+        # Generate samples in batch mode
+        start_batch_inference(
+            os.environ['AWS_REGION_NAME'], 
+            job_id, 
+            BEDROCK_MODEL, 
+            os.getenv("BEDROCK_EXECUTION_ROLE"), 
+            os.getenv("BUCKET"), 
+            config[args.model_name]["batch_file"]
+        )
+
+    elif args.backfill:
+        # Generate samples for missed indices in the bootstrap file specified
         missing_idx = find_missing_idx(folder_name, args.sample_size)
         print(f"There are {len(missing_idx)} samples missing")
 
-        backfill(system_prompt, BEDROCK_MODEL, missing_idx)
+        backfill(system_prompt, BEDROCK_MODEL, args.template, missing_idx)
 
     else:
+        # Generate samples from bootstrap file
         process_bootstrap_rows(
-            system_prompt, BEDROCK_MODEL, "bootstrap.csv", folder_name, args.sample_size
+            system_prompt, BEDROCK_MODEL, args.template, folder_name, args.sample_size
         )
