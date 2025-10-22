@@ -19,23 +19,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from assets.prompts.prompts import generate_system_prompt
 from assets.schema.genomicextractmodel import GenomicTestReport
 from utils.aws import start_batch_inference, upload_file
-
-
-def load_config(configlocation="config.json"):
-    try:
-        with open(configlocation, "r") as file:
-            config = json.load(file)
-            print("Successfully loaded config file.")
-            return config
-    except FileNotFoundError:
-        print("Failed to load {configlocation}")
-        raise
-    except json.JSONDecodeError as json_error:
-        print(f"Failed to parse {configlocation} as it has {json_error}")
-        raise
-    except Exception as e:
-        print(f"Failed to load {configlocation} due to {e}")
-        raise
+from utils.utils import load_config
 
 
 def parse_CLI_args() -> argparse.Namespace:
