@@ -17,7 +17,7 @@ from pathlib import Path
 from datetime import datetime
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from schema.genomicextractmodel import GenomicTestReport
+from assets.schema.genomicextractmodel import GenomicTestReport
 from utils.aws import start_batch_inference, upload_file
 
 
@@ -87,7 +87,7 @@ def parse_CLI_args() -> argparse.Namespace:
 def generate_system_prompt() -> str:
     ## CREATE SYSTEM PROMPT
     # schema
-    with open("../schema/genomicextractmodel.py", "r") as f:
+    with open("../assets/schema/genomicextractmodel.py", "r") as f:
         schema_content = f.read()
         # TODO: see if converting raw text into actual Pydantic model object works better
 
