@@ -2,3 +2,5 @@ __pycache__/
 .env
 .DS_Store
 samples/bootstrap.md
+*.jsonl
+*.jsonl.out
