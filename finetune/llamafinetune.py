@@ -1,11 +1,13 @@
 import sys
 import os
 import json
+from datetime import datetime
 from dotenv import load_dotenv
 from sagemaker.jumpstart.estimator import JumpStartEstimator
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from assets.prompts.prompts import generate_system_prompt
 from utils.utils import load_config
+from utils.aws import upload_file
 
 
 def generate_template_file() -> None:
@@ -62,20 +64,35 @@ def run_finetune_pipeline(
     estimator.fit({'training': input_path})
 
 if __name__ == "__main__":
-    generate_template_file()
-    generate_train_file()
-
     config = load_config()
     load_dotenv()
+
+    job_id = "finetune/" + datetime.now().strftime("%Y-%m-%d-%H%M")
+
+    generate_template_file()
+    upload_file(
+        config["llama"]["region"], 
+        "template.json",
+        os.getenv("BUCKET"),
+        "template.json",
+        job_id + "/input"
+    )
+
+    generate_train_file()
+    upload_file(
+        config["llama"]["region"],
+        "train.jsonl",
+        os.getenv("BUCKET"),
+        "train.jsonl",
+        job_id + "/input"
+    )
 
     run_finetune_pipeline(
         config["llama"]["model"],
         config["llama"]["version"],
         os.environ["ROLE"],
-        os.environ["INPUT_PATH"],
-        os.environ["OUTPUT_PATH"],
+        "s3://" + os.getenv("BUCKET") + "/" + job_id + "/input",
+        "s3://" + os.getenv("BUCKET") + "/" + job_id + "/output",
         os.environ["INSTANCE_TYPE"],
         config["llama"]["region"]
-    )
-
-    
+    )  
