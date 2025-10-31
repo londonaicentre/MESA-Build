@@ -1,0 +1,11 @@
+{
+    "image_arguments": {
+        "transformers_version": "4.51.3",
+        "pytorch_version": "pytorch2.6.0",
+        "py_version": "py312"
+    },
+    "llama": {
+        "region": "eu-west-2",
+        "endpoint_name": "genollama1alpha01"
+    }
+}
