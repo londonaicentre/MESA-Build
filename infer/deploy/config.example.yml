@@ -1,0 +1,8 @@
+model_list:
+  - model_name:
+    litellm_params:
+      model:
+      aws_region_name:
+      temperature:
+general_settings:
+  master_key:
