@@ -6,6 +6,7 @@
     },
     "llama": {
         "region": "eu-west-2",
-        "endpoint_name": "genollama1alpha01"
+        "endpoint_name": "genollama1alpha01",
+        "hf_model_name": "meta-llama/Llama-3.2-3B-Instruct"
     }
 }
