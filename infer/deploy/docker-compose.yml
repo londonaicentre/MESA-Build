@@ -1,0 +1,9 @@
+services:
+  litellm:
+    image: ghcr.io/londonaicentre/genollama/litellm:latest
+    build: .
+    environment:
+      NO_DOCS: true
+      NO_REDOC: true
+    ports:
+      - 4000:4000

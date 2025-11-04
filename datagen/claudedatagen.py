@@ -11,14 +11,16 @@ import re
 import time
 import json
 import random
+import boto3
 import pandas as pd
 from dotenv import load_dotenv
 from datetime import datetime
+from botocore.exceptions import ClientError
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from assets.prompts.prompts import generate_system_prompt
 from assets.schema.genomicextractmodel import GenomicTestReport
-from utils.aws import start_batch_inference, upload_file
+from utils.aws import upload_file
 from utils.utils import load_config
 
 
@@ -393,6 +395,27 @@ def generate_batch_anthropic(system_prompt, bootstrap_file, sample_size):
 
     return fn
 
+def start_batch_inference(region_name, job_id, model_id, role_arn, bucket, batch_file):
+    try:
+        boto3.client("bedrock", region_name=region_name).create_model_invocation_job(
+            jobName="genollama-" + job_id.replace("/", "-"),
+            modelId=model_id,
+            roleArn=role_arn,
+            inputDataConfig={
+                "s3InputDataConfig": {
+                    "s3Uri": "s3://" + bucket + "/" + job_id + "/input/" + batch_file
+                }
+            },
+            outputDataConfig={
+                "s3OutputDataConfig": {
+                    "s3Uri": "s3://" + bucket + "/" + job_id + "/output/" 
+                }
+            },
+        )
+    except ClientError as e:
+        print(e)
+        return False
+    return True
 
 if __name__ == "__main__":
     # Read the arguments from CLI
