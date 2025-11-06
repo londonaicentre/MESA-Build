@@ -7,17 +7,11 @@ from sagemaker import image_uris
 from sagemaker.huggingface import HuggingFaceModel, HuggingFacePredictor
 from dotenv import load_dotenv
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 from utils.utils import load_config
 
 def parse_CLI_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--demo",
-        action="store_true",
-        help="Whether to demo inference by deploying to a remote AWS Sagemaker AI Endpoint",
-    )
     parser.add_argument(
         "-p",
         "--path",
@@ -85,23 +79,21 @@ if __name__ == "__main__":
     load_dotenv()
 
     if(args.command == "up"):
-        if(args.demo):
-            if(deploy_demo(
-                get_model(
-                    "s3://" + os.getenv("BUCKET") + "/" + args.path + "/model.tar.gz", 
-                    os.getenv("ROLE"), 
-                    get_image_uri(
-                        config["llama"]["region"],
-                        os.getenv("INSTANCE_TYPE")
-                    ),
-                    config["llama"]["region"]
+        if(deploy_demo(
+            get_model(
+                "s3://" + os.getenv("BUCKET") + "/" + args.path + "/model.tar.gz", 
+                os.getenv("ROLE"), 
+                get_image_uri(
+                    config["llama"]["region"],
+                    os.getenv("INSTANCE_TYPE")
                 ),
-                os.getenv("INSTANCE_TYPE"),
-                config["llama"]["endpoint_name"]
-            )):
-                print('deployed')
-            else:
-                print('deploy failed')
+                config["llama"]["region"]
+            ),
+            os.getenv("INSTANCE_TYPE"),
+            config["llama"]["endpoint_name"]
+        )):
+            print("deployed")
+        else:
+            print("deploy failed")
     elif(args.command == "down"):
-        if(args.demo): 
-            delete_demo(config["llama"]["endpoint_name"])
+        delete_demo(config["llama"]["endpoint_name"])
