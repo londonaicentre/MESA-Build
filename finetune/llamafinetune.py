@@ -5,8 +5,8 @@ import argparse
 from datetime import datetime
 from dotenv import load_dotenv
 from sagemaker.jumpstart.estimator import JumpStartEstimator
+from llm_assets.prompts import generate_system_prompt
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from assets.prompts.prompts import generate_system_prompt
 from utils.utils import load_config
 from utils.aws import upload_file
 

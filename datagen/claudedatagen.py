@@ -17,9 +17,9 @@ from dotenv import load_dotenv
 from datetime import datetime
 from botocore.exceptions import ClientError
 
+from llm_assets.prompts import generate_system_prompt
+from llm_assets.llm_assets_types import GenomicTestReport
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from assets.prompts.prompts import generate_system_prompt
-from assets.schema.genomicextractmodel import GenomicTestReport
 from utils.aws import upload_file
 from utils.utils import load_config
 
