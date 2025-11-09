@@ -1,7 +1,7 @@
 services:
   litellm:
     image: ghcr.io/londonaicentre/genollama/litellm:latest
-    build: .
+    build: litellm
     environment:
       NO_DOCS: true
       NO_REDOC: true

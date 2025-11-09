@@ -31,7 +31,7 @@
 
 Following the [deployment of a Llama model](https://github.com/londonaicentre/GenoLlama/tree/main/infer#deploy-a-llama-model) on SageMaker AI:
 
-1. Specify details of the deployment in a new `config.yml` file, guided by the template [`config.example.yml`](config.example.yml) file. 
+1. Specify details of the deployment in a new `litellm/config.yml` file, guided by the template [`litellm/config.example.yml`](litellm/config.example.yml) file. 
 
 2. `make init` to run setup tasks
 
