@@ -87,6 +87,26 @@ resource "aws_security_group" "litellm" {
   }
 }
 
+resource "aws_security_group" "ui" {
+  name        = "ui"
+  description = "ui"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 # SSH
 resource "aws_key_pair" "keypair" {
   key_name   = "keypair"
@@ -105,7 +125,7 @@ resource "aws_instance" "ec2_instance" {
   associate_public_ip_address = true
   instance_type               = "t3.small"
   ami                         = data.aws_ssm_parameter.ubuntu.value
-  vpc_security_group_ids      = [aws_security_group.ssh.id, aws_security_group.litellm.id]
+  vpc_security_group_ids      = [aws_security_group.ssh.id, aws_security_group.litellm.id, aws_security_group.ui.id]
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   key_name                    = aws_key_pair.keypair.key_name
   root_block_device {
@@ -126,4 +146,9 @@ output "keypair" {
 output "dns" {
   description = "dns"
   value       = aws_instance.ec2_instance.public_dns
+}
+
+resource "local_file" "env" {
+  content  = "LITELLM_BASE_URL=${aws_instance.ec2_instance.public_dns}\nLITELLM_MASTER_KEY=${var.litellm_master_key}"
+  filename = ".env"
 }
