@@ -14,7 +14,12 @@ def server() -> TestLlamaServe:
 
 @pytest.fixture
 def mock_httpx_get(monkeypatch: MonkeyPatch) -> Mock:
-    mock: Mock = Mock(return_value=Mock(content=b'foo bar baz'))
+    mock: Mock = Mock(
+        side_effect=[
+            Mock(json=Mock(return_value={'url': 'foobar'})),
+            Mock(content=b'foo bar baz'),
+        ]
+    )
     monkeypatch.setattr('httpx.get', mock)
     return mock
 
@@ -34,9 +39,10 @@ def test_get_weights(
 ) -> None:
     monkeypatch.setattr('os.path.isfile', Mock(return_value=False))
     server.get_weights('foo')
-    mock_httpx_get.assert_called_once_with(
-        server.get_weights_url(), headers={'x-api-key': 'foo'}
+    mock_httpx_get.assert_any_call(
+        server.get_presigned_generation_url(), headers={'x-api-key': 'foo'}
     )
+    mock_httpx_get.assert_any_call('foobar')
     mock_file.assert_called_once_with(server.get_weights_path(), 'wb')
 
 

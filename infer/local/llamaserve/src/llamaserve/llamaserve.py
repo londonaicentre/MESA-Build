@@ -57,18 +57,23 @@ class LlamaServe:
     def _get_weights_path(self) -> str:
         return f'assets/weights/{self.__config.MODEL}/model.tar.gz'
 
-    def _get_weights_url(self) -> str:
+    def _get_presigned_generation_url(self) -> str:
         return f'https://{self.__config.WEIGHTS.ID}.execute-api.{self.__config.WEIGHTS.AWS_REGION}.amazonaws.com/dist/{self.__config.MODEL}/model.tar.gz'
 
     def _get_weights(self, key: str) -> bool:
         if not os.path.isfile(self._get_weights_path()):
-            self.__logger.debug('Fetching weights...')
             try:
-                response: Response = httpx.get(
-                    self._get_weights_url(),
+                self.__logger.debug('Fetching signed S3 URL...')
+                presigned_url_response: Response = httpx.get(
+                    self._get_presigned_generation_url(),
                     headers={'x-api-key': key},
                 )
-                response.raise_for_status()
+                presigned_url_response.raise_for_status()
+                self.__logger.debug('Fetching weights...')
+                weights_response: Response = httpx.get(
+                    presigned_url_response.json()['url']
+                )
+                weights_response.raise_for_status()
             except HTTPStatusError as e:
                 self.__logger.error(
                     f'Unable to download weights (details: HTTP error {e.response.status_code}: {e.response.text})'
@@ -80,7 +85,7 @@ class LlamaServe:
                 )
                 return False
             os.makedirs(os.path.dirname(self._get_weights_path()), exist_ok=True)
-            open(self._get_weights_path(), 'wb').write(response.content)
+            open(self._get_weights_path(), 'wb').write(weights_response.content)
             self.__logger.debug('Weights fetched')
         else:
             self.__logger.debug('Existing weights found')

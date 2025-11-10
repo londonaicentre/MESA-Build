@@ -11,42 +11,66 @@ resource "aws_api_gateway_rest_api" "llama_s3_proxy" {
 
 # IAM
 
-resource "aws_iam_role" "llama_s3_access_role" {
-  name = "llamaS3AccessRole"
+resource "aws_iam_role" "lambda_s3_access_role" {
+  name = "LambdaS3AccessRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect = "Allow"
-      Principal = { Service = "apigateway.amazonaws.com" }
+      Effect    = "Allow"
+      Principal = { Service = "lambda.amazonaws.com" }
       Action    = "sts:AssumeRole"
     }]
   })
 }
 
-resource "aws_iam_role_policy" "llama_s3_access_role_policy" {
-  name = "llamaS3AccessRolePolicy"
-  role = aws_iam_role.llama_s3_access_role.id
+resource "aws_iam_role_policy" "lambda_s3_access_role_policy" {
+  name = "LambdaS3AccessRolePolicy"
+  role = aws_iam_role.lambda_s3_access_role.id
 
   policy = jsonencode({
-  "Version": "2012-10-17",
-  "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "s3:ListBucket"
         ],
-        "Resource": "arn:aws:s3:::${var.bucket}"
+        "Resource" : "arn:aws:s3:::${var.bucket}"
       },
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "s3:GetObject"
         ],
-        "Resource": "arn:aws:s3:::${var.bucket}/*"
+        "Resource" : "arn:aws:s3:::${var.bucket}/*"
       }
     ]
   })
+}
+
+# Lambda
+
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/llama_s3_presign.py"
+  output_path = "${path.module}/llama_s3_presign.zip"
+}
+
+
+resource "aws_lambda_function" "presign_lambda" {
+  filename      = data.archive_file.lambda_zip.output_path
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  function_name = "llama_s3_presign"
+  role          = aws_iam_role.lambda_s3_access_role.arn
+  handler       = "llama_s3_presign.handler"
+  runtime       = "python3.12"
+
+  environment {
+    variables = {
+      BUCKET_NAME = var.bucket
+    }
+  }
 }
 
 # Request
@@ -63,46 +87,24 @@ resource "aws_api_gateway_method" "get" {
   http_method      = "GET"
   authorization    = "NONE"
   api_key_required = true
-
-  request_parameters = {
-    "method.request.path.object" = true
-  }
 }
 
 resource "aws_api_gateway_integration" "llama_s3_proxy" {
   rest_api_id             = aws_api_gateway_rest_api.llama_s3_proxy.id
   resource_id             = aws_api_gateway_resource.object.id
   http_method             = aws_api_gateway_method.get.http_method
-  integration_http_method = "GET"
-  type                    = "AWS"
-  uri                     = "arn:aws:apigateway:${var.aws_region}:s3:path/${var.bucket}/{object}"
-  credentials             = aws_iam_role.llama_s3_access_role.arn
-
-  request_parameters = {
-    "integration.request.path.object" = "method.request.path.object"
-  }
-
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.presign_lambda.invoke_arn
   depends_on = [aws_api_gateway_method.get]
 }
 
-# Response
-
-resource "aws_api_gateway_method_response" "response_200" {
-  rest_api_id = aws_api_gateway_rest_api.llama_s3_proxy.id
-  resource_id = aws_api_gateway_resource.object.id
-  http_method = aws_api_gateway_method.get.http_method
-  status_code = "200"
-}
-
-resource "aws_api_gateway_integration_response" "llama_s3_proxy_response" {
-  rest_api_id = aws_api_gateway_rest_api.llama_s3_proxy.id
-  resource_id = aws_api_gateway_resource.object.id
-  http_method = aws_api_gateway_method.get.http_method
-  status_code = aws_api_gateway_method_response.response_200.status_code
-
-  depends_on = [
-    aws_api_gateway_integration.llama_s3_proxy
-  ]
+resource "aws_lambda_permission" "llama_s3_proxy" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.presign_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.llama_s3_proxy.execution_arn}/*/*"
 }
 
 # Deployment
