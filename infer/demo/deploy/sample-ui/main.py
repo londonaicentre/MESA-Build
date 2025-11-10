@@ -1,6 +1,7 @@
-import os
+import os, secrets
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from openai import OpenAI
@@ -9,14 +10,11 @@ from llm_assets.prompts import generate_system_prompt
 
 load_dotenv()
 app = FastAPI()
+security = HTTPBasic()
 client = OpenAI(
     base_url=f'http://{os.getenv("LITELLM_BASE_URL")}:4000',
     api_key=os.getenv('LITELLM_MASTER_KEY'),
 )
-conversation = [{
-    "role": "system", 
-    "content": generate_system_prompt("systemprompt_finetune.md") + "\nThe document follows below:"
-}]
 
 HTML = """<!DOCTYPE html>
 <html><head><title>Chat</title></head><body>
@@ -107,15 +105,15 @@ Date: [Redacted Date]
 Laboratory: [Redacted] Molecular Genetics Laboratory
 Contact: [Redacted Phone] for queries
 </textarea>
+<br />
 <button onclick="send()">Send</button>
 <script>
 async function send() {
-    const msg = input.value; input.value = '';
-    chat.innerHTML += '<p><b>You:</b> ' + msg + '</p>';
-    chat.innerHTML += '<p><b>GenoLlama:</b> ...</p>';
-    const res = await fetch('/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg})});
+    const msg = input.value;
+    chat.innerHTML += '<p>Processing...</p>';
+    const res = await fetch('/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg}), credentials:'include'});
     const data = await res.json();
-    chat.lastChild.innerHTML = '<b>Bot:</b> ' + data.response;
+    chat.lastChild.innerHTML = data.response;
 }
 </script></body></html>"""
 
@@ -124,13 +122,25 @@ class ChatRequest(BaseModel):
     message: str
 
 
+def verify(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_user = secrets.compare_digest(credentials.username, os.getenv("AUTH_USER", "admin"))
+    correct_pass = secrets.compare_digest(credentials.password, os.getenv("AUTH_PASS", "admin"))
+    if not (correct_user and correct_pass):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, headers={"WWW-Authenticate": "Basic"})
+    return credentials.username
+
+
 @app.get('/', response_class=HTMLResponse)
-def index():
+def index(user: str = Depends(verify)):
     return HTML
 
 
 @app.post('/chat')
-def chat(req: ChatRequest):
+def chat(req: ChatRequest, user: str = Depends(verify)):
+    conversation = [{
+        "role": "system", 
+        "content": generate_system_prompt("systemprompt_finetune.md") + "\nThe document follows below:"
+    }]
     conversation.append({'role': 'user', 'content': req.message})
     response = client.chat.completions.create(model='genollama', messages=conversation)
     reply = response.choices[0].message.content
