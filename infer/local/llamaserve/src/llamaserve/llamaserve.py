@@ -7,14 +7,23 @@ from llamaserve.utils import Utils
 
 
 class LlamaServe:
+    """Serves llama models locally"""
+
     def __init__(self) -> None:
         self.__logger: logging.Logger = logging.getLogger()
         self.__config: Settings = Settings()
 
     def unpack(self) -> bool:
+        """
+        Download and extract model weights from S3
+
+        Returns:
+            bool: whether both operations were successful
+        """
         return self._get_weights(self.__config.WEIGHTS.KEY) and self.__unzip_weights()
 
     def serve(self) -> None:
+        """Serve the model via vLLM"""
         proc = subprocess.Popen(
             [
                 'vllm',
