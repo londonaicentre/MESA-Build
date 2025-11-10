@@ -34,7 +34,15 @@ source .venv/bin/activate
 
 ## Usage
 
-- (CLI) Start the server as follows: `llamaserve`.
+### CLI
+
+1. Note command line arguments:
+
+    | Argument  | Description  |
+    |---|---|
+    | -v, --verbose | Enable debug output (optional) |
+
+2. Start the server as follows: `llamaserve [args]`.
 
 ## License
 

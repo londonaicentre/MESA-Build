@@ -9,8 +9,11 @@ from llamaserve.utils import Utils
 class LlamaServe:
     """Serves llama models locally"""
 
-    def __init__(self) -> None:
+    def __init__(self, verbose: bool = False) -> None:
         self.__logger: logging.Logger = logging.getLogger()
+        if not self.__logger.hasHandlers():
+            self.__logger.addHandler(logging.StreamHandler())
+        self.__logger.setLevel(logging.DEBUG if verbose else logging.INFO)
         self.__config: Settings = Settings()
 
     def unpack(self) -> bool:
@@ -40,14 +43,14 @@ class LlamaServe:
         try:
             proc.wait()
         except KeyboardInterrupt:
-            print('\nShutting down...')
+            self.__logger.info('Shutting down...')
             proc.terminate()
             try:
                 proc.wait(timeout=10)
             except subprocess.TimeoutExpired:
-                print('Force killing...')
+                self.__logger.warning('Force killing...')
                 proc.kill()
-            print('Server stopped.')
+            self.__logger.info('Server stopped.')
 
     def _get_weights_path(self) -> str:
         return f'assets/weights/{self.__config.WEIGHTS.PATH}'
@@ -57,6 +60,7 @@ class LlamaServe:
 
     def _get_weights(self, key: str) -> bool:
         if not os.path.isfile(self._get_weights_path()):
+            self.__logger.debug('Fetching weights...')
             try:
                 response: Response = httpx.get(
                     self._get_weights_url(),
@@ -75,12 +79,17 @@ class LlamaServe:
                 return False
             os.makedirs(os.path.dirname(self._get_weights_path()), exist_ok=True)
             open(self._get_weights_path(), 'wb').write(response.content)
+            self.__logger.debug('Weights fetched')
+        else:
+            self.__logger.debug('Existing weights found')
         return True
 
     def __unzip_weights(self) -> bool:
         if Utils.one_file(self._get_weights_path()):
             try:
+                self.__logger.debug('Unpacking weights...')
                 Utils.unzip(self._get_weights_path())
+                self.__logger.debug('Weights unpacked')
             except Exception as e:
                 self.__logger.error(f'Unable to extract weights (details: {e})')
                 return False
