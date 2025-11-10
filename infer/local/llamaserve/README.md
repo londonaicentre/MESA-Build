@@ -17,6 +17,7 @@ Serve llama models locally.
 - Create a .env file with the details you have been provided with:
 
 ```
+MODEL=
 WEIGHTS_ID=
 WEIGHTS_KEY=
 ```
@@ -43,6 +44,30 @@ source .venv/bin/activate
     | -v, --verbose | Enable debug output (optional) |
 
 2. Start the server as follows: `llamaserve [args]`.
+
+## Clients
+
+### OpenAI
+
+1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai/0.26.5/) in python:
+
+    ```
+        from openai import OpenAI
+
+        client = OpenAI(
+            base_url="http://localhost:4000", 
+        )
+
+        response = client.chat.completions.create(
+            model="<model>",
+            messages=[
+                {"role": "system", "content": "You are an LLM named gpt-4o"},
+                {"role": "user", "content": "Hello"}
+            ]
+        )
+
+        print(response.choices[0].message.content)
+    ```
 
 ## License
 

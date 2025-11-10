@@ -5,7 +5,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class WeightSettings(BaseModel):
     ID: str = ''
     KEY: str = ''
-    PATH: str = 'genollama1alpha01/model.tar.gz'
     AWS_REGION: str = 'eu-west-2'
 
 
@@ -16,6 +15,7 @@ class ServerSettings(BaseModel):
 
 
 class Settings(BaseSettings):
+    MODEL: str = 'genollama1alpha01'
     WEIGHTS: WeightSettings = WeightSettings()
     SERVER: ServerSettings = ServerSettings()
 

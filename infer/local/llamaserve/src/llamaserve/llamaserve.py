@@ -32,6 +32,8 @@ class LlamaServe:
                 'vllm',
                 'serve',
                 Path(self._get_weights_path()).parent,
+                '--served_model_name',
+                str(self.__config.MODEL),
                 '--port',
                 str(self.__config.SERVER.PORT),
                 '--dtype',
@@ -53,10 +55,10 @@ class LlamaServe:
             self.__logger.info('Server stopped.')
 
     def _get_weights_path(self) -> str:
-        return f'assets/weights/{self.__config.WEIGHTS.PATH}'
+        return f'assets/weights/{self.__config.MODEL}/model.tar.gz'
 
     def _get_weights_url(self) -> str:
-        return f'https://{self.__config.WEIGHTS.ID}.execute-api.{self.__config.WEIGHTS.AWS_REGION}.amazonaws.com/dist/{self.__config.WEIGHTS.PATH}'
+        return f'https://{self.__config.WEIGHTS.ID}.execute-api.{self.__config.WEIGHTS.AWS_REGION}.amazonaws.com/dist/{self.__config.MODEL}/model.tar.gz'
 
     def _get_weights(self, key: str) -> bool:
         if not os.path.isfile(self._get_weights_path()):
