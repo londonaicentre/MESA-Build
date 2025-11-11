@@ -2,7 +2,7 @@ import os, secrets
 from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 from openai import OpenAI
 
@@ -16,133 +16,36 @@ client = OpenAI(
     api_key=os.getenv('LITELLM_MASTER_KEY'),
 )
 
-HTML = """<!DOCTYPE html>
-<html><head><title>Chat</title></head><body>
-<div id="chat"></div>
-<textarea id="input" type="text" style="height:200px; width:80%">
-MOLECULAR GENETICS LABORATORY REPORT
-
-[Redacted Hospital] NHS Foundation Trust
-Clinical Genetics Laboratory
-[Redacted Location]
-
-PATIENT INFORMATION
-Patient: [Redacted Name]
-Date of Birth: [Redacted DOB]
-Hospital Number: [Redacted ID]
-Sample Type: Blood
-Sample Date: [Redacted Date]
-Report Date: [Redacted Date]
-
-CLINICAL INFORMATION
-Referral Reason: Testing for genetic susceptibility to breast/ovarian cancer
-Referring Clinician: [Redacted Name]
-Clinical Context: Assessment for inherited breast/ovarian cancer predisposition syndrome
-Family History: Not provided
-
-TEST PERFORMED
-BRCA1 and BRCA2 Gene Analysis
-Methodology: Unidirectional DNA sequencing of all coding exons and flanking intronic sequences, supplemented by MLPA (Multiplex Ligation-dependent Probe Amplification) for deletion/duplication analysis
-Prior Testing: Protein truncation test previously performed on BRCA1 exon 11 and BRCA2 exons 10 and 11
-Sample Origin: Peripheral blood leucocytes
-
-RESULTS
-
-BRCA1 Gene Analysis (NM_007294.3)
-Sequencing Analysis: Complete sequencing of all 23 exons and splice sites
-Result: No pathogenic variants detected
-MLPA Analysis: No deletions or duplications detected
-Coverage: All exons adequately covered (>20x minimum)
-
-BRCA2 Gene Analysis (NM_000059.3)
-Sequencing Analysis: Complete sequencing of all 27 exons and splice sites
-Exon 27: c.9924C>G (p.Tyr3308X)
-Zygosity: Heterozygous
-Variant Type: Nonsense mutation
-Predicted Effect: Premature termination codon at position 3308
-
-Sequence Analysis:
-Wild-type: ...TAC GCC AAG...
-Mutant: ...TAG GCC AAG...
-         (Tyr) (Stop) (Lys)
-
-MLPA Analysis: No deletions or duplications detected
-Remainder of BRCA2 gene: No additional pathogenic variants detected
-
-DATA VERIFICATION
-Variant confirmed by bidirectional sequencing
-Nomenclature verified according to HGVS guidelines
-Reference sequences: BRCA1 (NM_007294.3), BRCA2 (NM_000059.3)
-Genomic coordinates: chr13:g.32357041C>G (GRCh38)
-
-INTERPRETATION
-The heterozygous c.9924C>G (p.Tyr3308X) variant in BRCA2 exon 27 is a nonsense mutation that introduces a premature stop codon at amino acid position 3308. This mutation is predicted to result in a truncated BRCA2 protein lacking the C-terminal domain, which is critical for DNA repair function.
-
-This variant has been previously reported in families with hereditary breast and ovarian cancer syndrome and is classified as pathogenic according to ACMG/AMP criteria (PVS1, PM2, PP3).
-
-No pathogenic variants were identified in BRCA1, and no large deletions or duplications were detected in either gene.
-
-CLINICAL SIGNIFICANCE
-This result confirms a diagnosis of inherited breast/ovarian cancer predisposition syndrome due to a pathogenic BRCA2 mutation. Carriers of pathogenic BRCA2 mutations have significantly increased lifetime risks for:
-- Breast cancer: up to 85% lifetime risk
-- Ovarian cancer: 10-20% lifetime risk
-- Other cancers: increased risk for prostate, pancreatic, and melanoma
-
-RECOMMENDATIONS
-1. Enhanced surveillance protocols for breast and ovarian cancer
-2. Consider risk-reducing strategies (prophylactic surgery, chemoprevention)
-3. Predictive testing available for at-risk family members
-4. Genetic counseling strongly recommended prior to cascade testing
-5. Referral to familial cancer clinic for ongoing management
-6. Consider participation in clinical trials for BRCA2 carriers
-
-INHERITANCE PATTERN
-Autosomal dominant with high penetrance
-Recurrence risk: 50% for each offspring
-
-Report Authorized by: [Redacted Name], Consultant Clinical Geneticist
-Date: [Redacted Date]
-Laboratory: [Redacted] Molecular Genetics Laboratory
-Contact: [Redacted Phone] for queries
-</textarea>
-<br />
-<button onclick="send()">Send</button>
-<script>
-async function send() {
-    const msg = input.value;
-    chat.innerHTML += '<p>Processing...</p>';
-    const res = await fetch('/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg}), credentials:'include'});
-    const data = await res.json();
-    chat.lastChild.innerHTML = data.response;
-}
-</script></body></html>"""
-
 
 class ChatRequest(BaseModel):
     message: str
 
 
 def verify(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_user = secrets.compare_digest(credentials.username, os.getenv("AUTH_USER", "admin"))
-    correct_pass = secrets.compare_digest(credentials.password, os.getenv("AUTH_PASS", "admin"))
+    correct_user = secrets.compare_digest(
+        credentials.username, os.getenv("AUTH_USER", "admin"))
+    correct_pass = secrets.compare_digest(
+        credentials.password, os.getenv("AUTH_PASS", "admin"))
     if not (correct_user and correct_pass):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, headers={"WWW-Authenticate": "Basic"})
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, headers={
+                            "WWW-Authenticate": "Basic"})
     return credentials.username
 
 
-@app.get('/', response_class=HTMLResponse)
-def index(user: str = Depends(verify)):
-    return HTML
+@app.get("/")
+def index(user: str = Depends(security)):
+    return FileResponse('index.html')
 
 
 @app.post('/chat')
 def chat(req: ChatRequest, user: str = Depends(verify)):
     conversation = [{
-        "role": "system", 
+        "role": "system",
         "content": generate_system_prompt("systemprompt_finetune.md") + "\nThe document follows below:"
     }]
     conversation.append({'role': 'user', 'content': req.message})
-    response = client.chat.completions.create(model='genollama', messages=conversation)
+    response = client.chat.completions.create(
+        model='genollama', messages=conversation)
     reply = response.choices[0].message.content
     conversation.append({'role': 'assistant', 'content': reply})
     return {'response': reply}
