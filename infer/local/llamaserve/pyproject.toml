@@ -1,14 +1,20 @@
 [project]
-name = "llama-serve" 
-description = "Llama serve" 
+name = "londonaicentre-llama-serve" 
+description = "Llama serve"
+authors = [
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
+]
 readme = "README.md"
 version = "1.0.0"
 requires-python = ">=3.12"
-license = {file = "LICENSE.md"}
+license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.12.4",
     "pydantic-settings>=2.11.0",
+    "tqdm>=4.67.1",
+    "types-tqdm>=4.67.0.20250809",
     "vllm>=0.11.0",
 ]
 [dependency-groups]
