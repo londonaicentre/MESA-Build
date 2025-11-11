@@ -7,7 +7,7 @@ from sagemaker import image_uris
 from sagemaker.huggingface import HuggingFaceModel, HuggingFacePredictor
 from dotenv import load_dotenv
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 from utils.utils import load_config
 
 def parse_CLI_args() -> argparse.Namespace:

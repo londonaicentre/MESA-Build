@@ -29,38 +29,42 @@
 
 ## Deployment
 
-Following the [deployment of a Llama model](https://github.com/londonaicentre/GenoLlama/tree/main/infer#deploy-a-llama-model) on SageMaker AI:
+Following the [deployment of a Llama model](https://github.com/londonaicentre/GenoLlama/tree/main/infer/demo/llamadeploy#deploy-a-llama-model) on SageMaker AI:
 
-1. Specify details of the deployment in a new `config.yml` file, guided by the template [`config.example.yml`](config.example.yml) file. 
+1. Specify details of the deployment in a new `litellm/config.yml` file, guided by the template [`litellm/config.example.yml`](litellm/config.example.yml) file. 
 
 2. `make init` to run setup tasks
 
 3. `make up` to deploy the proxy
 
-4. Interact with the deployed Llama model via the proxy, e.g.:
+4. Interact with the deployed Llama model via the proxy.
 
-    ```
-    from openai import OpenAI
+    - Interact through python:
 
-    client = OpenAI(
-        base_url="http://<host>:4000", 
-        api_key="<master_key>"
-    )
+        ```
+        from openai import OpenAI
 
-    response = client.chat.completions.create(
-        model="<model>",
-        messages=[
-            {"role": "system", "content": "You are an LLM named gpt-4o"},
-            {"role": "user", "content": "Hello"}
-        ]
-    )
+        client = OpenAI(
+            base_url="http://<host>:4000", 
+            api_key="<master_key>"
+        )
 
-    print(response.choices[0].message.content)
-    ```
+        response = client.chat.completions.create(
+            model="<model>",
+            messages=[
+                {"role": "system", "content": "You are an LLM named gpt-4o"},
+                {"role": "user", "content": "Hello"}
+            ]
+        )
 
-    - `base_url="http://<host>:4000"`: host specified in the output from `terraform output -raw dns`.
-    - `api_key="<master_key>"`: key specified in `config.yml` > `general_settings` > `master_key`.
-    - `model="<model>",`: model name specified in `config.yml` > `model_list` > `model_name`.
+        print(response.choices[0].message.content)
+        ```
+
+        - `base_url="http://<host>:4000"`: host specified in the output from `terraform output -raw dns`.
+        - `api_key="<master_key>"`: key specified in `config.yml` > `general_settings` > `master_key`.
+        - `model="<model>",`: model name specified in `config.yml` > `model_list` > `model_name`.
+    
+    - Interact through a UI. A sample UI is specified in [`sample-ui`](sample-ui).
     
 5. `make down` to remove the proxy 
 

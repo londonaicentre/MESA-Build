@@ -1,9 +1,18 @@
 services:
   litellm:
     image: ghcr.io/londonaicentre/genollama/litellm:latest
-    build: .
+    build: litellm
     environment:
       NO_DOCS: true
       NO_REDOC: true
     ports:
       - 4000:4000
+
+  sample-ui:
+    image: ghcr.io/londonaicentre/genollama/sample-ui:latest
+    build: sample-ui
+    environment:
+      LITELLM_BASE_URL: ${LITELLM_BASE_URL}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY}
+    ports:
+      - 3000:3000

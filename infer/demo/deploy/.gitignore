@@ -45,4 +45,4 @@ terraform.rc
 # for prettier:
 .venv/
 
-config.yml
+litellm/config.yml

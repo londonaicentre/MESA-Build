@@ -1,0 +1,19 @@
+[project]
+name = "londonaicentre-llm-assets" 
+description = "LLM assets"
+authors = [
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
+    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
+]
+version = "1.0.0"
+requires-python = ">=3.12"
+license = "CC-BY-NC-ND-4.0"
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.package-data]
+llm_assets = [
+    "templates/*",
+    "examples/*"
+]
