@@ -1,6 +1,7 @@
 import os, logging, httpx, subprocess
 from pathlib import Path
 from httpx import Response, HTTPStatusError, RequestError
+from tqdm import tqdm
 
 from llamaserve.settings import Settings
 from llamaserve.utils import Utils
@@ -70,10 +71,18 @@ class LlamaServe:
                 )
                 presigned_url_response.raise_for_status()
                 self.__logger.debug('Fetching weights...')
-                weights_response: Response = httpx.get(
-                    presigned_url_response.json()['url']
-                )
-                weights_response.raise_for_status()
+                os.makedirs(os.path.dirname(self._get_weights_path()), exist_ok=True)
+                with httpx.stream(
+                    'GET', presigned_url_response.json()['url']
+                ) as weights_response:
+                    weights_response.raise_for_status()
+                    total: int = int(weights_response.headers.get('content-length', 0))
+                    with open(self._get_weights_path(), 'wb') as file, tqdm(
+                        total=total, unit_scale=True, unit='B'
+                    ) as progress_bar:
+                        for chunk in weights_response.iter_bytes():
+                            file.write(chunk)
+                            progress_bar.update(len(chunk))
             except HTTPStatusError as e:
                 self.__logger.error(
                     f'Unable to download weights (details: HTTP error {e.response.status_code}: {e.response.text})'
@@ -84,8 +93,9 @@ class LlamaServe:
                     f'Unable to download weights (details: Request failed: {e})'
                 )
                 return False
-            os.makedirs(os.path.dirname(self._get_weights_path()), exist_ok=True)
-            open(self._get_weights_path(), 'wb').write(weights_response.content)
+            except Exception as e:
+                self.__logger.error(f'Unable to download weights (details: {e})')
+                return False
             self.__logger.debug('Weights fetched')
         else:
             self.__logger.debug('Existing weights found')

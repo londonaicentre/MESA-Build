@@ -1,6 +1,6 @@
 import pytest
 from pytest import MonkeyPatch
-from unittest.mock import Mock, mock_open
+from unittest.mock import MagicMock, Mock, mock_open
 from httpx import HTTPStatusError, RequestError
 
 from tests.llamaserve import TestLlamaServe
@@ -14,13 +14,22 @@ def server() -> TestLlamaServe:
 
 @pytest.fixture
 def mock_httpx_get(monkeypatch: MonkeyPatch) -> Mock:
-    mock: Mock = Mock(
-        side_effect=[
-            Mock(json=Mock(return_value={'url': 'foobar'})),
-            Mock(content=b'foo bar baz'),
-        ]
-    )
+    mock: Mock = Mock(return_value=Mock(json=Mock(return_value={'url': 'foobar'})))
     monkeypatch.setattr('httpx.get', mock)
+    return mock
+
+
+@pytest.fixture
+def mock_httpx_stream(monkeypatch: MonkeyPatch) -> MagicMock:
+    chunks = [b'foo', b'bar', b'baz']
+    mock: MagicMock = MagicMock(
+        raise_for_status=MagicMock(return_value=None),
+        headers={'content-length': str(sum(len(chunk) for chunk in chunks))},
+        iter_bytes=MagicMock(return_value=chunks),
+    )
+    monkeypatch.setattr("httpx.stream", mock)
+    mock_pbar = MagicMock()
+    monkeypatch.setattr("tqdm.tqdm", mock_pbar)
     return mock
 
 
@@ -35,6 +44,7 @@ def test_get_weights(
     monkeypatch: MonkeyPatch,
     server: TestLlamaServe,
     mock_httpx_get: Mock,
+    mock_httpx_stream: MagicMock,
     mock_file: Mock,
 ) -> None:
     monkeypatch.setattr('os.path.isfile', Mock(return_value=False))
@@ -42,7 +52,7 @@ def test_get_weights(
     mock_httpx_get.assert_any_call(
         server.get_presigned_generation_url(), headers={'x-api-key': 'foo'}
     )
-    mock_httpx_get.assert_any_call('foobar')
+    mock_httpx_stream.assert_any_call('GET', 'foobar')
     mock_file.assert_called_once_with(server.get_weights_path(), 'wb')
 
 

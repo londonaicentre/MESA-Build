@@ -13,6 +13,8 @@ dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.12.4",
     "pydantic-settings>=2.11.0",
+    "tqdm>=4.67.1",
+    "types-tqdm>=4.67.0.20250809",
     "vllm>=0.11.0",
 ]
 [dependency-groups]
