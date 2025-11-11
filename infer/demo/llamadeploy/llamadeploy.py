@@ -1,10 +1,7 @@
-import argparse
-import os
-import sys
-import boto3
-import sagemaker
+import argparse, os, sys, boto3, sagemaker
 from sagemaker import image_uris
 from sagemaker.huggingface import HuggingFaceModel, HuggingFacePredictor
+from sagemaker.djl_inference import DJLModel, DJLPredictor
 from dotenv import load_dotenv
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
@@ -26,13 +23,15 @@ def parse_CLI_args() -> argparse.Namespace:
     arguments = parser.parse_args()
     return arguments
 
-def get_image_uri(region, instance_type):
+def get_image_uri(framework, region, instance_type):
     config = load_config()
-    image_arguments = config["image_arguments"]
+    if framework not in list(config["images"].keys()):
+        return None
+    image_arguments = config["images"][framework]
     return image_uris.retrieve(
-        framework="huggingface",
+        framework=framework,
         region=region,
-        version=image_arguments["transformers_version"],
+        version=image_arguments["version"],
         base_framework_version=image_arguments["pytorch_version"],
         py_version=image_arguments["py_version"],
         instance_type=instance_type,
@@ -40,13 +39,24 @@ def get_image_uri(region, instance_type):
     )
 
 def get_model(model_data, role, image_uri, region):
-    return HuggingFaceModel(
-        model_data=model_data,
-        role=role,
-        image_uri=image_uri,
-        sagemaker_session=sagemaker.Session(boto_session=boto3.Session(region_name=region)),
-        model_server_workers=1
-    )
+    if image_uri and 'huggingface' in image_uri:
+        return HuggingFaceModel(
+            model_data=model_data,
+            role=role,
+            image_uri=image_uri,
+            sagemaker_session=sagemaker.Session(boto_session=boto3.Session(region_name=region)),
+            model_server_workers=1
+        )
+    elif image_uri and 'djl' in image_uri:
+        return DJLModel(
+            model_data=model_data,
+            role=role,
+            image_uri=image_uri,
+            sagemaker_session=sagemaker.Session(boto_session=boto3.Session(region_name=region)),
+            env = {
+                "OPTION_MAX_MODEL_LEN": "117128"
+            }   
+        )
 
 def deploy_demo(model, instance_type, endpoint_name): 
     model.deploy(
@@ -54,11 +64,14 @@ def deploy_demo(model, instance_type, endpoint_name):
         instance_type=instance_type,
         endpoint_name=endpoint_name
     )
-    return test_predict(endpoint_name)
+    if isinstance(model, HuggingFaceModel):
+        return test_predict(HuggingFacePredictor(endpoint_name=endpoint_name))
+    elif isinstance(model, DJLModel):
+        return test_predict(DJLPredictor(endpoint_name=endpoint_name))
 
-def test_predict(endpoint_name):
+def test_predict(predictor):
     try:
-        HuggingFacePredictor(endpoint_name=endpoint_name).predict(
+        predictor.predict(
             {
                 "inputs": "hello world"
             }
@@ -68,10 +81,16 @@ def test_predict(endpoint_name):
         print(e)
         return False
 
-def delete_demo(endpoint_name):
-    predictor = HuggingFacePredictor(endpoint_name=endpoint_name)
+def delete_demo(image, endpoint_name):
+    if "huggingface" in image:
+        predictor = HuggingFacePredictor(endpoint_name=endpoint_name)
+    elif "djl" in image:
+        predictor = DJLPredictor(endpoint_name=endpoint_name)
+    else:
+        return False
     predictor.delete_model()
     predictor.delete_endpoint()
+    return True
 
 if __name__ == "__main__":
     args = parse_CLI_args()
@@ -79,21 +98,26 @@ if __name__ == "__main__":
     load_dotenv()
 
     if(args.command == "up"):
-        if(deploy_demo(
-            get_model(
-                "s3://" + os.getenv("BUCKET") + "/" + args.path + "/model.tar.gz", 
-                os.getenv("ROLE"), 
-                get_image_uri(
-                    config["llama"]["region"],
-                    os.getenv("INSTANCE_TYPE")
+        print(
+            deploy_demo(
+                get_model(
+                    "s3://" + os.getenv("BUCKET") + "/" + args.path + "/model.tar.gz", 
+                    os.getenv("ROLE"), 
+                    get_image_uri(
+                        os.getenv("IMAGE"),
+                        config["llama"]["region"],
+                        os.getenv("INSTANCE_TYPE")
+                    ),
+                    config["llama"]["region"]
                 ),
-                config["llama"]["region"]
-            ),
-            os.getenv("INSTANCE_TYPE"),
-            config["llama"]["endpoint_name"]
-        )):
-            print("deployed")
-        else:
-            print("deploy failed")
+                os.getenv("INSTANCE_TYPE"),
+                config["llama"]["endpoint_name"]
+            )
+        )
     elif(args.command == "down"):
-        delete_demo(config["llama"]["endpoint_name"])
+        print(
+            delete_demo(
+                os.getenv("IMAGE"), 
+                config["llama"]["endpoint_name"]
+            )
+        )

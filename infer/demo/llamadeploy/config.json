@@ -1,8 +1,15 @@
 {
-    "image_arguments": {
-        "transformers_version": "4.51.3",
-        "pytorch_version": "pytorch2.6.0",
-        "py_version": "py312"
+    "images": {
+        "huggingface": {
+            "version": "4.51.3",
+            "pytorch_version": "pytorch2.6.0",
+            "py_version": "py312"
+        },
+        "djl-lmi": {
+            "version": "0.30.0",
+            "pytorch_version": "pytorch2.6.0",
+            "py_version": "py310"
+        }
     },
     "llama": {
         "region": "eu-west-2",
