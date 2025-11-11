@@ -104,8 +104,10 @@ class LlamaServe:
     def __unzip_weights(self) -> bool:
         if Utils.one_file(self._get_weights_path()):
             try:
-                self.__logger.debug('Unpacking weights...')
-                Utils.unzip(self._get_weights_path())
+                self.__logger.debug(
+                    f'Unpacking weights at {self._get_weights_path()}...'
+                )
+                Utils.untar(self._get_weights_path())
                 self.__logger.debug('Weights unpacked')
             except Exception as e:
                 self.__logger.error(f'Unable to extract weights (details: {e})')

@@ -38,6 +38,36 @@ def test_unzip_insufficient_space(monkeypatch: MonkeyPatch) -> None:
         Utils.unzip('foo.zip')
 
 
+def __setup_untar_mocks(monkeypatch: MonkeyPatch, file_size: int, free_space: int) -> None:
+    mock_tar_instance = Mock()
+    mock_tar_instance.getmembers.return_value = [
+        Mock(size=file_size, isfile=Mock(return_value=True))
+    ]
+    monkeypatch.setattr(
+        'tarfile.open',
+        lambda source, mode='r:*': Mock(
+            __enter__=Mock(return_value=mock_tar_instance),
+            __exit__=Mock(return_value=None),
+        ),
+    )
+    monkeypatch.setattr(Path, 'exists', Mock(return_value=True))
+    monkeypatch.setattr(
+        'shutil.disk_usage',
+        Mock(return_value=SimpleNamespace(free=free_space)),
+    )
+
+
+def test_untar(monkeypatch: MonkeyPatch) -> None:
+    __setup_untar_mocks(monkeypatch, 100, 1000)
+    assert Utils.untar('foo.tar.gz')
+
+
+def test_untar_insufficient_space(monkeypatch: MonkeyPatch) -> None:
+    __setup_untar_mocks(monkeypatch, 1000, 100)
+    with pytest.raises(OSError):
+        Utils.untar('foo.tar.gz')
+
+
 def test_one_file_true(monkeypatch: MonkeyPatch) -> None:
     mock_path = Mock(spec=Path)
     mock_path.is_file.return_value = True
