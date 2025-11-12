@@ -52,21 +52,22 @@ source .venv/bin/activate
 1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai/0.26.5/) in python:
 
     ```
-        from openai import OpenAI
+    from openai import OpenAI
 
-        client = OpenAI(
-            base_url="http://localhost:4000", 
-        )
+    client = OpenAI(
+        base_url="http://localhost:4000",
+        api_key="blank" 
+    )
 
-        response = client.chat.completions.create(
-            model="<model>",
-            messages=[
-                {"role": "system", "content": "You are an LLM named gpt-4o"},
-                {"role": "user", "content": "Hello"}
-            ]
-        )
+    response = client.chat.completions.create(
+        model="<model>",
+        messages=[
+            {"role": "system", "content": "You are an LLM named gpt-4o"},
+            {"role": "user", "content": "Hello"}
+        ]
+    )
 
-        print(response.choices[0].message.content)
+    print(response.choices[0].message.content)
     ```
 
 ## License
