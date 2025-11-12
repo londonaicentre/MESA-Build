@@ -2,7 +2,8 @@ import os, secrets
 from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 
@@ -10,6 +11,7 @@ from llm_assets.prompts import generate_system_prompt
 
 load_dotenv()
 app = FastAPI()
+app.mount('/static', StaticFiles(directory='static'), name='static')
 security = HTTPBasic()
 client = OpenAI(
     base_url=f'http://{os.getenv("LITELLM_BASE_URL")}:4000',
@@ -33,7 +35,7 @@ def verify(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @app.get("/")
-def index(user: str = Depends(security)):
+def index(user: str = Depends(verify)):
     return FileResponse('index.html')
 
 

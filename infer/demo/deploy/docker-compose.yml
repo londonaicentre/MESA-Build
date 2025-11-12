@@ -14,5 +14,7 @@ services:
     environment:
       LITELLM_BASE_URL: ${LITELLM_BASE_URL}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY}
+      AUTH_USER: ${AUTH_USER}
+      AUTH_PASS: ${AUTH_PASS}
     ports:
       - 3000:3000
