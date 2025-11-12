@@ -35,7 +35,7 @@ def verify(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @app.get("/")
-def index(user: str = Depends(security)):
+def index(user: str = Depends(verify)):
     return FileResponse('index.html')
 
 
