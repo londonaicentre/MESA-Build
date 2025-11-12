@@ -1,4 +1,4 @@
-# Deploy a Llama model on AWS SageMaker AI (demo)
+# Deploy a Llama model on AWS SageMaker AI
 
 ## Arrange access to SageMaker
 
@@ -10,6 +10,7 @@ A custom [`inference.py`](inference.py) file should be added to the zipped model
 It can also be used to hard code parameters such a temperature values.
 
 ## Deploy a Llama model
+
 Using a venv with the required packages installed (`pip install -r requirements.txt`) and after setting the right env variables, run `llamadeploy.py`.
 Some command line arguments are optional, set what you need to change:
 
