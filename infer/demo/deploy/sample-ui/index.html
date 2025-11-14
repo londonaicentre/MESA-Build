@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Chat</title>
+    <title>GenoLlama</title>
     <!-- Font Awesome -->
     <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <div class="row d-flex justify-content-center align-items-center">
+        <div class="row">
             <div class="col-5">
                 <h6>Report text:</h6>
                 <textarea class="form-control" id="input" style="height: 300px">
@@ -123,11 +123,8 @@ Date: [Redacted Date]
 Laboratory: [Redacted] Molecular Genetics Laboratory
 Contact: [Redacted Phone] for queries
                 </textarea>
-                <div class="mt-3">
-                    <small>This model is presented as-is for demonstration without guardrails. Be mindful of other participants when prompting. All inputs are automatically logged.</small>
-                </div>
             </div>
-            <div class="col-2 row d-flex justify-content-center align-items-center">
+            <div class="col-2 d-flex justify-content-center align-items-center">
                 <button id="send" onclick="send()" type="button" class="btn btn-outline-primary">
                 Convert
                 </button>
@@ -137,10 +134,13 @@ Contact: [Redacted Phone] for queries
                 <div id="chat" class="d-flex justify-content-center align-items-center border" style="min-height: 300px; text-align: center;"></div>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col-12 d-flex justify-content-end align-items-center">
-                <img width="10%" class="m-1" src="static/aic.png" />
-                <img width="10%" class="m-1" src="static/gain.png" />
+        <div class="row mt-5">
+            <div class="col-5">
+                <small>This model is presented as-is for demonstration without guardrails. All inputs are automatically logged.</small>
+            </div>
+            <div class="col-7 d-flex justify-content-end align-items-center">
+                <img width="100px" class="m-1" src="static/aic.png" />
+                <img width="100px" class="m-1" src="static/gain.png" />
             </div>
         </div>
         </div>
