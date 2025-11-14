@@ -34,13 +34,13 @@ class LlamaServe:
                 'serve',
                 Path(self._get_weights_path()).parent,
                 '--served_model_name',
-                str(self.__config.MODEL),
+                str(self.__config.MODEL.NAME),
                 '--port',
                 str(self.__config.SERVER.PORT),
                 '--dtype',
-                self.__config.SERVER.PRECISION,
+                self.__config.MODEL.PRECISION,
                 '--max-model-len',
-                str(self.__config.SERVER.MAX_MODEL_LENGTH),
+                str(self.__config.MODEL.LENGTH),
             ]
         )
         try:
@@ -56,10 +56,10 @@ class LlamaServe:
             self.__logger.info('Server stopped.')
 
     def _get_weights_path(self) -> str:
-        return f'assets/weights/{self.__config.MODEL}/model.tar.gz'
+        return f'assets/weights/{self.__config.MODEL.NAME}/model.tar.gz'
 
     def _get_presigned_generation_url(self) -> str:
-        return f'https://{self.__config.WEIGHTS.ID}.execute-api.{self.__config.WEIGHTS.AWS_REGION}.amazonaws.com/dist/{self.__config.MODEL}/model.tar.gz'
+        return f'https://{self.__config.WEIGHTS.ID}.execute-api.{self.__config.WEIGHTS.REGION}.amazonaws.com/dist/{self.__config.MODEL.NAME}/model.tar.gz'
 
     def _get_weights(self, key: str) -> bool:
         if not os.path.isfile(self._get_weights_path()):

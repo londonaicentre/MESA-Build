@@ -17,7 +17,7 @@ Serve llama models locally.
 - Create a .env file with the details you have been provided with:
 
 ```
-MODEL=
+MODEL_NAME=
 WEIGHTS_ID=
 WEIGHTS_KEY=
 ```
