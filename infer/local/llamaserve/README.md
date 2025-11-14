@@ -10,11 +10,18 @@ Serve llama models locally.
 
 ## Prerequisites
 
+### Software
+
 - Python 3.12
+
+### Hardware
+
+- A GPU with >=24GB VRAM (tested on NVIDIA A30)
 
 ### Configuration
 
-- Create a .env file with the details you have been provided with:
+- Create a file called `.env` in the directory where you intend to run this package. 
+Populate it with the details you have been provided with in the following format:
 
 ```
 MODEL_NAME=
@@ -49,7 +56,7 @@ source .venv/bin/activate
 
 ### OpenAI
 
-1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai/0.26.5/) in python:
+1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai) in python:
 
     ```
     from openai import OpenAI

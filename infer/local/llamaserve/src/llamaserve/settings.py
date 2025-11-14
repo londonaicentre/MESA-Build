@@ -11,7 +11,7 @@ class WeightSettings(BaseModel):
 class ModelSettings(BaseModel):
     NAME: str = 'genollama1alpha01'
     PRECISION: str = 'float16'
-    LENGTH: int = 67015
+    LENGTH: int = 41152
 
 
 class ServerSettings(BaseModel):
