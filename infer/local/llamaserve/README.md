@@ -54,7 +54,7 @@ source .venv/bin/activate
 
 ## Clients
 
-### OpenAI
+### OpenAI (example)
 
 1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai) in python:
 
@@ -62,12 +62,12 @@ source .venv/bin/activate
     from openai import OpenAI
 
     client = OpenAI(
-        base_url="http://localhost:4000",
+        base_url="http://localhost:5000/v1",
         api_key="blank" 
     )
 
     response = client.chat.completions.create(
-        model="<model>",
+        model="<MODEL_NAME>",
         messages=[
             {"role": "system", "content": "You are an LLM named gpt-4o"},
             {"role": "user", "content": "Hello"}
