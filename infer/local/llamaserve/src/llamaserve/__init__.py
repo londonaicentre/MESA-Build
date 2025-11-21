@@ -18,5 +18,5 @@ def parse_args() -> LlamaServeArguments:
 def run() -> None:
     args: LlamaServeArguments = parse_args()
     llamaServe: LlamaServe = LlamaServe(args.verbose)
-    llamaServe.unpack()
-    llamaServe.serve()
+    if llamaServe.unpack():
+        llamaServe.serve()

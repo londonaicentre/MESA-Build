@@ -10,14 +10,21 @@ Serve llama models locally.
 
 ## Prerequisites
 
+### Software
+
 - Python 3.12
+
+### Hardware
+
+- A GPU with >=24GB VRAM (tested on NVIDIA A30)
 
 ### Configuration
 
-- Create a .env file with the details you have been provided with:
+- Create a file called `.env` in the directory where you intend to run this package. 
+Populate it with the details you have been provided with in the following format:
 
 ```
-MODEL=
+MODEL_NAME=
 WEIGHTS_ID=
 WEIGHTS_KEY=
 ```
@@ -47,20 +54,20 @@ source .venv/bin/activate
 
 ## Clients
 
-### OpenAI
+### OpenAI (example)
 
-1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai/0.26.5/) in python:
+1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai) in python:
 
     ```
     from openai import OpenAI
 
     client = OpenAI(
-        base_url="http://localhost:4000",
+        base_url="http://localhost:5000/v1",
         api_key="blank" 
     )
 
     response = client.chat.completions.create(
-        model="<model>",
+        model="<MODEL_NAME>",
         messages=[
             {"role": "system", "content": "You are an LLM named gpt-4o"},
             {"role": "user", "content": "Hello"}
