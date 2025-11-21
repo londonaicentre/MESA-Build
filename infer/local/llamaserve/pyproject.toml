@@ -1,12 +1,12 @@
 [project]
 name = "londonaicentre-llama-serve" 
-description = "Llama serve"
+description = "Serve llama models locally"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
 ]
 readme = "README.md"
-version = "1.0.0"
+version = "1.1.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
