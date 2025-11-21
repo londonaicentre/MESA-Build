@@ -1,0 +1,18 @@
+[project]
+name = "londonaicentre-schemallama-utils" 
+description = "SchemaLlama utils"
+authors = [
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
+    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
+]
+version = "1.0.0"
+requires-python = ">=3.12"
+license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "boto3>=1.41.1",
+    "litellm>=1.80.0",
+]
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"

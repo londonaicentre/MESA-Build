@@ -20,7 +20,7 @@ def upload_file(region_name, file_name, bucket, object_name=None, path=None):
         return False
     return True
 
-def bedrock_completion(model_name, system_prompt, user_prompt):
+def bedrock_completion(model_name, system_prompt, user_prompt, bedrock_api_key):
     max_retries = 5
     for attempt in range(max_retries + 1):
         try:
@@ -32,7 +32,7 @@ def bedrock_completion(model_name, system_prompt, user_prompt):
                     {"content": system_prompt, "role": "system"},
                     {"content": user_prompt, "role": "user"},
                 ],
-                api_key=os.environ["BEDROCK_API_KEY"],
+                api_key=bedrock_api_key,
             )
         except RateLimitError:
             if attempt == max_retries:
