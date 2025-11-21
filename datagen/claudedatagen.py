@@ -4,13 +4,10 @@ import litellm
 litellm.suppress_debug_info = (
     True  # suppress unhelpful library output on rate limit error
 )
-from litellm import completion, RateLimitError
 import os
 import sys
 import re
-import time
 import json
-import random
 import boto3
 import pandas as pd
 from dotenv import load_dotenv
@@ -22,6 +19,7 @@ from llm_assets.llm_assets_types import GenomicTestReport
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from utils.aws import upload_file
 from utils.utils import load_config
+from utils.aws import bedrock_completion
 
 
 def parse_CLI_args() -> argparse.Namespace:
@@ -262,35 +260,7 @@ def generate_sample(system_prompt, model_name, df, idx) -> bool:
 
     try:
         user_prompt = generate_user_prompt(row)
-
-        max_retries = 5
-        for attempt in range(max_retries + 1):
-            try:
-                message = completion(
-                    model=model_name,
-                    max_tokens=8192,
-                    temperature=0.001,
-                    messages=[
-                        {"content": system_prompt, "role": "system"},
-                        {"content": user_prompt, "role": "user"},
-                    ],
-                    api_key=os.environ["BEDROCK_API_KEY"],
-                )
-                break
-            except RateLimitError:
-                if attempt == max_retries:
-                    raise
-                # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
-                delay = random.uniform(0, min(60, 2**attempt))
-                print(
-                    "hit rate limit, waiting "
-                    + str(round(delay, 2))
-                    + " seconds (retry "
-                    + str(attempt + 1)
-                    + ")"
-                )
-                time.sleep(delay)
-
+        message = bedrock_completion(model_name, system_prompt, user_prompt)
         json_output = extract_json_from_response(message.choices[0].message.content)
 
         if json_output is not None:
