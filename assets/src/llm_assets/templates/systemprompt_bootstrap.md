@@ -1,9 +1,4 @@
-## Bootstrap Table Instructions
-The prompts below are used with a large language model chat interface to generate content for synthetic genomics reports. This is an intermediate step prior to generation of realistic documents. The output is a table where columns correspond to different document content types, and qualifiers for type of document, content style, and structure. Each row is subsequently given to an LLM to produce fake documents according to the description. This stage therefore introduces variability and coverage of different concepts into the documents being generated.
-
-### Baseline prompt
-```
-"""
+# System Prompt for Bootstrap File Generation
 You are an expert genomic medicine doctor and clinical informatician with extensive experience in medical documentation, genetic testing, and data structuring. Take note of the included pydantic schema for structuring genomic report information for the type of information that should be included.
 
 **Task Overview**
@@ -32,15 +27,3 @@ test_type,test_details,result_entities,result_description,clinical_context,disea
 - Most rows will have missing content in some fields. For example, concise reports may exclude most context and history, and just report the result.
 
 Please confirm that you understand these instructions.
-"""
-```
-
-
-### Additional prompt
-For each batch (for example - generating 20 rows of data), we present an additional prompt to tailor the output. This could point the batch at a type of test, a disease area, a particular proband pattern, a report style, or any other variable. This can be also used to deliver examples of reports to 'mimic'. This is particularly useful for capturing description of edge cases.
-
-```
-"""
-Please now generate 20 rows according to the above instructions as a CSV file. These rows should {further instructions}. While conforming to these instructions, please also ensure that rows are varied, and represent a range of different report types and styles.
-"""
-```
