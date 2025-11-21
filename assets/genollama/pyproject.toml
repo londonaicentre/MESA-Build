@@ -1,6 +1,6 @@
 [project]
-name = "londonaicentre-llm-assets" 
-description = "LLM assets"
+name = "londonaicentre-genollama-assets" 
+description = "GenoLlama assets"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
@@ -13,7 +13,7 @@ license = "CC-BY-NC-ND-4.0"
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.setuptools.package-data]
-llm_assets = [
+genollama_assets = [
     "templates/*",
     "examples/*"
 ]

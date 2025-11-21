@@ -1,6 +1,6 @@
 import os
 import json
-from llm_assets.llm_assets_types import GenomicTestReport
+from genollama_assets.genollama_assets_types import GenomicTestReport
 from pydantic import ValidationError
 
 def tojson():

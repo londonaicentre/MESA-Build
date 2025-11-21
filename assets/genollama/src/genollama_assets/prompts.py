@@ -1,12 +1,12 @@
 from importlib.resources import files
 
 def load(folder: str, file: str) -> str:
-    return files("llm_assets").joinpath(f"{folder}/{file}").read_text()
+    return files("genollama_assets").joinpath(f"{folder}/{file}").read_text()
 
 def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
     ## CREATE SYSTEM PROMPT
     # schema
-    schema_content = load(".", "llm_assets_types.py")
+    schema_content = load(".", "genollama_assets_types.py")
     # TODO: see if converting raw text into actual Pydantic model object works better
 
     # examples
