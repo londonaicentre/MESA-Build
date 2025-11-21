@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from genollama_assets.prompts import generate_system_prompt, generate_datagen_user_prompt
 from genollama_assets.genollama_assets_types import GenomicTestReport
-from claudedatagen import run_datagen, run_backfill, run_batch
+from claudedatagen.claudedatagen import run_sample_generation, run_backfill, run_batch_inference
 
 
 def parse_CLI_args() -> argparse.Namespace:
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     BEDROCK_API_KEY = os.getenv("BEDROCK_API_KEY")
     system_prompt = generate_system_prompt()
     if args.batch:
-        run_batch(
+        run_batch_inference(
             system_prompt,
             generate_datagen_user_prompt,
             args.model_name,
@@ -82,7 +82,7 @@ if __name__ == "__main__":
             GenomicTestReport,
         )
     else:
-        run_datagen(
+        run_sample_generation(
             system_prompt,
             generate_datagen_user_prompt,
             args.model_name,

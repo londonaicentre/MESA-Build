@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from genollama_assets.prompts import generate_system_prompt, generate_bootstrap_user_prompt
-from claudebootstrap import run_bootstrap
+from claudedatagen.claudedatagen import run_bootstrap_file_generation
 
 
 def parse_CLI_args() -> argparse.Namespace:
@@ -37,4 +37,4 @@ if __name__ == "__main__":
     args = parse_CLI_args()
     # load api key
     load_dotenv()
-    run_bootstrap(generate_system_prompt("systemprompt_bootstrap.md"), generate_bootstrap_user_prompt, args.instruction, args.model_name, os.getenv("BEDROCK_API_KEY"))
+    run_bootstrap_file_generation(generate_system_prompt("systemprompt_bootstrap.md"), generate_bootstrap_user_prompt, args.instruction, args.model_name, os.getenv("BEDROCK_API_KEY"))

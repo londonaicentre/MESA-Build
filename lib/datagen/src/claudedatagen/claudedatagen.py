@@ -271,7 +271,7 @@ def generate_sample(
         return False
 
 
-def generate_batch_anthropic(
+def generate_batch(
     system_prompt, user_prompt_function, bootstrap_file, sample_size
 ):
     """Generate batch request file for Anthropic model.
@@ -351,7 +351,7 @@ def start_batch_inference(region_name, job_id, model_id, role_arn, bucket, batch
     return True
 
 
-def run_batch(
+def run_batch_inference(
     system_prompt,
     user_prompt_function,
     model_name,
@@ -363,7 +363,7 @@ def run_batch(
     config = load_config()
     # Process all samples from bootstrap file in batch mode
     # Create batch instruction JSONL file
-    batch_jsonl = generate_batch_anthropic(
+    batch_jsonl = generate_batch(
         system_prompt, user_prompt_function, template, sample_size
     )
     job_id = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
@@ -412,7 +412,7 @@ def run_backfill(
     )
 
 
-def run_datagen(
+def run_sample_generation(
     system_prompt,
     user_prompt_function,
     model_name,
@@ -435,3 +435,21 @@ def run_datagen(
         schema,
         sample_size,
     )
+
+def run_bootstrap_file_generation(
+    system_prompt,
+    user_prompt_function,
+    instruction,
+    model_name,
+    bedrock_api_key,
+):
+    config = load_config()
+    os.environ["AWS_REGION_NAME"] = config[model_name]["region"]
+    message = bedrock_completion(
+        config[model_name]["model"],
+        system_prompt,
+        user_prompt_function(instruction),
+        bedrock_api_key,
+    )
+    with open("bootstrap.csv", "w", newline="") as file:
+        file.write(message.choices[0].message.content)
