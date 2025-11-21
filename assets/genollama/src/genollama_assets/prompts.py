@@ -35,3 +35,31 @@ def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
         .replace("{e4}", e4)
     )
     return system_prompt
+
+def generate_bootstrap_user_prompt(instructions: str) -> str:
+    ## CREATE USER PROMPT
+
+    user_prompt = f"""Please now generate 20 rows according to the above instructions as a CSV file. These rows should {instructions}. While conforming to these instructions, please also ensure that rows are varied, and represent a range of different report types and styles."""
+
+    return user_prompt
+
+def generate_datagen_user_prompt(row: dict) -> str:
+    ## CREATE USER PROMPT
+    user_prompt = f"""Please generate a genomic laboratory report based on the following test scenario:
+
+        Test Type: {row["test_type"]}
+        Test Details: {row["test_details"]}
+        Result Entities: {row["result_entities"]}
+        Result Description: {row["result_description"]}
+        Clinical Context: {row["clinical_context"]}
+        Disease Context: {row["disease_context"]}
+        Family History: {row["family_history"]}
+        Test Subject: {row["test_subject"]}
+        Clinical Implications: {row["clinical_implications"]}
+        Recommendations: {row["recommendations"]}
+        Report Style: {row["report_style"]}
+
+        Generate a realistic genomic laboratory report incorporating all these details.
+        Then extract the information into the structured schema format."""
+
+    return user_prompt
