@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infer/local/llamaserve
+        working-directory: lib/infer/local/llamaserve
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         with:
           name: dist
-          path: infer/local/llamaserve/dist
+          path: lib/infer/local/llamaserve/dist
 
   publish:
     needs: build

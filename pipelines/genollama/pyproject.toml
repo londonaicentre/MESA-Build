@@ -1,0 +1,31 @@
+[project]
+name = "londonaicentre-genollama" 
+description = "GenoLlama"
+authors = [
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
+    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
+]
+version = "1.0.0"
+requires-python = ">=3.12"
+license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "londonaicentre-genollama-assets",
+    "londonaicentre-schemallama-datagen",
+    "londonaicentre-schemallama-finetune",
+    "londonaicentre-schemallama-deploy",
+    "python-dotenv>=1.2.1",
+]
+[project.scripts]
+"bootstrap" = "genollama.bootstrap:main"
+"datagen" = "genollama.datagen:main"
+"finetune" = "genollama.finetune:main"
+"deploy" = "genollama.deploy:main"
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+[tool.uv.sources]
+londonaicentre-genollama-assets = { path = "../../assets/genollama", editable = true }
+londonaicentre-schemallama-datagen = { path = "../../lib/datagen", editable = true }
+londonaicentre-schemallama-finetune = { path = "../../lib/finetune", editable = true }
+londonaicentre-schemallama-deploy = { path = "../../lib/infer/demo/llamadeploy", editable = true }

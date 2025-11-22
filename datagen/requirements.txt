@@ -1,4 +1,0 @@
-boto3
-litellm
-pandas
--e ../assets
