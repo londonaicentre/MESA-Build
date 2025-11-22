@@ -12,5 +12,5 @@ class ModelConfig(BaseModel):
 class Config(BaseSettings):
     models: dict[str, ModelConfig]
     
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(models=json.loads(files("datagen").joinpath("config/config.json").read_text()))
