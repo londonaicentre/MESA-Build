@@ -47,7 +47,7 @@ def chat(req: ChatRequest, user: str = Depends(verify)):
     }]
     conversation.append({'role': 'user', 'content': req.message})
     response = client.chat.completions.create(
-        model='genollama', messages=conversation, temperature=0.1, max_tokens=8000)
+        model='schemallama', messages=conversation, temperature=0.1, max_tokens=8000)
     reply = response.choices[0].message.content
     conversation.append({'role': 'assistant', 'content': reply})
     return {'response': reply}

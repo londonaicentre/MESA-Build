@@ -120,7 +120,7 @@ data "aws_ssm_parameter" "ubuntu" {
 
 resource "aws_instance" "ec2_instance" {
   tags = {
-    Name = "genollama"
+    Name = "schemallama"
   }
   associate_public_ip_address = true
   instance_type               = "t3.small"

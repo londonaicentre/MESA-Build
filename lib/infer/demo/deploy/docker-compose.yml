@@ -1,6 +1,6 @@
 services:
   litellm:
-    image: ghcr.io/londonaicentre/genollama/litellm:latest
+    image: ghcr.io/londonaicentre/schemallama/litellm:latest
     build: litellm
     environment:
       NO_DOCS: true
@@ -9,7 +9,7 @@ services:
       - 4000:4000
 
   sample-ui:
-    image: ghcr.io/londonaicentre/genollama/sample-ui:latest
+    image: ghcr.io/londonaicentre/schemallama/sample-ui:latest
     build: sample-ui
     environment:
       LITELLM_BASE_URL: ${LITELLM_BASE_URL}

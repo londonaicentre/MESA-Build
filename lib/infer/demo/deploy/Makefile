@@ -12,12 +12,12 @@ up:
 	terraform apply
 	. ./.venv/bin/activate && ansible-playbook site.yml
 	ssh-keyscan -t ed25519 $$(terraform output -raw dns) >> ~/.ssh/known_hosts
-	docker context create genollama --docker "host=ssh://ubuntu@$$(terraform output -raw dns)"
-	docker context use genollama
+	docker context create schemallama --docker "host=ssh://ubuntu@$$(terraform output -raw dns)"
+	docker context use schemallama
 	docker compose up -d
 
 down:
-	docker context rm -f genollama
+	docker context rm -f schemallama
 	terraform destroy
 
 prettier:
