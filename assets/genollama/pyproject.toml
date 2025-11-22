@@ -9,6 +9,9 @@ authors = [
 version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "pydantic>=2.12.4",
+]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
@@ -16,4 +19,9 @@ build-backend = "setuptools.build_meta"
 genollama_assets = [
     "templates/*",
     "examples/*"
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
 ]
