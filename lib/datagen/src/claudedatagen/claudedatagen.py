@@ -13,8 +13,7 @@ from botocore.exceptions import ClientError
 from typing import Callable
 
 from aws import upload_file, bedrock_completion
-from utils import load_config
-
+from claudedatagen.config import Config
 
 def extract_json_from_response(response):
     """
@@ -360,7 +359,7 @@ def run_batch_inference(
     bucket,
     bedrock_execution_role,
 ):
-    config = load_config()
+    config: Config = Config()
     # Process all samples from bootstrap file in batch mode
     # Create batch instruction JSONL file
     batch_jsonl = generate_batch(
@@ -369,20 +368,20 @@ def run_batch_inference(
     job_id = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
     # Upload to S3 bucket
     upload_file(
-        config[model_name]["region"],
-        config[model_name]["batch_file"],
+        config.models[model_name].region,
+        config.models[model_name].batch_file,
         bucket,
-        config[model_name]["batch_file"],
+        config.models[model_name].batch_file,
         job_id + "/input",
     )
     # Generate samples in batch mode
     start_batch_inference(
-        config[model_name]["region"],
+        config.models[model_name].region,
         job_id,
-        config[model_name]["model"],
+        config.models[model_name].model,
         bedrock_execution_role,
         bucket,
-        config[model_name]["batch_file"],
+        config.models[model_name].batch_file,
     )
 
 
@@ -395,8 +394,8 @@ def run_backfill(
     bedrock_api_key,
     schema,
 ):
-    config = load_config()
-    os.environ["AWS_REGION_NAME"] = config[model_name]["region"]
+    config: Config = Config()
+    os.environ["AWS_REGION_NAME"] = config.models[model_name].region
     folder_name = f"samples_{model_name}/"
     # Generate samples for missed indices in the bootstrap file specified
     missing_idx = find_missing_idx(folder_name, sample_size)
@@ -404,7 +403,7 @@ def run_backfill(
     backfill(
         system_prompt,
         user_prompt_function,
-        config[model_name]["model"],
+        config.models[model_name].model,
         template,
         missing_idx,
         bedrock_api_key,
@@ -421,14 +420,14 @@ def run_sample_generation(
     bedrock_api_key,
     schema,
 ):
-    config = load_config()
-    os.environ["AWS_REGION_NAME"] = config[model_name]["region"]
+    config: Config = Config()
+    os.environ["AWS_REGION_NAME"] = config.models[model_name].region
     folder_name = f"samples_{model_name}/"
     # Generate samples from bootstrap file
     process_bootstrap_rows(
         system_prompt,
         user_prompt_function,
-        config[model_name]["model"],
+        config.models[model_name].model,
         template,
         folder_name,
         bedrock_api_key,
@@ -443,10 +442,10 @@ def run_bootstrap_file_generation(
     model_name,
     bedrock_api_key,
 ):
-    config = load_config()
-    os.environ["AWS_REGION_NAME"] = config[model_name]["region"]
+    config: Config = Config()
+    os.environ["AWS_REGION_NAME"] = config.models[model_name].region
     message = bedrock_completion(
-        config[model_name]["model"],
+        config.models[model_name].model,
         system_prompt,
         user_prompt_function(instruction),
         bedrock_api_key,
