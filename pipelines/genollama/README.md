@@ -19,6 +19,7 @@ BEDROCK_EXECUTION_ROLE=
 BUCKET=
 SAGEMAKER_EXECUTION_ROLE=
 INSTANCE_TYPE=
+IMAGE=
 ```
 
 ### Assets
@@ -68,3 +69,11 @@ For example `datagen sonnet4 15` will generate 15 samples in the model's subfold
     - `-f, --file`: Name of the AWS Bedrock Anthropic batch inference output file containing sample data to use as input. Defaults to `anthropic_batch_job.jsonl.out`.
 
     - `-d, --dry_run`: Whether to simulate calling AWS endpoints. Defaults to `False`.
+
+### Deploy a Llama model
+
+1. Run `deploy` with the following arguments:
+
+    - `-p, --path`: Path within S3 bucket to the zipped weights of the model to deploy. Required.
+
+    - `[command]`: The action to perform: `up` (deploy) or `down` (delete). Required.

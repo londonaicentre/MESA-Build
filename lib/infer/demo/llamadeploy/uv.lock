@@ -771,56 +771,9 @@ wheels = [
 ]
 
 [[package]]
-name = "londonaicentre-genollama"
-version = "1.0.0"
-source = { editable = "." }
-dependencies = [
-    { name = "londonaicentre-genollama-assets" },
-    { name = "londonaicentre-schemallama-datagen" },
-    { name = "londonaicentre-schemallama-deploy" },
-    { name = "londonaicentre-schemallama-finetune" },
-    { name = "python-dotenv" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "londonaicentre-genollama-assets", editable = "../../assets/genollama" },
-    { name = "londonaicentre-schemallama-datagen", editable = "../../lib/datagen" },
-    { name = "londonaicentre-schemallama-deploy", editable = "../../lib/infer/demo/llamadeploy" },
-    { name = "londonaicentre-schemallama-finetune", editable = "../../lib/finetune" },
-    { name = "python-dotenv", specifier = ">=1.2.1" },
-]
-
-[[package]]
-name = "londonaicentre-genollama-assets"
-version = "1.0.0"
-source = { editable = "../../assets/genollama" }
-
-[[package]]
-name = "londonaicentre-schemallama-datagen"
-version = "1.0.0"
-source = { editable = "../../lib/datagen" }
-dependencies = [
-    { name = "boto3" },
-    { name = "litellm" },
-    { name = "londonaicentre-schemallama-utils" },
-    { name = "pandas" },
-    { name = "pydantic-settings" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "boto3", specifier = ">=1.41.1" },
-    { name = "litellm", specifier = ">=1.80.0" },
-    { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
-    { name = "pandas", specifier = ">=2.3.3" },
-    { name = "pydantic-settings", specifier = ">=2.12.0" },
-]
-
-[[package]]
 name = "londonaicentre-schemallama-deploy"
 version = "1.0.0"
-source = { editable = "../../lib/infer/demo/llamadeploy" }
+source = { editable = "." }
 dependencies = [
     { name = "boto3" },
     { name = "londonaicentre-schemallama-utils" },
@@ -831,24 +784,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "boto3", specifier = ">=1.41.2" },
-    { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
-    { name = "pydantic-settings", specifier = ">=2.12.0" },
-    { name = "sagemaker", specifier = "==2.254.1" },
-]
-
-[[package]]
-name = "londonaicentre-schemallama-finetune"
-version = "1.0.0"
-source = { editable = "../../lib/finetune" }
-dependencies = [
-    { name = "londonaicentre-schemallama-utils" },
-    { name = "pydantic-settings" },
-    { name = "sagemaker" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
+    { name = "londonaicentre-schemallama-utils", editable = "../../../utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "sagemaker", specifier = "==2.254.1" },
 ]
@@ -856,7 +792,7 @@ requires-dist = [
 [[package]]
 name = "londonaicentre-schemallama-utils"
 version = "1.0.0"
-source = { editable = "../../lib/utils" }
+source = { editable = "../../../utils" }
 dependencies = [
     { name = "boto3" },
     { name = "litellm" },

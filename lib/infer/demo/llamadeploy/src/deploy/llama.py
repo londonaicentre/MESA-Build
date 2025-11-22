@@ -1,39 +1,22 @@
-import argparse, os, sys, boto3, sagemaker
+import boto3
+import sagemaker
 from sagemaker import image_uris
 from sagemaker.huggingface import HuggingFaceModel, HuggingFacePredictor
 from sagemaker.djl_inference import DJLModel, DJLPredictor
-from dotenv import load_dotenv
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
-from utils.utils import load_config
-
-def parse_CLI_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-p",
-        "--path",
-        type=str,
-        required=True,
-        help="Path within S3 bucket to the zipped weights of the model to deploy",
-    )
-    parser.add_argument(
-        "command", 
-        choices=["up", "down"]
-    )
-    arguments = parser.parse_args()
-    return arguments
+from deploy.config import Config
 
 def get_image_uri(framework, region, instance_type):
-    config = load_config()
-    if framework not in list(config["images"].keys()):
+    config: Config = Config()
+    if framework not in list(config.images.keys()):
         return None
-    image_arguments = config["images"][framework]
+    image_arguments = config.images[framework]
     return image_uris.retrieve(
         framework=framework,
         region=region,
-        version=image_arguments["version"],
-        base_framework_version=image_arguments["pytorch_version"],
-        py_version=image_arguments["py_version"],
+        version=image_arguments.version,
+        base_framework_version=image_arguments.pytorch_version,
+        py_version=image_arguments.py_version,
         instance_type=instance_type,
         image_scope="inference"
     )
@@ -92,32 +75,26 @@ def delete_demo(image, endpoint_name):
     predictor.delete_endpoint()
     return True
 
-if __name__ == "__main__":
-    args = parse_CLI_args()
-    config = load_config()
-    load_dotenv()
+def run_deploy_up(bucket, path, sagemaker_execution_role, image, instance_type):
+    config: Config = Config()
+    return deploy_demo(
+        get_model(
+            "s3://" + bucket + "/" + path + "/model.tar.gz", 
+            sagemaker_execution_role, 
+            get_image_uri(
+                image,
+                config.models["llama"].region,
+                instance_type
+            ),
+            config.models["llama"].region
+        ),
+        instance_type,
+        config.models["llama"].endpoint_name
+    )
 
-    if(args.command == "up"):
-        print(
-            deploy_demo(
-                get_model(
-                    "s3://" + os.getenv("BUCKET") + "/" + args.path + "/model.tar.gz", 
-                    os.getenv("ROLE"), 
-                    get_image_uri(
-                        os.getenv("IMAGE"),
-                        config["llama"]["region"],
-                        os.getenv("INSTANCE_TYPE")
-                    ),
-                    config["llama"]["region"]
-                ),
-                os.getenv("INSTANCE_TYPE"),
-                config["llama"]["endpoint_name"]
-            )
-        )
-    elif(args.command == "down"):
-        print(
-            delete_demo(
-                os.getenv("IMAGE"), 
-                config["llama"]["endpoint_name"]
-            )
-        )
+def run_deploy_down(image):
+    config: Config = Config()
+    return delete_demo(
+        image, 
+        config.models["llama"].endpoint_name
+    )

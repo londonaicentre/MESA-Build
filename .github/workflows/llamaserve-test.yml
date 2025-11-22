@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - infer/local/llamaserve/**
+      - lib/infer/local/llamaserve/**
 
 jobs:
   test:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infer/local/llamaserve
+        working-directory: lib/infer/local/llamaserve
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

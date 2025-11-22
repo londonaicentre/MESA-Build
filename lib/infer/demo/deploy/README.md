@@ -29,7 +29,7 @@
 
 ## Deployment
 
-Following the [deployment of a Llama model](https://github.com/londonaicentre/GenoLlama/tree/main/infer/demo/llamadeploy#deploy-a-llama-model) on SageMaker AI:
+Following the [deployment of a Llama model](https://github.com/londonaicentre/GenoLlama/tree/main/lib/infer/demo/llamadeploy#deploy-a-llama-model) on SageMaker AI:
 
 1. Specify details of the deployment in a new `litellm/config.yml` file, guided by the template [`litellm/config.example.yml`](litellm/config.example.yml) file. 
 
