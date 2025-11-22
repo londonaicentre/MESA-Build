@@ -1,20 +1,18 @@
-import os
-import argparse
+from argparse import ArgumentParser
+from dataclasses import dataclass
 
-from dotenv import load_dotenv
-
+from genollama.settings import Settings
 from genollama_assets.prompts import generate_system_prompt
 from finetune.llama import run_finetune
 
-def parse_CLI_args() -> argparse.Namespace:
-    """Parse command line arguments
-
-    Returns:
-        args : Namespace
-            Namespace of passed command line argument inputs
-    """
-    parser = argparse.ArgumentParser()
-
+@dataclass
+class FinetuneArgs:
+    file: str
+    dry_run: bool
+    
+def parse_CLI_args() -> FinetuneArgs:
+    """Parse command line arguments"""
+    parser: ArgumentParser = ArgumentParser()
     parser.add_argument(
         "-f",
         "--file",
@@ -28,17 +26,16 @@ def parse_CLI_args() -> argparse.Namespace:
         action="store_true",
         help="Whether to simulate calling AWS endpoints",
     )
-    arguments = parser.parse_args()
-    return arguments
+    return FinetuneArgs(**vars(parser.parse_args()))
 
-def main():
-    args = parse_CLI_args()
-    load_dotenv()
+def main() -> None:
+    args: FinetuneArgs = parse_CLI_args()
+    settings: Settings = Settings()
     run_finetune(
         generate_system_prompt("systemprompt_finetune.md"),
         args.file, 
-        os.getenv("BUCKET"), 
-        os.environ["SAGEMAKER_EXECUTION_ROLE"],
-        os.environ["INSTANCE_TYPE"], 
+        settings.BUCKET, 
+        settings.SAGEMAKER_EXECUTION_ROLE,
+        settings.INSTANCE_TYPE, 
         args.dry_run
     )
