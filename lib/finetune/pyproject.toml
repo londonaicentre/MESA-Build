@@ -24,3 +24,8 @@ datagen = [
     "config/*"
 ]
 
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+]
+
