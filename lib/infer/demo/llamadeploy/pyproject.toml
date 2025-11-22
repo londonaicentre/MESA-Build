@@ -24,4 +24,10 @@ londonaicentre-schemallama-utils = { path = "../../../utils", editable = true }
 datagen = [
     "config/*"
 ]
+[dependency-groups]
+dev = [
+    "boto3-stubs>=1.41.2",
+    "mypy>=1.18.2",
+    "transformers>=4.57.1",
+]
 
