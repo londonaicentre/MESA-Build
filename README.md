@@ -12,10 +12,12 @@ Training LLMs for genomic biomarker extraction from NHS genomic laboratory hub r
     
     - Prompt templates.
 
-- `/datagen`: Bootstrapping synthetic data for LLM fine-tuning
+- `/lib/datagen`: Bootstrapping synthetic data for LLM fine-tuning
 
-- `/finetune`: LLM fine-tuning
+- `/lib/finetune`: LLM fine-tuning
 
-- `/infer`: LLM inference
+- `/lib/infer`: LLM inference
 
-- `/utils`: Reusable functions
+- `/lib/utils`: Reusable functions
+
+- `/pipelines`: Individual pipelines for developing text to schema models (e.g. GenoLlama)
