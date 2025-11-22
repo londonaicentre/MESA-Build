@@ -4,9 +4,9 @@ import random
 import time
 
 from botocore.exceptions import ClientError
-from litellm import completion, RateLimitError
+from litellm import completion, RateLimitError, ModelResponse
 
-def upload_file(region_name, file_name, bucket, object_name=None, path=None):
+def upload_file(region_name: str, file_name: str, bucket: str, object_name: str | None = None, path: str | None = None) -> bool:
     if object_name is None:
         object_name = os.path.basename(file_name)
     try:
@@ -20,8 +20,8 @@ def upload_file(region_name, file_name, bucket, object_name=None, path=None):
         return False
     return True
 
-def bedrock_completion(model_name, system_prompt, user_prompt, bedrock_api_key):
-    max_retries = 5
+def bedrock_completion(model_name: str, system_prompt: str, user_prompt: str, bedrock_api_key: str) -> ModelResponse | None:
+    max_retries: int = 5
     for attempt in range(max_retries + 1):
         try:
             return completion(
@@ -33,12 +33,13 @@ def bedrock_completion(model_name, system_prompt, user_prompt, bedrock_api_key):
                     {"content": user_prompt, "role": "user"},
                 ],
                 api_key=bedrock_api_key,
+                stream=False
             )
         except RateLimitError:
             if attempt == max_retries:
                 raise
             # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
-            delay = random.uniform(0, min(60, 2**attempt))
+            delay: float = random.uniform(0, min(60, 2**attempt))
             print(
                 "hit rate limit, waiting "
                 + str(round(delay, 2))
@@ -47,3 +48,4 @@ def bedrock_completion(model_name, system_prompt, user_prompt, bedrock_api_key):
                 + ")"
             )
             time.sleep(delay)
+    return None

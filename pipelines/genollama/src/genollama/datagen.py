@@ -1,22 +1,22 @@
-import argparse
-import os
+from argparse import ArgumentParser
+from dataclasses import dataclass
 
-from dotenv import load_dotenv
-
+from genollama.settings import Settings
 from genollama_assets.prompts import generate_system_prompt, generate_datagen_user_prompt
 from genollama_assets.genollama_assets_types import GenomicTestReport
 from datagen.claude import run_sample_generation, run_backfill, run_batch_inference
 
+@dataclass
+class DatagenArgs:
+    model_name: str
+    sample_size: int
+    template: str
+    batch: bool
+    backfill: bool
 
-def parse_CLI_args() -> argparse.Namespace:
-    """Parse command line arguments
-
-    Returns:
-        args : Namespace
-            Namespace of passed command line argument inputs
-    """
-    parser = argparse.ArgumentParser()
-
+def parse_CLI_args() -> DatagenArgs:
+    """Parse command line arguments"""
+    parser: ArgumentParser = ArgumentParser()
     parser.add_argument(
         "model_name",
         type=str,
@@ -50,16 +50,14 @@ def parse_CLI_args() -> argparse.Namespace:
         default=False,
         help="Generate samples for skipped indices",
     )
-    arguments = parser.parse_args()
-    return arguments
+    return DatagenArgs(**vars(parser.parse_args()))
 
 
-def main():
+def main() -> None:
     # Read the arguments from CLI
-    args = parse_CLI_args()
+    args: DatagenArgs = parse_CLI_args()
     # load api key
-    load_dotenv()
-    BEDROCK_API_KEY = os.getenv("BEDROCK_API_KEY")
+    settings: Settings = Settings()
     system_prompt = generate_system_prompt()
     if args.batch:
         run_batch_inference(
@@ -68,8 +66,8 @@ def main():
             args.model_name,
             args.template,
             args.sample_size,
-            os.getenv("BUCKET"),
-            os.getenv("BEDROCK_EXECUTION_ROLE"),
+            settings.BUCKET,
+            settings.BEDROCK_EXECUTION_ROLE,
         )
     elif args.backfill:
         run_backfill(
@@ -78,7 +76,7 @@ def main():
             args.model_name,
             args.template,
             args.sample_size,
-            os.getenv("BEDROCK_API_KEY"),
+            settings.BEDROCK_API_KEY,
             GenomicTestReport,
         )
     else:
@@ -88,6 +86,6 @@ def main():
             args.model_name,
             args.template,
             args.sample_size,
-            os.getenv("BEDROCK_API_KEY"),
+            settings.BEDROCK_API_KEY,
             GenomicTestReport,
         )

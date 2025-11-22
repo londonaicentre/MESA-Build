@@ -18,7 +18,7 @@ class Config(BaseSettings):
     models: dict[str, ModelConfig]
     images: dict[str, ImageConfig]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             models=json.loads(files("deploy").joinpath("config/models.json").read_text()),
             images=json.loads(files("deploy").joinpath("config/images.json").read_text())

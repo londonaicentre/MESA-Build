@@ -1,13 +1,16 @@
-import argparse
-import os
-
-from dotenv import load_dotenv
+from argparse import ArgumentParser
+from dataclasses import dataclass
 
 from deploy.llama import run_deploy_up, run_deploy_down
+from genollama.settings import Settings
 
-
-def parse_CLI_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
+@dataclass
+class DeployArgs:
+    path: str
+    command: str
+    
+def parse_CLI_args() -> DeployArgs:
+    parser: ArgumentParser = ArgumentParser()
     parser.add_argument(
         "-p",
         "--path",
@@ -19,20 +22,19 @@ def parse_CLI_args() -> argparse.Namespace:
         "command", 
         choices=["up", "down"]
     )
-    arguments = parser.parse_args()
-    return arguments
+    return DeployArgs(**vars(parser.parse_args()))
 
-def main():
-    args = parse_CLI_args()
-    load_dotenv()
+def main() -> None:
+    args: DeployArgs = parse_CLI_args()
+    settings: Settings = Settings()
     
     if(args.command == "up"):
         run_deploy_up(
-            os.getenv("BUCKET"), 
+            settings.BUCKET, 
             args.path, 
-            os.getenv("SAGEMAKER_EXECUTION_ROLE"),
-            os.getenv("IMAGE"), 
-            os.getenv("INSTANCE_TYPE")
+            settings.SAGEMAKER_EXECUTION_ROLE,
+            settings.IMAGE, 
+            settings.INSTANCE_TYPE
         )
     elif(args.command == "down"):
-        run_deploy_down(os.getenv("IMAGE"))
+        run_deploy_down(settings.IMAGE)

@@ -14,7 +14,7 @@ dependencies = [
     "londonaicentre-schemallama-datagen",
     "londonaicentre-schemallama-finetune",
     "londonaicentre-schemallama-deploy",
-    "python-dotenv>=1.2.1",
+    "pydantic-settings>=2.12.0",
 ]
 [project.scripts]
 "bootstrap" = "genollama.bootstrap:main"
@@ -29,3 +29,7 @@ londonaicentre-genollama-assets = { path = "../../assets/genollama", editable = 
 londonaicentre-schemallama-datagen = { path = "../../lib/datagen", editable = true }
 londonaicentre-schemallama-finetune = { path = "../../lib/finetune", editable = true }
 londonaicentre-schemallama-deploy = { path = "../../lib/infer/demo/llamadeploy", editable = true }
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+]
