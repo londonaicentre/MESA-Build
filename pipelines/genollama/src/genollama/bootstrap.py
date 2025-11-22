@@ -2,13 +2,18 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from genollama.settings import Settings
-from genollama_assets.prompts import generate_system_prompt, generate_bootstrap_user_prompt
+from genollama_assets.prompts import (
+    generate_system_prompt,
+    generate_bootstrap_user_prompt,
+)
 from datagen.claude import run_bootstrap_file_generation
+
 
 @dataclass
 class BootstrapArgs:
     model_name: str
     instruction: str
+
 
 def parse_CLI_args() -> BootstrapArgs:
     """Parse command line arguments"""
@@ -28,9 +33,16 @@ def parse_CLI_args() -> BootstrapArgs:
     )
     return BootstrapArgs(**vars(parser.parse_args()))
 
+
 def main() -> None:
     # Read the arguments from CLI
     args: BootstrapArgs = parse_CLI_args()
     # load api key
     settings: Settings = Settings()
-    run_bootstrap_file_generation(generate_system_prompt("systemprompt_bootstrap.md"), generate_bootstrap_user_prompt, args.instruction, args.model_name, settings.BEDROCK_API_KEY)
+    run_bootstrap_file_generation(
+        generate_system_prompt("systemprompt_bootstrap.md"),
+        generate_bootstrap_user_prompt,
+        args.instruction,
+        args.model_name,
+        settings.BEDROCK_API_KEY,
+    )

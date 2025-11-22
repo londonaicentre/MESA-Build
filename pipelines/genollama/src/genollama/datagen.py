@@ -2,9 +2,13 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from genollama.settings import Settings
-from genollama_assets.prompts import generate_system_prompt, generate_datagen_user_prompt
+from genollama_assets.prompts import (
+    generate_system_prompt,
+    generate_datagen_user_prompt,
+)
 from genollama_assets.genollama_assets_types import GenomicTestReport
 from datagen.claude import run_sample_generation, run_backfill, run_batch_inference
+
 
 @dataclass
 class DatagenArgs:
@@ -13,6 +17,7 @@ class DatagenArgs:
     template: str
     batch: bool
     backfill: bool
+
 
 def parse_CLI_args() -> DatagenArgs:
     """Parse command line arguments"""
