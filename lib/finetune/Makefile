@@ -1,2 +1,5 @@
 test:
-	mypy src/ 
+	mypy src/
+
+prettier:
+	ruff check --fix . && ruff format .

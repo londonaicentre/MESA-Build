@@ -1,8 +1,10 @@
 from importlib.resources import files
 from typing import Any
 
+
 def load(folder: str, file: str) -> str:
     return files("genollama_assets").joinpath(f"{folder}/{file}").read_text()
+
 
 def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
     ## CREATE SYSTEM PROMPT
@@ -11,7 +13,7 @@ def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
     # TODO: see if converting raw text into actual Pydantic model object works better
 
     # examples
-    examples_path: str = "examples" 
+    examples_path: str = "examples"
     e1: str = ""
     e2: str = ""
     e3: str = ""
@@ -37,12 +39,13 @@ def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
     )
     return system_prompt
 
+
 def generate_bootstrap_user_prompt(instructions: str) -> str:
     ## CREATE USER PROMPT
-
     user_prompt: str = f"""Please now generate 20 rows according to the above instructions as a CSV file. These rows should {instructions}. While conforming to these instructions, please also ensure that rows are varied, and represent a range of different report types and styles."""
 
     return user_prompt
+
 
 def generate_datagen_user_prompt(row: dict[str, Any]) -> str:
     ## CREATE USER PROMPT

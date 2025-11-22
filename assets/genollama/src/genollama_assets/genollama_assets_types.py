@@ -5,11 +5,13 @@ from pydantic import BaseModel, Field
 
 
 class TestType(str, Enum):
-    DNA = "DNA" # broad-spectrum sequencing approaches (e.g. WGS, WES, targeted panels, Sanger sequencing)
-    FISH = "FISH" # Cytogenetic technique using fluorescent probes to detect specific chromosomal regions
-    KARYOTYPE = "Karyotype" # Classical cytogenetic analysis of chromosome structure and number
-    PCR = "PCR" # Amplification-based methods including qPCR, RT-PCR, digital PCR
-    MLPA = "MLPA"# Copy number detection technique
+    DNA = "DNA"  # broad-spectrum sequencing approaches (e.g. WGS, WES, targeted panels, Sanger sequencing)
+    FISH = "FISH"  # Cytogenetic technique using fluorescent probes to detect specific chromosomal regions
+    KARYOTYPE = (
+        "Karyotype"  # Classical cytogenetic analysis of chromosome structure and number
+    )
+    PCR = "PCR"  # Amplification-based methods including qPCR, RT-PCR, digital PCR
+    MLPA = "MLPA"  # Copy number detection technique
     OTHER = "Other"
 
 
@@ -29,9 +31,9 @@ class ResultEntityType(str, Enum):
 
 
 class ClinicalFindingType(str, Enum):
-    MORBIDITY = "morbidity" # background diagnoses
-    PATIENT_FINDING = "patient_finding" # symptoms, signs, or other observations
-    FAMILY_HISTORY = "family_history" # morbidity or finding in a family member
+    MORBIDITY = "morbidity"  # background diagnoses
+    PATIENT_FINDING = "patient_finding"  # symptoms, signs, or other observations
+    FAMILY_HISTORY = "family_history"  # morbidity or finding in a family member
 
 
 class ClinicalFinding(BaseModel):
@@ -55,10 +57,12 @@ class ClinicalContext(BaseModel):
         default_factory=list, description="Relevant historical patient information"
     )
 
+
 class GeneIdentifier(BaseModel):
     nomenclature_system: str  # "HGNC", "Entrez", "Ensembl", etc.
-    identifier: str           # The actual ID/symbol
-    version: Optional[str]    # If there are version references
+    identifier: str  # The actual ID/symbol
+    version: Optional[str]  # If there are version references
+
 
 class QuantitativeResult(BaseModel):
     result_name: str = Field(
@@ -80,7 +84,10 @@ class CategoricalResult(BaseModel):
 
 
 class BiomarkerTestResult(BaseModel):
-    test_subject: str = Field(..., description="Person whose test is reported, e.g. patient, child, other relative")
+    test_subject: str = Field(
+        ...,
+        description="Person whose test is reported, e.g. patient, child, other relative",
+    )
     test_type: TestType = Field(
         ..., description="The category of genomic test performed"
     )
@@ -139,7 +146,7 @@ class ClinicalOutcome(BaseModel):
 class GenomicTestReport(BaseModel):
     sufficient_data_quality: bool = Field(
         ...,
-        description="This is True if the text is readable, and False if the text appears corrupted. It is not a reflection of content, but is here to flag poor text quality (e.g. OCR artefacts preventing text from being read)."
+        description="This is True if the text is readable, and False if the text appears corrupted. It is not a reflection of content, but is here to flag poor text quality (e.g. OCR artefacts preventing text from being read).",
     )
     is_genomic_report: bool = Field(
         ...,
