@@ -13,4 +13,4 @@ class Config(BaseSettings):
     models: dict[str, ModelConfig]
     
     def __init__(self):
-        super().__init__(models=json.loads(files("claudedatagen").joinpath("config/config.json").read_text()))
+        super().__init__(models=json.loads(files("datagen").joinpath("config/config.json").read_text()))

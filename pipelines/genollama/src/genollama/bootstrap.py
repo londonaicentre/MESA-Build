@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from genollama_assets.prompts import generate_system_prompt, generate_bootstrap_user_prompt
-from claudedatagen.claudedatagen import run_bootstrap_file_generation
+from datagen.claude import run_bootstrap_file_generation
 
 
 def parse_CLI_args() -> argparse.Namespace:

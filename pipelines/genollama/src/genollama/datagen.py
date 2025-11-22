@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from genollama_assets.prompts import generate_system_prompt, generate_datagen_user_prompt
 from genollama_assets.genollama_assets_types import GenomicTestReport
-from claudedatagen.claudedatagen import run_sample_generation, run_backfill, run_batch_inference
+from datagen.claude import run_sample_generation, run_backfill, run_batch_inference
 
 
 def parse_CLI_args() -> argparse.Namespace:

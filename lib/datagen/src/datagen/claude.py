@@ -13,7 +13,7 @@ from botocore.exceptions import ClientError
 from typing import Callable
 
 from aws import upload_file, bedrock_completion
-from claudedatagen.config import Config
+from datagen.config import Config
 
 def extract_json_from_response(response):
     """
