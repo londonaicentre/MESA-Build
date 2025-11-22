@@ -1,30 +1,45 @@
-# Generate synthetic data using Claude 4 Opus/Sonnet on AWS Bedrock
+# SchemaLlama: Datagen
 
-Synthetic data for fine-tuning LLMs is generated using the following components:
+Synthetic data generation for fine-tuning schema standardisation LLMs.
 
-(1) `bootstrap.csv`, where each row is an outline for a synthetic genomics report
+## Getting started
 
-(2) `../assets/src/llm_assets/examples`, containing numerous examples of reports and target output schema (in json) that conforms to the pydantic model.
+### AWS
 
-(3) `../assets/llm_assets_types.py` > `GenomicTestReport`, containing the target schema that should appear as a json, containing the extract for each synthetic report.
+- Obtain a Bedrock API key from an account manager.
 
-## Arrange access to the required model on AWS Bedrock
+- (Batch inference only) Obtain information on a Bedrock Execution IAM Role with S3 and model access.
 
-Obtain an API access key from an account manager and save as the `BEDROCK_API_KEY` env variable.
-Set the AWS region appropriately (in the `claudedatagen.py` script).
-Enable model on the AWS Bedrock interface, ask an account manager if not available already. Then set the appropriate model in the `BEDROCK_MODEL` variable.
+- (Batch inference only) Obtain information on the name of an S3 bucket to upload a batch specification to.
 
-## Generate synthetic data samples
+- Enable [one of the target models](src/claudedatagen/config/config.json) on the AWS Bedrock interface. Ask an account manager if not available already.
 
-Using a venv with the required packages installed (`pip install -r requirements.txt`) and after setting the right env variables, run the `claudedatagen.py` script. 
-All command line arguments are optional, set what you need to change:
+## Usage
 
-- `-m, --model_name`: Name of model to use, eg 'sonnet4' or 'opus4', must have corresponding configuration in the `config.json` file. Defaults to `sonnet4`.
+1. Generate a bootstrap file:
 
-- `-s, --sample_size`: Required number of samples to be generated, defaults to `10`.
+```python
+from datagen.claude import run_bootstrap_file_generation
+run_bootstrap_file_generation(
+    <System prompt>,
+    <User prompt function>, 
+    <Customisation instruction>,
+    <Target model name>, 
+    <Bedrock API key>
+)
+```
 
-- `-b, --bootstrap`: Path to the bootstrap file (must be in the same directory or provide absolute path). Defaults to `bootstrap.csv`.
+2. Generate synthetic data:
 
-- `-f, --backfill`: Whether to generate additional samples and backfill for missed indices from bootstrap file. Defaults to `False`.
-
-For example `python claudedatagen.py sonnet4 15` will generate 15 samples in the model's subfolder under `samples`, while `python claudedatagen.py sonnet4 23 -b True` will generate sample reports for any missed indices and at least 8 additional samples.
+```python
+from datagen.claude import run_sample_generation
+run_sample_generation(
+    <System prompt>,
+    <User prompt function>,
+    <Target model name>,
+    <Bootstrap file>,
+    <Number of samples>,
+    <Bedrock API key>,
+    <Schema>
+)
+```
