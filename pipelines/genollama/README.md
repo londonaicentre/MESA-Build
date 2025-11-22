@@ -17,6 +17,8 @@ Within a `.env` file, specify:
 BEDROCK_API_KEY=
 BEDROCK_EXECUTION_ROLE=
 BUCKET=
+SAGEMAKER_EXECUTION_ROLE=
+INSTANCE_TYPE=
 ```
 
 ### Assets
@@ -25,7 +27,7 @@ BUCKET=
 
 - `genollama_assets/examples`, containing numerous examples of reports and target output schema (in json) that conforms to the schema.
 
-- `genollama_assets/prompts.py`
+- `genollama_assets/prompts.py`, containing the system and user prompts required to generate samples and fine-tune.
 
 ### Installation
 
@@ -59,3 +61,10 @@ uv sync
 
 For example `datagen sonnet4 15` will generate 15 samples in the model's subfolder under `samples`, while `datagen sonnet4 23 -f True` will generate sample reports for any missed indices and at least 8 additional samples.
 
+### Start a fine-tuning run
+
+1. Run `finetune` with the following arguments:
+
+    - `-f, --file`: Name of the AWS Bedrock Anthropic batch inference output file containing sample data to use as input. Defaults to `anthropic_batch_job.jsonl.out`.
+
+    - `-d, --dry_run`: Whether to simulate calling AWS endpoints. Defaults to `False`.

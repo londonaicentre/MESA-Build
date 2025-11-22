@@ -12,14 +12,17 @@ license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "londonaicentre-genollama-assets",
     "londonaicentre-schemallama-datagen",
+    "londonaicentre-schemallama-finetune",
     "python-dotenv>=1.2.1",
 ]
 [project.scripts]
 "bootstrap" = "genollama.bootstrap:main"
 "datagen" = "genollama.datagen:main"
+"finetune" = "genollama.finetune:main"
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-genollama-assets = { path = "../../assets/genollama", editable = true }
 londonaicentre-schemallama-datagen = { path = "../../lib/datagen", editable = true }
+londonaicentre-schemallama-finetune = { path = "../../lib/finetune", editable = true }
