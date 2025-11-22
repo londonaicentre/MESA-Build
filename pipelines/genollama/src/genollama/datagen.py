@@ -54,7 +54,7 @@ def parse_CLI_args() -> argparse.Namespace:
     return arguments
 
 
-if __name__ == "__main__":
+def main():
     # Read the arguments from CLI
     args = parse_CLI_args()
     # load api key

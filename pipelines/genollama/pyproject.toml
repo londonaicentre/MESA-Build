@@ -14,6 +14,9 @@ dependencies = [
     "londonaicentre-schemallama-datagen",
     "python-dotenv>=1.2.1",
 ]
+[project.scripts]
+"bootstrap" = "genollama.bootstrap:main"
+"datagen" = "genollama.datagen:main"
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
