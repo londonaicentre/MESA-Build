@@ -16,6 +16,6 @@ provider "aws" {
 # S3
 ############################
 
-resource "aws_s3_bucket" "genollama_bucket" {
-  bucket = "aicentrelondon-nlpteam-genollama"
+resource "aws_s3_bucket" "schemallama_bucket" {
+  bucket = "aicentrelondon-nlpteam-schemallama"
 }
