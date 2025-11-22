@@ -10,6 +10,8 @@ version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
+    "londonaicentre-genollama-assets",
+    "londonaicentre-schemallama-datagen",
     "python-dotenv>=1.2.1",
 ]
 [build-system]
@@ -18,8 +20,3 @@ build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-genollama-assets = { path = "../../assets/genollama", editable = true }
 londonaicentre-schemallama-datagen = { path = "../../lib/datagen", editable = true }
-[dependency-groups]
-dev = [
-    "londonaicentre-genollama-assets",
-    "londonaicentre-schemallama-datagen",
-]

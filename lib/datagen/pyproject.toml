@@ -14,16 +14,13 @@ dependencies = [
     "litellm>=1.80.0",
     "pandas>=2.3.3",
     "pydantic-settings>=2.12.0",
+    "londonaicentre-schemallama-utils",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-schemallama-utils = { path = "../utils", editable = true }
-[dependency-groups]
-dev = [
-    "londonaicentre-schemallama-utils"
-]
 [tool.setuptools.package-data]
 datagen = [
     "config/*"
