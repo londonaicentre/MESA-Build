@@ -2,6 +2,8 @@
     "llama": {
         "model": "meta-textgeneration-llama-3-2-3b-instruct",
         "version": "*",
-        "region": "eu-west-2"
+        "region": "eu-west-2",
+        "template_filename": "template.json",
+        "train_filename": "train.json"
     }
 }
