@@ -21,7 +21,14 @@
 
 ## Deployment
 
-1. Add required variables to (a new file) `terraform.tfvars`, guided by the variables listed in [`variables.tf`](variables.tf).
+1. Call this module:
+
+    ```terraform
+    module "infer_local_deploy" {
+        source = "../../../lib/infer/local/deploy"
+        bucket = <weights bucket name>
+    }
+    ```
 
 2. Connect to AWS, e.g. by setting up [`granted`](https://docs.commonfate.io/granted/getting-started) and activating a profile.
 

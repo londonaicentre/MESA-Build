@@ -71,7 +71,7 @@ def main() -> None:
             args.model_name,
             args.template,
             args.sample_size,
-            settings.BUCKET,
+            settings.US_BUCKET,
             settings.BEDROCK_EXECUTION_ROLE,
         )
     elif args.backfill:
