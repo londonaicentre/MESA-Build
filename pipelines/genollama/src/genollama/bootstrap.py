@@ -6,7 +6,7 @@ from genollama_assets.prompts import (
     generate_system_prompt,
     generate_bootstrap_user_prompt,
 )
-from datagen.claude import run_bootstrap_file_generation
+from datagen.claude import BootstrapFileGenerator
 
 
 @dataclass
@@ -35,11 +35,9 @@ def parse_CLI_args() -> BootstrapArgs:
 
 
 def main() -> None:
-    # Read the arguments from CLI
     args: BootstrapArgs = parse_CLI_args()
-    # load api key
     settings: Settings = Settings()
-    run_bootstrap_file_generation(
+    BootstrapFileGenerator.run_bootstrap_file_generation(
         generate_system_prompt("systemprompt_bootstrap.md"),
         generate_bootstrap_user_prompt,
         args.instruction,

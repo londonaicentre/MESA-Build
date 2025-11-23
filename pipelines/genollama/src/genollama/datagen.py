@@ -7,7 +7,7 @@ from genollama_assets.prompts import (
     generate_datagen_user_prompt,
 )
 from genollama_assets.genollama_assets_types import GenomicTestReport
-from datagen.claude import run_sample_generation, run_backfill, run_batch_inference
+from datagen.claude import SampleGenerator
 
 
 @dataclass
@@ -59,38 +59,28 @@ def parse_CLI_args() -> DatagenArgs:
 
 
 def main() -> None:
-    # Read the arguments from CLI
     args: DatagenArgs = parse_CLI_args()
-    # load api key
     settings: Settings = Settings()
-    system_prompt = generate_system_prompt()
+    system_prompt: str = generate_system_prompt()
+    sample_generator: SampleGenerator = SampleGenerator(
+        system_prompt,
+        generate_datagen_user_prompt,
+        GenomicTestReport,
+        args.model_name,
+        args.template,
+        settings.BEDROCK_API_KEY,
+    )
     if args.batch:
-        run_batch_inference(
-            system_prompt,
-            generate_datagen_user_prompt,
-            args.model_name,
-            args.template,
+        sample_generator.run_batch_inference(
             args.sample_size,
             settings.US_BUCKET,
             settings.BEDROCK_EXECUTION_ROLE,
         )
     elif args.backfill:
-        run_backfill(
-            system_prompt,
-            generate_datagen_user_prompt,
-            args.model_name,
-            args.template,
+        sample_generator.run_backfill(
             args.sample_size,
-            settings.BEDROCK_API_KEY,
-            GenomicTestReport,
         )
     else:
-        run_sample_generation(
-            system_prompt,
-            generate_datagen_user_prompt,
-            args.model_name,
-            args.template,
+        sample_generator.run_sample_generation(
             args.sample_size,
-            settings.BEDROCK_API_KEY,
-            GenomicTestReport,
         )
