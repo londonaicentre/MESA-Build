@@ -11,4 +11,3 @@ __pycache__/
 .venv/
 .env
 template.json
-*.jsonl*

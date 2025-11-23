@@ -14,6 +14,21 @@ def upload_file(
     object_name: str | None = None,
     path: str | None = None,
 ) -> bool:
+    """Upload a file to S3
+
+    Args:
+        region_name (str): The region in which the bucket exists
+        file_name (str): The name of the local file to upload
+        bucket (str): The name of the target bucket
+        object_name (str, optional): the name of the uploaded object.
+            If absent, file_name is used.
+        path (str, optional): the path to the uploaded object. If absent,
+            file_name is used.
+
+    Returns:
+        bool: Whether the upload was successful
+
+    """
     if object_name is None:
         object_name = os.path.basename(file_name)
     try:
@@ -29,6 +44,18 @@ def upload_file(
 def bedrock_completion(
     model_name: str, system_prompt: str, user_prompt: str, bedrock_api_key: str
 ) -> ModelResponse | None:
+    """Use a Bedrock LLM for inference. Uses backoff and jitter on rate limit.
+
+    Args:
+        model_name (str): The name of the LLM
+        system_prompt (str): The system prompt to use
+        user_prompt (str): The user prompt to use
+        bedrock_api_key (str): API key to access AWS Bedrock
+
+    Returns:
+        ModelResponse: The model's prediction (LiteLLM wrapper object)
+
+    """
     max_retries: int = 5
     for attempt in range(max_retries + 1):
         try:

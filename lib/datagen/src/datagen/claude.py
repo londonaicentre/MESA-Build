@@ -21,8 +21,14 @@ litellm.suppress_debug_info = (
 
 
 def extract_json_from_response(response: str) -> dict[str, Any] | None:
-    """
-    Extract JSON from Claude's response
+    """Extract JSON from Claude's response
+
+    Args:
+        response (str): Claude's response
+
+    Returns:
+        JSON if parse successful, None otherwise
+
     """
     # try parse response as JSON
     try:
@@ -53,8 +59,15 @@ def extract_json_from_response(response: str) -> dict[str, Any] | None:
 def validate_with_pydantic(
     schema: type[BaseModel], output_data: dict[str, Any]
 ) -> tuple[bool, BaseModel | None]:
-    """
-    Validate the output against the Pydantic schema
+    """Validate the output against the Pydantic schema
+
+    Args:
+        schema (type[BaseModel]): Schema class to use for validation
+        output_data (dict): JSON data to validate
+
+    Returns:
+        True, Parsed JSON if validation successful, False, None otherwise.
+
     """
     try:
         validated_report: BaseModel = schema(**output_data)
@@ -74,20 +87,25 @@ def process_bootstrap_rows(
     schema: type[BaseModel],
     sample_size: int = 10,
 ) -> None:
-    """
-    Process rows from the specified bootstrap file and generate the requested number of samples.
+    """Process rows from the specified bootstrap file and
+        generate the requested number of samples
 
     Args:
-        system_prompt (str): _description_
-        model_name (str): Name of model to use on AWS Bedrock.
-        bootstrap_file (str): Path to file with sample configuration.
-        output_dir (str): Path to output folder.
-        sample_size (int): Number of samples to generate.
-        examples_dir (str): Path to example files.
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        model_name (str): Name of model to use on AWS Bedrock
+        bootstrap_file (str): Path to file with sample configuration
+        output_dir (str): Path to output folder
+        bedrock_api_key (str): API key to access AWS Bedrock
+        schema (type[BaseModel]): Schema class to use for validation
+        sample_size (int, optional): Number of samples to generate.
+            Defaults to 10.
+
     """
     df: pd.DataFrame = pd.read_csv(bootstrap_file)
 
-    ## PROCESS ROWS
+    # Process rows
     os.makedirs(output_dir, exist_ok=True)
     samples_exist: int = len(os.listdir(output_dir))
     successful_generations: int = 0
@@ -110,7 +128,7 @@ def process_bootstrap_rows(
         # Skip rows for which samples have been generated
         if id < samples_exist:
             continue
-        
+
         # Stop generating samples when requested amount is reached
         if id == sample_size:
             print(f"Generated the requested number of samples, {sample_size}.")
@@ -133,14 +151,16 @@ def process_bootstrap_rows(
 
 
 def find_missing_idx(folder_name: str, sample_size: int) -> list[int]:
-    """For a given folder and expected number of samples, identifies indices for which no sample was generated.
+    """For a given folder and expected number of samples,
+        identifies indices for which no sample was generated
 
     Args:
-        folder_name (str): Path to the output folder.
-        sample_size (int): Expected number of samples.
+        folder_name (str): Path to the output folder
+        sample_size (int): Expected number of samples
 
     Returns:
-        list[int]: List of indices without a sample generated.
+        list[int]: List of indices without a sample generated
+
     """
     all_files: list[str] = os.listdir(folder_name)
     filenames: list[str] = [file.strip(".json").strip("sample") for file in all_files]
@@ -162,15 +182,19 @@ def backfill(
     bedrock_api_key: str,
     schema: type[BaseModel],
 ) -> None:
-    """Generate samples for the missing indices.
+    """Generate samples for the missing indices
 
     Args:
-        system_prompt (str): _description_
-        model_name (str): Name of model to use on AWS Bedrock.
-        bootstrap_file (str): Path to bootstrap file.
-        idx_list (list[int]): List of indices for a sample to be generated.
-    """
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        model_name (str): Name of model to use on AWS Bedrock
+        bootstrap_file (str): Path to bootstrap file
+        idx_list (list[int]): List of indices for a sample to be generated
+        bedrock_api_key (str): API key to access AWS Bedrock
+        schema (type[BaseModel]): Schema class to use for validation
 
+    """
     df: pd.DataFrame = pd.read_csv(bootstrap_file)
     successful_generations: int = 0
     failed_generations: int = 0
@@ -205,10 +229,18 @@ def generate_sample(
     """Generate synthetic patient reports.
 
     Args:
-        system_prompt (str): _description_
-        model_name (str): Name of model to use on AWS Bedrock.
-        df (pandas.DataFrame): template for sample report generation.
-        idx (int): Index for row to be processed from template.
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        model_name (str): Name of model to use on AWS Bedrock
+        df (pandas.DataFrame): template for sample report generation
+        idx (int): Index for row to be processed from template
+        bedrock_api_key (str): API key to access AWS Bedrock
+        schema (type[BaseModel]): Schema class to use for validation
+
+    Returns:
+        bool: Whether sample generation is successful
+
     """
     row: pd.Series = df.iloc[idx]
     try:
@@ -237,7 +269,6 @@ def generate_sample(
                 schema, json_output["output"]
             )
             if is_valid and validated_output is not None:
-
                 # Convert Pydantic model to dict for JSON serialization
                 json_output["output"] = validated_output.model_dump()
                 output_filename: str = os.path.join(
@@ -280,12 +311,18 @@ def generate_batch(
     bootstrap_file: str,
     sample_size: int,
 ) -> str:
-    """Generate batch request file for Anthropic model.
+    """Generate batch request file for Anthropic model
 
     Args:
-        system_prompt (str): _description_
-        bootstrap_file (str): Path to bootstrap file.
-        sample_size (int): Number of samples to be generated.
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        bootstrap_file (str): Path to bootstrap file
+        sample_size (int): Number of samples to be generated
+
+    Returns:
+        str: The batch request file
+
     """
     fn: str = "anthropic_batch_job.jsonl"
     df: pd.DataFrame = pd.read_csv(bootstrap_file)
@@ -298,7 +335,6 @@ def generate_batch(
         sample_size = max_samples
     with open(fn, "w") as outfile:
         for idx, row in df.iterrows():
-
             # Stop generating samples when requested amount is reached
             if idx == sample_size:
                 print(f"Generated the requested number of samples, {sample_size}.")
@@ -335,6 +371,23 @@ def start_batch_inference(
     bucket: str,
     batch_file: str,
 ) -> bool:
+    """Start AWS Bedrock batch inference
+
+    Args:
+        region_name (str): The region in which to run the batch
+        job_id (str): The id to give to the batch job
+        model_id (str): The id of the model to target for the job
+        role_arn (str): The ARN of an IAM role with permissions to
+            access S3 for batch specification and access
+            cross-region models
+        bucket (str): The name of the bucket in which the batch
+            specification exists
+        batch_file (str): The name of the batch specification file
+
+    Returns:
+        bool: Whether the batch inference run started successfully
+
+    """
     try:
         boto3.client("bedrock", region_name=region_name).create_model_invocation_job(
             jobName="schemallama-" + job_id.replace("/", "-"),
@@ -366,13 +419,29 @@ def run_batch_inference(
     bucket: str,
     bedrock_execution_role: str,
 ) -> None:
+    """Generate samples via batch inference
+
+    Args:
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        model_name (str): Name of model to use on AWS Bedrock
+        template (str): Path to bootstrap (template) file
+        sample_size (int): Number of samples to be generated
+        bucket (str): The name of the bucket in which the batch
+            specification exists
+        bedrock_execution_role (str): The ARN of an IAM role with
+            permissions to access S3 for batch specification and
+            access cross-region models
+
+    """
     config: Config = Config()
 
     # Process all samples from bootstrap file in batch mode
     # Create batch instruction JSONL file
     generate_batch(system_prompt, user_prompt_function, template, sample_size)
     job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-    
+
     # Upload to S3 bucket
     upload_file(
         config.models[model_name].region,
@@ -381,7 +450,7 @@ def run_batch_inference(
         config.models[model_name].batch_file,
         job_id + "/input",
     )
-    
+
     # Generate samples in batch mode
     start_batch_inference(
         config.models[model_name].region,
@@ -402,6 +471,19 @@ def run_backfill(
     bedrock_api_key: str,
     schema: type[BaseModel],
 ) -> None:
+    """Backfill missing samples
+
+    Args:
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        model_name (str): Name of model to use on AWS Bedrock
+        template (str): Path to bootstrap (template) file
+        sample_size (int): Number of samples to be generated
+        bedrock_api_key (str): API key to access AWS Bedrock
+        schema (type[BaseModel]): Schema class to use for validation
+
+    """
     config: Config = Config()
     os.environ["AWS_REGION_NAME"] = config.models[model_name].region
     folder_name: str = f"samples_{model_name}/"
@@ -429,10 +511,23 @@ def run_sample_generation(
     bedrock_api_key: str,
     schema: type[BaseModel],
 ) -> None:
+    """Generate samples via individual AWS Bedrock inference calls
+
+    Args:
+        system_prompt (str): System prompt for sample generation
+        user_prompt_function (Callable): User prompt generation
+            function to which bootstrap data is passed
+        model_name (str): Name of model to use on AWS Bedrock
+        template (str): Path to bootstrap (template) file
+        sample_size (int): Number of samples to be generated
+        bedrock_api_key (str): API key to access AWS Bedrock
+        schema (type[BaseModel]): Schema class to use for validation
+
+    """
     config: Config = Config()
     os.environ["AWS_REGION_NAME"] = config.models[model_name].region
     folder_name = f"samples_{model_name}/"
-    
+
     # Generate samples from bootstrap file
     process_bootstrap_rows(
         system_prompt,
@@ -453,6 +548,18 @@ def run_bootstrap_file_generation(
     model_name: str,
     bedrock_api_key: str,
 ) -> None:
+    """Generate bootstrap file to vary samples
+
+    Args:
+        system_prompt (str): System prompt for bootstrap file generation
+        user_prompt_function (Callable): User prompt generation
+            function to which instruction is passed
+        instruction (str): Instruction to tailor bootstrap file to
+            specific area
+        model_name (str): Name of model to use on AWS Bedrock
+        bedrock_api_key (str): API key to access AWS Bedrock
+
+    """
     config: Config = Config()
     os.environ["AWS_REGION_NAME"] = config.models[model_name].region
     message: ModelResponse | None = bedrock_completion(

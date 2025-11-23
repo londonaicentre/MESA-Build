@@ -42,7 +42,8 @@ terraform.rc
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform,ansible
 
+.env
+litellm/config.yml
+
 # for prettier:
 .venv/
-
-litellm/config.yml
