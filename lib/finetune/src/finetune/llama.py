@@ -9,6 +9,13 @@ from utils.aws import upload_file
 
 
 def generate_template_file(system_prompt: str) -> None:
+    """Generate template file into which part of the training
+        data are embedded.
+
+    Args:
+        system_prompt (str): Prompt for the head of this file
+
+    """
     with open("template.json", "w") as outfile:
         print(
             json.dumps(
@@ -23,6 +30,12 @@ def generate_template_file(system_prompt: str) -> None:
 
 
 def generate_train_file(samples_input_file: str) -> None:
+    """Generate a training file formatted from sample data
+
+    Args:
+        samples_input_file (str): path to sample data file
+
+    """
     with open("train.jsonl", "w") as outfile:
         with open(samples_input_file, "r") as infile:
             for line in infile:
@@ -61,6 +74,24 @@ def run_estimator(
     instruction_tuned: bool = True,
     quantized: bool = True,
 ) -> None:
+    """Start fine-tuning process
+
+    Args:
+        model_id (str): The id of the model to fine-tune
+        model_version (str): The version of the model to fine-tune
+        role (str): The ARN of an IAM role with permissions to
+            access SageMaker
+        input_path (str): Path in S3 to the training data
+        output_path (str): Path in S3 to place fine-tuned
+            model weights
+        instance_type (str): AWS instance type to use for fine-tuning
+        region (str): Region in which to do the fine-tuning
+        instruction_tuned (bool, optional): Whether to instruction-train
+            the model (indicated by `template.json`). Defaults to True.
+        quantized (bool, optional): Whether to load the base model in
+            lower precision. Defaults to True.
+
+    """
     estimator: JumpStartEstimator = JumpStartEstimator(
         model_id=model_id,
         model_version=model_version,
@@ -88,6 +119,21 @@ def run_finetune(
     instance_type: str,
     dry_run: bool = False,
 ) -> None:
+    """Start fine-tuning pipeline
+
+    Args:
+        system_prompt (str): Prompt for fine-tuning template
+        sample_data_file (str): File containing sample data to
+            use in fine-tuning process
+        bucket (str): S3 bucket where fine-tuning input files
+            and fine-tuned weights are/will be stored
+        sagemaker_execution_role (str): The ARN of an IAM role
+            with permissions to access SageMaker
+        instance_type (str): AWS instance type to use for fine-tuning
+        dry_run (bool, optional): Whether to run all processes
+            except calls to AWS. Default to False.
+
+    """
     config: Config = Config()
     job_id: str = "finetune/" + datetime.now().strftime("%Y-%m-%d-%H%M")
     generate_template_file(system_prompt)
