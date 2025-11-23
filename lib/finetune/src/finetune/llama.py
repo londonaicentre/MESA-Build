@@ -5,7 +5,7 @@ from typing import Any
 from sagemaker.jumpstart.estimator import JumpStartEstimator
 
 from finetune.config import Config
-from utils.aws import upload_file
+from utils.aws import AWS
 
 
 class FineTuner:
@@ -146,7 +146,7 @@ class FineTuner:
         self.__generate_template_file(system_prompt)
         upload_path: str = job_id + "/input"
         if not dry_run:
-            upload_file(
+            AWS.upload_file(
                 self.__model_region,
                 self.__model_template_filename,
                 bucket,
@@ -155,7 +155,7 @@ class FineTuner:
             )
         self.__generate_train_file(sample_data_file)
         if not dry_run:
-            upload_file(
+            AWS.upload_file(
                 self.__model_region,
                 self.__model_train_filename,
                 bucket,

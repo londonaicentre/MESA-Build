@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from litellm import Choices, ModelResponse
 
 from datagen.config import Config
-from utils.aws import upload_file, bedrock_completion
+from utils.aws import AWS
 
 litellm.suppress_debug_info = (
     True  # suppress unhelpful library output on rate limit error
@@ -222,7 +222,7 @@ class SampleGenerator:
             user_prompt: str = self.__user_prompt_function(row.to_dict())
             if self.__bedrock_api_key is None:
                 return False
-            message: ModelResponse | None = bedrock_completion(
+            message: ModelResponse | None = AWS.bedrock_completion(
                 self.__model_id,
                 self.__system_prompt,
                 user_prompt,
@@ -409,7 +409,7 @@ class SampleGenerator:
         job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
 
         # Upload to S3 bucket
-        upload_file(
+        AWS.upload_file(
             self.__model_region,
             self.__model_batch_file,
             bucket,
@@ -473,7 +473,7 @@ class BootstrapFileGenerator:
 
         """
         config: Config = Config()
-        message: ModelResponse | None = bedrock_completion(
+        message: ModelResponse | None = AWS.bedrock_completion(
             config.models[model_name].model,
             system_prompt,
             user_prompt_function(instruction),
