@@ -15,6 +15,7 @@ class ModelConfig(BaseModel):
     endpoint_name: str
     hf_model_name: str
     region: str
+    max_length: int
 
 
 class Config(BaseSettings):

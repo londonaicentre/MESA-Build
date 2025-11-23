@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from dataclasses import dataclass
 
-from deploy.llama import run_deploy_up, run_deploy_down
+from deploy.llama import Deployer
 from genollama.settings import Settings
 
 
@@ -27,14 +27,13 @@ def parse_CLI_args() -> DeployArgs:
 def main() -> None:
     args: DeployArgs = parse_CLI_args()
     settings: Settings = Settings()
+    deployer: Deployer = Deployer(settings.IMAGE, settings.INSTANCE_TYPE)
 
     if args.command == "up":
-        run_deploy_up(
+        deployer.run_deploy_up(
             settings.BUCKET,
             args.path,
             settings.SAGEMAKER_EXECUTION_ROLE,
-            settings.IMAGE,
-            settings.INSTANCE_TYPE,
         )
     elif args.command == "down":
-        run_deploy_down(settings.IMAGE)
+        deployer.run_deploy_down()
