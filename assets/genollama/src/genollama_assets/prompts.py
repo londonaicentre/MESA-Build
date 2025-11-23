@@ -3,14 +3,33 @@ from typing import Any
 
 
 def load(folder: str, file: str) -> str:
+    """Load a file from within the package
+
+    Args:
+        folder (str): Folder containing the file
+        file (str): Name of the file
+
+    Returns:
+        str: File contents
+
+    """
     return files("genollama_assets").joinpath(f"{folder}/{file}").read_text()
 
 
 def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
-    ## CREATE SYSTEM PROMPT
+    """Create a system prompt
+
+    Args:
+        file (str, optional): The template file to use for the system prompt.
+            Defaults to the datagen system prompt.
+
+    Returns:
+        str: The system prompt
+
+    """
+
     # schema
     schema_content: str = load(".", "genollama_assets_types.py")
-    # TODO: see if converting raw text into actual Pydantic model object works better
 
     # examples
     examples_path: str = "examples"
@@ -41,14 +60,29 @@ def generate_system_prompt(file: str = "systemprompt_datagen.md") -> str:
 
 
 def generate_bootstrap_user_prompt(instructions: str) -> str:
-    ## CREATE USER PROMPT
-    user_prompt: str = f"""Please now generate 20 rows according to the above instructions as a CSV file. These rows should {instructions}. While conforming to these instructions, please also ensure that rows are varied, and represent a range of different report types and styles."""
+    """Create a user prompt for bootstrap file generation
 
+    Args:
+        instructions (str): Instruction to tailor the bootstrap file output
+
+    Returns:
+        str: The user prompt
+
+    """
+    user_prompt: str = f"""Please now generate 20 rows according to the above instructions as a CSV file. These rows should {instructions}. While conforming to these instructions, please also ensure that rows are varied, and represent a range of different report types and styles."""
     return user_prompt
 
 
 def generate_datagen_user_prompt(row: dict[str, Any]) -> str:
-    ## CREATE USER PROMPT
+    """Create a user prompt for sample file generation
+
+    Args:
+        row (dict): The bootstrap file row from which to generate data to tailor the sample
+
+    Returns:
+        str: The user prompt
+
+    """
     user_prompt: str = f"""Please generate a genomic laboratory report based on the following test scenario:
 
         Test Type: {row["test_type"]}
@@ -65,5 +99,4 @@ def generate_datagen_user_prompt(row: dict[str, Any]) -> str:
 
         Generate a realistic genomic laboratory report incorporating all these details.
         Then extract the information into the structured schema format."""
-
     return user_prompt
