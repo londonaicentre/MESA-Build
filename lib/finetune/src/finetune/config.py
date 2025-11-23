@@ -9,6 +9,8 @@ class ModelConfig(BaseModel):
     model: str
     version: str
     region: str
+    template_filename: str
+    train_filename: str
 
 
 class Config(BaseSettings):

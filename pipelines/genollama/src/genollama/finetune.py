@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from genollama.settings import Settings
 from genollama_assets.prompts import generate_system_prompt
-from finetune.llama import run_finetune
+from finetune.llama import FineTuner
 
 
 @dataclass
@@ -34,11 +34,11 @@ def parse_CLI_args() -> FinetuneArgs:
 def main() -> None:
     args: FinetuneArgs = parse_CLI_args()
     settings: Settings = Settings()
-    run_finetune(
+    fine_tuner: FineTuner = FineTuner(settings.INSTANCE_TYPE)
+    fine_tuner.run_finetune(
         generate_system_prompt("systemprompt_finetune.md"),
         args.file,
         settings.BUCKET,
         settings.SAGEMAKER_EXECUTION_ROLE,
-        settings.INSTANCE_TYPE,
         args.dry_run,
     )

@@ -2,6 +2,7 @@
     "llama": {
         "region": "eu-west-2",
         "endpoint_name": "schemallama",
-        "hf_model_name": "meta-llama/Llama-3.2-3B-Instruct"
+        "hf_model_name": "meta-llama/Llama-3.2-3B-Instruct",
+        "max_length": 117128
     }
 }
