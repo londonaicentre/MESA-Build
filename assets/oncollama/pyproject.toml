@@ -1,0 +1,31 @@
+[project]
+name = "londonaicentre-oncollama-assets" 
+description = "OncoLlama assets"
+authors = [
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
+    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
+]
+version = "1.0.0"
+requires-python = ">=3.12"
+license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "pyyaml>=6.0.3",
+]
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.package-data]
+oncollama_assets = [
+    "profiles/*",
+    "prompts/*",
+    "structure/*",
+    "*.yml",
+    "py.typed"
+]
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "ruff>=0.14.6",
+    "types-pyyaml>=6.0.12.20250915",
+]
