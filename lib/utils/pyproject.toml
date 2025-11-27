@@ -20,6 +20,7 @@ build-backend = "setuptools.build_meta"
 package-data = {"utils" = ["py.typed"]}
 [dependency-groups]
 dev = [
+    "boto3-stubs>=1.41.4",
     "mypy>=1.18.2",
     "ruff>=0.14.6",
 ]

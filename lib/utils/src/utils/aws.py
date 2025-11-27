@@ -1,6 +1,7 @@
 import os
 import random
 import time
+from typing import Any
 
 import boto3
 from botocore.exceptions import ClientError
@@ -44,7 +45,13 @@ class AWS:
 
     @staticmethod
     def bedrock_completion(
-        model_name: str, system_prompt: str, user_prompt: str, bedrock_api_key: str
+        model_name: str,
+        system_prompt: str | None,
+        user_prompt: str,
+        bedrock_api_key: str,
+        max_tokens: int = 8192,
+        temperature: float = 0.001,
+        **kwargs: Any,
     ) -> ModelResponse | None:
         """Use a Bedrock LLM for inference. Uses backoff and jitter on rate limit.
 
@@ -53,24 +60,29 @@ class AWS:
             system_prompt (str): The system prompt to use
             user_prompt (str): The user prompt to use
             bedrock_api_key (str): API key to access AWS Bedrock
+            max_tokens (int): Maximum output tokens. Defaults to 8192.
+            temperature (float): Model randomness. Defaults to 0.001.
 
         Returns:
             ModelResponse: The model's prediction (LiteLLM wrapper object)
 
         """
+        messages: list[dict[str, str]] = []
+        if system_prompt is not None:
+            messages.append({"content": system_prompt, "role": "system"})
+        messages.append({"content": user_prompt, "role": "user"})
         max_retries: int = 5
         for attempt in range(max_retries + 1):
             try:
                 return completion(
                     model=model_name,
-                    max_tokens=8192,
-                    temperature=0.001,
-                    messages=[
-                        {"content": system_prompt, "role": "system"},
-                        {"content": user_prompt, "role": "user"},
-                    ],
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    messages=messages,
                     api_key=bedrock_api_key,
+                    aws_region_name="us-east-1",
                     stream=False,
+                    **kwargs,
                 )
             except RateLimitError:
                 if attempt == max_retries:
