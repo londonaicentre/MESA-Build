@@ -10,11 +10,14 @@ version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
+    "londonaicentre-schemallama-types",
     "pyyaml>=6.0.3",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
+[tool.uv.sources]
+londonaicentre-schemallama-types = { path = "../../lib/types", editable = true }
 [tool.setuptools.package-data]
 oncollama_assets = [
     "profiles/*",

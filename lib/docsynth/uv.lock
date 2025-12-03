@@ -739,29 +739,11 @@ wheels = [
 ]
 
 [[package]]
-name = "londonaicentre-oncollama-assets"
-version = "1.0.0"
-source = { editable = "../../assets/oncollama" }
-dependencies = [
-    { name = "pyyaml" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "pyyaml", specifier = ">=6.0.3" }]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.18.2" },
-    { name = "ruff", specifier = ">=0.14.6" },
-    { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
-]
-
-[[package]]
 name = "londonaicentre-schemallama-docsynth"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "londonaicentre-oncollama-assets" },
+    { name = "londonaicentre-schemallama-types" },
     { name = "londonaicentre-schemallama-utils" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
@@ -776,7 +758,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "londonaicentre-oncollama-assets", editable = "../../assets/oncollama" },
+    { name = "londonaicentre-schemallama-types", editable = "../types" },
     { name = "londonaicentre-schemallama-utils", editable = "../utils" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "pyyaml", specifier = ">=6.0.3" },
@@ -787,6 +769,19 @@ dev = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
+]
+
+[[package]]
+name = "londonaicentre-schemallama-types"
+version = "1.0.0"
+source = { editable = "../types" }
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.18.2" },
+    { name = "ruff", specifier = ">=0.14.6" },
 ]
 
 [[package]]

@@ -1,6 +1,6 @@
 import random
 
-from oncollama_assets import OncoLlamaAssets
+from schemallama_types.assets import SchemaLlamaAssets
 
 """
 load_sampling.py - probabilistic sampling from config files into prompt
@@ -8,7 +8,7 @@ load_sampling.py - probabilistic sampling from config files into prompt
 
 
 class ConfigSampler:
-    def __init__(self, assets: OncoLlamaAssets):
+    def __init__(self, assets: SchemaLlamaAssets):
         self.style_data = assets.load_style_data()
         self.content_data = assets.load_content_data()
 

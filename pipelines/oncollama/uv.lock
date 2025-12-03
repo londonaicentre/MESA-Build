@@ -665,6 +665,7 @@ name = "londonaicentre-oncollama"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "londonaicentre-oncollama-assets" },
     { name = "londonaicentre-schemallama-docsynth" },
 ]
 
@@ -675,7 +676,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "londonaicentre-schemallama-docsynth", editable = "../../lib/docsynth" }]
+requires-dist = [
+    { name = "londonaicentre-oncollama-assets", editable = "../../assets/oncollama" },
+    { name = "londonaicentre-schemallama-docsynth", editable = "../../lib/docsynth" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -688,11 +692,15 @@ name = "londonaicentre-oncollama-assets"
 version = "1.0.0"
 source = { editable = "../../assets/oncollama" }
 dependencies = [
+    { name = "londonaicentre-schemallama-types" },
     { name = "pyyaml" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pyyaml", specifier = ">=6.0.3" }]
+requires-dist = [
+    { name = "londonaicentre-schemallama-types", editable = "../../lib/types" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -706,7 +714,7 @@ name = "londonaicentre-schemallama-docsynth"
 version = "1.0.0"
 source = { editable = "../../lib/docsynth" }
 dependencies = [
-    { name = "londonaicentre-oncollama-assets" },
+    { name = "londonaicentre-schemallama-types" },
     { name = "londonaicentre-schemallama-utils" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
@@ -714,7 +722,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "londonaicentre-oncollama-assets", editable = "../../assets/oncollama" },
+    { name = "londonaicentre-schemallama-types", editable = "../../lib/types" },
     { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "pyyaml", specifier = ">=6.0.3" },
@@ -725,6 +733,19 @@ dev = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
+]
+
+[[package]]
+name = "londonaicentre-schemallama-types"
+version = "1.0.0"
+source = { editable = "../../lib/types" }
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.18.2" },
+    { name = "ruff", specifier = ">=0.14.6" },
 ]
 
 [[package]]

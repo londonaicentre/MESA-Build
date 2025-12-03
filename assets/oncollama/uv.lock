@@ -7,6 +7,7 @@ name = "londonaicentre-oncollama-assets"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "londonaicentre-schemallama-types" },
     { name = "pyyaml" },
 ]
 
@@ -18,13 +19,29 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pyyaml", specifier = ">=6.0.3" }]
+requires-dist = [
+    { name = "londonaicentre-schemallama-types", editable = "../../lib/types" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
+]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
+]
+
+[[package]]
+name = "londonaicentre-schemallama-types"
+version = "1.0.0"
+source = { editable = "../../lib/types" }
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.18.2" },
+    { name = "ruff", specifier = ">=0.14.6" },
 ]
 
 [[package]]

@@ -1,4 +1,4 @@
-from oncollama_assets import OncoLlamaAssets
+from schemallama_types.assets import SchemaLlamaAssets
 from docsynth.utils.load_sampling import ConfigSampler
 from docsynth.utils.load_profiles import ProfileLoader
 from docsynth.utils.load_structure import StructureLoader
@@ -10,14 +10,13 @@ build_prompt.py - assembles complete prompts from all components
 
 
 class PromptBuilder:
-    def __init__(self, enabled_structures=None):
-        oncollama_assets = OncoLlamaAssets()
-        self.config_sampler = ConfigSampler(oncollama_assets)
-        self.profile_loader = ProfileLoader(oncollama_assets)
-        self.structure_loader = StructureLoader(enabled_structures, oncollama_assets)
+    def __init__(self, assets: SchemaLlamaAssets, enabled_structures=None):
+        self.config_sampler = ConfigSampler(assets)
+        self.profile_loader = ProfileLoader(assets)
+        self.structure_loader = StructureLoader(enabled_structures, assets)
         self.structure_loader.load_structures()
 
-        self.template = oncollama_assets.load_prompt_template()
+        self.template = assets.load_prompt_template()
 
     def load_profiles(self, profile_files=None):
         """

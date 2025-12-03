@@ -7,6 +7,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
+from schemallama_types.assets import SchemaLlamaAssets
 from docsynth.utils.build_prompt import PromptBuilder
 from docsynth.utils.llm_clients import create_llm_client
 
@@ -77,7 +78,7 @@ class Generator:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]
         return f"{structure_name}_{profile_id}_{timestamp}"
 
-    def generate(self):
+    def generate(self, assets: SchemaLlamaAssets):
         self.__logger.info("Starting document generation pipeline")
         print("Loading pipeline.yml...")
         pipeline_config = self.load_pipeline_config("pipeline.yml")
@@ -88,7 +89,7 @@ class Generator:
             "enabled_structures"
         ]
 
-        builder = PromptBuilder(enabled_structures=enabled_structures)
+        builder = PromptBuilder(assets, enabled_structures)
 
         profile_files = pipeline_config["profile_selection"].get("file")
         builder.load_profiles(profile_files)

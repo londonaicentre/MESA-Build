@@ -1,6 +1,6 @@
 import random
 
-from oncollama_assets import OncoLlamaAssets
+from schemallama_types.assets import SchemaLlamaAssets
 
 """
 load_profiles.py - loads in cancer & molecular profiles
@@ -8,7 +8,7 @@ load_profiles.py - loads in cancer & molecular profiles
 
 
 class ProfileLoader:
-    def __init__(self, assets: OncoLlamaAssets):
+    def __init__(self, assets: SchemaLlamaAssets):
         self.__assets = assets
         self.all_profiles = []
         self.profile_files = []

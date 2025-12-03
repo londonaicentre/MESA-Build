@@ -1,6 +1,6 @@
 import random
 
-from oncollama_assets import OncoLlamaAssets
+from schemallama_types.assets import SchemaLlamaAssets
 
 """
 load_structure.py - loads in relevant structure as prompt
@@ -8,7 +8,7 @@ load_structure.py - loads in relevant structure as prompt
 
 
 class StructureLoader:
-    def __init__(self, enabled_structures, assets: OncoLlamaAssets):
+    def __init__(self, enabled_structures, assets: SchemaLlamaAssets):
         self.__assets = assets
         self.enabled_structures = enabled_structures
         self.structures = {}
