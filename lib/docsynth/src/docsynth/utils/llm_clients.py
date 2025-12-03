@@ -61,6 +61,16 @@ class GeminiClient(LLMClient):
     Client for Google Gemini API
     """
 
+    def init(self):
+        try:
+            import google.generativeai as genai
+
+            self.genai = genai
+        except ImportError:
+            raise ImportError(
+                "google-generativeai package not installed. Run: pip install google-generativeai"
+            )
+
     def generate(self, prompt: str) -> str:
         """
         Generate response from Gemini.
