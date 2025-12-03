@@ -1,4 +1,4 @@
-from datagen.generate import Generator
+from docsynth.generate import Generator
 
 
 def main() -> None:

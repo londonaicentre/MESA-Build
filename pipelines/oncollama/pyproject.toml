@@ -10,15 +10,15 @@ version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
-    "londonaicentre-schemallama-datagen"
+    "londonaicentre-schemallama-docsynth"
 ]
 [project.scripts]
-"datagen" = "oncollama.datagen:main"
+"docsynth" = "oncollama.docsynth:main"
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
-londonaicentre-schemallama-datagen = { path = "../../lib/datagen", editable = true }
+londonaicentre-schemallama-docsynth = { path = "../../lib/docsynth", editable = true }
 [dependency-groups]
 dev = [
     "mypy>=1.18.2",

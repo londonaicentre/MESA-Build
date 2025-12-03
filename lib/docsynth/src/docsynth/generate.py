@@ -7,8 +7,8 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from datagen.utils.build_prompt import PromptBuilder
-from datagen.utils.llm_clients import create_llm_client
+from docsynth.utils.build_prompt import PromptBuilder
+from docsynth.utils.llm_clients import create_llm_client
 
 """
 generate.py - config driven synthetic document generation

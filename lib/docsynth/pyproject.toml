@@ -1,6 +1,6 @@
 [project]
-name = "londonaicentre-schemallama-datagen" 
-description = "SchemaLlama datagen"
+name = "londonaicentre-schemallama-docsynth" 
+description = "SchemaLlama docsynth"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
@@ -10,27 +10,25 @@ version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
-    "boto3>=1.41.1",
-    "litellm>=1.80.0",
-    "pandas>=2.3.3",
-    "pydantic-settings>=2.12.0",
+    "londonaicentre-oncollama-assets",
     "londonaicentre-schemallama-utils",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-schemallama-utils = { path = "../utils", editable = true }
+londonaicentre-oncollama-assets = { path = "../../assets/oncollama", editable = true }
 [tool.setuptools.package-data]
-datagen = [
-    "config/*",
+docsynth = [
     "py.typed"
 ]
 [dependency-groups]
 dev = [
-    "boto3-stubs>=1.41.2",
     "mypy>=1.18.2",
-    "pandas-stubs>=2.3.2.250926",
     "ruff>=0.14.6",
+    "types-pyyaml>=6.0.12.20250915",
 ]
 

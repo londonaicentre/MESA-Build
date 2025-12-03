@@ -1,7 +1,7 @@
 from oncollama_assets import OncoLlamaAssets
-from datagen.utils.load_sampling import ConfigSampler
-from datagen.utils.load_profiles import ProfileLoader
-from datagen.utils.load_structure import StructureLoader
+from docsynth.utils.load_sampling import ConfigSampler
+from docsynth.utils.load_profiles import ProfileLoader
+from docsynth.utils.load_structure import StructureLoader
 
 
 """
