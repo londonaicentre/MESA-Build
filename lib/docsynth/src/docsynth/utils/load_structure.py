@@ -2,22 +2,40 @@ import random
 
 from schemallama_types.assets import SchemaLlamaAssets
 
-"""
-load_structure.py - loads in relevant structure as prompt
-"""
-
 
 class StructureLoader:
+    """Load in relevant structure as prompt
+
+    Args:
+        enabled_structures (list): Specified files containing example
+            structures to include when building a prompt
+        assets (SchemaLlamaAssets): An assets wrapper object extending
+            the SchemaLlamaAssets type
+
+    """
+
     def __init__(self, enabled_structures: list[str], assets: SchemaLlamaAssets):
         self.__assets: SchemaLlamaAssets = assets
         self.enabled_structures: list[str] = enabled_structures
         self.structures: dict[str, str] = {}
 
     def load_structures(self) -> dict[str, str]:
+        """Load structures using asset wrapper
+
+        Returns
+            dict: A mapping between structure file names and content
+
+        """
         self.structures = self.__assets.load_structures(self.enabled_structures)
         return self.structures
 
     def get_random_structure(self) -> tuple[str, str]:
+        """Get a structure at random
+
+        Returns
+            tuple: The structure file name and content
+
+        """
         if not self.structures:
             raise ValueError("No structures loaded.")
 
@@ -26,6 +44,15 @@ class StructureLoader:
         return filename, content
 
     def format_structure_prompt(self, structure_content: str) -> str:
+        """Format an example structure for use in a prompt
+
+        Args:
+            structure_content (str): The content of the structure file
+
+        Returns:
+            str: The formatted structure
+
+        """
         lines: list[str] = ["## MIMIC THIS DOCUMENT STRUCTURE"]
         lines.append("")
         lines.append(
@@ -38,7 +65,22 @@ class StructureLoader:
         return "\n".join(lines)
 
     def get_structure_count(self) -> int:
+        """Get the number of loaded structures
+
+        Returns:
+            int: Structure number
+
+        """
         return len(self.structures)
 
     def get_structure_name_without_extension(self, filename: str) -> str:
+        """Return a copy of a structure filename without its extension
+
+        Args:
+            filename (str): Filename with extension
+
+        Returns:
+            str: Structure filename
+
+        """
         return self.__assets.get_structure_name_without_extension(filename)

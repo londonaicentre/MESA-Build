@@ -7,14 +7,18 @@ from litellm import Choices, ModelResponse
 from docsynth.config import LLM, LLMProvider
 from utils.aws import AWS
 
-"""
-llm_clients.py - LLM client abstractions for calling different API providers.
-"""
-
 
 class LLMClient(ABC):
     """
-    Abstract base class for any clients
+    LLM client abstractions for calling different API providers
+
+    Args:
+        model (str): Model name (e.g., 'gemini-2.5-flash')
+        temperature (float, optional): Sampling temperature
+        max_tokens (int, optional): Max tokens to generate
+        api_key (str, optional): API key to authenticate to remove
+            provider
+
     """
 
     def __init__(
@@ -24,17 +28,6 @@ class LLMClient(ABC):
         max_tokens: int = 4000,
         api_key: str = "",
     ):
-        """
-        Initialise Gemini client.
-
-        Args:
-            model:
-                Model name (e.g., 'gemini-2.5-flash')
-            temperature:
-                Sampling temperature
-            max_tokens:
-                Max tokens to generate
-        """
         self._logger: logging.Logger = logging.getLogger(__name__)
         self.api_key: str = api_key
 
@@ -42,7 +35,6 @@ class LLMClient(ABC):
         self.model_name: str = model
         self.temperature: float = temperature
         self.max_tokens: int = max_tokens
-
         self._logger.info(
             f"Initialized client with model={model}, temperature={temperature}, max_tokens={max_tokens}"
         )
@@ -53,19 +45,16 @@ class LLMClient(ABC):
         Generate a response from the LLM.
 
         Args:
-            prompt:
-                Prompt to send to the LLM
+            prompt (str): Prompt to send to the LLM
 
         Returns:
-            Raw response text from the LLM
+            str: Raw response text from the LLM or None
         """
         pass
 
 
 class GeminiClient(LLMClient):
-    """
-    Client for Google Gemini API
-    """
+    """Client for Google Gemini API"""
 
     def init(
         self,
@@ -85,10 +74,7 @@ class GeminiClient(LLMClient):
             )
 
     def generate(self, prompt: str) -> str | None:
-        """
-        Generate response from Gemini.
-        """
-
+        """Generate response from Gemini."""
         self._logger.debug(f"Sending prompt to Gemini (length={len(prompt)} chars)")
 
         try:
@@ -145,11 +131,10 @@ class GeminiClient(LLMClient):
 
 
 class AnthropicClient(LLMClient):
-    """
-    Client for Anthropic API
-    """
+    """Client for Anthropic API"""
 
     def generate(self, prompt: str) -> str | None:
+        """Generate response from Claude"""
         self._logger.debug(f"Sending prompt to Claude (length={len(prompt)} chars)")
 
         try:
@@ -172,16 +157,13 @@ class AnthropicClient(LLMClient):
                     )
                     return result
             return None
-
         except Exception as e:
             self._logger.error(f"Error generating from Claude: {e}")
             raise
 
 
 class LocalClient(LLMClient):
-    """
-    Client for local OpenAI-compatible endpoint
-    """
+    """Client for local OpenAI-compatible endpoint"""
 
     def __init__(
         self,
@@ -194,16 +176,9 @@ class LocalClient(LLMClient):
         Initialize local OpenAI-compatible client.
 
         Args:
-            base_url:
-                Base URL for the API (e.g., 'http://localhost:1234/v1')
-            model:
-                Model name
-            temperature:
-                Sampling temperature
-            max_tokens:
-                Max tokens to generate
-        """
+            base_url (str): Base URL for the API (e.g., 'http://localhost:1234/v1')
 
+        """
         super().__init__(model, temperature, max_tokens)
         self.base_url: str = base_url
 
@@ -245,11 +220,11 @@ def create_llm_client(llm_config: LLM) -> LLMClient | None:
     Factory function to create the appropriate LLM client based on config.
 
     Args:
-        llm_config:
-            Dictionary containing LLM configuration from pipeline.yml
+        llm_config (LLM): Object containing LLM configuration from pipeline.yml
 
     Returns:
-        LLMClient instance or None if disabled
+        LLMClient: Instance or None if disabled
+
     """
     if not llm_config.enabled:
         print("LLM generation disabled")
@@ -271,18 +246,20 @@ def create_llm_client(llm_config: LLM) -> LLMClient | None:
             model=config.model,
             temperature=config.temperature,
             max_tokens=config.max_tokens,
-            api_key=config.api_key
+            api_key=config.api_key,
         )
 
     elif provider == "anthropic":
         config = llm_config.anthropic
         if not config.api_key:
-            raise ValueError("llm__anthropic__api_key not found in environment variables")
+            raise ValueError(
+                "llm__anthropic__api_key not found in environment variables"
+            )
         return AnthropicClient(
             model=config.model,
             temperature=config.temperature,
             max_tokens=config.max_tokens,
-            api_key=config.api_key
+            api_key=config.api_key,
         )
 
     elif provider == "local":

@@ -9,12 +9,10 @@ from schemallama_types.assets import Profile, SchemaLlamaAssets
 from docsynth.utils.build_prompt import PromptBuilder
 from docsynth.utils.llm_clients import LLMClient, create_llm_client
 
-"""
-generate.py - config driven synthetic document generation
-"""
-
 
 class Generator:
+    """Config driven synthetic document generation"""
+
     def __init__(self) -> None:
         # basic now for debug
         logging.basicConfig(
@@ -25,8 +23,14 @@ class Generator:
         self.__logger: logging.Logger = logging.getLogger(__name__)
 
     def extract_output_content(self, response_text: str) -> str:
-        """
-        Extract content between <OUTPUT> tags
+        """Extract content between <OUTPUT> tags
+
+        Args:
+            response_text (str): Raw response text
+
+        Returns:
+            str: Extracted content
+
         """
         pattern: str = r"<OUTPUT>(.*?)</OUTPUT>"
         match: re.Match[str] | None = re.search(pattern, response_text, re.DOTALL)
@@ -46,9 +50,15 @@ class Generator:
     def save_document(
         self, output_dir: str, doc_id: str, prompt: str, content: str | None = None
     ) -> None:
-        """
-        Saves output document as JSON file
-        If content is None, only saves prompt (debugging prompt-only mode)
+        """Saves output document as JSON file.
+            If content is None, only saves prompt (debugging prompt-only mode)
+
+        Args:
+            output_dir (str): The directory in which to store the output
+            doc_id (str): An id to use as the document filename
+            prompt (str): A copy of the prompt used
+            content (str, optional): The synthetic document content
+
         """
         Path(output_dir).mkdir(parents=True, exist_ok=True)
 
@@ -68,13 +78,27 @@ class Generator:
         self.__logger.debug(f"Saved document to {output_path}")
 
     def generate_doc_id(self, structure_name: str, profile_id: str) -> str:
-        """
-        Generate unique document ID as {structure}_{profile}_{timestamp}
+        """Generate unique document ID as {structure}_{profile}_{timestamp}
+
+        Args:
+            structure_name: Name of the structure used
+            profile_id: ID of the profile used
+
+        Returns:
+            str: The document id
+
         """
         timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]
         return f"{structure_name}_{profile_id}_{timestamp}"
 
     def generate(self, assets: SchemaLlamaAssets) -> None:
+        """Generate one or more synthetic documents
+
+        Args:
+            assets (SchemaLlamaAssets): An assets wrapper object extending
+                the SchemaLlamaAssets type
+
+        """
         self.__logger.info("Starting document generation pipeline")
         print("Loading pipeline.yml...")
         pipeline_config: PipelineConfig = PipelineConfig()
@@ -133,7 +157,7 @@ class Generator:
         print(f"Generating {total_docs} {action} in '{mode}' mode...")
         print("#" * 60)
 
-        # todo: can refactor this as sequential and random share identical code
+        # TODO: can refactor this as sequential and random share identical code
         i: int
         profile: Profile
         prompt: str

@@ -3,12 +3,16 @@ from typing import Any
 
 from schemallama_types.assets import Content, SchemaLlamaAssets, Style
 
-"""
-load_sampling.py - probabilistic sampling from config files into prompt
-"""
-
 
 class ConfigSampler:
+    """Probabilistic sampling from config files into prompt
+
+    Args:
+        assets (SchemaLlamaAssets): An assets wrapper object extending
+            the SchemaLlamaAssets type
+
+    """
+
     def __init__(self, assets: SchemaLlamaAssets):
         self.style_data: Style = assets.load_style_data()
         self.content_data: Content = assets.load_content_data()
@@ -16,7 +20,9 @@ class ConfigSampler:
     def _sample_section(self, section_data: dict[str, Any]) -> list[dict[str, str]]:
         mutually_exclusive: bool = section_data.get("mutually_exclusive", False)
         items: dict[str, Any] = {
-            k: v for k, v in section_data.items() if not k.startswith("mutually_exclusive")
+            k: v
+            for k, v in section_data.items()
+            if not k.startswith("mutually_exclusive")
         }
         selected: list[dict[str, str]] = []
 
@@ -41,6 +47,14 @@ class ConfigSampler:
         return selected
 
     def sample_style_config(self) -> dict[str, list[dict[str, str]]]:
+        """Process the style config from the asset wrapper object
+            to make probabilistic selections of items for the prompt
+
+        Returns:
+            dict: Each section of the style asset, matched to probabilistic
+                selections (key and description) within that asset
+
+        """
         result: dict[str, list[dict[str, str]]] = {}
         section_name: str
         section_data: dict[str, Any]
@@ -49,6 +63,14 @@ class ConfigSampler:
         return result
 
     def sample_content_config(self) -> dict[str, list[dict[str, str]]]:
+        """Process the content config from the asset wrapper object
+            to make probabilistic selections of items for the prompt
+
+        Returns:
+            dict: Each section of the content asset, matched to probabilistic
+                selections (key and description) within that asset
+
+        """
         result: dict[str, list[dict[str, str]]] = {}
         section_name: str
         section_data: dict[str, Any]
@@ -59,6 +81,12 @@ class ConfigSampler:
     def format_style_prompt(
         self, sampled_style: dict[str, list[dict[str, str]]]
     ) -> str:
+        """Transform probabilistically selected styles into a prompt
+
+        Returns:
+            str: The formatted prompt
+
+        """
         lines: list[str] = ["## FOLLOW THESE STYLE REQUIREMENTS"]
         lines.append("")
 
@@ -77,6 +105,12 @@ class ConfigSampler:
     def format_content_prompt(
         self, sampled_content: dict[str, list[dict[str, str]]]
     ) -> str:
+        """Transform probabilistically selected content into a prompt
+
+        Returns:
+            str: The formatted prompt
+
+        """
         lines: list[str] = ["## FOLLOW THESE CONTENT REQUIREMENTS"]
         lines.append("")
 
@@ -93,6 +127,12 @@ class ConfigSampler:
         return "\n".join(lines).strip()
 
     def generate_prompts(self) -> tuple[str, str]:
+        """Generated both prompts (style and content) with probabilistic components
+
+        Returns:
+            tuple: The style and content prompts
+
+        """
         style_config: dict[str, list[dict[str, str]]] = self.sample_style_config()
         content_config: dict[str, list[dict[str, str]]] = self.sample_content_config()
         style_prompt: str = self.format_style_prompt(style_config)

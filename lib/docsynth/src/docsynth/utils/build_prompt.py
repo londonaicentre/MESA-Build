@@ -6,12 +6,17 @@ from docsynth.utils.load_profiles import ProfileLoader
 from docsynth.utils.load_structure import StructureLoader
 
 
-"""
-build_prompt.py - assembles complete prompts from all components
-"""
-
-
 class PromptBuilder:
+    """Assembles complete prompts from all components
+
+    Args:
+        assets (SchemaLlamaAssets): An assets wrapper object extending
+            the SchemaLlamaAssets type
+        enabled_structures (list): Specified files containing example
+            structures to include when building a prompt
+
+    """
+
     def __init__(self, assets: SchemaLlamaAssets, enabled_structures: list[str]):
         self.config_sampler: ConfigSampler = ConfigSampler(assets)
         self.profile_loader: ProfileLoader = ProfileLoader(assets)
@@ -19,12 +24,14 @@ class PromptBuilder:
             enabled_structures, assets
         )
         self.structure_loader.load_structures()
-
         self.template: str = assets.load_prompt_template()
 
     def load_profiles(self, profile_files: list[str] = []) -> None:
-        """
-        Load profiles from specified file(s) or all profiles
+        """Load profiles from specified file(s) or all profiles
+
+        Args:
+            profile_files (list, optional): Specified files
+
         """
         if profile_files:
             self.profile_loader.load_profiles_from_files(profile_files)
@@ -32,28 +39,47 @@ class PromptBuilder:
             self.profile_loader.load_all_profiles()
 
     def get_profile_count(self) -> int:
-        """
-        Get total number of loaded profiles
+        """Get total number of loaded profiles
+
+        Returns:
+            int: total number of loaded profiles
+
         """
         return self.profile_loader.get_profile_count()
 
     def get_random_profile(self) -> Profile:
-        """
-        Get random profile when using random mode
+        """Get random profile when using random mode
+
+        Returns:
+            Profile: Profile object
+
         """
         return self.profile_loader.get_random_profile()
 
     def get_sequential_profiles(self) -> Generator[Profile, None, None]:
-        """
-        Get generator for sequential mode
+        """Get generator for sequential mode
+
+        Returns:
+            Profile: Profile object generator
+
         """
         return self.profile_loader.get_sequential_profiles()
 
     def build_prompt(
         self, profile: Profile, include_style: bool = True, include_content: bool = True
     ) -> tuple[str, str, str]:
-        """
-        Assemble complete prompt for a given profile
+        """Assemble complete prompt for a given profile
+
+        Args:
+            profile (Profile): Given profile
+            include_style (bool): Whether to include style instructions in
+                the prompt
+            include_style (bool): Whether to include content instructions in
+                the prompt
+
+        Returns:
+            tuple: The prompt, chosen structure file name, and the chosen profile id
+
         """
         # style / content
         style_prompt: str
@@ -88,7 +114,6 @@ class PromptBuilder:
             components.append(content_prompt)
 
         components.extend([profile_prompt, structure_prompt])
-
         specific_instructions: str = "\n\n".join(components)
         complete_prompt: str = self.template.format(
             specific_instructions=specific_instructions
