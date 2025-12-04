@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from importlib.resources import files
 from importlib.resources.abc import Traversable
+from pathlib import Path
 from typing import cast
 
 from litellm import ConfigDict
@@ -231,4 +232,4 @@ class SchemaLlamaAssets(ABC):
         return self.structures
 
     def get_structure_name_without_extension(self, filename: str) -> str:
-        return self.base_dir.joinpath("structure/" + filename).name
+        return Path(self.base_dir.joinpath("structure/" + filename).name).stem 
