@@ -1,8 +1,10 @@
 import logging
-import os
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Any, cast
 
+from litellm import Choices, ModelResponse
+
+from docsynth.config import LLM, LLMProvider
 from utils.aws import AWS
 
 """
@@ -15,7 +17,13 @@ class LLMClient(ABC):
     Abstract base class for any clients
     """
 
-    def __init__(self, model: str, temperature: float = 1.0, max_tokens: int = 4000):
+    def __init__(
+        self,
+        model: str,
+        temperature: float = 1.0,
+        max_tokens: int = 4000,
+        api_key: str = "",
+    ):
         """
         Initialise Gemini client.
 
@@ -27,22 +35,20 @@ class LLMClient(ABC):
             max_tokens:
                 Max tokens to generate
         """
-        self._logger = logging.getLogger(__name__)
-        self.api_key = os.getenv("API_KEY")
-        if not self.api_key:
-            raise ValueError("API_KEY not found in environment variables")
+        self._logger: logging.Logger = logging.getLogger(__name__)
+        self.api_key: str = api_key
 
         # Store generation parameters for API calls
-        self.model_name = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
+        self.model_name: str = model
+        self.temperature: float = temperature
+        self.max_tokens: int = max_tokens
 
         self._logger.info(
             f"Initialized client with model={model}, temperature={temperature}, max_tokens={max_tokens}"
         )
 
     @abstractmethod
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str) -> str | None:
         """
         Generate a response from the LLM.
 
@@ -61,7 +67,14 @@ class GeminiClient(LLMClient):
     Client for Google Gemini API
     """
 
-    def init(self):
+    def init(
+        self,
+        model: str,
+        temperature: float = 1.0,
+        max_tokens: int = 4000,
+        api_key: str = "",
+    ) -> None:
+        super().__init__(model, temperature, max_tokens, api_key)
         try:
             import google.generativeai as genai
 
@@ -71,7 +84,7 @@ class GeminiClient(LLMClient):
                 "google-generativeai package not installed. Run: pip install google-generativeai"
             )
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str) -> str | None:
         """
         Generate response from Gemini.
         """
@@ -80,7 +93,7 @@ class GeminiClient(LLMClient):
 
         try:
             # Disable all safety filters to allow medical/technical content generation
-            safety_settings = [
+            safety_settings: list[dict[str, Any]] = [
                 {
                     "category": self.genai.types.HarmCategory.HARM_CATEGORY_HARASSMENT,
                     "threshold": self.genai.types.HarmBlockThreshold.BLOCK_NONE,
@@ -99,7 +112,7 @@ class GeminiClient(LLMClient):
                 },
             ]
 
-            response = AWS.bedrock_completion(
+            response: ModelResponse | None = AWS.bedrock_completion(
                 "gemini/" + self.model_name,
                 None,
                 prompt,
@@ -108,23 +121,24 @@ class GeminiClient(LLMClient):
                 self.temperature,
                 safety_settings=safety_settings,
             )
+            if response is not None:
+                # Check if response was blocked by safety filters
+                if not cast(Choices, response.choices[0]).message.content:
+                    finish_reason: str | None = response.choices[0].finish_reason
+                    self._logger.error(
+                        f"Gemini blocked response. Finish reason: {finish_reason}"
+                    )
+                    raise ValueError(
+                        f"Response blocked by Gemini. Finish reason: {finish_reason}"
+                    )
 
-            # Check if response was blocked by safety filters
-            if not response.choices[0].message.content:
-                finish_reason = response.choices[0].finish_reason
-                self._logger.error(
-                    f"Gemini blocked response. Finish reason: {finish_reason}"
-                )
-                raise ValueError(
-                    f"Response blocked by Gemini. Finish reason: {finish_reason}"
-                )
-
-            result = response.choices[0].message.content
-            self._logger.debug(
-                f"Received response from Gemini (length={len(result)} chars)"
-            )
-            return result
-
+                result: str | None = cast(Choices, response.choices[0]).message.content
+                if result is not None:
+                    self._logger.debug(
+                        f"Received response from Gemini (length={len(result)} chars)"
+                    )
+                    return result
+            return None
         except Exception as e:
             self._logger.error(f"Error generating from Gemini: {e}")
             raise
@@ -135,11 +149,11 @@ class AnthropicClient(LLMClient):
     Client for Anthropic API
     """
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str) -> str | None:
         self._logger.debug(f"Sending prompt to Claude (length={len(prompt)} chars)")
 
         try:
-            response = AWS.bedrock_completion(
+            response: ModelResponse | None = AWS.bedrock_completion(
                 self.model_name,
                 None,
                 prompt,
@@ -147,12 +161,17 @@ class AnthropicClient(LLMClient):
                 self.max_tokens,
                 self.temperature,
             )
+            if response is not None:
+                if not cast(Choices, response.choices[0]).message.content:
+                    raise ValueError("Response not provided by Bedrock.")
 
-            result = response.choices[0].message.content
-            self._logger.debug(
-                f"Received response from Claude (length={len(result)} chars)"
-            )
-            return result
+                result: str | None = cast(Choices, response.choices[0]).message.content
+                if result is not None:
+                    self._logger.debug(
+                        f"Received response from Claude (length={len(result)} chars)"
+                    )
+                    return result
+            return None
 
         except Exception as e:
             self._logger.error(f"Error generating from Claude: {e}")
@@ -186,17 +205,17 @@ class LocalClient(LLMClient):
         """
 
         super().__init__(model, temperature, max_tokens)
-        self.base_url = base_url
+        self.base_url: str = base_url
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str) -> str | None:
         """
         Generate response from local API.
         """
 
-        self.__logger.debug(f"Sending prompt to local API (length={len(prompt)} chars)")
+        self._logger.debug(f"Sending prompt to local API (length={len(prompt)} chars)")
 
         try:
-            response = AWS.bedrock_completion(
+            response: ModelResponse | None = AWS.bedrock_completion(
                 self.model_name,
                 None,
                 prompt,
@@ -205,19 +224,23 @@ class LocalClient(LLMClient):
                 self.temperature,
                 api_base=self.base_url,
             )
+            if response is not None:
+                if not cast(Choices, response.choices[0]).message.content:
+                    raise ValueError("Response not provided by local client.")
 
-            result = response.choices[0].message.content
-            self.__logger.debug(
-                f"Received response from local API (length={len(result)} chars)"
-            )
-            return result
-
+                result: str | None = cast(Choices, response.choices[0]).message.content
+                if result is not None:
+                    self._logger.debug(
+                        f"Received response from local API (length={len(result)} chars)"
+                    )
+                    return result
+            return None
         except Exception as e:
-            self.__logger.error(f"Error generating from local API: {e}")
+            self._logger.error(f"Error generating from local API: {e}")
             raise
 
 
-def create_llm_client(llm_config: dict) -> Optional[LLMClient]:
+def create_llm_client(llm_config: LLM) -> LLMClient | None:
     """
     Factory function to create the appropriate LLM client based on config.
 
@@ -228,11 +251,12 @@ def create_llm_client(llm_config: dict) -> Optional[LLMClient]:
     Returns:
         LLMClient instance or None if disabled
     """
-    if not llm_config.get("enabled", False):
+    if not llm_config.enabled:
         print("LLM generation disabled")
         return None
 
-    provider = llm_config.get("provider", "none")
+    provider: str = llm_config.provider
+    config: LLMProvider
 
     # Return None if no provider configured
     if provider == "none":
@@ -240,37 +264,38 @@ def create_llm_client(llm_config: dict) -> Optional[LLMClient]:
         return None
 
     elif provider == "gemini":
-        config = llm_config["gemini"]
+        config = llm_config.gemini
+        if not config.api_key:
+            raise ValueError("llm__gemini__api_key not found in environment variables")
         return GeminiClient(
-            model=config["model"],
-            temperature=config.get("temperature", 1.0),
-            max_tokens=config.get("max_tokens", 4000),
+            model=config.model,
+            temperature=config.temperature,
+            max_tokens=config.max_tokens,
+            api_key=config.api_key
         )
 
     elif provider == "anthropic":
-        config = llm_config["anthropic"]
+        config = llm_config.anthropic
+        if not config.api_key:
+            raise ValueError("llm__anthropic__api_key not found in environment variables")
         return AnthropicClient(
-            model=config["model"],
-            temperature=config.get("temperature", 1.0),
-            max_tokens=config.get("max_tokens", 4000),
+            model=config.model,
+            temperature=config.temperature,
+            max_tokens=config.max_tokens,
+            api_key=config.api_key
         )
 
     elif provider == "local":
-        config = llm_config["local"]
-        # Read base_url and model from environment variables
-        base_url = os.getenv("LOCAL_LLM_BASE_URL")
-        model = os.getenv("LOCAL_LLM_MODEL")
-
-        if not base_url:
-            raise ValueError("LOCAL_LLM_BASE_URL not found in environment variables")
-        if not model:
-            raise ValueError("LOCAL_LLM_MODEL not found in environment variables")
-
+        config = llm_config.local
+        if not config.base_url:
+            raise ValueError("llm__local__base_url not found in environment variables")
+        base_url: str = config.base_url
+        model: str = config.model
         return LocalClient(
             base_url=base_url,
             model=model,
-            temperature=config.get("temperature", 1.0),
-            max_tokens=config.get("max_tokens", 4000),
+            temperature=config.temperature,
+            max_tokens=config.max_tokens,
         )
 
     else:

@@ -1,34 +1,14 @@
 # PROMPT GENERATION CONFIG - CONTENT
 ## Each section contains elements that can be sampled probabilistically 
 ## Descriptions are prompt-ready and will be inserted directly into LLM prompts
-## _mutually_exclusive: true = exactly ONE item selected from section (weighted random choice)
-## _mutually_exclusive: false = each item sampled independently (based on independent probability)
+## mutually_exclusive: true = exactly ONE item selected from section (weighted random choice)
+## mutually_exclusive: false = each item sampled independently (based on independent probability)
 
 ###################
 # TIMELINE EVENTS #
 ###################
 timeline_events:
-  _mutually_exclusive: false
-
-  surgery:
-    probability: 0.65
-    description: "The patient has had one or more surgical resection of the primary tumor."
-
-  systemic_therapy_initiated:
-    probability: 0.75
-    description: "The patient has had one or more systemic therapies (chemotherapy, immunotherapy, or targeted therapy)."
-
-  radiotherapy:
-    probability: 0.45
-    description: "The patient has had one or more radiotherapy treatments."
-
-  treatment_toxicity:
-    probability: 0.35
-    description: "The patient has experienced one or more treatment-related toxicity or adverse effects."
-
-  treatment_reduction_or_stop:
-    probability: 0.25
-    description: "The patient has experienced one or more treatments being dose-reduced, delayed, or discontinued due to toxicity or other factors."
+  mutually_exclusive: false
 
   clinical_trial_consideration:
     probability: 0.20
@@ -38,6 +18,26 @@ timeline_events:
     probability: 0.15
     description: "The patient was enrolled in a clinical trial."
 
+  patient_death:
+    probability: 0.05
+    description: "The patient died."
+
+  surgery:
+    probability: 0.65
+    description: "The patient has had one or more surgical resection of the primary tumor."
+
+  systemic_therapy_initiated:
+    probability: 0.75
+    description: "The patient has had one or more systemic therapies (chemotherapy, immunotherapy, or targeted therapy)."
+
+  treatment_toxicity:
+    probability: 0.35
+    description: "The patient has experienced one or more treatment-related toxicity or adverse effects."
+
+  treatment_reduction_or_stop:
+    probability: 0.25
+    description: "The patient has experienced one or more treatments being dose-reduced, delayed, or discontinued due to toxicity or other factors."
+
   positive_treatment_response:
     probability: 0.30
     description: "There were one or more events where imaging or clinical assessment demonstrated positive response to treatment (partial response, stable disease, or symptomatic improvement)."
@@ -45,10 +45,6 @@ timeline_events:
   disease_progression_imaging:
     probability: 0.30
     description: "There were one or more events where radiological imaging showed evidence of disease progression."
-
-  new_metastatic_spread:
-    probability: 0.25
-    description: "There were one or more events where new metastatic disease was identified at nodal or distant sites."
 
   disease_remission:
     probability: 0.15
@@ -58,15 +54,19 @@ timeline_events:
     probability: 0.20
     description: "Disease recurrence or relapse was detected after previous treatment at any point."
 
-  patient_death:
-    probability: 0.05
-    description: "The patient died."
+  radiotherapy:
+    probability: 0.45
+    description: "The patient has had one or more radiotherapy treatments."
+
+  new_metastatic_spread:
+    probability: 0.25
+    description: "There were one or more events where new metastatic disease was identified at nodal or distant sites."
 
 ####################
 # PATIENT FINDINGS #
 ####################
 patient_findings:
-  _mutually_exclusive: false
+  mutually_exclusive: false
 
   comorbidity:
     probability: 0.60
@@ -93,28 +93,10 @@ patient_findings:
     description: "Include one or more positive findings of physical examination (e.g., palpable mass, lymphadenopathy, organomegaly, cachexia)."
 
 #####################
-# HISTORICAL CANCER #
-#####################
-historical_cancer:
-  _mutually_exclusive: true
-
-  no_historical_cancer:
-    probability: 0.6
-    description: "The primary cancer is the patient's only cancer diagnosis"
-
-  historical_cancer_mentioned:
-    probability: 0.25
-    description: "In addition to the primary cancer, the patient has had another unrelated cancer diagnosis"
-
-  competing_historical_cancer:
-    probability: 0.15
-    description: "The patient has another active cancer with a described treatment timeline, although it is not the main subject of this document"
-
-#####################
 # FUNCTIONAL STATUS #
 #####################
 functional_status:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   good:
     probability: 0.40
@@ -132,7 +114,7 @@ functional_status:
 # MENTAL STATE #
 ################
 mental_state:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   positive:
     probability: 0.40
@@ -150,7 +132,7 @@ mental_state:
 # DIAGNOSIS DATE #
 ##################
 diagnosis_date:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   include_year_and_month:
     probability: 0.50
@@ -164,11 +146,73 @@ diagnosis_date:
     probability: 0.20
     description: ""
 
+######################
+# DISEASE TRAJECTORY #
+######################
+disease_trajectory:
+  mutually_exclusive: true
+
+  stable:
+    probability: 0.40
+    description: "The disease course has been stable with no significant progression."
+
+  improving:
+    probability: 0.30
+    description: "The patient's condition has been improving with treatment response evident."
+
+  slowly_progressing:
+    probability: 0.15
+    description: "The disease has been slowly progressing despite treatment."
+
+  rapidly_deteriorating:
+    probability: 0.10
+    description: "The patient's condition has deteriorated rapidly with progressive disease."
+
+  remission:
+    probability: 0.05
+    description: "The patient is in complete or partial remission."
+
+########################
+# TREATMENT COMPLEXITY #
+########################
+treatment_complexity:
+  mutually_exclusive: true
+
+  simple:
+    probability: 0.35
+    description: "Treatment history is straightforward with single or first-line therapy."
+
+  moderate:
+    probability: 0.40
+    description: "Treatment involves multiple modalities or second-line therapy."
+
+  complex:
+    probability: 0.25
+    description: "Treatment history is complex with multiple lines of therapy, combination treatments, or clinical trial involvement."
+
+#####################
+# HISTORICAL CANCER #
+#####################
+historical_cancer:
+  mutually_exclusive: true
+
+  no_historical_cancer:
+    probability: 0.6
+    description: "The primary cancer is the patient's only cancer diagnosis"
+
+  historical_cancer_mentioned:
+    probability: 0.25
+    description: "In addition to the primary cancer, the patient has had another unrelated cancer diagnosis"
+
+  competing_historical_cancer:
+    probability: 0.15
+    description: "The patient has another active cancer with a described treatment timeline, although it is not the main subject of this document"
+    
 ###############
 # TNM STAGING #
 ###############
 tnm_staging:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   include_full_tnm:
     probability: 0.50
@@ -186,7 +230,7 @@ tnm_staging:
 # OTHER STAGING #
 #################
 other_staging:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   include_numeric_stage:
     probability: 0.50
@@ -200,7 +244,7 @@ other_staging:
 # CANCER SCORES #
 #################
 cancer_scores:
-  _mutually_exclusive: false
+  mutually_exclusive: false
 
   pathological_grade:
     probability: 0.30
@@ -218,7 +262,7 @@ cancer_scores:
 # METASTASES #
 ##############
 metastatic_spread:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   no_metastases:
     probability: 0.40
@@ -251,47 +295,3 @@ metastatic_spread:
   multiple_sites:
     probability: 0.15
     description: "Patient has widespread metastatic disease involving multiple sites."
-
-######################
-# DISEASE TRAJECTORY #
-######################
-disease_trajectory:
-  _mutually_exclusive: true
-
-  stable:
-    probability: 0.40
-    description: "The disease course has been stable with no significant progression."
-
-  improving:
-    probability: 0.30
-    description: "The patient's condition has been improving with treatment response evident."
-
-  slowly_progressing:
-    probability: 0.15
-    description: "The disease has been slowly progressing despite treatment."
-
-  rapidly_deteriorating:
-    probability: 0.10
-    description: "The patient's condition has deteriorated rapidly with progressive disease."
-
-  remission:
-    probability: 0.05
-    description: "The patient is in complete or partial remission."
-
-########################
-# TREATMENT COMPLEXITY #
-########################
-treatment_complexity:
-  _mutually_exclusive: true
-
-  simple:
-    probability: 0.35
-    description: "Treatment history is straightforward with single or first-line therapy."
-
-  moderate:
-    probability: 0.40
-    description: "Treatment involves multiple modalities or second-line therapy."
-
-  complex:
-    probability: 0.25
-    description: "Treatment history is complex with multiple lines of therapy, combination treatments, or clinical trial involvement."

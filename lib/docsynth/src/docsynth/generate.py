@@ -4,12 +4,10 @@ import re
 from datetime import datetime
 from pathlib import Path
 
-import yaml
-from dotenv import load_dotenv
-
-from schemallama_types.assets import SchemaLlamaAssets
+from docsynth.config import LLM, PipelineConfig
+from schemallama_types.assets import Profile, SchemaLlamaAssets
 from docsynth.utils.build_prompt import PromptBuilder
-from docsynth.utils.llm_clients import create_llm_client
+from docsynth.utils.llm_clients import LLMClient, create_llm_client
 
 """
 generate.py - config driven synthetic document generation
@@ -17,32 +15,24 @@ generate.py - config driven synthetic document generation
 
 
 class Generator:
-    def __init__(self):
-        load_dotenv(".env")
+    def __init__(self) -> None:
         # basic now for debug
         logging.basicConfig(
             filename="debug.log",
             level=logging.DEBUG,
             format="%(asctime)s - %(levelname)s - %(message)s",
         )
-        self.__logger = logging.getLogger(__name__)
+        self.__logger: logging.Logger = logging.getLogger(__name__)
 
-    def load_pipeline_config(self, config_path):
-        """
-        Loads main configuration as defined in pipeline.yml
-        """
-        with open(config_path, "r") as f:
-            return yaml.safe_load(f)
-
-    def extract_output_content(self, response_text):
+    def extract_output_content(self, response_text: str) -> str:
         """
         Extract content between <OUTPUT> tags
         """
-        pattern = r"<OUTPUT>(.*?)</OUTPUT>"
-        match = re.search(pattern, response_text, re.DOTALL)
+        pattern: str = r"<OUTPUT>(.*?)</OUTPUT>"
+        match: re.Match[str] | None = re.search(pattern, response_text, re.DOTALL)
 
         if match:
-            content = match.group(1).strip()
+            content: str = match.group(1).strip()
             self.__logger.debug(
                 f"Successfully extracted content from <OUTPUT> tags (length={len(content)} chars)"
             )
@@ -53,45 +43,51 @@ class Generator:
             )
             return response_text.strip()
 
-    def save_document(self, output_dir, doc_id, prompt, content=None):
+    def save_document(
+        self, output_dir: str, doc_id: str, prompt: str, content: str | None = None
+    ) -> None:
         """
         Saves output document as JSON file
         If content is None, only saves prompt (debugging prompt-only mode)
         """
         Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-        output = {"doc_id": doc_id, "doc_name": "synth", "prompt": prompt}
+        output: dict[str, str] = {
+            "doc_id": doc_id,
+            "doc_name": "synth",
+            "prompt": prompt,
+        }
 
         if content is not None:
             output["content"] = content
 
-        output_path = Path(output_dir) / f"{doc_id}.json"
+        output_path: Path = Path(output_dir) / f"{doc_id}.json"
         with open(output_path, "w") as f:
             json.dump(output, f, indent=2)
 
         self.__logger.debug(f"Saved document to {output_path}")
 
-    def generate_doc_id(self, structure_name, profile_id):
+    def generate_doc_id(self, structure_name: str, profile_id: str) -> str:
         """
         Generate unique document ID as {structure}_{profile}_{timestamp}
         """
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]
+        timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:19]
         return f"{structure_name}_{profile_id}_{timestamp}"
 
-    def generate(self, assets: SchemaLlamaAssets):
+    def generate(self, assets: SchemaLlamaAssets) -> None:
         self.__logger.info("Starting document generation pipeline")
         print("Loading pipeline.yml...")
-        pipeline_config = self.load_pipeline_config("pipeline.yml")
+        pipeline_config: PipelineConfig = PipelineConfig()
 
         print("Building prompt...")
 
-        enabled_structures = pipeline_config["structure_selection"][
-            "enabled_structures"
-        ]
+        enabled_structures: list[str] = (
+            pipeline_config.structure_selection.enabled_structures
+        )
 
-        builder = PromptBuilder(assets, enabled_structures)
+        builder: PromptBuilder = PromptBuilder(assets, enabled_structures)
 
-        profile_files = pipeline_config["profile_selection"].get("file")
+        profile_files: list[str] = pipeline_config.profile_selection.file
         builder.load_profiles(profile_files)
 
         if profile_files:
@@ -102,11 +98,11 @@ class Generator:
         print(f"Total profiles: {builder.get_profile_count()}")
 
         # initialise chosen LLM client
-        llm_config = pipeline_config.get("llm", {})
-        llm_client = None
+        llm_config: LLM = pipeline_config.llm
+        llm_client: LLMClient | None = None
 
-        if llm_config.get("enabled", False):
-            provider = llm_config.get("provider", "none")
+        if llm_config.enabled:
+            provider: str = llm_config.provider
             try:
                 print(f"Initialising LLM client (provider: {provider})...")
                 llm_client = create_llm_client(llm_config)
@@ -123,36 +119,43 @@ class Generator:
             print("LLM generation disabled (saving prompts only)")
             self.__logger.info("LLM generation disabled")
 
-        output_dir = "output/" + pipeline_config["output"]["subdirectory"]
+        output_dir: str = "output/" + pipeline_config.output.subdirectory
         print(f"Output directory: {output_dir}")
 
-        mode = pipeline_config["profile_selection"]["mode"]
-        count = pipeline_config["profile_selection"]["count"]
-        include_style = pipeline_config["prompt_config"]["include_style"]
-        include_content = pipeline_config["prompt_config"]["include_content"]
+        mode: str = str(pipeline_config.profile_selection.mode)
+        count: int = pipeline_config.profile_selection.count
+        include_style: bool = pipeline_config.prompt_config.include_style
+        include_content: bool = pipeline_config.prompt_config.include_content
 
-        total_docs = builder.get_profile_count() if count == -1 else count
+        total_docs: int = builder.get_profile_count() if count == -1 else count
 
-        action = "documents" if llm_client else "prompts"
+        action: str = "documents" if llm_client else "prompts"
         print(f"Generating {total_docs} {action} in '{mode}' mode...")
         print("#" * 60)
 
         # todo: can refactor this as sequential and random share identical code
+        i: int
+        profile: Profile
+        prompt: str
+        structure_name: str
+        profile_id: str
+        content: str | None = None
+        response: str | None
         if mode == "sequential":
             for i, profile in enumerate(builder.get_sequential_profiles(), 1):
                 if i > total_docs:
                     break
+
                 prompt, structure_name, profile_id = builder.build_prompt(
                     profile, include_style, include_content
                 )
-                doc_id = self.generate_doc_id(structure_name, profile_id)
+                doc_id: str = self.generate_doc_id(structure_name, profile_id)
 
-                content = None
                 if llm_client:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
                         response = llm_client.generate(prompt)
-                        content = self.extract_output_content(response)
+                        content = self.extract_output_content(str(response))
                         self.__logger.info(
                             f"Successfully generated content for {doc_id} (length={len(content)} chars)"
                         )
@@ -179,7 +182,7 @@ class Generator:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
                         response = llm_client.generate(prompt)
-                        content = self.extract_output_content(response)
+                        content = self.extract_output_content(str(response))
                         self.__logger.info(
                             f"Successfully generated content for {doc_id} (length={len(content)} chars)"
                         )

@@ -1,14 +1,14 @@
 # PROMPT GENERATION CONFIG - STYLE
 ## Each section contains elements that can be sampled probabilistically 
 ## Descriptions are prompt-ready and will be inserted directly into LLM prompts
-## _mutually_exclusive: true = exactly ONE item selected from section (weighted random choice)
-## _mutually_exclusive: false = each item sampled independently (based on independent probability)
+## mutually_exclusive: true = exactly ONE item selected from section (weighted random choice)
+## mutually_exclusive: false = each item sampled independently (based on independent probability)
 
 #################
 # DOCUMENT TYPE #
 #################
 document_type:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   is_a_letter:
     probability: 0.50
@@ -22,7 +22,7 @@ document_type:
 # CONTENT TYPE #
 ################
 content_type:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   initial_consultation:
     probability: 0.20
@@ -56,7 +56,7 @@ content_type:
 # WRITING STYLE #
 #################
 writing_style:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   concise_factual:
     probability: 0.40
@@ -74,7 +74,7 @@ writing_style:
 # HEADER STYLE #
 ################
 header_style:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   complex_header:
     probability: 0.15
@@ -96,7 +96,7 @@ header_style:
 # FOOTER STYLE #
 ################
 footer_style:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   complex_footer:
     probability: 0.25
@@ -118,7 +118,7 @@ footer_style:
 # REDACTION STYLE #
 ###################
 redaction_style:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   fully_redacted:
     probability: 0.33
@@ -136,7 +136,7 @@ redaction_style:
 # DATA QUALITY #
 ################
 data_quality_issues:
-  _mutually_exclusive: true
+  mutually_exclusive: true
 
   none:
     probability: 0.40

@@ -21,8 +21,14 @@ llm:
     temperature: 1.0
     max_tokens: 4000
 
+  # gemini configuration
+  gemini:
+    model: gemini-2.5-flash
+    temperature: 1.0
+    max_tokens: 4000
+
   # local api configuration
-  ## note: base_url and model are configured via LOCAL_LLM_BASE_URL and LOCAL_LLM_MODEL in .env
+  ## note: base_url and model are configured via llm__local__base_url and llm__local__model in .env
   local:
     temperature: 1.0
     max_tokens: 4000

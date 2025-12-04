@@ -928,7 +928,6 @@ dependencies = [
     { name = "google-generativeai" },
     { name = "londonaicentre-schemallama-types" },
     { name = "londonaicentre-schemallama-utils" },
-    { name = "python-dotenv" },
     { name = "pyyaml" },
 ]
 
@@ -944,7 +943,6 @@ requires-dist = [
     { name = "google-generativeai", specifier = ">=0.8.5" },
     { name = "londonaicentre-schemallama-types", editable = "../types" },
     { name = "londonaicentre-schemallama-utils", editable = "../utils" },
-    { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "pyyaml", specifier = ">=6.0.3" },
 ]
 
