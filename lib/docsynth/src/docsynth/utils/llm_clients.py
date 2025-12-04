@@ -4,6 +4,7 @@ from typing import Any, cast
 
 from litellm import Choices, ModelResponse
 
+from utils.llm import LLM
 from utils.aws import AWS
 
 
@@ -97,7 +98,7 @@ class GeminiClient(LLMClient):
                 },
             ]
 
-            response: ModelResponse | None = AWS.bedrock_completion(
+            response: ModelResponse | None = LLM.completion(
                 "gemini/" + self.model_name,
                 None,
                 prompt,
@@ -189,7 +190,7 @@ class LocalClient(LLMClient):
         self._logger.debug(f"Sending prompt to local API (length={len(prompt)} chars)")
 
         try:
-            response: ModelResponse | None = AWS.bedrock_completion(
+            response: ModelResponse | None = LLM.completion(
                 self.model_name,
                 None,
                 prompt,

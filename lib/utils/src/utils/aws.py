@@ -1,11 +1,11 @@
 import os
 import random
 import time
-from typing import Any
 
 import boto3
 from botocore.exceptions import ClientError
-from litellm import completion, RateLimitError, ModelResponse
+from litellm import RateLimitError, ModelResponse
+from utils.llm import LLM
 
 
 class AWS:
@@ -51,7 +51,6 @@ class AWS:
         bedrock_api_key: str,
         max_tokens: int = 8192,
         temperature: float = 0.001,
-        **kwargs: Any,
     ) -> ModelResponse | None:
         """Use a Bedrock LLM for inference. Uses backoff and jitter on rate limit.
 
@@ -67,22 +66,17 @@ class AWS:
             ModelResponse: The model's prediction (LiteLLM wrapper object)
 
         """
-        messages: list[dict[str, str]] = []
-        if system_prompt is not None:
-            messages.append({"content": system_prompt, "role": "system"})
-        messages.append({"content": user_prompt, "role": "user"})
         max_retries: int = 5
         for attempt in range(max_retries + 1):
             try:
-                return completion(
-                    model=model_name,
+                return LLM.completion(
+                    model_name=model_name,
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                    api_key=bedrock_api_key,
                     max_tokens=max_tokens,
                     temperature=temperature,
-                    messages=messages,
-                    api_key=bedrock_api_key,
                     aws_region_name="us-east-1",
-                    stream=False,
-                    **kwargs,
                 )
             except RateLimitError:
                 if attempt == max_retries:
