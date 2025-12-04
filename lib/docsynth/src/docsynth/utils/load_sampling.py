@@ -17,7 +17,7 @@ class ConfigSampler:
         self.style_data: Style = assets.load_style_data()
         self.content_data: Content = assets.load_content_data()
 
-    def _sample_section(self, section_data: dict[str, Any]) -> list[dict[str, str]]:
+    def __sample_section(self, section_data: dict[str, Any]) -> list[dict[str, str]]:
         mutually_exclusive: bool = section_data.get("mutually_exclusive", False)
         items: dict[str, Any] = {
             k: v
@@ -59,7 +59,7 @@ class ConfigSampler:
         section_name: str
         section_data: dict[str, Any]
         for section_name, section_data in self.style_data.model_dump().items():
-            result[section_name] = self._sample_section(section_data)
+            result[section_name] = self.__sample_section(section_data)
         return result
 
     def sample_content_config(self) -> dict[str, list[dict[str, str]]]:
@@ -75,7 +75,7 @@ class ConfigSampler:
         section_name: str
         section_data: dict[str, Any]
         for section_name, section_data in self.content_data.model_dump().items():
-            result[section_name] = self._sample_section(section_data)
+            result[section_name] = self.__sample_section(section_data)
         return result
 
     def format_style_prompt(

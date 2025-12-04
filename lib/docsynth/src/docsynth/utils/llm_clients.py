@@ -4,7 +4,6 @@ from typing import Any, cast
 
 from litellm import Choices, ModelResponse
 
-from docsynth.config import LLM, LLMProvider
 from utils.aws import AWS
 
 
@@ -213,67 +212,3 @@ class LocalClient(LLMClient):
         except Exception as e:
             self._logger.error(f"Error generating from local API: {e}")
             raise
-
-
-def create_llm_client(llm_config: LLM) -> LLMClient | None:
-    """
-    Factory function to create the appropriate LLM client based on config.
-
-    Args:
-        llm_config (LLM): Object containing LLM configuration from pipeline.yml
-
-    Returns:
-        LLMClient: Instance or None if disabled
-
-    """
-    if not llm_config.enabled:
-        print("LLM generation disabled")
-        return None
-
-    provider: str = llm_config.provider
-    config: LLMProvider
-
-    # Return None if no provider configured
-    if provider == "none":
-        print("LLM provider set to 'none'")
-        return None
-
-    elif provider == "gemini":
-        config = llm_config.gemini
-        if not config.api_key:
-            raise ValueError("llm__gemini__api_key not found in environment variables")
-        return GeminiClient(
-            model=config.model,
-            temperature=config.temperature,
-            max_tokens=config.max_tokens,
-            api_key=config.api_key,
-        )
-
-    elif provider == "anthropic":
-        config = llm_config.anthropic
-        if not config.api_key:
-            raise ValueError(
-                "llm__anthropic__api_key not found in environment variables"
-            )
-        return AnthropicClient(
-            model=config.model,
-            temperature=config.temperature,
-            max_tokens=config.max_tokens,
-            api_key=config.api_key,
-        )
-
-    elif provider == "local":
-        config = llm_config.local
-        if not config.base_url:
-            raise ValueError("llm__local__base_url not found in environment variables")
-        base_url: str = config.base_url
-        model: str = config.model
-        return LocalClient(
-            base_url=base_url,
-            model=model,
-            temperature=config.temperature,
-            max_tokens=config.max_tokens,
-        )
-
-    else:
-        raise ValueError(f"Unknown LLM provider: {provider}")
