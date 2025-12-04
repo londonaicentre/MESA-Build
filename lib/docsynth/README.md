@@ -65,9 +65,9 @@ Note: when `llm.enabled: false` in `pipeline.yml`, only prompts are saved (no `c
 ```mermaid
 flowchart LR
     A[pipeline.yml] --> G[generate.py]
-    B[config/profiles/*.yml] --> C[load_profiles.py]
-    D[config/structure/*.txt] --> E[load_structure.py]
-    F[config/style.yml & content.yml] --> H[load_sampling.py]
+    B[profiles/*.yml] --> C[load_profiles.py]
+    D[structure/*.txt] --> E[load_structure.py]
+    F[style.yml & content.yml] --> H[load_sampling.py]
     C --> I[build_prompt.py]
     E --> I
     H --> I
