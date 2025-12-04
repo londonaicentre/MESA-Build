@@ -1,6 +1,6 @@
 [project]
-name = "londonaicentre-schemallama-utils" 
-description = "SchemaLlama utils"
+name = "londonaicentre-oncollama" 
+description = "OncoLlama"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
@@ -10,17 +10,19 @@ version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
-    "boto3>=1.41.1",
-    "litellm>=1.80.0",
+    "londonaicentre-oncollama-assets",
+    "londonaicentre-schemallama-docsynth"
 ]
+[project.scripts]
+"docsynth" = "oncollama.docsynth:main"
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
-[tool.setuptools]
-package-data = {"utils" = ["py.typed"]}
+[tool.uv.sources]
+londonaicentre-oncollama-assets = { path = "../../assets/oncollama", editable = true }
+londonaicentre-schemallama-docsynth = { path = "../../lib/docsynth", editable = true }
 [dependency-groups]
 dev = [
-    "boto3-stubs>=1.41.4",
     "mypy>=1.18.2",
     "ruff>=0.14.6",
 ]

@@ -1,0 +1,41 @@
+llm:
+  enabled: true
+  provider: anthropic
+  anthropic:
+    model: global.anthropic.claude-sonnet-4-20250514-v1:0
+    temperature: 1.0
+    max_tokens: 4000
+  gemini:
+    model: gemini-2.5-flash
+    temperature: 1.0
+    max_tokens: 4000
+  local:
+    temperature: 1.0
+    max_tokens: 4000
+profile_selection:
+  mode: sequential
+  count: 1
+  file:
+    - head_neck.yml
+    - skin.yml
+    - haem.yml
+    - brain.yml
+    - tissue.yml
+    - liver.yml
+structure_selection:
+  enabled_structures:
+    - cuhsparsesections.txt
+    - gtaboutcome.txt
+    - gtabreferral.txt
+    - semistructured1.txt
+    - semistructured2.txt
+    - structuredsections.txt
+    - structuredtimeline.txt
+    - narrative.txt
+    - narrative2.txt
+prompt_config:
+  include_style: false
+  include_content: true
+  prompt_template: default
+output:
+  subdirectory: test_batch
