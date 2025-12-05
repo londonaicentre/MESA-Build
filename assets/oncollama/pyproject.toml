@@ -6,7 +6,8 @@ authors = [
 ]
 version = "1.0.0"
 requires-python = ">=3.12"
-license = "CC-BY-NC-ND-4.0"
+license = "LicenseRef-Proprietary"
+license-files = [ "LICENSE.md" ]
 dependencies = [
     "londonaicentre-schemallama-types",
     "pyyaml>=6.0.3",
