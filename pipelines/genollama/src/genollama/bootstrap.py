@@ -33,7 +33,7 @@ def parse_CLI_args() -> BootstrapArgs:
         "-s",
         "--backup",
         action="store_true",
-        help="Whether to store the generated boostrap file in S3 (requires credentials)",
+        help="Whether to store the generated bootstrap file in S3 (requires credentials)",
     )
     return BootstrapArgs(**vars(parser.parse_args()))
 
