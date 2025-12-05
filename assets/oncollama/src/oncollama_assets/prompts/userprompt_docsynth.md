@@ -12,8 +12,8 @@ The document should:
 The document you generate should be placed inside tags <OUTPUT> and </OUTPUT>
 
 # SPECIFIC INSTRUCTIONS
-{specific_instructions}
 
+{specific_instructions}
 
 # YOUR TASK
 
