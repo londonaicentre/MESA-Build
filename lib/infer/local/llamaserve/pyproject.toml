@@ -6,9 +6,10 @@ authors = [
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
 ]
 readme = "README.md"
-version = "1.1.0"
+version = "1.1.1"
 requires-python = ">=3.12"
-license = "CC-BY-NC-ND-4.0"
+license = "LicenseRef-Proprietary"
+license-files = [ "LICENSE.md" ]
 dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.12.4",
