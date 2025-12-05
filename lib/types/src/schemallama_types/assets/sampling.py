@@ -1,30 +1,8 @@
-from abc import ABC, abstractmethod
-from importlib.resources import files
 from importlib.resources.abc import Traversable
-from pathlib import Path
-from typing import cast
 
-from litellm import ConfigDict
-from pydantic import BaseModel
+from litellm import BaseModel
+from pydantic import ConfigDict
 import yaml
-
-
-class Profile(BaseModel):
-    profile_id: str | None = None
-    morphology: str = ""
-    descriptive_name: str = ""
-    biomarker_profile: str = ""
-
-    model_config = ConfigDict(
-        extra="allow",
-    )
-
-
-class Profiles(BaseModel):
-    items: dict[str, Profile] = {}
-
-    def __init__(self, file_path: Traversable) -> None:
-        super().__init__(items=yaml.safe_load(file_path.read_text()))
 
 
 class SamplingAttribute(BaseModel):
@@ -169,67 +147,3 @@ class Content(BaseModel):
 
     def __init__(self, file_path: Traversable) -> None:
         super().__init__(**yaml.safe_load(file_path.read_text()))
-
-
-class SchemaLlamaAssets(ABC):
-    def __init__(self, base_dir: str) -> None:
-        self.all_profiles: list[Profile] = []
-        self.base_dir: Traversable = files(base_dir)
-
-    def load_prompt_template(self, template_name: str = "default") -> str:
-        return self.base_dir.joinpath("prompts/" + f"{template_name}.md").read_text()
-
-    def load_all_profiles(self) -> list[Profile]:
-        items: list[Traversable] = cast(
-            list[Traversable], sorted(self.base_dir.joinpath("profiles").iterdir())
-        )
-        item: Traversable
-        for item in items:
-            if item.is_file() and item.name.endswith(".yml"):
-                profiles: list[Profile] = self._load_profiles_from_file(item)
-                self.all_profiles.extend(profiles)
-        return self.all_profiles
-
-    @abstractmethod
-    def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
-        pass
-
-    def load_profiles_from_files(self, filenames: list[str]) -> list[Profile]:
-        for filename in filenames:
-            file_path: str = "profiles/" + filename
-            try:
-                profiles: list[Profile] = self._load_profiles_from_file(
-                    self.base_dir.joinpath(file_path)
-                )
-                self.all_profiles.extend(profiles)
-            except FileNotFoundError:
-                raise FileNotFoundError(f"Profile file not found: {file_path}")
-        return self.all_profiles
-
-    def get_profile_count(self) -> int:
-        return len(self.all_profiles)
-
-    @abstractmethod
-    def format_profile_prompt(self, profile: Profile) -> str:
-        pass
-
-    def load_style_data(self) -> Style:
-        return Style(self.base_dir.joinpath("style.yml"))
-
-    def load_content_data(self) -> Content:
-        return Content(self.base_dir.joinpath("content.yml"))
-
-    def load_structures(self, enabled_structures: list[str]) -> dict[str, str]:
-        self.structures: dict[str, str] = {}
-        for filename in enabled_structures:
-            file_path: str = "structure/" + filename
-            try:
-                self.structures[filename] = self.base_dir.joinpath(
-                    file_path
-                ).read_text()
-            except FileNotFoundError:
-                raise FileNotFoundError(f"Structure file not found: {file_path}")
-        return self.structures
-
-    def get_structure_name_without_extension(self, filename: str) -> str:
-        return Path(self.base_dir.joinpath("structure/" + filename).name).stem 

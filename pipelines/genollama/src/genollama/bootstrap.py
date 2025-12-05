@@ -2,10 +2,7 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from genollama.settings import Settings
-from genollama_assets.prompts import (
-    generate_system_prompt,
-    generate_bootstrap_user_prompt,
-)
+from genollama_assets.wrapper import GenoLlamaAssets
 from datagen.claude import BootstrapFileGenerator
 
 
@@ -37,9 +34,10 @@ def parse_CLI_args() -> BootstrapArgs:
 def main() -> None:
     args: BootstrapArgs = parse_CLI_args()
     settings: Settings = Settings()
+    genollama_assets: GenoLlamaAssets = GenoLlamaAssets()
     BootstrapFileGenerator.run_bootstrap_file_generation(
-        generate_system_prompt("systemprompt_bootstrap.md"),
-        generate_bootstrap_user_prompt,
+        genollama_assets.load_system_prompt("systemprompt_bootstrap.md"),
+        genollama_assets.load_bootstrap_user_prompt,
         args.instruction,
         args.model_name,
         settings.BEDROCK_API_KEY,

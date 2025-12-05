@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from genollama.settings import Settings
-from genollama_assets.prompts import generate_system_prompt
+from genollama_assets.wrapper import GenoLlamaAssets
 from finetune.llama import FineTuner
 
 
@@ -35,8 +35,9 @@ def main() -> None:
     args: FinetuneArgs = parse_CLI_args()
     settings: Settings = Settings()
     fine_tuner: FineTuner = FineTuner(settings.INSTANCE_TYPE)
+    genollama_assets: GenoLlamaAssets = GenoLlamaAssets()
     fine_tuner.run_finetune(
-        generate_system_prompt("systemprompt_finetune.md"),
+        genollama_assets.load_system_prompt("systemprompt_finetune.md"),
         args.file,
         settings.BUCKET,
         settings.SAGEMAKER_EXECUTION_ROLE,

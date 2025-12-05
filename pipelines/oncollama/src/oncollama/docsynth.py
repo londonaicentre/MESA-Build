@@ -1,4 +1,4 @@
-from oncollama_assets import OncoLlamaAssets
+from oncollama_assets.wrapper import OncoLlamaAssets
 from docsynth.generate import Generator
 
 
