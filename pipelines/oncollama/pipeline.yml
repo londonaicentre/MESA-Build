@@ -36,6 +36,6 @@ structure_selection:
 prompt_config:
   include_style: false
   include_content: true
-  prompt_template: default
+  prompt_template: docsynth
 output:
   subdirectory: test_batch
