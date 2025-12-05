@@ -9,7 +9,7 @@ class WeightSettings(BaseModel):
 
 
 class ModelSettings(BaseModel):
-    NAME: str = 'genollama1alpha01'
+    NAME: str = 'schemallama'
     PRECISION: str = 'float16'
     LENGTH: int = 41152
 
