@@ -17,6 +17,17 @@ class OncoLlamaAssets(SchemaLlamaAssets):
     def validate_schema(
         self, schema: type[BaseModel]
     ) -> tuple[bool, str, dict[str, Any] | None]:
+        """Validate a schema (pydantic -> dict) with
+            oncology specific properties
+
+        Args:
+            schema: (type[BaseModel]): The schema to validate
+
+        Returns:
+            tuple: The validation result, result description,
+                and json version of the schema
+
+        """
         result: bool
         message: str
         json_schema: dict[str, Any] | None
@@ -33,16 +44,28 @@ class OncoLlamaAssets(SchemaLlamaAssets):
 
     # prompts
     def load_system_prompt(self, file: str = "infer_prompt.txt") -> str:
+        """Create a system prompt
+
+        Args:
+            file (str, optional): The template file to use for the system prompt.
+                Defaults to the inference system prompt.
+
+        Returns:
+            str: The system prompt
+
+        """
         schema_content: str = inspect.getsource(schema)
         system_prompt_template: str = self._load("prompts", file)
         return system_prompt_template.replace("{SCHEMA}", schema_content)
 
     def load_bootstrap_user_prompt(self, instructions: str) -> str:
+        """TODO: Implement upon the use of bootstrapping in oncollama."""
         return ""
 
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
+        """TODO: Implement upon data generation in oncollama."""
         return ""
-    
+
     # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
         cancer_profiles: list[Profile] = []
@@ -64,6 +87,16 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         return cancer_profiles
 
     def format_profile_prompt(self, profile: Profile) -> str:
+        """Create the profile portion of a docsynth user prompt
+
+        Args:
+            profile (Profile): The profile object containing the information
+                to include in the prompt
+
+        Returns:
+            str: The profile prompt
+
+        """
         lines: list[str] = ["## USE THIS PRIMARY CANCER PROFILE"]
         lines.append("")
         lines.append(

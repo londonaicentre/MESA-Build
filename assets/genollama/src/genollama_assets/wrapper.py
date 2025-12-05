@@ -17,6 +17,15 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
     # schema
     def validate_json_examples(self, schema: type[BaseModel]) -> tuple[bool, str]:
+        """Validate stored genomic example json files (str -> dict)
+
+        Args:
+            schema: (type[BaseModel]): The schema to validate against
+
+        Returns:
+            tuple: The validation result and result description
+
+        """
         items: list[Traversable] = cast(
             list[Traversable], sorted(self._base_dir.joinpath("examples").iterdir())
         )
@@ -42,6 +51,17 @@ class GenoLlamaAssets(SchemaLlamaAssets):
     def validate_schema(
         self, schema: type[BaseModel]
     ) -> tuple[bool, str, dict[str, Any] | None]:
+        """Validate a genomic schema (pydantic -> dict),
+            and output the result.
+
+        Args:
+            schema: (type[BaseModel]): The schema to validate
+
+        Returns:
+            tuple: The validation result, result description,
+                and json version of the schema
+
+        """
         result: bool
         message: str
         json_schema: dict[str, Any] | None
@@ -128,7 +148,9 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
     # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
+        """TODO: Implement upon the use of docsynth profiles in oncollama."""
         return []
 
     def format_profile_prompt(self, profile: Profile) -> str:
+        """TODO: Implement upon the use of docsynth profiles in oncollama."""
         return ""
