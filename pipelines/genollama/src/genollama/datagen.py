@@ -2,11 +2,8 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from genollama.settings import Settings
-from genollama_assets.prompts import (
-    generate_system_prompt,
-    generate_datagen_user_prompt,
-)
-from genollama_assets.genollama_assets_types import GenomicTestReport
+from genollama_assets.wrapper import GenoLlamaAssets
+from genollama_assets.schema import GenomicTestReport
 from datagen.claude import SampleGenerator
 
 
@@ -61,10 +58,11 @@ def parse_CLI_args() -> DatagenArgs:
 def main() -> None:
     args: DatagenArgs = parse_CLI_args()
     settings: Settings = Settings()
-    system_prompt: str = generate_system_prompt()
+    genollama_assets: GenoLlamaAssets = GenoLlamaAssets()
+    system_prompt: str = genollama_assets.load_system_prompt()
     sample_generator: SampleGenerator = SampleGenerator(
         system_prompt,
-        generate_datagen_user_prompt,
+        genollama_assets.load_datagen_user_prompt,
         GenomicTestReport,
         args.model_name,
         args.template,

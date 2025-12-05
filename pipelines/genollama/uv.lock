@@ -915,7 +915,11 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "mypy", specifier = ">=1.18.2" }]
+dev = [
+    { name = "boto3-stubs", specifier = ">=1.41.4" },
+    { name = "mypy", specifier = ">=1.18.2" },
+    { name = "ruff", specifier = ">=0.14.6" },
+]
 
 [[package]]
 name = "markdown-it-py"
