@@ -1,6 +1,14 @@
 # SchemaLlama
 
-Training LLMs for biomarker extraction from unstructured NHS documents.
+Training Llama LLMs for biomarker extraction from unstructured NHS documents.
+
+## Pipelines
+
+Current pipelines in this repository:
+
+- [OncoLlama](pipelines/oncollama/): Generating high fidelity synthetic cancer letters, and fine-tuning LLMs for structured data extraction.
+
+- [GenoLlama](pipelines/genollama/): Training LLMs for genomic biomarker extraction from NHS genomic laboratory hub reports.
 
 ## Repository structure
 
