@@ -10,6 +10,7 @@ from datagen.claude import BootstrapFileGenerator
 class BootstrapArgs:
     model_name: str
     instruction: str
+    backup: bool
 
 
 def parse_CLI_args() -> BootstrapArgs:
@@ -28,6 +29,12 @@ def parse_CLI_args() -> BootstrapArgs:
         required=True,
         help="Tailor the bootstrap file output, e.g. point the batch at a type of test, a disease area, a particular proband pattern, a report style, or any other variable",
     )
+    parser.add_argument(
+        "-s",
+        "--backup",
+        action="store_true",
+        help="Whether to store the generated bootstrap file in S3 (requires credentials)",
+    )
     return BootstrapArgs(**vars(parser.parse_args()))
 
 
@@ -41,4 +48,5 @@ def main() -> None:
         args.instruction,
         args.model_name,
         settings.BEDROCK_API_KEY,
+        settings.US_BUCKET if args.backup else "",
     )

@@ -41,6 +41,8 @@ uv sync
 
     - `-i, --instruction`: Tailor the bootstrap file output, e.g. point the batch at a type of test, a disease area, a particular proband pattern, a report style, or any other variable. Required.
 
+    - `-s, --backup`: Whether to store the generated bootstrap file in S3 (requires credentials). Optional.
+
 ### Generate synthetic data samples
 
 1. Run `datagen` with the following arguments:

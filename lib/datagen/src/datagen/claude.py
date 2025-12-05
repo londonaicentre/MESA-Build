@@ -252,7 +252,7 @@ class SampleGenerator:
                     # Convert Pydantic model to dict for JSON serialization
                     json_output["output"] = validated_output.model_dump()
                     output_filename: str = os.path.join(
-                        "samples_sonnet4/", f"sample{idx + 1:04d}.json"
+                        self.__output_folder_name, f"sample{idx + 1:04d}.json"
                     )
                     try:
                         with open(output_filename, "w", encoding="utf-8") as f:
@@ -267,7 +267,7 @@ class SampleGenerator:
 
                     # for debugging later
                     debug_filename: str = os.path.join(
-                        "samples_sonnet4/",
+                        self.__output_folder_name,
                         f"invalid_sample{idx + 1:04d}.json",
                     )
                     with open(debug_filename, "w", encoding="utf-8") as f:
@@ -459,6 +459,7 @@ class BootstrapFileGenerator:
         instruction: str,
         model_name: str,
         bedrock_api_key: str,
+        bucket: str = "",
     ) -> None:
         """Generate bootstrap file to vary samples
 
@@ -469,7 +470,9 @@ class BootstrapFileGenerator:
             instruction (str): Instruction to tailor bootstrap file to
                 specific area
             model_name (str): Name of model to use on AWS Bedrock
-            bedrock_api_key (str, optional): API key to access AWS Bedrock
+            bedrock_api_key (str): API key to access AWS Bedrock
+            bucket (str, optional): The name of the bucket in which to store the bootstrap file.
+                If omitted, file is not backed up.
 
         """
         config: Config = Config()
@@ -479,6 +482,15 @@ class BootstrapFileGenerator:
             user_prompt_function(instruction),
             bedrock_api_key,
         )
+        bootstrap_file_name: str = "bootstrap.csv"
         if message is not None:
-            with open("bootstrap.csv", "w", newline="") as file:
+            with open(bootstrap_file_name, "w", newline="") as file:
                 file.write(str(cast(Choices, message.choices[0]).message.content))
+        if bucket != "":
+            AWS.upload_file(
+                config.models[model_name].region,
+                bootstrap_file_name,
+                bucket,
+                bootstrap_file_name,
+                "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
+            )
