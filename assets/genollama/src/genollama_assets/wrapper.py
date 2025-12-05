@@ -16,9 +16,7 @@ class GenoLlamaAssets(SchemaLlamaAssets):
         super().__init__("genollama_assets")
 
     # schema
-    def validate_json(
-        self, json_str: str, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
+    def validate_json_examples(self, schema: type[BaseModel]) -> tuple[bool, str]:
         items: list[Traversable] = cast(
             list[Traversable], sorted(self._base_dir.joinpath("examples").iterdir())
         )
@@ -38,8 +36,8 @@ class GenoLlamaAssets(SchemaLlamaAssets):
                     else:
                         raise ValueError(message)
                 except ValidationError:
-                    return False, f"Example {item.name} failed validation", None
-        return True, "All examples checked", None
+                    return False, f"Example {item.name} failed validation"
+        return True, "All examples checked"
 
     def validate_schema(
         self, schema: type[BaseModel]
