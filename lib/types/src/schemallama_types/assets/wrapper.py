@@ -1,8 +1,12 @@
 from abc import ABC, abstractmethod
 from importlib.resources import files
 from importlib.resources.abc import Traversable
+import json
 from pathlib import Path
 from typing import Any, cast
+
+from jsonschema import ValidationError
+from pydantic import BaseModel
 
 from schemallama_types.assets.profile import Profile
 from schemallama_types.assets.sampling import Content, Style
@@ -14,6 +18,30 @@ class SchemaLlamaAssets(ABC):
 
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
+
+    # schema
+    def validate_json(
+        self, json_str: str, schema: type[BaseModel]
+    ) -> tuple[bool, str, dict[str, Any] | None]:
+        try:
+            parsed: dict[str, Any] = json.loads(json_str)
+            schema(**parsed)
+            return True, "Valid", parsed
+        except json.JSONDecodeError as e:
+            return False, f"JSON Parse Error: {e}", None
+        except ValidationError as e:
+            return False, f"Schema Validation Error: {e}", None
+        except Exception as e:
+            return False, f"Validation Error: {e}", None
+
+    def validate_schema(
+        self, schema: type[BaseModel]
+    ) -> tuple[bool, str, dict[str, Any] | None]:
+        try:
+            json_schema: dict[str, Any] = schema.model_json_schema()
+            return True, "Schema validation successful", json_schema
+        except Exception as e:
+            return False, f"Schema validation failed: {e}", None
 
     # prompts
     def load_user_prompt_template(self, template_name: str) -> str:

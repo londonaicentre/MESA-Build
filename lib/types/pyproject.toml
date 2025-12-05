@@ -18,4 +18,5 @@ package-data = {"types" = ["py.typed"]}
 dev = [
     "mypy>=1.18.2",
     "ruff>=0.14.6",
+    "types-jsonschema>=4.25.1.20251009",
 ]
