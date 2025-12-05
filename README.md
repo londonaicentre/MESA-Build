@@ -8,10 +8,6 @@ Training LLMs for biomarker extraction from unstructured NHS documents.
 📁 SCHEMA_LLAMA
 ├── pipelines/             # Individual pipelines for developing text to schema models
 ├── assets/                # Static per-pipeline assets
-├──── *_types.py           # Pydantic model for specifying expected LLM output structure
-├──── prompts.py           # Prompt template functions
-├──── templates/           # Prompt templates
-├──── examples/            # Examples to tailor prompt templates
 ├── lib/                   # Reusable functionality across pipelines
 ├──── docsynth/            # Configuration driven unstructured document generation
 ├──── datagen/             # Bootstrapping synthetic data for LLM fine-tuning

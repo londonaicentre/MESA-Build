@@ -23,14 +23,6 @@ INSTANCE_TYPE=
 IMAGE=
 ```
 
-### Assets
-
-- `genollama_assets/genollama_assets_types` > `GenomicTestReport`, containing the target schema as a pydantic model.
-
-- `genollama_assets/examples`, containing numerous examples of reports and target output schema (in json) that conforms to the schema.
-
-- `genollama_assets/prompts.py`, containing the system and user prompts required to generate samples and fine-tune.
-
 ### Installation
 
 ```
