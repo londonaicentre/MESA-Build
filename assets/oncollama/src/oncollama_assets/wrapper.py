@@ -1,14 +1,49 @@
 from importlib.resources.abc import Traversable
+import inspect
 from typing import Any
+
+from pydantic import BaseModel
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile, Profiles
+from oncollama_assets import schema
 
 
 class OncoLlamaAssets(SchemaLlamaAssets):
     def __init__(self) -> None:
         super().__init__("oncollama_assets")
 
+    # schema
+    def validate_schema(
+        self, schema: type[BaseModel]
+    ) -> tuple[bool, str, dict[str, Any] | None]:
+        result: bool
+        message: str
+        json_schema: dict[str, Any] | None
+        try:
+            result, message, json_schema = super().validate_schema(schema)
+            if result and json_schema is not None:
+                print(f"Properties: {len(json_schema.get('properties', {}))}")
+                print(f"Definitions: {len(json_schema.get('$defs', {}))}")
+                return True, "Schema validation successful", json_schema
+            else:
+                raise ValueError(message)
+        except Exception as e:
+            return False, f"Schema validation failed: {e}", None
+
+    # prompts
+    def load_system_prompt(self, file: str = "infer_prompt.txt") -> str:
+        schema_content: str = inspect.getsource(schema)
+        system_prompt_template: str = self._load("prompts", file)
+        return system_prompt_template.replace("{SCHEMA}", schema_content)
+
+    def load_bootstrap_user_prompt(self, instructions: str) -> str:
+        return ""
+
+    def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
+        return ""
+    
+    # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
         cancer_profiles: list[Profile] = []
         cancer_type: str = file_path.name
@@ -40,12 +75,3 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         )
         lines.append("")
         return "\n".join(lines)
-
-    def load_system_prompt(self, file: str) -> str:
-        pass
-
-    def load_bootstrap_user_prompt(self, instructions: str) -> str:
-        pass
-
-    def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
-        pass
