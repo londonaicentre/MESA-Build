@@ -252,7 +252,7 @@ class SampleGenerator:
                     # Convert Pydantic model to dict for JSON serialization
                     json_output["output"] = validated_output.model_dump()
                     output_filename: str = os.path.join(
-                        "samples_sonnet4/", f"sample{idx + 1:04d}.json"
+                        self.__output_folder_name, f"sample{idx + 1:04d}.json"
                     )
                     try:
                         with open(output_filename, "w", encoding="utf-8") as f:
@@ -267,7 +267,7 @@ class SampleGenerator:
 
                     # for debugging later
                     debug_filename: str = os.path.join(
-                        "samples_sonnet4/",
+                        self.__output_folder_name,
                         f"invalid_sample{idx + 1:04d}.json",
                     )
                     with open(debug_filename, "w", encoding="utf-8") as f:
