@@ -1,14 +1,59 @@
 from importlib.resources.abc import Traversable
+import inspect
+import json
 from typing import Any
+
+from litellm import cast
+from pydantic import BaseModel, ValidationError
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
+from genollama_assets import schema
 
 
 class GenoLlamaAssets(SchemaLlamaAssets):
     def __init__(self) -> None:
         super().__init__("genollama_assets")
 
+    # schema
+    def validate_json(
+        self, json_str: str, schema: type[BaseModel]
+    ) -> tuple[bool, str, dict[str, Any] | None]:
+        items: list[Traversable] = cast(
+            list[Traversable], sorted(self._base_dir.joinpath("examples").iterdir())
+        )
+        item: Traversable
+        result: bool
+        message: str
+        parsed: dict[str, Any] | None
+        for item in items:
+            if item.is_file() and item.name.endswith(".json"):
+                result, message, parsed = super().validate_json(
+                    item.read_text(), schema
+                )
+                try:
+                    if result and parsed is not None:
+                        loaded_example: BaseModel = schema(**parsed["output"])
+                        loaded_example.model_dump_json()
+                    else:
+                        raise ValueError(message)
+                except ValidationError:
+                    return False, f"Example {item.name} failed validation", None
+        return True, "All examples checked", None
+
+    def validate_schema(
+        self, schema: type[BaseModel]
+    ) -> tuple[bool, str, dict[str, Any] | None]:
+        result: bool
+        message: str
+        json_schema: dict[str, Any] | None
+        result, message, json_schema = super().validate_schema(schema)
+        if result and json_schema is not None:
+            with open("schema.json", "w") as output_file:
+                json.dump(json_schema, output_file, indent=4)
+        return result, message, json_schema
+
+    # prompts
     def load_system_prompt(self, file: str = "systemprompt_datagen.md") -> str:
         """Create a system prompt
 
@@ -20,7 +65,8 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             str: The system prompt
 
         """
-        schema_content: str = self._load(".", "schema.py")
+        schema_content: str = inspect.getsource(schema)
+        system_prompt_template: str = self._load("prompts", file)
         examples_path: str = "examples"
         e1: str = ""
         e2: str = ""
@@ -33,15 +79,13 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             e4 = self._load(examples_path, "e4.json")
         except FileNotFoundError as e:
             print(f"Warning: Could not load example file: {e}")
-        system_prompt_template: str = self._load("prompts", file)
-        system_prompt: str = (
+        return (
             system_prompt_template.replace("{schema_content}", schema_content)
             .replace("{e1}", e1)
             .replace("{e2}", e2)
             .replace("{e3}", e3)
             .replace("{e4}", e4)
         )
-        return system_prompt
 
     def load_bootstrap_user_prompt(self, instructions: str) -> str:
         """Create a user prompt for bootstrap file generation
@@ -84,8 +128,9 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             Then extract the information into the structured schema format."""
         return user_prompt
 
+    # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
-        pass
+        return []
 
     def format_profile_prompt(self, profile: Profile) -> str:
-        pass
+        return ""
