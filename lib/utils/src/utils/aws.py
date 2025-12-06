@@ -96,13 +96,12 @@ class AWS:
 
     @staticmethod
     def create_anthropic_bedrock_batch_entry(
-        id: str, system_prompt: str, user_prompt: str, max_tokens: int = 4000
+        id: str, system_prompt: str | None, user_prompt: str, max_tokens: int = 4000
     ) -> dict[str, Any]:
-        return {
+        record: dict[str, Any] = {
             "recordId": id,
             "modelInput": {
                 "anthropic_version": "bedrock-2023-05-31",
-                "system": system_prompt,
                 "max_tokens": max_tokens,
                 "messages": [
                     {
@@ -117,6 +116,9 @@ class AWS:
                 ],
             },
         }
+        if system_prompt is not None:
+            record["modelInput"]["system"] = system_prompt
+        return record
 
     @staticmethod
     def create_model_invocation_job(
@@ -127,7 +129,7 @@ class AWS:
         bedrock_execution_role: str,
         model_region: str,
     ) -> bool:
-        """Create a model invocation job (batch inference run) 
+        """Create a model invocation job (batch inference run)
             on AWS Bedrock
 
         Args:
