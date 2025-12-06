@@ -29,12 +29,12 @@ class LLMClient(ABC):
         api_key: str = "",
     ):
         self._logger: logging.Logger = logging.getLogger(__name__)
-        self.api_key: str = api_key
+        self._api_key: str = api_key
 
         # Store generation parameters for API calls
-        self.model_name: str = model
-        self.temperature: float = temperature
-        self.max_tokens: int = max_tokens
+        self._model_name: str = model
+        self._temperature: float = temperature
+        self._max_tokens: int = max_tokens
         self._logger.info(
             f"Initialized client with model={model}, temperature={temperature}, max_tokens={max_tokens}"
         )
@@ -67,7 +67,7 @@ class GeminiClient(LLMClient):
         try:
             import google.generativeai as genai
 
-            self.genai = genai
+            self.__genai = genai
         except ImportError:
             raise ImportError(
                 "google-generativeai package not installed. Run: pip install google-generativeai"
@@ -81,30 +81,30 @@ class GeminiClient(LLMClient):
             # Disable all safety filters to allow medical/technical content generation
             safety_settings: list[dict[str, Any]] = [
                 {
-                    "category": self.genai.types.HarmCategory.HARM_CATEGORY_HARASSMENT,
-                    "threshold": self.genai.types.HarmBlockThreshold.BLOCK_NONE,
+                    "category": self.__genai.types.HarmCategory.HARM_CATEGORY_HARASSMENT,
+                    "threshold": self.__genai.types.HarmBlockThreshold.BLOCK_NONE,
                 },
                 {
-                    "category": self.genai.types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                    "threshold": self.genai.types.HarmBlockThreshold.BLOCK_NONE,
+                    "category": self.__genai.types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                    "threshold": self.__genai.types.HarmBlockThreshold.BLOCK_NONE,
                 },
                 {
-                    "category": self.genai.types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                    "threshold": self.genai.types.HarmBlockThreshold.BLOCK_NONE,
+                    "category": self.__genai.types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                    "threshold": self.__genai.types.HarmBlockThreshold.BLOCK_NONE,
                 },
                 {
-                    "category": self.genai.types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                    "threshold": self.genai.types.HarmBlockThreshold.BLOCK_NONE,
+                    "category": self.__genai.types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                    "threshold": self.__genai.types.HarmBlockThreshold.BLOCK_NONE,
                 },
             ]
 
             response: ModelResponse | None = LLM.completion(
-                "gemini/" + self.model_name,
+                "gemini/" + self._model_name,
                 None,
                 prompt,
-                self.api_key,
-                self.max_tokens,
-                self.temperature,
+                self._api_key,
+                self._max_tokens,
+                self._temperature,
                 safety_settings=safety_settings,
             )
             if response is not None:
@@ -139,12 +139,12 @@ class AnthropicClient(LLMClient):
 
         try:
             response: ModelResponse | None = AWS.bedrock_completion(
-                self.model_name,
+                self._model_name,
                 None,
                 prompt,
-                self.api_key,
-                self.max_tokens,
-                self.temperature,
+                self._api_key,
+                self._max_tokens,
+                self._temperature,
             )
             if response is not None:
                 if not cast(Choices, response.choices[0]).message.content:
@@ -180,7 +180,7 @@ class LocalClient(LLMClient):
 
         """
         super().__init__(model, temperature, max_tokens)
-        self.base_url: str = base_url
+        self.__base_url: str = base_url
 
     def generate(self, prompt: str) -> str | None:
         """
@@ -191,13 +191,13 @@ class LocalClient(LLMClient):
 
         try:
             response: ModelResponse | None = LLM.completion(
-                self.model_name,
+                self._model_name,
                 None,
                 prompt,
-                self.api_key,
-                self.max_tokens,
-                self.temperature,
-                api_base=self.base_url,
+                self._api_key,
+                self._max_tokens,
+                self._temperature,
+                api_base=self.__base_url,
             )
             if response is not None:
                 if not cast(Choices, response.choices[0]).message.content:
