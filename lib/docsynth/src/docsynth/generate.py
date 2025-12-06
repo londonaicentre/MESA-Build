@@ -126,7 +126,12 @@ class Generator:
         else:
             raise ValueError(f"Unknown LLM provider: {provider}")
 
-    def generate(self, assets: SchemaLlamaAssets) -> None:
+    def generate(
+        self,
+        assets: SchemaLlamaAssets,
+        bucket: str | None = None,
+        bedrock_execution_role: str | None = None,
+    ) -> None:
         """Generate one or more synthetic documents
 
         Args:
@@ -197,6 +202,7 @@ class Generator:
         self.__logger.debug("#" * 60)
 
         # TODO: can refactor this as sequential and random share identical code
+        batch: bool = bucket is not None and bedrock_execution_role is not None
         i: int
         profile: Profile
         prompt: str
@@ -217,7 +223,9 @@ class Generator:
                 if llm_client:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
-                        response = llm_client.generate(prompt)
+                        response = llm_client.generate(prompt, batch)
+                        if batch:
+                            continue
                         content = self.__extract_output_content(str(response))
                         self.__logger.info(
                             f"Successfully generated content for {doc_id} (length={len(content)} chars)"
@@ -231,7 +239,6 @@ class Generator:
 
                 self.__logger.debug(f"[{i}/{total_docs}] Generated: {doc_id}")
                 self.__save_document(output_dir, doc_id, prompt, content)
-
         elif mode == "random":
             for i in range(1, total_docs + 1):
                 profile = builder.get_random_profile()
@@ -244,7 +251,9 @@ class Generator:
                 if llm_client:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
-                        response = llm_client.generate(prompt)
+                        response = llm_client.generate(prompt, batch)
+                        if batch:
+                            continue
                         content = self.__extract_output_content(str(response))
                         self.__logger.info(
                             f"Successfully generated content for {doc_id} (length={len(content)} chars)"
@@ -260,8 +269,11 @@ class Generator:
                 self.__save_document(output_dir, doc_id, prompt, content)
 
         self.__logger.debug("#" * 60)
-        self.__logger.debug(f"Generated {total_docs} {action}")
-        self.__logger.debug(f"Saved to: {output_dir}")
-        self.__logger.info(
-            f"Pipeline completed successfully. Generated {total_docs} {action}"
-        )
+        if llm_client is not None and bucket is not None and bedrock_execution_role is not None:
+            llm_client.run_batch_inference(bucket, bedrock_execution_role)
+        else:
+            self.__logger.debug(f"Generated {total_docs} {action}")
+            self.__logger.debug(f"Saved to: {output_dir}")
+            self.__logger.info(
+                f"Pipeline completed successfully. Generated {total_docs} {action}"
+            )

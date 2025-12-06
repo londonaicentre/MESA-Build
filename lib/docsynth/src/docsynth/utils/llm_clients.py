@@ -1,10 +1,12 @@
+from datetime import datetime
+import json
 import logging
 from abc import ABC, abstractmethod
 from typing import Any, cast
 
+from docsynth.config import Config
 from litellm import Choices, ModelResponse
 
-from docsynth.config import Config
 from utils.llm import LLM
 from utils.aws import AWS
 
@@ -41,7 +43,7 @@ class LLMClient(ABC):
         )
 
     @abstractmethod
-    def generate(self, prompt: str) -> str | None:
+    def generate(self, prompt: str, batch: bool = False) -> str | None:
         """
         Generate a response from the LLM.
 
@@ -51,6 +53,10 @@ class LLMClient(ABC):
         Returns:
             str: Raw response text from the LLM or None
         """
+        pass
+
+    @abstractmethod
+    def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
         pass
 
 
@@ -74,7 +80,7 @@ class GeminiClient(LLMClient):
                 "google-generativeai package not installed. Run: pip install google-generativeai"
             )
 
-    def generate(self, prompt: str) -> str | None:
+    def generate(self, prompt: str, batch: bool = False) -> str | None:
         """Generate response from Gemini."""
         self._logger.debug(f"Sending prompt to Gemini (length={len(prompt)} chars)")
 
@@ -130,6 +136,9 @@ class GeminiClient(LLMClient):
             self._logger.error(f"Error generating from Gemini: {e}")
             raise
 
+    def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
+        return False
+
 
 class AnthropicClient(LLMClient):
     """Client for Anthropic API"""
@@ -143,34 +152,61 @@ class AnthropicClient(LLMClient):
     ) -> None:
         super().__init__(model, temperature, max_tokens, api_key)
         self.__config: Config = Config()
+        self.__batch_entries: list[dict[str, Any]] = []
 
-    def generate(self, prompt: str) -> str | None:
+    def generate(self, prompt: str, batch: bool = False) -> str | None:
         """Generate response from Claude"""
-        self._logger.debug(f"Sending prompt to Claude (length={len(prompt)} chars)")
-
-        try:
-            response: ModelResponse | None = AWS.bedrock_completion(
-                self.__config.models[self._model_name].model,
-                None,
-                prompt,
-                self._api_key,
-                self._max_tokens,
-                self._temperature,
+        if batch:
+            self._logger.debug(
+                f"Storing prompt for later batch run (length={len(prompt)} chars)"
             )
-            if response is not None:
-                if not cast(Choices, response.choices[0]).message.content:
-                    raise ValueError("Response not provided by Bedrock.")
-
-                result: str | None = cast(Choices, response.choices[0]).message.content
-                if result is not None:
-                    self._logger.debug(
-                        f"Received response from Claude (length={len(result)} chars)"
-                    )
-                    return result
+            self.__batch_entries.append(
+                AWS.create_anthropic_bedrock_batch_entry(
+                    str(len(self.__batch_entries)), None, prompt
+                )
+            )
             return None
-        except Exception as e:
-            self._logger.error(f"Error generating from Claude: {e}")
-            raise
+        else:
+            self._logger.debug(f"Sending prompt to Claude (length={len(prompt)} chars)")
+
+            try:
+                response: ModelResponse | None = AWS.bedrock_completion(
+                    self.__config.models[self._model_name].model,
+                    None,
+                    prompt,
+                    self._api_key,
+                    self._max_tokens,
+                    self._temperature,
+                )
+                if response is not None:
+                    if not cast(Choices, response.choices[0]).message.content:
+                        raise ValueError("Response not provided by Bedrock.")
+
+                    result: str | None = cast(
+                        Choices, response.choices[0]
+                    ).message.content
+                    if result is not None:
+                        self._logger.debug(
+                            f"Received response from Claude (length={len(result)} chars)"
+                        )
+                        return result
+                return None
+            except Exception as e:
+                self._logger.error(f"Error generating from Claude: {e}")
+                raise
+
+    def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
+        with open(self.__config.models[self._model_name].batch_file, "w") as batch_file:
+            json.dump(self.__batch_entries, batch_file)
+        AWS.run_batch_inference(
+            "docsynth/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
+            self.__config.models[self._model_name].model,
+            self.__config.models[self._model_name].batch_file,
+            bucket,
+            bedrock_execution_role,
+            self.__config.models[self._model_name].region,
+        )
+        return True
 
 
 class LocalClient(LLMClient):
@@ -193,7 +229,7 @@ class LocalClient(LLMClient):
         super().__init__(model, temperature, max_tokens)
         self.__base_url: str = base_url
 
-    def generate(self, prompt: str) -> str | None:
+    def generate(self, prompt: str, batch: bool = False) -> str | None:
         """
         Generate response from local API.
         """
@@ -224,3 +260,6 @@ class LocalClient(LLMClient):
         except Exception as e:
             self._logger.error(f"Error generating from local API: {e}")
             raise
+
+    def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
+        return False
