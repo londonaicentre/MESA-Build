@@ -6,7 +6,7 @@ from pathlib import Path
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
-from docsynth.config import LLM, PipelineConfig
+from docsynth.pipeline import LLM, PipelineConfig
 from docsynth.utils.build_prompt import PromptBuilder
 from docsynth.utils.llm_clients import (
     AnthropicClient,
@@ -14,7 +14,7 @@ from docsynth.utils.llm_clients import (
     LLMClient,
     LocalClient,
 )
-from docsynth.config import LLMProvider
+from docsynth.pipeline import LLMProvider
 
 
 class Generator:
