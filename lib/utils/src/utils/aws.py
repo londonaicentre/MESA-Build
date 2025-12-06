@@ -1,6 +1,7 @@
 import os
 import random
 import time
+from typing import Any
 
 import boto3
 from botocore.exceptions import ClientError
@@ -92,3 +93,123 @@ class AWS:
                 )
                 time.sleep(delay)
         return None
+
+    @staticmethod
+    def create_anthropic_bedrock_batch_entry(
+        id: str, system_prompt: str, user_prompt: str, max_tokens: int = 4000
+    ) -> dict[str, Any]:
+        return {
+            "recordId": id,
+            "modelInput": {
+                "anthropic_version": "bedrock-2023-05-31",
+                "system": system_prompt,
+                "max_tokens": max_tokens,
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": user_prompt,
+                            }
+                        ],
+                    },
+                ],
+            },
+        }
+
+    @staticmethod
+    def create_model_invocation_job(
+        job_id: str,
+        model_id: str,
+        batch_file: str,
+        bucket: str,
+        bedrock_execution_role: str,
+        model_region: str,
+    ) -> bool:
+        """Create a model invocation job (batch inference run) 
+            on AWS Bedrock
+
+        Args:
+            job_id (str): The id to give to the batch job
+            model_id (str): The Bedrock id of the model to use for
+                inference in the batch job
+            batch_file (str): The name of the local file
+                containing the batch specification
+            bucket (str): The name of the bucket in which the batch
+                specification exists
+            bedrock_execution_role (str): The ARN of an IAM role with
+                permissions to access S3 for batch specification and
+                access cross-region models
+            model_region (str): The region in which to run the job
+
+        Returns:
+            bool: Whether the batch inference run started successfully
+
+        """
+        try:
+            boto3.client(
+                "bedrock", region_name=model_region
+            ).create_model_invocation_job(
+                jobName="schemallama-" + job_id.replace("/", "-"),
+                modelId=model_id,
+                roleArn=bedrock_execution_role,
+                inputDataConfig={
+                    "s3InputDataConfig": {
+                        "s3Uri": "s3://"
+                        + bucket
+                        + "/"
+                        + job_id
+                        + "/input/"
+                        + batch_file
+                    }
+                },
+                outputDataConfig={
+                    "s3OutputDataConfig": {
+                        "s3Uri": "s3://" + bucket + "/" + job_id + "/output/"
+                    }
+                },
+            )
+        except ClientError as e:
+            print(e)
+            return False
+        return True
+
+    @staticmethod
+    def run_batch_inference(
+        job_id: str,
+        model_id: str,
+        batch_file: str,
+        bucket: str,
+        bedrock_execution_role: str,
+        model_region: str,
+    ) -> None:
+        """Generate samples via batch inference
+
+        Args:
+            job_id (str): The id to give to the batch job
+            model_id (str): The Bedrock id of the model to use for
+                inference in the batch job
+            batch_file (str): The name of the local file
+                containing the batch specification
+            bucket (str): The name of the bucket to which the batch
+                specification should be uploaded
+            bedrock_execution_role (str): The ARN of an IAM role with
+                permissions to access S3 for batch specification and
+                access cross-region models
+            model_region (str): The region in which to run the job
+
+        """
+        # Upload to S3 bucket
+        AWS.upload_file(
+            model_region,
+            batch_file,
+            bucket,
+            batch_file,
+            job_id + "/input",
+        )
+
+        # Generate samples in batch mode
+        AWS.create_model_invocation_job(
+            job_id, model_id, batch_file, bucket, bedrock_execution_role, model_region
+        )

@@ -5,8 +5,6 @@ import json
 from datetime import datetime
 from typing import Any, Callable, cast
 
-import boto3
-from botocore.exceptions import ClientError
 import pandas as pd
 import litellm
 from pydantic import BaseModel
@@ -299,91 +297,32 @@ class SampleGenerator:
             str: The batch request file
 
         """
-        fn: str = "anthropic_batch_job.jsonl"
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-        max_samples: int = len(df.index)
+        file_name: str = "anthropic_batch_job.jsonl"
+        dataframe: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        max_samples: int = len(dataframe.index)
         if sample_size > max_samples:
             print(
                 f"Requested number of samples is more than number of templates for generation. \
                     Will create {max_samples} samples instead of {sample_size}"
             )
             sample_size = max_samples
-        with open(fn, "w") as outfile:
-            for idx, row in df.iterrows():
+        with open(file_name, "w") as outfile:
+            for idx, row in dataframe.iterrows():
                 # Stop generating samples when requested amount is reached
                 if idx == sample_size:
                     print(f"Generated the requested number of samples, {sample_size}.")
                     break
-                user_prompt: str = self.__user_prompt_function(row.to_dict())
-                record: dict[str, Any] = {
-                    "recordId": str(idx),
-                    "modelInput": {
-                        "anthropic_version": "bedrock-2023-05-31",
-                        "system": self.__system_prompt,
-                        "max_tokens": 4000,
-                        "messages": [
-                            {
-                                "role": "user",
-                                "content": [
-                                    {
-                                        "type": "text",
-                                        "text": user_prompt,
-                                    }
-                                ],
-                            },
-                        ],
-                    },
-                }
-                print(json.dumps(record), file=outfile)
-        return fn
-
-    def __start_batch_inference(
-        self,
-        job_id: str,
-        role_arn: str,
-        bucket: str,
-    ) -> bool:
-        """Start AWS Bedrock batch inference
-
-        Args:
-            job_id (str): The id to give to the batch job
-            role_arn (str): The ARN of an IAM role with permissions to
-                access S3 for batch specification and access
-                cross-region models
-            bucket (str): The name of the bucket in which the batch
-                specification exists
-
-        Returns:
-            bool: Whether the batch inference run started successfully
-
-        """
-        try:
-            boto3.client(
-                "bedrock", region_name=self.__model_region
-            ).create_model_invocation_job(
-                jobName="schemallama-" + job_id.replace("/", "-"),
-                modelId=self.__model_id,
-                roleArn=role_arn,
-                inputDataConfig={
-                    "s3InputDataConfig": {
-                        "s3Uri": "s3://"
-                        + bucket
-                        + "/"
-                        + job_id
-                        + "/input/"
-                        + self.__model_batch_file
-                    }
-                },
-                outputDataConfig={
-                    "s3OutputDataConfig": {
-                        "s3Uri": "s3://" + bucket + "/" + job_id + "/output/"
-                    }
-                },
-            )
-        except ClientError as e:
-            print(e)
-            return False
-        return True
+                print(
+                    json.dumps(
+                        AWS.create_anthropic_bedrock_batch_entry(
+                            str(idx),
+                            self.__system_prompt,
+                            self.__user_prompt_function(row.to_dict()),
+                        )
+                    ),
+                    file=outfile,
+                )
+        return file_name
 
     def run_batch_inference(
         self,
@@ -395,8 +334,8 @@ class SampleGenerator:
 
         Args:
             sample_size (int): Number of samples to be generated
-            bucket (str): The name of the bucket in which the batch
-                specification exists
+            bucket (str): The name of the bucket to which the batch
+                specification should be uploaded
             bedrock_execution_role (str): The ARN of an IAM role with
                 permissions to access S3 for batch specification and
                 access cross-region models
@@ -406,22 +345,13 @@ class SampleGenerator:
         # Process all samples from bootstrap file in batch mode
         # Create batch instruction JSONL file
         self.__generate_batch(sample_size)
-        job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-
-        # Upload to S3 bucket
-        AWS.upload_file(
-            self.__model_region,
+        AWS.run_batch_inference(
+            "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
+            self.__model_id,
             self.__model_batch_file,
             bucket,
-            self.__model_batch_file,
-            job_id + "/input",
-        )
-
-        # Generate samples in batch mode
-        self.__start_batch_inference(
-            job_id,
             bedrock_execution_role,
-            bucket,
+            self.__model_region,
         )
 
     def run_backfill(self, sample_size: int) -> None:
