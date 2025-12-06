@@ -4,6 +4,7 @@ from typing import Any, cast
 
 from litellm import Choices, ModelResponse
 
+from docsynth.config import Config
 from utils.llm import LLM
 from utils.aws import AWS
 
@@ -56,7 +57,7 @@ class LLMClient(ABC):
 class GeminiClient(LLMClient):
     """Client for Google Gemini API"""
 
-    def init(
+    def __init__(
         self,
         model: str,
         temperature: float = 1.0,
@@ -133,13 +134,23 @@ class GeminiClient(LLMClient):
 class AnthropicClient(LLMClient):
     """Client for Anthropic API"""
 
+    def __init__(
+        self,
+        model: str,
+        temperature: float = 1.0,
+        max_tokens: int = 4000,
+        api_key: str = "",
+    ) -> None:
+        super().__init__(model, temperature, max_tokens, api_key)
+        self.__config: Config = Config()
+
     def generate(self, prompt: str) -> str | None:
         """Generate response from Claude"""
         self._logger.debug(f"Sending prompt to Claude (length={len(prompt)} chars)")
 
         try:
             response: ModelResponse | None = AWS.bedrock_completion(
-                self._model_name,
+                self.__config.models[self._model_name].model,
                 None,
                 prompt,
                 self._api_key,
