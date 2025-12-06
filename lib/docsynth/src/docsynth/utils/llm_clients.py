@@ -43,7 +43,7 @@ class LLMClient(ABC):
         )
 
     @abstractmethod
-    def generate(self, prompt: str, batch: bool = False) -> str | None:
+    def generate(self, prompt: str, batch_entry_id: str | None = None) -> str | None:
         """
         Generate a response from the LLM.
 
@@ -80,7 +80,7 @@ class GeminiClient(LLMClient):
                 "google-generativeai package not installed. Run: pip install google-generativeai"
             )
 
-    def generate(self, prompt: str, batch: bool = False) -> str | None:
+    def generate(self, prompt: str, batch_entry_id: str | None = None) -> str | None:
         """Generate response from Gemini."""
         self._logger.debug(f"Sending prompt to Gemini (length={len(prompt)} chars)")
 
@@ -154,15 +154,15 @@ class AnthropicClient(LLMClient):
         self.__config: Config = Config()
         self.__batch_entries: list[dict[str, Any]] = []
 
-    def generate(self, prompt: str, batch: bool = False) -> str | None:
+    def generate(self, prompt: str, batch_entry_id: str | None = None) -> str | None:
         """Generate response from Claude"""
-        if batch:
+        if batch_entry_id is not None:
             self._logger.debug(
                 f"Storing prompt for later batch run (length={len(prompt)} chars)"
             )
             self.__batch_entries.append(
                 AWS.create_anthropic_bedrock_batch_entry(
-                    str(len(self.__batch_entries)), None, prompt
+                    batch_entry_id, None, prompt
                 )
             )
             return None
@@ -231,7 +231,7 @@ class LocalClient(LLMClient):
         super().__init__(model, temperature, max_tokens)
         self.__base_url: str = base_url
 
-    def generate(self, prompt: str, batch: bool = False) -> str | None:
+    def generate(self, prompt: str, batch_entry_id: str | None = None) -> str | None:
         """
         Generate response from local API.
         """

@@ -223,7 +223,7 @@ class Generator:
                 if llm_client:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
-                        response = llm_client.generate(prompt, batch)
+                        response = llm_client.generate(prompt, doc_id)
                         if batch:
                             continue
                         content = self.__extract_output_content(str(response))
@@ -251,7 +251,7 @@ class Generator:
                 if llm_client:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
-                        response = llm_client.generate(prompt, batch)
+                        response = llm_client.generate(prompt, doc_id)
                         if batch:
                             continue
                         content = self.__extract_output_content(str(response))
@@ -269,7 +269,11 @@ class Generator:
                 self.__save_document(output_dir, doc_id, prompt, content)
 
         self.__logger.debug("#" * 60)
-        if llm_client is not None and bucket is not None and bedrock_execution_role is not None:
+        if (
+            llm_client is not None
+            and bucket is not None
+            and bedrock_execution_role is not None
+        ):
             llm_client.run_batch_inference(bucket, bedrock_execution_role)
         else:
             self.__logger.debug(f"Generated {total_docs} {action}")
