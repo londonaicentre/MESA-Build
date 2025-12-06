@@ -20,10 +20,10 @@ Serve llama models locally.
 
 ### Configuration
 
-- Create a file called `.env` in the directory where you intend to run this package. 
+- Create a file called `.env` in the directory where you intend to run this package.
 Populate it with the details you have been provided with in the following format:
 
-```
+```text
 MODEL_NAME=
 WEIGHTS_ID=
 WEIGHTS_KEY=
@@ -31,12 +31,12 @@ WEIGHTS_KEY=
 
 ## Installation
 
-1. (Recommended) Create a virtual environment and activate it: 
+1. (Recommended) Create a virtual environment and activate it:
 
-```
-python -m venv .venv
-source .venv/bin/activate
-```
+    ```python
+    python -m venv .venv
+    source .venv/bin/activate
+    ```
 
 2. Install this package: `pip install londonaicentre-llama-serve`.
 
@@ -58,7 +58,7 @@ source .venv/bin/activate
 
 1. Interact with the server using the [OpenAI client](https://pypi.org/project/openai) in python:
 
-    ```
+    ```python
     from openai import OpenAI
 
     client = OpenAI(
@@ -79,6 +79,4 @@ source .venv/bin/activate
 
 ## License
 
-This project uses the CC BY-NC-ND 4.0 license (see [LICENSE](LICENSE)).
-
-The contents of this repository are designed for NHS organisations to use on private data.
+This project uses a proprietary license (see [LICENSE](LICENSE.md)).
