@@ -197,7 +197,9 @@ class AnthropicClient(LLMClient):
 
     def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
         with open(self.__config.models[self._model_name].batch_file, "w") as batch_file:
-            json.dump(self.__batch_entries, batch_file)
+            entry: dict[str, Any]
+            for entry in self.__batch_entries:
+                print(json.dumps(entry), file=batch_file)
         AWS.run_batch_inference(
             "docsynth/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
             self.__config.models[self._model_name].model,
