@@ -14,6 +14,7 @@ class DatagenArgs:
     template: str
     batch: bool
     backfill: bool
+    extract: bool
 
 
 def parse_CLI_args() -> DatagenArgs:
@@ -52,6 +53,12 @@ def parse_CLI_args() -> DatagenArgs:
         default=False,
         help="Generate samples for skipped indices",
     )
+    parser.add_argument(
+        "-e",
+        "--extract",
+        action="store_true",
+        help="Extract generated samples from a Bedrock batch output file.",
+    )
     return DatagenArgs(**vars(parser.parse_args()))
 
 
@@ -74,6 +81,8 @@ def main() -> None:
             settings.US_BUCKET,
             settings.BEDROCK_EXECUTION_ROLE,
         )
+    elif args.extract:
+        sample_generator.extract_batch_output()
     elif args.backfill:
         sample_generator.run_backfill(
             args.sample_size,

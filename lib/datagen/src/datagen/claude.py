@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from re import Match
@@ -12,6 +13,7 @@ from litellm import Choices, ModelResponse
 
 from datagen.config import Config
 from utils.aws import AWS
+from utils.llm import BatchOutputs
 
 litellm.suppress_debug_info = (
     True  # suppress unhelpful library output on rate limit error
@@ -44,6 +46,9 @@ class SampleGenerator:
         bedrock_api_key: str | None = None,
     ):
         self.__config: Config = Config()
+        self.__logger: logging.Logger = logging.getLogger(__name__)
+        if not self.__logger.hasHandlers():
+            self.__logger.addHandler(logging.StreamHandler())
         self.__system_prompt: str = system_prompt
         self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
             user_prompt_function
@@ -89,7 +94,7 @@ class SampleGenerator:
                     return json.loads(json_match.group(0))
                 except json.JSONDecodeError:
                     raise Exception("Could not parse JSON from response")
-            print("No valid JSON found in response")
+            self.__logger.error("No valid JSON found in response")
             return None
 
     def __validate_with_pydantic(
@@ -108,8 +113,113 @@ class SampleGenerator:
             validated_report: BaseModel = self.__schema(**output_data)
             return True, validated_report
         except Exception as e:
-            print(f"Pydantic validation error: {e}")
+            self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
+
+    def __extract_validate_and_save_sample(self, response: str, sample_id: int) -> bool:
+        """Extract sample from model response, validate it and save it to a
+            labelled file.
+
+        Args:
+            response (str): The raw response
+            sample_id (int): The id with which to label the sample
+
+        Returns:
+            bool: Whether the named operations were successful
+
+        """
+        json_output: dict[str, Any] | None = self.__extract_json_from_response(response)
+        if json_output is not None:
+            if (
+                not isinstance(json_output, dict)
+                or "content" not in json_output
+                or "output" not in json_output
+            ):
+                self.__logger.error(
+                    f"Invalid schema format in output for sample {sample_id + 1}"
+                )
+                return False
+
+            # validate against schema
+            is_valid: bool
+            validated_output: BaseModel | None
+            is_valid, validated_output = self.__validate_with_pydantic(
+                json_output["output"]
+            )
+            if is_valid and validated_output is not None:
+                # Convert Pydantic model to dict for JSON serialization
+                json_output["output"] = validated_output.model_dump()
+                output_filename: str = os.path.join(
+                    self.__output_folder_name, f"sample{sample_id + 1:04d}.json"
+                )
+                try:
+                    with open(output_filename, "w", encoding="utf-8") as f:
+                        json.dump(json_output, f, indent=4, ensure_ascii=False)
+                    self.__logger.info(
+                        f"Successfully saved output to {output_filename}"
+                    )
+                    return True
+                except Exception as e:
+                    self.__logger.error(f"Error saving JSON to file: {e}")
+                    return False
+            else:
+                self.__logger.error(
+                    f"Pydantic validation failed for sample {sample_id + 1}"
+                )
+
+                # for debugging later
+                debug_filename: str = os.path.join(
+                    self.__output_folder_name,
+                    f"invalid_sample{sample_id + 1:04d}.json",
+                )
+                with open(debug_filename, "w", encoding="utf-8") as f:
+                    json.dump(json_output, f, indent=4, ensure_ascii=False)
+                return False
+        else:
+            self.__logger.warning(
+                f"Skipping file save for sample {sample_id + 1} due to JSON parsing failure"
+            )
+            self.__logger.debug(
+                "Claude response:",
+                response,
+            )
+            return False
+
+    def __generate_sample(self, bootstrap_file: pd.DataFrame, idx: int) -> bool:
+        """Generate structured output from a synthetic patient report.
+
+        Args:
+            bootstrap_file (pandas.DataFrame): Specialised examples (template) for
+                sample report generation
+            idx (int): Index for row to be processed from bootstrap file
+
+        Returns:
+            bool: Whether sample generation is successful
+
+        """
+        row: pd.Series = bootstrap_file.iloc[idx]
+        try:
+            user_prompt: str = self.__user_prompt_function(row.to_dict())
+            if self.__bedrock_api_key is None:
+                return False
+            message: ModelResponse | None = AWS.bedrock_completion(
+                self.__model_id,
+                self.__system_prompt,
+                user_prompt,
+                self.__bedrock_api_key,
+            )
+            if message is None:
+                return False
+            content: str | None = cast(Choices, message.choices[0]).message.content
+            if content is not None:
+                return self.__extract_validate_and_save_sample(content, idx)
+            else:
+                return False
+        except Exception as e:
+            self.__logger.error(f"Error processing row {idx + 1}: {e}")
+            return False
+
+    # real-time generation
 
     def __process_bootstrap_rows(
         self,
@@ -124,7 +234,7 @@ class SampleGenerator:
                 Defaults to 10.
 
         """
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
 
         # Process rows
         os.makedirs(self.__output_folder_name, exist_ok=True)
@@ -132,18 +242,18 @@ class SampleGenerator:
         successful_generations: int = 0
         failed_generations: int = 0
         if samples_exist > sample_size:
-            print(
+            self.__logger.warning(
                 f"Requested number of samples have already been generated in {self.__output_folder_name}."
             )
             exit()
-        max_samples: int = len(df.index)
+        max_samples: int = len(bootstrap_file.index)
         if sample_size > max_samples:
-            print(
+            self.__logger.warning(
                 f"Requested number of samples is more than number of templates for generation. \
                     Will create {max_samples} samples instead of {sample_size}"
             )
             sample_size = max_samples
-        for idx, row in df.iterrows():
+        for idx, row in bootstrap_file.iterrows():
             id: int = int(cast(int, idx))
 
             # Skip rows for which samples have been generated
@@ -152,15 +262,32 @@ class SampleGenerator:
 
             # Stop generating samples when requested amount is reached
             if id == sample_size:
-                print(f"Generated the requested number of samples, {sample_size}.")
+                self.__logger.info(
+                    f"Generated the requested number of samples, {sample_size}."
+                )
                 break
-            if self.__generate_sample(df, id):
+            if self.__generate_sample(bootstrap_file, id):
                 successful_generations += 1
             else:
                 failed_generations += 1
-        print(
+        self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
+
+    def run_sample_generation(self, sample_size: int) -> None:
+        """Generate samples via individual AWS Bedrock inference calls
+
+        Args:
+            sample_size (int): Number of samples to be generated
+
+        """
+
+        # Generate samples from bootstrap file
+        self.__process_bootstrap_rows(
+            sample_size,
+        )
+
+    # backfill
 
     def __find_missing_idx(self, sample_size: int) -> list[int]:
         """For a given folder and expected number of samples,
@@ -180,7 +307,6 @@ class SampleGenerator:
         missing_idx: list[int] = []
         for idx in range(sample_size):
             if f"{idx + 1:04d}" not in filenames:
-                # print(f"Sample missing for index {idx+1}")
                 missing_idx.append(idx)
         return missing_idx
 
@@ -191,102 +317,36 @@ class SampleGenerator:
             idx_list (list[int]): List of indices for a sample to be generated
 
         """
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
         successful_generations: int = 0
         failed_generations: int = 0
         for idx in idx_list:
-            print(f"Processing row {idx + 1}")
-            if self.__generate_sample(df, idx):
+            self.__logger.debug(f"Processing row {idx + 1}")
+            if self.__generate_sample(bootstrap_file, idx):
                 successful_generations += 1
             else:
                 failed_generations += 1
-        print(
+        self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
-    def __generate_sample(self, df: pd.DataFrame, idx: int) -> bool:
-        """Generate synthetic patient reports.
+    def run_backfill(self, sample_size: int) -> None:
+        """Backfill missing samples
 
         Args:
-            df (pandas.DataFrame): template for sample report generation
-            idx (int): Index for row to be processed from template
-
-        Returns:
-            bool: Whether sample generation is successful
+            sample_size (int): Number of samples to be generated
 
         """
-        row: pd.Series = df.iloc[idx]
-        try:
-            user_prompt: str = self.__user_prompt_function(row.to_dict())
-            if self.__bedrock_api_key is None:
-                return False
-            message: ModelResponse | None = AWS.bedrock_completion(
-                self.__model_id,
-                self.__system_prompt,
-                user_prompt,
-                self.__bedrock_api_key,
-            )
-            if message is None:
-                return False
-            json_output: dict[str, Any] | None = self.__extract_json_from_response(
-                str(cast(Choices, message.choices[0]).message.content)
-            )
-            if json_output is not None:
-                if (
-                    not isinstance(json_output, dict)
-                    or "content" not in json_output
-                    or "output" not in json_output
-                ):
-                    print(f"Invalid schema format in output for row {idx + 1}")
-                    return False
 
-                # validate against schema
-                is_valid: bool
-                validated_output: BaseModel | None
-                is_valid, validated_output = self.__validate_with_pydantic(
-                    json_output["output"]
-                )
-                if is_valid and validated_output is not None:
-                    # Convert Pydantic model to dict for JSON serialization
-                    json_output["output"] = validated_output.model_dump()
-                    output_filename: str = os.path.join(
-                        self.__output_folder_name, f"sample{idx + 1:04d}.json"
-                    )
-                    try:
-                        with open(output_filename, "w", encoding="utf-8") as f:
-                            json.dump(json_output, f, indent=4, ensure_ascii=False)
-                        print(f"Successfully saved output to {output_filename}")
-                        return True
-                    except Exception as e:
-                        print(f"Error saving JSON to file: {e}")
-                        return False
-                else:
-                    print(f"Pydantic validation failed for row {idx + 1}")
+        # Generate samples for missed indices in the bootstrap file specified
+        missing_idx: list[int] = self.__find_missing_idx(sample_size)
+        self.__logger.info(f"There are {len(missing_idx)} samples missing")
+        self.__backfill(missing_idx)
 
-                    # for debugging later
-                    debug_filename: str = os.path.join(
-                        self.__output_folder_name,
-                        f"invalid_sample{idx + 1:04d}.json",
-                    )
-                    with open(debug_filename, "w", encoding="utf-8") as f:
-                        json.dump(json_output, f, indent=4, ensure_ascii=False)
-                    return False
-            else:
-                print(
-                    f"Skipping file save for row {idx + 1} due to JSON parsing failure"
-                )
-                print(
-                    "Claude response:",
-                    str(cast(Choices, message.choices[0]).message.content),
-                )
-                return False
-        except Exception as e:
-            print(f"Error processing row {idx + 1}: {e}")
-            return False
+    # batch
 
     def __generate_batch(
-        self,
-        sample_size: int,
+        self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
     ) -> str:
         """Generate batch request file for Anthropic model
 
@@ -297,20 +357,21 @@ class SampleGenerator:
             str: The batch request file
 
         """
-        file_name: str = "anthropic_batch_job.jsonl"
-        dataframe: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-        max_samples: int = len(dataframe.index)
+        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        max_samples: int = len(bootstrap_file.index)
         if sample_size > max_samples:
-            print(
+            self.__logger.warning(
                 f"Requested number of samples is more than number of templates for generation. \
                     Will create {max_samples} samples instead of {sample_size}"
             )
             sample_size = max_samples
         with open(file_name, "w") as outfile:
-            for idx, row in dataframe.iterrows():
+            for idx, row in bootstrap_file.iterrows():
                 # Stop generating samples when requested amount is reached
                 if idx == sample_size:
-                    print(f"Generated the requested number of samples, {sample_size}.")
+                    self.__logger.debug(
+                        f"Generated the requested number of samples, {sample_size}."
+                    )
                     break
                 print(
                     json.dumps(
@@ -354,30 +415,29 @@ class SampleGenerator:
             self.__model_region,
         )
 
-    def run_backfill(self, sample_size: int) -> None:
-        """Backfill missing samples
-
-        Args:
-            sample_size (int): Number of samples to be generated
-
-        """
-
-        # Generate samples for missed indices in the bootstrap file specified
-        missing_idx: list[int] = self.__find_missing_idx(sample_size)
-        print(f"There are {len(missing_idx)} samples missing")
-        self.__backfill(missing_idx)
-
-    def run_sample_generation(self, sample_size: int) -> None:
-        """Generate samples via individual AWS Bedrock inference calls
-
-        Args:
-            sample_size (int): Number of samples to be generated
-
-        """
-
-        # Generate samples from bootstrap file
-        self.__process_bootstrap_rows(
-            sample_size,
+    def extract_batch_output(
+        self, file_name: str = "anthropic_batch_job.jsonl"
+    ) -> None:
+        successful_generations: int = 0
+        failed_generations: int = 0
+        with open(file_name + ".out") as batch_output_file:
+            for sample_id, bedrock_batch_output in enumerate(
+                BatchOutputs.model_validate(
+                    {"outputs": [json.loads(line) for line in batch_output_file]}
+                ).outputs
+            ):
+                try:
+                    if self.__extract_validate_and_save_sample(
+                        str(bedrock_batch_output.modelOutput.content[0].text), sample_id
+                    ):
+                        successful_generations += 1
+                    else:
+                        failed_generations += 1
+                except Exception as e:
+                    failed_generations += 1
+                    self.__logger.error(f"Error processing row {sample_id + 1}: {e}")
+        self.__logger.info(
+            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
 
