@@ -1,7 +1,6 @@
 import logging
 import os
 import re
-from re import Match
 import json
 from datetime import datetime
 from typing import Any, Callable, cast
@@ -13,7 +12,7 @@ from litellm import Choices, ModelResponse
 
 from datagen.config import Config
 from utils.aws import AWS
-from utils.llm import BatchOutputs
+from utils.llm import LLM, BatchOutputs
 
 litellm.suppress_debug_info = (
     True  # suppress unhelpful library output on rate limit error
@@ -78,12 +77,12 @@ class SampleGenerator:
             return json.loads(response)
         except json.JSONDecodeError:
             # try to find JSON in a code block
-            json_match: Match[str] | None = re.search(
-                r"```json\s*(.*?)\s*```", response, re.DOTALL
-            )
-            if json_match:
+            extracted: bool
+            content: str
+            extracted, _, content = LLM.extract_output_content(response)
+            if extracted:
                 try:
-                    return json.loads(json_match.group(1))
+                    return json.loads(content)
                 except json.JSONDecodeError:
                     pass
 

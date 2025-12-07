@@ -6,6 +6,7 @@ from sagemaker.jumpstart.estimator import JumpStartEstimator
 
 from finetune.config import Config
 from utils.aws import AWS
+from utils.llm import LLM, BatchOutput
 
 
 class FineTuner:
@@ -57,11 +58,12 @@ class FineTuner:
         with open("train.jsonl", "w") as outfile:
             with open(samples_input_file, "r") as infile:
                 for line in infile:
-                    parsed_line: dict[str, Any] = json.loads(line)
-                    text: str = (
-                        parsed_line["modelOutput"]["content"][0]["text"]
-                        .replace("```json", "")
-                        .replace("```", "")
+                    parsed_line: BatchOutput = BatchOutput.model_validate(
+                        json.loads(line)
+                    )
+                    text: str
+                    _, _, text = LLM.extract_output_content(
+                        parsed_line.modelOutput.content[0].text
                     )
                     try:
                         parsed_text: dict[str, Any] = json.loads(text)

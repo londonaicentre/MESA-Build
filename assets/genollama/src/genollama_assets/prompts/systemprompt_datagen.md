@@ -41,6 +41,7 @@ Present ONLY the generated report and output schema as a JSON file, with main fi
 
 The final output must be a valid JSON with this exact structure:
 ```json
+<OUTPUT>
 {
   "content": "generated_genomic_report_text",
   "output": {
@@ -70,4 +71,5 @@ The final output must be a valid JSON with this exact structure:
     }
   }
 }
+</OUTPUT>
 ```

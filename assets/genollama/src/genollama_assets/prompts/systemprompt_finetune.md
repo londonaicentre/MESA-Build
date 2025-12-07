@@ -28,6 +28,7 @@ Present ONLY the output schema as a JSON file containing the GenomicTestReport p
 
 The final output must be a valid JSON with this exact structure:
 ```json
+<OUTPUT>
 {
   "sufficient_data_quality": true,
   "is_genomic_report": true,
@@ -54,4 +55,5 @@ The final output must be a valid JSON with this exact structure:
     "overall_recommendations": "..."
   }
 }
+</OUTPUT>
 ```
