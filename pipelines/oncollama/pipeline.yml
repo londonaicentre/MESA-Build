@@ -38,4 +38,4 @@ prompt_config:
   include_content: true
   prompt_template: docsynth
 output:
-  subdirectory: test_batch
+  subdirectory: oncollama

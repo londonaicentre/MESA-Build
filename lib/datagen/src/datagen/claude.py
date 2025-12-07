@@ -1,5 +1,8 @@
+import csv
+import _csv
 import logging
 import os
+from pathlib import Path
 import re
 import json
 from datetime import datetime
@@ -11,6 +14,7 @@ from pydantic import BaseModel
 from litellm import Choices, ModelResponse
 
 from datagen.config import Config
+from schemallama_types.docsynth import DocsynthDocument
 from utils.aws import AWS
 from utils.llm import LLM, BatchOutputs
 
@@ -449,6 +453,7 @@ class BootstrapFileGenerator:
         model_name: str,
         bedrock_api_key: str,
         bucket: str = "",
+        bootstrap_file_name: str = "bootstrap.csv",
     ) -> None:
         """Generate bootstrap file to vary samples
 
@@ -462,6 +467,7 @@ class BootstrapFileGenerator:
             bedrock_api_key (str): API key to access AWS Bedrock
             bucket (str, optional): The name of the bucket in which to store the bootstrap file.
                 If omitted, file is not backed up.
+            bootstrap_file_name(str, optional): Name of output bootstrap file.
 
         """
         config: Config = Config()
@@ -471,7 +477,6 @@ class BootstrapFileGenerator:
             user_prompt_function(instruction),
             bedrock_api_key,
         )
-        bootstrap_file_name: str = "bootstrap.csv"
         if message is not None:
             with open(bootstrap_file_name, "w", newline="") as file:
                 file.write(str(cast(Choices, message.choices[0]).message.content))
@@ -482,4 +487,17 @@ class BootstrapFileGenerator:
                 bucket,
                 bootstrap_file_name,
                 "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
+            )
+
+    @staticmethod
+    def generate_from_existing_synthetic_data(
+        synthetic_data_folder: str = "output",
+        bootstrap_file_name: str = "bootstrap.csv",
+    ) -> None:
+        with open(bootstrap_file_name, "w", newline="") as bootstrap_file:
+            writer: _csv._writer = csv.writer(bootstrap_file)
+            writer.writerow(["content"])
+            writer.writerows(
+                [DocsynthDocument.model_validate_json(file.read_text()).content.replace("\n", " ").replace("\r", " ")]
+                for file in Path(synthetic_data_folder).iterdir()
             )

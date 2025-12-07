@@ -1,4 +1,3 @@
-import json
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -14,6 +13,7 @@ from docsynth.utils.llm_clients import (
     LocalClient,
 )
 from docsynth.pipeline import LLMProvider
+from schemallama_types.docsynth import DocsynthDocument
 from utils.llm import BatchOutputs, LLM as LLMUtils
 
 
@@ -64,18 +64,18 @@ class Generator:
     ) -> None:
         Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-        output: dict[str, str] = {
-            "doc_id": doc_id,
-            "doc_name": "synth",
-            "prompt": prompt,
-        }
+        output: DocsynthDocument = DocsynthDocument(
+            doc_id=doc_id,
+            doc_name="synth",
+            prompt=prompt,
+        )
 
         if content is not None:
-            output["content"] = content
+            output.content = content
 
         output_path: Path = Path(output_dir) / f"{doc_id}.json"
-        with open(output_path, "w") as f:
-            json.dump(output, f, indent=2)
+        with open(output_path, "w") as document:
+            document.write(output.model_dump_json(indent=2))
 
         self.__logger.debug(f"Saved document to {output_path}")
 
@@ -190,6 +190,7 @@ class Generator:
         prompt: str
         structure_name: str
         profile_id: str
+        doc_id: str
         response: str | None
         extracted: bool
         extraction_status_message: str
@@ -202,7 +203,7 @@ class Generator:
                 prompt, structure_name, profile_id = builder.build_prompt(
                     profile, include_style, include_content
                 )
-                doc_id: str = self.__generate_doc_id(structure_name, profile_id)
+                doc_id = self.__generate_doc_id(structure_name, profile_id)
 
                 if self.__llm_client:
                     try:
