@@ -115,18 +115,19 @@ class SampleGenerator:
             self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
 
-    def __generate_sample(self, df: pd.DataFrame, idx: int) -> bool:
+    def __generate_sample(self, bootstrap_file: pd.DataFrame, idx: int) -> bool:
         """Generate synthetic patient reports.
 
         Args:
-            df (pandas.DataFrame): template for sample report generation
-            idx (int): Index for row to be processed from template
+            bootstrap_file (pandas.DataFrame): Specialised examples (template) for
+                sample report generation
+            idx (int): Index for row to be processed from bootstrap file
 
         Returns:
             bool: Whether sample generation is successful
 
         """
-        row: pd.Series = df.iloc[idx]
+        row: pd.Series = bootstrap_file.iloc[idx]
         try:
             user_prompt: str = self.__user_prompt_function(row.to_dict())
             if self.__bedrock_api_key is None:
@@ -214,7 +215,7 @@ class SampleGenerator:
                 Defaults to 10.
 
         """
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
 
         # Process rows
         os.makedirs(self.__output_folder_name, exist_ok=True)
@@ -226,14 +227,14 @@ class SampleGenerator:
                 f"Requested number of samples have already been generated in {self.__output_folder_name}."
             )
             exit()
-        max_samples: int = len(df.index)
+        max_samples: int = len(bootstrap_file.index)
         if sample_size > max_samples:
             self.__logger.warning(
                 f"Requested number of samples is more than number of templates for generation. \
                     Will create {max_samples} samples instead of {sample_size}"
             )
             sample_size = max_samples
-        for idx, row in df.iterrows():
+        for idx, row in bootstrap_file.iterrows():
             id: int = int(cast(int, idx))
 
             # Skip rows for which samples have been generated
@@ -246,7 +247,7 @@ class SampleGenerator:
                     f"Generated the requested number of samples, {sample_size}."
                 )
                 break
-            if self.__generate_sample(df, id):
+            if self.__generate_sample(bootstrap_file, id):
                 successful_generations += 1
             else:
                 failed_generations += 1
@@ -297,12 +298,12 @@ class SampleGenerator:
             idx_list (list[int]): List of indices for a sample to be generated
 
         """
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
         successful_generations: int = 0
         failed_generations: int = 0
         for idx in idx_list:
             self.__logger.debug(f"Processing row {idx + 1}")
-            if self.__generate_sample(df, idx):
+            if self.__generate_sample(bootstrap_file, idx):
                 successful_generations += 1
             else:
                 failed_generations += 1
