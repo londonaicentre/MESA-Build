@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from re import Match
@@ -44,6 +45,9 @@ class SampleGenerator:
         bedrock_api_key: str | None = None,
     ):
         self.__config: Config = Config()
+        self.__logger: logging.Logger = logging.getLogger(__name__)
+        if not self.__logger.hasHandlers():
+            self.__logger.addHandler(logging.StreamHandler())
         self.__system_prompt: str = system_prompt
         self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
             user_prompt_function
@@ -89,7 +93,7 @@ class SampleGenerator:
                     return json.loads(json_match.group(0))
                 except json.JSONDecodeError:
                     raise Exception("Could not parse JSON from response")
-            print("No valid JSON found in response")
+            self.__logger.error("No valid JSON found in response")
             return None
 
     def __validate_with_pydantic(
@@ -108,7 +112,7 @@ class SampleGenerator:
             validated_report: BaseModel = self.__schema(**output_data)
             return True, validated_report
         except Exception as e:
-            print(f"Pydantic validation error: {e}")
+            self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
 
     def __process_bootstrap_rows(
@@ -132,13 +136,13 @@ class SampleGenerator:
         successful_generations: int = 0
         failed_generations: int = 0
         if samples_exist > sample_size:
-            print(
+            self.__logger.warning(
                 f"Requested number of samples have already been generated in {self.__output_folder_name}."
             )
             exit()
         max_samples: int = len(df.index)
         if sample_size > max_samples:
-            print(
+            self.__logger.warning(
                 f"Requested number of samples is more than number of templates for generation. \
                     Will create {max_samples} samples instead of {sample_size}"
             )
@@ -152,13 +156,15 @@ class SampleGenerator:
 
             # Stop generating samples when requested amount is reached
             if id == sample_size:
-                print(f"Generated the requested number of samples, {sample_size}.")
+                self.__logger.info(
+                    f"Generated the requested number of samples, {sample_size}."
+                )
                 break
             if self.__generate_sample(df, id):
                 successful_generations += 1
             else:
                 failed_generations += 1
-        print(
+        self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
@@ -180,7 +186,6 @@ class SampleGenerator:
         missing_idx: list[int] = []
         for idx in range(sample_size):
             if f"{idx + 1:04d}" not in filenames:
-                # print(f"Sample missing for index {idx+1}")
                 missing_idx.append(idx)
         return missing_idx
 
@@ -195,12 +200,12 @@ class SampleGenerator:
         successful_generations: int = 0
         failed_generations: int = 0
         for idx in idx_list:
-            print(f"Processing row {idx + 1}")
+            self.__logger.debug(f"Processing row {idx + 1}")
             if self.__generate_sample(df, idx):
                 successful_generations += 1
             else:
                 failed_generations += 1
-        print(
+        self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
@@ -237,7 +242,9 @@ class SampleGenerator:
                     or "content" not in json_output
                     or "output" not in json_output
                 ):
-                    print(f"Invalid schema format in output for row {idx + 1}")
+                    self.__logger.error(
+                        f"Invalid schema format in output for row {idx + 1}"
+                    )
                     return False
 
                 # validate against schema
@@ -255,13 +262,15 @@ class SampleGenerator:
                     try:
                         with open(output_filename, "w", encoding="utf-8") as f:
                             json.dump(json_output, f, indent=4, ensure_ascii=False)
-                        print(f"Successfully saved output to {output_filename}")
+                        self.__logger.info(
+                            f"Successfully saved output to {output_filename}"
+                        )
                         return True
                     except Exception as e:
-                        print(f"Error saving JSON to file: {e}")
+                        self.__logger.error(f"Error saving JSON to file: {e}")
                         return False
                 else:
-                    print(f"Pydantic validation failed for row {idx + 1}")
+                    self.__logger.error(f"Pydantic validation failed for row {idx + 1}")
 
                     # for debugging later
                     debug_filename: str = os.path.join(
@@ -272,16 +281,16 @@ class SampleGenerator:
                         json.dump(json_output, f, indent=4, ensure_ascii=False)
                     return False
             else:
-                print(
+                self.__logger.warning(
                     f"Skipping file save for row {idx + 1} due to JSON parsing failure"
                 )
-                print(
+                self.__logger.debug(
                     "Claude response:",
                     str(cast(Choices, message.choices[0]).message.content),
                 )
                 return False
         except Exception as e:
-            print(f"Error processing row {idx + 1}: {e}")
+            self.__logger.error(f"Error processing row {idx + 1}: {e}")
             return False
 
     def __generate_batch(
@@ -301,7 +310,7 @@ class SampleGenerator:
         dataframe: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
         max_samples: int = len(dataframe.index)
         if sample_size > max_samples:
-            print(
+            self.__logger.warning(
                 f"Requested number of samples is more than number of templates for generation. \
                     Will create {max_samples} samples instead of {sample_size}"
             )
@@ -310,7 +319,9 @@ class SampleGenerator:
             for idx, row in dataframe.iterrows():
                 # Stop generating samples when requested amount is reached
                 if idx == sample_size:
-                    print(f"Generated the requested number of samples, {sample_size}.")
+                    self.__logger.debug(
+                        f"Generated the requested number of samples, {sample_size}."
+                    )
                     break
                 print(
                     json.dumps(
@@ -364,7 +375,7 @@ class SampleGenerator:
 
         # Generate samples for missed indices in the bootstrap file specified
         missing_idx: list[int] = self.__find_missing_idx(sample_size)
-        print(f"There are {len(missing_idx)} samples missing")
+        self.__logger.info(f"There are {len(missing_idx)} samples missing")
         self.__backfill(missing_idx)
 
     def run_sample_generation(self, sample_size: int) -> None:
