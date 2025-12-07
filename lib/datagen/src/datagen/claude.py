@@ -115,100 +115,6 @@ class SampleGenerator:
             self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
 
-    def __process_bootstrap_rows(
-        self,
-        sample_size: int = 10,
-    ) -> None:
-        """Process rows from the specified bootstrap file and
-            generate the requested number of samples
-
-        Args:
-            bedrock_api_key (str): API key to access AWS Bedrock
-            sample_size (int, optional): Number of samples to generate.
-                Defaults to 10.
-
-        """
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-
-        # Process rows
-        os.makedirs(self.__output_folder_name, exist_ok=True)
-        samples_exist: int = len(os.listdir(self.__output_folder_name))
-        successful_generations: int = 0
-        failed_generations: int = 0
-        if samples_exist > sample_size:
-            self.__logger.warning(
-                f"Requested number of samples have already been generated in {self.__output_folder_name}."
-            )
-            exit()
-        max_samples: int = len(df.index)
-        if sample_size > max_samples:
-            self.__logger.warning(
-                f"Requested number of samples is more than number of templates for generation. \
-                    Will create {max_samples} samples instead of {sample_size}"
-            )
-            sample_size = max_samples
-        for idx, row in df.iterrows():
-            id: int = int(cast(int, idx))
-
-            # Skip rows for which samples have been generated
-            if id < samples_exist:
-                continue
-
-            # Stop generating samples when requested amount is reached
-            if id == sample_size:
-                self.__logger.info(
-                    f"Generated the requested number of samples, {sample_size}."
-                )
-                break
-            if self.__generate_sample(df, id):
-                successful_generations += 1
-            else:
-                failed_generations += 1
-        self.__logger.info(
-            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
-        )
-
-    def __find_missing_idx(self, sample_size: int) -> list[int]:
-        """For a given folder and expected number of samples,
-            identifies indices for which no sample was generated
-
-        Args:
-            sample_size (int): Expected number of samples
-
-        Returns:
-            list[int]: List of indices without a sample generated
-
-        """
-        all_files: list[str] = os.listdir(self.__output_folder_name)
-        filenames: list[str] = [
-            file.strip(".json").strip("sample") for file in all_files
-        ]
-        missing_idx: list[int] = []
-        for idx in range(sample_size):
-            if f"{idx + 1:04d}" not in filenames:
-                missing_idx.append(idx)
-        return missing_idx
-
-    def __backfill(self, idx_list: list[int]) -> None:
-        """Generate samples for the missing indices
-
-        Args:
-            idx_list (list[int]): List of indices for a sample to be generated
-
-        """
-        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-        successful_generations: int = 0
-        failed_generations: int = 0
-        for idx in idx_list:
-            self.__logger.debug(f"Processing row {idx + 1}")
-            if self.__generate_sample(df, idx):
-                successful_generations += 1
-            else:
-                failed_generations += 1
-        self.__logger.info(
-            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
-        )
-
     def __generate_sample(self, df: pd.DataFrame, idx: int) -> bool:
         """Generate synthetic patient reports.
 
@@ -293,6 +199,132 @@ class SampleGenerator:
             self.__logger.error(f"Error processing row {idx + 1}: {e}")
             return False
 
+    # real-time generation
+
+    def __process_bootstrap_rows(
+        self,
+        sample_size: int = 10,
+    ) -> None:
+        """Process rows from the specified bootstrap file and
+            generate the requested number of samples
+
+        Args:
+            bedrock_api_key (str): API key to access AWS Bedrock
+            sample_size (int, optional): Number of samples to generate.
+                Defaults to 10.
+
+        """
+        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+
+        # Process rows
+        os.makedirs(self.__output_folder_name, exist_ok=True)
+        samples_exist: int = len(os.listdir(self.__output_folder_name))
+        successful_generations: int = 0
+        failed_generations: int = 0
+        if samples_exist > sample_size:
+            self.__logger.warning(
+                f"Requested number of samples have already been generated in {self.__output_folder_name}."
+            )
+            exit()
+        max_samples: int = len(df.index)
+        if sample_size > max_samples:
+            self.__logger.warning(
+                f"Requested number of samples is more than number of templates for generation. \
+                    Will create {max_samples} samples instead of {sample_size}"
+            )
+            sample_size = max_samples
+        for idx, row in df.iterrows():
+            id: int = int(cast(int, idx))
+
+            # Skip rows for which samples have been generated
+            if id < samples_exist:
+                continue
+
+            # Stop generating samples when requested amount is reached
+            if id == sample_size:
+                self.__logger.info(
+                    f"Generated the requested number of samples, {sample_size}."
+                )
+                break
+            if self.__generate_sample(df, id):
+                successful_generations += 1
+            else:
+                failed_generations += 1
+        self.__logger.info(
+            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
+        )
+
+    def run_sample_generation(self, sample_size: int) -> None:
+        """Generate samples via individual AWS Bedrock inference calls
+
+        Args:
+            sample_size (int): Number of samples to be generated
+
+        """
+
+        # Generate samples from bootstrap file
+        self.__process_bootstrap_rows(
+            sample_size,
+        )
+
+    # backfill
+
+    def __find_missing_idx(self, sample_size: int) -> list[int]:
+        """For a given folder and expected number of samples,
+            identifies indices for which no sample was generated
+
+        Args:
+            sample_size (int): Expected number of samples
+
+        Returns:
+            list[int]: List of indices without a sample generated
+
+        """
+        all_files: list[str] = os.listdir(self.__output_folder_name)
+        filenames: list[str] = [
+            file.strip(".json").strip("sample") for file in all_files
+        ]
+        missing_idx: list[int] = []
+        for idx in range(sample_size):
+            if f"{idx + 1:04d}" not in filenames:
+                missing_idx.append(idx)
+        return missing_idx
+
+    def __backfill(self, idx_list: list[int]) -> None:
+        """Generate samples for the missing indices
+
+        Args:
+            idx_list (list[int]): List of indices for a sample to be generated
+
+        """
+        df: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        successful_generations: int = 0
+        failed_generations: int = 0
+        for idx in idx_list:
+            self.__logger.debug(f"Processing row {idx + 1}")
+            if self.__generate_sample(df, idx):
+                successful_generations += 1
+            else:
+                failed_generations += 1
+        self.__logger.info(
+            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
+        )
+
+    def run_backfill(self, sample_size: int) -> None:
+        """Backfill missing samples
+
+        Args:
+            sample_size (int): Number of samples to be generated
+
+        """
+
+        # Generate samples for missed indices in the bootstrap file specified
+        missing_idx: list[int] = self.__find_missing_idx(sample_size)
+        self.__logger.info(f"There are {len(missing_idx)} samples missing")
+        self.__backfill(missing_idx)
+
+    # batch
+
     def __generate_batch(
         self,
         sample_size: int,
@@ -363,32 +395,6 @@ class SampleGenerator:
             bucket,
             bedrock_execution_role,
             self.__model_region,
-        )
-
-    def run_backfill(self, sample_size: int) -> None:
-        """Backfill missing samples
-
-        Args:
-            sample_size (int): Number of samples to be generated
-
-        """
-
-        # Generate samples for missed indices in the bootstrap file specified
-        missing_idx: list[int] = self.__find_missing_idx(sample_size)
-        self.__logger.info(f"There are {len(missing_idx)} samples missing")
-        self.__backfill(missing_idx)
-
-    def run_sample_generation(self, sample_size: int) -> None:
-        """Generate samples via individual AWS Bedrock inference calls
-
-        Args:
-            sample_size (int): Number of samples to be generated
-
-        """
-
-        # Generate samples from bootstrap file
-        self.__process_bootstrap_rows(
-            sample_size,
         )
 
 
