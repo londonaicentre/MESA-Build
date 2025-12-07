@@ -421,6 +421,14 @@ class SampleGenerator:
     def extract_batch_output(
         self, file_name: str = "anthropic_batch_job.jsonl"
     ) -> None:
+        """Transform batch inference sample outputs to the same format
+            (set of output files) as real-time generated samples.
+
+        Args:
+            file_name (str, optional): Batch output file from which
+                to extract samples
+
+        """
         successful_generations: int = 0
         failed_generations: int = 0
         with open(file_name + ".out") as batch_output_file:
@@ -494,6 +502,15 @@ class BootstrapFileGenerator:
         synthetic_data_folder: str = "output",
         bootstrap_file_name: str = "bootstrap.csv",
     ) -> None:
+        """Generate bootstrap file version of docsynth samples,
+            compatible with user prompt creation.
+
+        Args:
+            synthetic_data_folder (str, optional): Folder containing
+                docsynth outputs.
+            bootstrap_file_name(str, optional): Name of output bootstrap file.
+
+        """
         with open(bootstrap_file_name, "w", newline="") as bootstrap_file:
             writer: _csv._writer = csv.writer(bootstrap_file)
             writer.writerow(["content"])
