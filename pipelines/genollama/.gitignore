@@ -13,3 +13,4 @@ __pycache__/
 template.json
 *.jsonl*
 *.csv
+samples*/

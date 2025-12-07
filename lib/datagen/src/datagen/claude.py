@@ -13,6 +13,7 @@ from litellm import Choices, ModelResponse
 
 from datagen.config import Config
 from utils.aws import AWS
+from utils.llm import BatchOutputs
 
 litellm.suppress_debug_info = (
     True  # suppress unhelpful library output on rate limit error
@@ -345,8 +346,7 @@ class SampleGenerator:
     # batch
 
     def __generate_batch(
-        self,
-        sample_size: int,
+        self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
     ) -> str:
         """Generate batch request file for Anthropic model
 
@@ -357,9 +357,8 @@ class SampleGenerator:
             str: The batch request file
 
         """
-        file_name: str = "anthropic_batch_job.jsonl"
-        dataframe: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-        max_samples: int = len(dataframe.index)
+        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
+        max_samples: int = len(bootstrap_file.index)
         if sample_size > max_samples:
             self.__logger.warning(
                 f"Requested number of samples is more than number of templates for generation. \
@@ -367,7 +366,7 @@ class SampleGenerator:
             )
             sample_size = max_samples
         with open(file_name, "w") as outfile:
-            for idx, row in dataframe.iterrows():
+            for idx, row in bootstrap_file.iterrows():
                 # Stop generating samples when requested amount is reached
                 if idx == sample_size:
                     self.__logger.debug(
@@ -414,6 +413,31 @@ class SampleGenerator:
             bucket,
             bedrock_execution_role,
             self.__model_region,
+        )
+
+    def extract_batch_output(
+        self, file_name: str = "anthropic_batch_job.jsonl"
+    ) -> None:
+        successful_generations: int = 0
+        failed_generations: int = 0
+        with open(file_name + ".out") as batch_output_file:
+            for sample_id, bedrock_batch_output in enumerate(
+                BatchOutputs.model_validate(
+                    {"outputs": [json.loads(line) for line in batch_output_file]}
+                ).outputs
+            ):
+                try:
+                    if self.__extract_validate_and_save_sample(
+                        str(bedrock_batch_output.modelOutput.content[0].text), sample_id
+                    ):
+                        successful_generations += 1
+                    else:
+                        failed_generations += 1
+                except Exception as e:
+                    failed_generations += 1
+                    self.__logger.error(f"Error processing row {sample_id + 1}: {e}")
+        self.__logger.info(
+            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
 
