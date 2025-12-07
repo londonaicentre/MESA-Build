@@ -498,6 +498,10 @@ class BootstrapFileGenerator:
             writer: _csv._writer = csv.writer(bootstrap_file)
             writer.writerow(["content"])
             writer.writerows(
-                [DocsynthDocument.model_validate_json(file.read_text()).content.replace("\n", " ").replace("\r", " ")]
+                [
+                    str(DocsynthDocument.model_validate_json(file.read_text()).content)
+                    .replace("\n", " ")
+                    .replace("\r", " ")
+                ]
                 for file in Path(synthetic_data_folder).iterdir()
             )
