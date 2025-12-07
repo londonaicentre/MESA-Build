@@ -7,7 +7,7 @@ from typing import Any, cast
 from docsynth.config import Config
 from litellm import Choices, ModelResponse
 
-from utils.llm import LLM
+from utils.llm import LLM, BatchOutputs
 from utils.aws import AWS
 
 
@@ -58,6 +58,10 @@ class LLMClient(ABC):
     @abstractmethod
     def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
         pass
+
+    @abstractmethod
+    def get_batch_inference_outputs(self) -> BatchOutputs | None:
+        return None
 
 
 class GeminiClient(LLMClient):
@@ -139,6 +143,9 @@ class GeminiClient(LLMClient):
     def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
         return False
 
+    def get_batch_inference_outputs(self) -> BatchOutputs | None:
+        return None
+
 
 class AnthropicClient(LLMClient):
     """Client for Anthropic API"""
@@ -161,9 +168,7 @@ class AnthropicClient(LLMClient):
                 f"Storing prompt for later batch run (length={len(prompt)} chars)"
             )
             self.__batch_entries.append(
-                AWS.create_anthropic_bedrock_batch_entry(
-                    batch_entry_id, None, prompt
-                )
+                AWS.create_anthropic_bedrock_batch_entry(batch_entry_id, None, prompt)
             )
             return None
         else:
@@ -209,6 +214,14 @@ class AnthropicClient(LLMClient):
             self.__config.models[self._model_name].region,
         )
         return True
+
+    def get_batch_inference_outputs(self) -> BatchOutputs | None:
+        with open(
+            self.__config.models[self._model_name].batch_file + ".out"
+        ) as batch_output_file:
+            return BatchOutputs.model_validate(
+                {"outputs": [json.loads(line) for line in batch_output_file]}
+            )
 
 
 class LocalClient(LLMClient):
@@ -265,3 +278,6 @@ class LocalClient(LLMClient):
 
     def run_batch_inference(self, bucket: str, bedrock_execution_role: str) -> bool:
         return False
+
+    def get_batch_inference_outputs(self) -> BatchOutputs | None:
+        return None
