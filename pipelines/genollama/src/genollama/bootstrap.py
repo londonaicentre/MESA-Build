@@ -42,7 +42,7 @@ def main() -> None:
     args: BootstrapArgs = parse_CLI_args()
     settings: Settings = Settings()
     genollama_assets: GenoLlamaAssets = GenoLlamaAssets()
-    BootstrapFileGenerator.run_bootstrap_file_generation(
+    BootstrapFileGenerator.generate(
         genollama_assets.load_system_prompt("systemprompt_bootstrap.md"),
         genollama_assets.load_bootstrap_user_prompt,
         args.instruction,

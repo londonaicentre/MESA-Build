@@ -76,7 +76,7 @@ def main() -> None:
         settings.BEDROCK_API_KEY,
     )
     if args.batch:
-        sample_generator.run_batch_inference(
+        sample_generator.generate_via_batch(
             args.sample_size,
             settings.US_BUCKET,
             settings.BEDROCK_EXECUTION_ROLE,
@@ -88,6 +88,6 @@ def main() -> None:
             args.sample_size,
         )
     else:
-        sample_generator.run_sample_generation(
+        sample_generator.generate(
             args.sample_size,
         )

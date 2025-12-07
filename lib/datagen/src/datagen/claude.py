@@ -274,7 +274,7 @@ class SampleGenerator:
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
-    def run_sample_generation(self, sample_size: int) -> None:
+    def generate(self, sample_size: int) -> None:
         """Generate samples via individual AWS Bedrock inference calls
 
         Args:
@@ -385,7 +385,7 @@ class SampleGenerator:
                 )
         return file_name
 
-    def run_batch_inference(
+    def generate_via_batch(
         self,
         sample_size: int,
         bucket: str,
@@ -443,7 +443,7 @@ class SampleGenerator:
 
 class BootstrapFileGenerator:
     @staticmethod
-    def run_bootstrap_file_generation(
+    def generate(
         system_prompt: str,
         user_prompt_function: Callable[[str], str],
         instruction: str,
