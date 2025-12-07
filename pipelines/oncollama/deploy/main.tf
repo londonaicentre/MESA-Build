@@ -25,12 +25,28 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us"
+
+  default_tags {
+    tags = {
+      terraform = "true"
+    }
+  }
+}
+
 ############################
 # S3
 ############################
 
 resource "aws_s3_bucket" "oncollama_bucket" {
   bucket = "aicentre-nlpteam-oncollama"
+}
+
+resource "aws_s3_bucket" "oncollama_us_bucket" {
+  provider = aws.us
+  bucket   = "aicentre-nlpteam-us-oncollama"
 }
 
 #####################################

@@ -1,6 +1,44 @@
-from typing import Any
+from typing import Any, Literal
 
-from litellm import completion, ModelResponse
+from litellm import Usage, completion, ModelResponse
+from pydantic import BaseModel
+
+
+class TextContent(BaseModel):
+    type: Literal["text"]
+    text: str
+
+
+class Message(BaseModel):
+    role: Literal["user", "assistant"]
+    content: list[TextContent]
+
+
+class ModelInput(BaseModel):
+    anthropic_version: str
+    max_tokens: int
+    messages: list[Message]
+
+
+class ModelOutput(BaseModel):
+    model: str
+    id: str
+    type: str
+    role: str
+    content: list[TextContent]
+    stop_reason: str
+    stop_sequence: str | None = None
+    usage: Usage
+
+
+class BatchOutput(BaseModel):
+    modelInput: ModelInput
+    modelOutput: ModelOutput
+    recordId: str
+
+
+class BatchOutputs(BaseModel):
+    outputs: list[BatchOutput]
 
 
 class LLM:
