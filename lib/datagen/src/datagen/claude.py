@@ -115,8 +115,77 @@ class SampleGenerator:
             self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
 
+    def __extract_validate_and_save_sample(self, response: str, sample_id: int) -> bool:
+        """Extract sample from model response, validate it and save it to a
+            labelled file.
+
+        Args:
+            response (str): The raw response
+            sample_id (int): The id with which to label the sample
+
+        Returns:
+            bool: Whether the named operations were successful
+
+        """
+        json_output: dict[str, Any] | None = self.__extract_json_from_response(response)
+        if json_output is not None:
+            if (
+                not isinstance(json_output, dict)
+                or "content" not in json_output
+                or "output" not in json_output
+            ):
+                self.__logger.error(
+                    f"Invalid schema format in output for sample {sample_id + 1}"
+                )
+                return False
+
+            # validate against schema
+            is_valid: bool
+            validated_output: BaseModel | None
+            is_valid, validated_output = self.__validate_with_pydantic(
+                json_output["output"]
+            )
+            if is_valid and validated_output is not None:
+                # Convert Pydantic model to dict for JSON serialization
+                json_output["output"] = validated_output.model_dump()
+                output_filename: str = os.path.join(
+                    self.__output_folder_name, f"sample{sample_id + 1:04d}.json"
+                )
+                try:
+                    with open(output_filename, "w", encoding="utf-8") as f:
+                        json.dump(json_output, f, indent=4, ensure_ascii=False)
+                    self.__logger.info(
+                        f"Successfully saved output to {output_filename}"
+                    )
+                    return True
+                except Exception as e:
+                    self.__logger.error(f"Error saving JSON to file: {e}")
+                    return False
+            else:
+                self.__logger.error(
+                    f"Pydantic validation failed for sample {sample_id + 1}"
+                )
+
+                # for debugging later
+                debug_filename: str = os.path.join(
+                    self.__output_folder_name,
+                    f"invalid_sample{sample_id + 1:04d}.json",
+                )
+                with open(debug_filename, "w", encoding="utf-8") as f:
+                    json.dump(json_output, f, indent=4, ensure_ascii=False)
+                return False
+        else:
+            self.__logger.warning(
+                f"Skipping file save for sample {sample_id + 1} due to JSON parsing failure"
+            )
+            self.__logger.debug(
+                "Claude response:",
+                response,
+            )
+            return False
+
     def __generate_sample(self, bootstrap_file: pd.DataFrame, idx: int) -> bool:
-        """Generate synthetic patient reports.
+        """Generate structured output from a synthetic patient report.
 
         Args:
             bootstrap_file (pandas.DataFrame): Specialised examples (template) for
@@ -140,61 +209,10 @@ class SampleGenerator:
             )
             if message is None:
                 return False
-            json_output: dict[str, Any] | None = self.__extract_json_from_response(
-                str(cast(Choices, message.choices[0]).message.content)
-            )
-            if json_output is not None:
-                if (
-                    not isinstance(json_output, dict)
-                    or "content" not in json_output
-                    or "output" not in json_output
-                ):
-                    self.__logger.error(
-                        f"Invalid schema format in output for row {idx + 1}"
-                    )
-                    return False
-
-                # validate against schema
-                is_valid: bool
-                validated_output: BaseModel | None
-                is_valid, validated_output = self.__validate_with_pydantic(
-                    json_output["output"]
-                )
-                if is_valid and validated_output is not None:
-                    # Convert Pydantic model to dict for JSON serialization
-                    json_output["output"] = validated_output.model_dump()
-                    output_filename: str = os.path.join(
-                        self.__output_folder_name, f"sample{idx + 1:04d}.json"
-                    )
-                    try:
-                        with open(output_filename, "w", encoding="utf-8") as f:
-                            json.dump(json_output, f, indent=4, ensure_ascii=False)
-                        self.__logger.info(
-                            f"Successfully saved output to {output_filename}"
-                        )
-                        return True
-                    except Exception as e:
-                        self.__logger.error(f"Error saving JSON to file: {e}")
-                        return False
-                else:
-                    self.__logger.error(f"Pydantic validation failed for row {idx + 1}")
-
-                    # for debugging later
-                    debug_filename: str = os.path.join(
-                        self.__output_folder_name,
-                        f"invalid_sample{idx + 1:04d}.json",
-                    )
-                    with open(debug_filename, "w", encoding="utf-8") as f:
-                        json.dump(json_output, f, indent=4, ensure_ascii=False)
-                    return False
+            content: str | None = cast(Choices, message.choices[0]).message.content
+            if content is not None:
+                return self.__extract_validate_and_save_sample(content, idx)
             else:
-                self.__logger.warning(
-                    f"Skipping file save for row {idx + 1} due to JSON parsing failure"
-                )
-                self.__logger.debug(
-                    "Claude response:",
-                    str(cast(Choices, message.choices[0]).message.content),
-                )
                 return False
         except Exception as e:
             self.__logger.error(f"Error processing row {idx + 1}: {e}")
