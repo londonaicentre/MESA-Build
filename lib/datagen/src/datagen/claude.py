@@ -1,7 +1,9 @@
+import csv
+import _csv
 import logging
 import os
+from pathlib import Path
 import re
-from re import Match
 import json
 from datetime import datetime
 from typing import Any, Callable, cast
@@ -12,8 +14,9 @@ from pydantic import BaseModel
 from litellm import Choices, ModelResponse
 
 from datagen.config import Config
+from schemallama_types.docsynth import DocsynthDocument
 from utils.aws import AWS
-from utils.llm import BatchOutputs
+from utils.llm import LLM, BatchOutputs
 
 litellm.suppress_debug_info = (
     True  # suppress unhelpful library output on rate limit error
@@ -78,12 +81,12 @@ class SampleGenerator:
             return json.loads(response)
         except json.JSONDecodeError:
             # try to find JSON in a code block
-            json_match: Match[str] | None = re.search(
-                r"```json\s*(.*?)\s*```", response, re.DOTALL
-            )
-            if json_match:
+            extracted: bool
+            content: str
+            extracted, _, content = LLM.extract_output_content(response)
+            if extracted:
                 try:
-                    return json.loads(json_match.group(1))
+                    return json.loads(content)
                 except json.JSONDecodeError:
                     pass
 
@@ -274,7 +277,7 @@ class SampleGenerator:
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
-    def run_sample_generation(self, sample_size: int) -> None:
+    def generate(self, sample_size: int) -> None:
         """Generate samples via individual AWS Bedrock inference calls
 
         Args:
@@ -385,7 +388,7 @@ class SampleGenerator:
                 )
         return file_name
 
-    def run_batch_inference(
+    def generate_via_batch(
         self,
         sample_size: int,
         bucket: str,
@@ -443,13 +446,14 @@ class SampleGenerator:
 
 class BootstrapFileGenerator:
     @staticmethod
-    def run_bootstrap_file_generation(
+    def generate(
         system_prompt: str,
         user_prompt_function: Callable[[str], str],
         instruction: str,
         model_name: str,
         bedrock_api_key: str,
         bucket: str = "",
+        bootstrap_file_name: str = "bootstrap.csv",
     ) -> None:
         """Generate bootstrap file to vary samples
 
@@ -463,6 +467,7 @@ class BootstrapFileGenerator:
             bedrock_api_key (str): API key to access AWS Bedrock
             bucket (str, optional): The name of the bucket in which to store the bootstrap file.
                 If omitted, file is not backed up.
+            bootstrap_file_name(str, optional): Name of output bootstrap file.
 
         """
         config: Config = Config()
@@ -472,7 +477,6 @@ class BootstrapFileGenerator:
             user_prompt_function(instruction),
             bedrock_api_key,
         )
-        bootstrap_file_name: str = "bootstrap.csv"
         if message is not None:
             with open(bootstrap_file_name, "w", newline="") as file:
                 file.write(str(cast(Choices, message.choices[0]).message.content))
@@ -483,4 +487,17 @@ class BootstrapFileGenerator:
                 bucket,
                 bootstrap_file_name,
                 "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
+            )
+
+    @staticmethod
+    def generate_from_existing_synthetic_data(
+        synthetic_data_folder: str = "output",
+        bootstrap_file_name: str = "bootstrap.csv",
+    ) -> None:
+        with open(bootstrap_file_name, "w", newline="") as bootstrap_file:
+            writer: _csv._writer = csv.writer(bootstrap_file)
+            writer.writerow(["content"])
+            writer.writerows(
+                [DocsynthDocument.model_validate_json(file.read_text()).content.replace("\n", " ").replace("\r", " ")]
+                for file in Path(synthetic_data_folder).iterdir()
             )

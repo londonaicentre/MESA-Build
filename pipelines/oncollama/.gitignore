@@ -13,3 +13,4 @@ __pycache__/
 debug.log
 output/
 *.jsonl*
+*.csv

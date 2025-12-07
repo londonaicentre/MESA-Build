@@ -1,3 +1,4 @@
+from re import Match, DOTALL, search
 from typing import Any, Literal
 
 from litellm import Usage, completion, ModelResponse
@@ -79,3 +80,31 @@ class LLM:
             stream=False,
             **kwargs,
         )
+
+    @staticmethod
+    def extract_output_content(response_text: str) -> tuple[bool, str, str]:
+        """Extract the json portion of an LLM schema standardisation response.
+
+        Args:
+            response_text (str): The full response text
+
+        Returns:
+            tuple: Whether the extraction was successful, a status message,
+                and the extracted (or full) content
+
+        """
+        pattern: str = r"<OUTPUT>(.*?)</OUTPUT>"
+        match: Match[str] | None = search(pattern, response_text, DOTALL)
+        if match:
+            content: str = match.group(1).strip()
+            return (
+                True,
+                f"Successfully extracted content from <OUTPUT> tags (length={len(content)} chars)",
+                content,
+            )
+        else:
+            return (
+                False,
+                "No <OUTPUT> tags found in response, using full response text",
+                response_text.strip(),
+            )

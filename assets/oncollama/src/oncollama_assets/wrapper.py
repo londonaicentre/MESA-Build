@@ -43,7 +43,7 @@ class OncoLlamaAssets(SchemaLlamaAssets):
             return False, f"Schema validation failed: {e}", None
 
     # prompts
-    def load_system_prompt(self, file: str = "infer_prompt.txt") -> str:
+    def load_system_prompt(self, file: str = "systemprompt_infer.md") -> str:
         """Create a system prompt
 
         Args:
@@ -63,8 +63,7 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         return ""
 
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
-        """TODO: Implement upon data generation in oncollama."""
-        return ""
+        return row["content"]
 
     # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:

@@ -1,10 +1,10 @@
 from argparse import ArgumentParser
 from dataclasses import dataclass
 
-from genollama.settings import Settings
-from genollama_assets.wrapper import GenoLlamaAssets
-from genollama_assets.schema import GenomicTestReport
 from datagen.claude import SampleGenerator
+from oncollama.settings import Settings
+from oncollama_assets.schema import OncoLlamaModel
+from oncollama_assets.wrapper import OncoLlamaAssets
 
 
 @dataclass
@@ -65,12 +65,12 @@ def parse_CLI_args() -> DatagenArgs:
 def main() -> None:
     args: DatagenArgs = parse_CLI_args()
     settings: Settings = Settings()
-    genollama_assets: GenoLlamaAssets = GenoLlamaAssets()
-    system_prompt: str = genollama_assets.load_system_prompt()
+    oncollama_assets: OncoLlamaAssets = OncoLlamaAssets()
+    system_prompt: str = oncollama_assets.load_system_prompt("systemprompt_datagen.md")
     sample_generator: SampleGenerator = SampleGenerator(
         system_prompt,
-        genollama_assets.load_datagen_user_prompt,
-        GenomicTestReport,
+        oncollama_assets.load_datagen_user_prompt,
+        OncoLlamaModel,
         args.model_name,
         args.template,
         settings.BEDROCK_API_KEY,
