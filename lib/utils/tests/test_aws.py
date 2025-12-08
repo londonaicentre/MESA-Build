@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock, patch
 
 from litellm import RateLimitError
-
 import pytest
+
 from utils.aws import AWS
 
 
@@ -32,3 +32,37 @@ def test_completion_limit_raises_exception(
     mock_completion.return_value = model_response
     with pytest.raises(RateLimitError):
         AWS.bedrock_completion("foo", "bar", "baz", "quux")
+
+
+def test_create_anthropic_bedrock_batch_entry_valid_fields_are_present() -> None:
+    assert (
+        AWS.create_anthropic_bedrock_batch_entry("", None, "")["modelInput"][
+            "anthropic_version"
+        ]
+        == "bedrock-2023-05-31"
+    )
+    assert (
+        AWS.create_anthropic_bedrock_batch_entry("foo", None, "")["recordId"] == "foo"
+    )
+    assert (
+        AWS.create_anthropic_bedrock_batch_entry("", None, "bar")["modelInput"][
+            "messages"
+        ][0]["content"][0]["text"]
+        == "bar"
+    )
+    assert (
+        "system"
+        not in AWS.create_anthropic_bedrock_batch_entry("", None, "bar")[
+            "modelInput"
+        ].keys()
+    )
+
+
+@patch("utils.aws.boto3.client")
+def test_create_model_invocation_job_valid_input_succeeds(
+    mock_client: MagicMock,
+) -> None:
+    mock_bedrock_client = MagicMock()
+    mock_client.return_value = mock_bedrock_client
+    AWS.create_model_invocation_job("foo", "bar", "baz", "qux", "quux", "foobar")
+    mock_bedrock_client.create_model_invocation_job.assert_called_once()
