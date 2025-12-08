@@ -65,7 +65,7 @@ class SampleGenerator:
         self.__bedrock_api_key: str | None = bedrock_api_key
         self.__output_folder_name: str = f"samples_{model_name}/"
 
-    def __extract_json_from_response(self, response: str) -> dict[str, Any] | None:
+    def _extract_json_from_response(self, response: str) -> dict[str, Any] | None:
         """Extract JSON from Claude's response
 
         Args:
@@ -90,17 +90,19 @@ class SampleGenerator:
                 except json.JSONDecodeError:
                     pass
 
-            # If fails, try to find any JSON-like structure
+            # if fails, try to find any JSON-like structure
             json_match = re.search(r"{[\s\S]*}", response)
             if json_match:
                 try:
                     return json.loads(json_match.group(0))
                 except json.JSONDecodeError:
-                    raise Exception("Could not parse JSON from response")
+                    raise json.JSONDecodeError(
+                        "Could not parse JSON from response", "", 0
+                    )
             self.__logger.error("No valid JSON found in response")
             return None
 
-    def __validate_with_pydantic(
+    def _validate_with_pydantic(
         self, output_data: dict[str, Any]
     ) -> tuple[bool, BaseModel | None]:
         """Validate the output against the Pydantic schema
@@ -119,7 +121,7 @@ class SampleGenerator:
             self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
 
-    def __extract_validate_and_save_sample(self, response: str, sample_id: int) -> bool:
+    def _extract_validate_and_save_sample(self, response: str, sample_id: int) -> bool:
         """Extract sample from model response, validate it and save it to a
             labelled file.
 
@@ -131,7 +133,7 @@ class SampleGenerator:
             bool: Whether the named operations were successful
 
         """
-        json_output: dict[str, Any] | None = self.__extract_json_from_response(response)
+        json_output: dict[str, Any] | None = self._extract_json_from_response(response)
         if json_output is not None:
             if (
                 not isinstance(json_output, dict)
@@ -146,11 +148,11 @@ class SampleGenerator:
             # validate against schema
             is_valid: bool
             validated_output: BaseModel | None
-            is_valid, validated_output = self.__validate_with_pydantic(
+            is_valid, validated_output = self._validate_with_pydantic(
                 json_output["output"]
             )
             if is_valid and validated_output is not None:
-                # Convert Pydantic model to dict for JSON serialization
+                # convert pydantic model to dict for json serialization
                 json_output["output"] = validated_output.model_dump()
                 output_filename: str = os.path.join(
                     self.__output_folder_name, f"sample{sample_id + 1:04d}.json"
@@ -188,7 +190,7 @@ class SampleGenerator:
             )
             return False
 
-    def __generate_sample(self, bootstrap_file: pd.DataFrame, idx: int) -> bool:
+    def _generate_sample(self, bootstrap_file: pd.DataFrame, idx: int) -> bool:
         """Generate structured output from a synthetic patient report.
 
         Args:
@@ -215,7 +217,7 @@ class SampleGenerator:
                 return False
             content: str | None = cast(Choices, message.choices[0]).message.content
             if content is not None:
-                return self.__extract_validate_and_save_sample(content, idx)
+                return self._extract_validate_and_save_sample(content, idx)
             else:
                 return False
         except Exception as e:
@@ -224,10 +226,10 @@ class SampleGenerator:
 
     # real-time generation
 
-    def __process_bootstrap_rows(
+    def _process_bootstrap_rows(
         self,
         sample_size: int = 10,
-    ) -> None:
+    ) -> tuple[int, int]:
         """Process rows from the specified bootstrap file and
             generate the requested number of samples
 
@@ -248,7 +250,7 @@ class SampleGenerator:
             self.__logger.warning(
                 f"Requested number of samples have already been generated in {self.__output_folder_name}."
             )
-            exit()
+            return 0, 0
         max_samples: int = len(bootstrap_file.index)
         if sample_size > max_samples:
             self.__logger.warning(
@@ -256,7 +258,7 @@ class SampleGenerator:
                     Will create {max_samples} samples instead of {sample_size}"
             )
             sample_size = max_samples
-        for idx, row in bootstrap_file.iterrows():
+        for idx, _ in bootstrap_file.iterrows():
             id: int = int(cast(int, idx))
 
             # Skip rows for which samples have been generated
@@ -269,13 +271,14 @@ class SampleGenerator:
                     f"Generated the requested number of samples, {sample_size}."
                 )
                 break
-            if self.__generate_sample(bootstrap_file, id):
+            if self._generate_sample(bootstrap_file, id):
                 successful_generations += 1
             else:
                 failed_generations += 1
         self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
+        return successful_generations, failed_generations
 
     def generate(self, sample_size: int) -> None:
         """Generate samples via individual AWS Bedrock inference calls
@@ -286,7 +289,7 @@ class SampleGenerator:
         """
 
         # Generate samples from bootstrap file
-        self.__process_bootstrap_rows(
+        self._process_bootstrap_rows(
             sample_size,
         )
 
@@ -325,7 +328,7 @@ class SampleGenerator:
         failed_generations: int = 0
         for idx in idx_list:
             self.__logger.debug(f"Processing row {idx + 1}")
-            if self.__generate_sample(bootstrap_file, idx):
+            if self._generate_sample(bootstrap_file, idx):
                 successful_generations += 1
             else:
                 failed_generations += 1
@@ -438,7 +441,7 @@ class SampleGenerator:
                 ).outputs
             ):
                 try:
-                    if self.__extract_validate_and_save_sample(
+                    if self._extract_validate_and_save_sample(
                         str(bedrock_batch_output.modelOutput.content[0].text), sample_id
                     ):
                         successful_generations += 1
