@@ -20,4 +20,6 @@ jobs:
           python-version: "3.12"
       - run: pip install uv
       - run: uv sync
+      - run: uv run ruff check src/ tests/
+      - run: uv run mypy src/ tests/
       - run: uv run pytest tests
