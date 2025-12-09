@@ -24,3 +24,6 @@ class TestSampleGenerator(SampleGenerator):
 
     def process_bootstrap_rows(self, sample_size: int) -> tuple[int, int]:
         return self._process_bootstrap_rows(sample_size)
+
+    def generate_batch(self, sample_size: int) -> str:
+        return self._generate_batch(sample_size)

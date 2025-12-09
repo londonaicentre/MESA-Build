@@ -351,7 +351,7 @@ class SampleGenerator:
 
     # batch
 
-    def __generate_batch(
+    def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
     ) -> str:
         """Generate batch request file for Anthropic model
@@ -411,7 +411,7 @@ class SampleGenerator:
 
         # Process all samples from bootstrap file in batch mode
         # Create batch instruction JSONL file
-        self.__generate_batch(sample_size)
+        self._generate_batch(sample_size)
         AWS.run_batch_inference(
             "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
             self.__model_id,
@@ -423,7 +423,7 @@ class SampleGenerator:
 
     def extract_batch_output(
         self, file_name: str = "anthropic_batch_job.jsonl"
-    ) -> None:
+    ) -> tuple[int, int]:
         """Transform batch inference sample outputs to the same format
             (set of output files) as real-time generated samples.
 
@@ -453,6 +453,7 @@ class SampleGenerator:
         self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
+        return successful_generations, failed_generations
 
 
 class BootstrapFileGenerator:
