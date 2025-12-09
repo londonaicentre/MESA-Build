@@ -9,35 +9,14 @@ import pandas as pd
 import pytest
 from pytest import MonkeyPatch
 
+from tests.types import TestSchema
 from tests.claude import TestSampleGenerator
 
 
-class Foobar(BaseModel):
-    __test__ = False
-    foo: str
-
-
-class TestSchema(BaseModel):
-    __test__ = False
-    foo: Foobar
-    baz: str
-    qux: list[int]
-
-
-@pytest.fixture(scope="session")
-def sample_generator() -> TestSampleGenerator:
-    def test_user_prompt(param: dict[str, Any]) -> str:
-        return "bar"
-
-    return TestSampleGenerator(
-        "foo", test_user_prompt, TestSchema, "sonnet4", "qux.csv", "foobar"
-    )
-
-
 @pytest.fixture
-def valid_model_response() -> ModelResponse:
+def valid_model_response(valid_sample_json_output: str) -> ModelResponse:
     message: Message = Message(
-        content='<OUTPUT>{"content": "foo", "output": {"foo": {"foo": "bar"}, "baz": "qux", "qux": [1, 2, 3]}}</OUTPUT>'
+        content="<OUTPUT>" + valid_sample_json_output + "</OUTPUT>"
     )
     choice: Choices = Choices(message=message)
     return ModelResponse(
@@ -91,12 +70,14 @@ def test_validate_with_pydantic_invalid_input_returns_false(
 
 
 def test_extract_validate_and_save_sample_valid_input_writes_file(
-    sample_generator: TestSampleGenerator, monkeypatch: MonkeyPatch
+    sample_generator: TestSampleGenerator,
+    valid_sample_json_output: str,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     file_mock: MagicMock = mock_open()
     monkeypatch.setattr("builtins.open", file_mock)
     assert sample_generator.extract_validate_and_save_sample(
-        '<OUTPUT>{"content": "foo", "output": {"foo": {"foo": "bar"}, "baz": "qux", "qux": [1, 2, 3]}}</OUTPUT>',
+        "<OUTPUT>" + valid_sample_json_output + "</OUTPUT>",
         1,
     )
     file_mock.assert_called_once_with(
