@@ -45,7 +45,7 @@ def test_load_system_prompt_datagen(genollama_assets: GenoLlamaAssets) -> None:
         in systemprompt_datagen
     )
     # contains schema
-    assert "class GenomicTestReport(BaseModel)" in systemprompt_datagen
+    assert '{"properties": {"test_subject":' in systemprompt_datagen
     # contains an example
     assert "CYTOGENETICS AND MOLECULAR GENETICS REPORT" in systemprompt_datagen
 

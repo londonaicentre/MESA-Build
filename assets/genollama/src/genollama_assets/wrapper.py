@@ -1,5 +1,4 @@
 from importlib.resources.abc import Traversable
-import inspect
 import json
 from typing import Any
 
@@ -8,7 +7,7 @@ from pydantic import BaseModel, ValidationError
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
-from genollama_assets import schema
+from genollama_assets.schema import GenomicTestReport
 
 
 class GenoLlamaAssets(SchemaLlamaAssets):
@@ -83,7 +82,7 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             str: The system prompt
 
         """
-        schema_content: str = inspect.getsource(schema)
+        schema_content: str = json.dumps(GenomicTestReport.model_json_schema())
         system_prompt_template: str = self._load("prompts", file)
         examples_path: str = "examples"
         e1: str = ""
