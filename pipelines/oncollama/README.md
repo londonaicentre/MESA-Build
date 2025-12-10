@@ -19,6 +19,9 @@ llm__local__model=
 BEDROCK_EXECUTION_ROLE=
 BUCKET=
 US_BUCKET=
+SAGEMAKER_EXECUTION_ROLE=
+INSTANCE_TYPE=
+IMAGE=
 ```
 
 ### Installation
@@ -31,7 +34,7 @@ uv sync
 
 ## Usage
 
-### Synthetic file generation
+### Synthetic oncology note generation
 
 1. Run `docsynth`.
 
@@ -39,7 +42,7 @@ uv sync
 
 1. Reformat docsynth outputs as a bootstrap file for datagen. Run `bootstrap`.
 
-### Generate synthetic data samples
+### Generate fine-tuning input data
 
 1. Run `datagen` with the following arguments:
 
@@ -47,6 +50,20 @@ uv sync
 
     - `-s, --sample_size`: Required number of samples to be generated, defaults to `10`.
 
-    - `-b, --bootstrap`: Path to the bootstrap file (must be in the same directory or provide absolute path). Defaults to `bootstrap.csv`.
-
     - `-f, --backfill`: Whether to generate additional samples and backfill for missed indices from bootstrap file. Defaults to `False`.
+
+### Start an OncoLlama fine-tuning run
+
+1. Run `finetune` with the following arguments:
+
+    - `-f, --file`: Name of the AWS Bedrock Anthropic batch inference output file containing sample data to use as input. Defaults to `anthropic_batch_job.jsonl.out`.
+
+    - `-d, --dry_run`: Whether to simulate calling AWS endpoints. Defaults to `False`.
+
+### Deploy OncoLlama to AWS
+
+1. Run `deploy` with the following arguments:
+
+    - `-p, --path`: Path within S3 bucket to the zipped weights of the model to deploy. Required.
+
+    - `[command]`: The action to perform: `up` (deploy) or `down` (delete). Required.
