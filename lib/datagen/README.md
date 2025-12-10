@@ -1,6 +1,6 @@
 # SchemaLlama: Datagen
 
-Synthetic data generation for fine-tuning schema standardisation LLMs.
+Synthetic input data generation for fine-tuning schema standardisation LLMs.
 
 ## Getting started
 
@@ -18,28 +18,28 @@ Synthetic data generation for fine-tuning schema standardisation LLMs.
 
 1. Generate a bootstrap file:
 
-```python
-from datagen.claude import run_bootstrap_file_generation
-run_bootstrap_file_generation(
-    <System prompt>,
-    <User prompt function>, 
-    <Customisation instruction>,
-    <Target model name>, 
-    <Bedrock API key>
-)
-```
+    ```python
+    from datagen.claude import run_bootstrap_file_generation
+    run_bootstrap_file_generation(
+        <System prompt>,
+        <User prompt function>, 
+        <Customisation instruction>,
+        <Target model name>, 
+        <Bedrock API key>
+    )
+    ```
 
-2. Generate synthetic data:
+2. Generate synthetic input data, e.g.:
 
-```python
-from datagen.claude import run_sample_generation
-run_sample_generation(
-    <System prompt>,
-    <User prompt function>,
-    <Target model name>,
-    <Bootstrap file>,
-    <Number of samples>,
-    <Bedrock API key>,
-    <Schema>
-)
-```
+    ```python
+    from datagen.claude import run_sample_generation
+    run_sample_generation(
+        <System prompt>,
+        <User prompt function>,
+        <Target model name>,
+        <Bootstrap file>,
+        <Number of samples>,
+        <Bedrock API key>,
+        <Schema>
+    )
+    ```
