@@ -10,7 +10,7 @@
         },
         "biomarker_test_results": [
             {
-                "proband": "patient",
+                "test_subject": "patient",
                 "test_type": "FISH",
                 "other_test_type": null,
                 "test_methodology": "In situ hybridization with TUPLE1 and ARSA probe",
