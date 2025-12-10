@@ -36,16 +36,16 @@ class GenoLlamaAssets(SchemaLlamaAssets):
         for item in items:
             if item.is_file() and item.name.endswith(".json"):
                 result, message, parsed = super().validate_json(
-                    item.read_text(), schema
+                    json.dumps(json.loads(item.read_text())["output"]), schema
                 )
                 try:
                     if result and parsed is not None:
-                        loaded_example: BaseModel = schema(**parsed["output"])
+                        loaded_example: BaseModel = schema(**parsed)
                         loaded_example.model_dump_json()
                     else:
                         raise ValueError(message)
-                except ValidationError:
-                    return False, f"Example {item.name} failed validation"
+                except (ValidationError, ValueError) as e:
+                    return False, f"Example {item.name} failed validation: {e}"
         return True, "All examples checked"
 
     def validate_schema(
@@ -148,9 +148,9 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
     # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
-        """TODO: Implement upon the use of docsynth profiles in oncollama."""
+        """TODO: Implement upon the use of docsynth profiles in genollama."""
         return []
 
     def format_profile_prompt(self, profile: Profile) -> str:
-        """TODO: Implement upon the use of docsynth profiles in oncollama."""
+        """TODO: Implement upon the use of docsynth profiles in genollama."""
         return ""

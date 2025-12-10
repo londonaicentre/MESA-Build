@@ -18,7 +18,7 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         self, schema: type[BaseModel]
     ) -> tuple[bool, str, dict[str, Any] | None]:
         """Validate a schema (pydantic -> dict) with
-            oncology specific properties
+            additional checks
 
         Args:
             schema: (type[BaseModel]): The schema to validate

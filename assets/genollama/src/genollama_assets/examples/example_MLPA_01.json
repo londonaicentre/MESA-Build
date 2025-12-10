@@ -10,7 +10,7 @@
         },
         "biomarker_test_results": [
             {
-                "proband": "patient",
+                "test_subject": "patient",
                 "test_type": "MLPA",
                 "other_test_type": null,
                 "test_methodology": "Multiplex Ligation-dependent Probe Amplification (MLPA) using a microdeletion/microduplication kit",
