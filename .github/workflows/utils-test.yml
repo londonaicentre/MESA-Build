@@ -1,18 +1,18 @@
-name: llamaserve test
+name: utils test
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - lib/infer/local/llamaserve/**
+      - lib/utils/**
 
 jobs:
   test:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: lib/infer/local/llamaserve
+        working-directory: lib/utils
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6

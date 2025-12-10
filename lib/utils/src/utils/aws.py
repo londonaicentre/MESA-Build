@@ -6,8 +6,21 @@ from typing import Any
 import boto3
 from botocore.exceptions import ClientError
 from litellm import RateLimitError, ModelResponse
+from pydantic import BaseModel
 
-from utils.llm import LLM
+from utils.llm import LLM, Message, TextContent
+
+
+class ModelInput(BaseModel):
+    anthropic_version: str = "bedrock-2023-05-31"
+    system: str | None
+    max_tokens: int
+    messages: list[Message]
+
+
+class AnthropicBedrockBatchEntry(BaseModel):
+    recordId: str
+    modelInput: ModelInput
 
 
 class AWS:
@@ -99,27 +112,33 @@ class AWS:
     def create_anthropic_bedrock_batch_entry(
         id: str, system_prompt: str | None, user_prompt: str, max_tokens: int = 4000
     ) -> dict[str, Any]:
-        record: dict[str, Any] = {
-            "recordId": id,
-            "modelInput": {
-                "anthropic_version": "bedrock-2023-05-31",
-                "max_tokens": max_tokens,
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": user_prompt,
-                            }
-                        ],
-                    },
+        """Create an entry for a Bedrock batch execution file targeting
+            Anthropic models.
+
+        Args:
+            id (str): Unique id of the entry in the resulting file
+            system_prompt (str, optional): The system prompt to use
+                during batch inference
+            user_prompt (str): The user prompt to use during batch inference
+            max_tokens (int, optional): The maximum number of output tokens
+
+        Returns:
+            dict: The batch entry object as a dictionary
+
+        """
+        return AnthropicBedrockBatchEntry(
+            recordId=id,
+            modelInput=ModelInput(
+                max_tokens=max_tokens,
+                messages=[
+                    Message(
+                        role="user",
+                        content=[TextContent(type="text", text=user_prompt)],
+                    )
                 ],
-            },
-        }
-        if system_prompt is not None:
-            record["modelInput"]["system"] = system_prompt
-        return record
+                system=system_prompt,
+            ),
+        ).model_dump(exclude_none=True)
 
     @staticmethod
     def create_model_invocation_job(
