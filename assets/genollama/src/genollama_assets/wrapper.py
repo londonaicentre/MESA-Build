@@ -148,9 +148,9 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
     # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
-        """TODO: Implement upon the use of docsynth profiles in oncollama."""
+        """TODO: Implement upon the use of docsynth profiles in genollama."""
         return []
 
     def format_profile_prompt(self, profile: Profile) -> str:
-        """TODO: Implement upon the use of docsynth profiles in oncollama."""
+        """TODO: Implement upon the use of docsynth profiles in genollama."""
         return ""
