@@ -1,0 +1,24 @@
+name: genollama test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - pipelines/genollama/**
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipelines/genollama
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install uv
+      - run: uv sync
+      - run: uv run ruff check src/
+      - run: uv run mypy src/
