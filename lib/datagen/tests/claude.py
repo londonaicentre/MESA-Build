@@ -27,3 +27,9 @@ class TestSampleGenerator(SampleGenerator):
 
     def generate_batch(self, sample_size: int) -> str:
         return self._generate_batch(sample_size)
+
+    def find_missing_idx(self, sample_size: int) -> list[int]:
+        return self._find_missing_idx(sample_size)
+
+    def backfill(self, idx_list: list[int]) -> tuple[int, int]:
+        return self._backfill(idx_list)

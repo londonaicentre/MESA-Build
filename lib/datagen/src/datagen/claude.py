@@ -295,7 +295,7 @@ class SampleGenerator:
 
     # backfill
 
-    def __find_missing_idx(self, sample_size: int) -> list[int]:
+    def _find_missing_idx(self, sample_size: int) -> list[int]:
         """For a given folder and expected number of samples,
             identifies indices for which no sample was generated
 
@@ -316,7 +316,7 @@ class SampleGenerator:
                 missing_idx.append(idx)
         return missing_idx
 
-    def __backfill(self, idx_list: list[int]) -> None:
+    def _backfill(self, idx_list: list[int]) -> tuple[int, int]:
         """Generate samples for the missing indices
 
         Args:
@@ -335,6 +335,7 @@ class SampleGenerator:
         self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
+        return successful_generations, failed_generations
 
     def run_backfill(self, sample_size: int) -> None:
         """Backfill missing samples
@@ -345,9 +346,9 @@ class SampleGenerator:
         """
 
         # Generate samples for missed indices in the bootstrap file specified
-        missing_idx: list[int] = self.__find_missing_idx(sample_size)
+        missing_idx: list[int] = self._find_missing_idx(sample_size)
         self.__logger.info(f"There are {len(missing_idx)} samples missing")
-        self.__backfill(missing_idx)
+        self._backfill(missing_idx)
 
     # batch
 

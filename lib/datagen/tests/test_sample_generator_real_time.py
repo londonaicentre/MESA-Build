@@ -13,17 +13,6 @@ from tests.types import TestSchema
 from tests.claude import TestSampleGenerator
 
 
-@pytest.fixture
-def valid_model_response(valid_sample_json_output: str) -> ModelResponse:
-    message: Message = Message(
-        content="<OUTPUT>" + valid_sample_json_output + "</OUTPUT>"
-    )
-    choice: Choices = Choices(message=message)
-    return ModelResponse(
-        choices=[choice],
-    )
-
-
 def test_extract_json_from_response_valid_input_returns_dict(
     sample_generator: TestSampleGenerator,
 ) -> None:
