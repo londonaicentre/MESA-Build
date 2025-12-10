@@ -9,6 +9,10 @@ authors = [
 version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "jsonschema>=4.25.1",
+    "litellm>=1.80.9",
+]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
