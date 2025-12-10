@@ -12,7 +12,7 @@ Current pipelines in this repository:
 
 ## Repository structure
 
-```
+```text
 📁 SCHEMA_LLAMA
 ├── pipelines/             # Individual pipelines for developing text to schema models
 ├── assets/                # Static per-pipeline assets
@@ -31,6 +31,30 @@ Current pipelines in this repository:
 ```
 
 <img src="_assets/repo.png" alt="isolated" width="500"/>
+
+## Development
+
+Most folders are self-contained python packages, allowing for the selective release of assets and pipeline logic. Under this setup, a development/update cycle might look like the following:
+
+- Install dependencies (`uv sync`)
+
+- Add/modify features to/in source code
+
+- Add/update tests for these features
+
+- Run formatter (`make prettier`)
+
+- Run type check and unit tests (`make test`)
+
+- Increment package version according to SemVer
+
+- Commit changes to a feature branch
+
+- Create a PR for the feature branch, and, following CI success and approval, merge with main
+
+- Create a tag for the merge commit referencing the version increment
+
+- Build and push the package to pypi (`python -m build` and `uv run twine upload -r pypi dist/*`), or rely on CI/CD for this
 
 ## Worked examples
 
