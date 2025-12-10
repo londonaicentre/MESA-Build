@@ -10,6 +10,8 @@ license = "LicenseRef-Proprietary"
 license-files = [ "LICENSE.md" ]
 dependencies = [
     "londonaicentre-schemallama-types",
+    "pydantic>=2.12.5",
+    "pytest>=9.0.2",
     "pyyaml>=6.0.3",
 ]
 [build-system]
