@@ -1,4 +1,18 @@
-## Prompts
+# GenoLlama Assets
+
+Assets for GenoLlama: genomic biomarker extraction from NHS genomic laboratory hub reports.
+
+## Structure
+
+```text
+📁 GENOLLAMA_ASSETS
+├── examples/            # A set of unstructured genomic report text input to structured output examples
+├── prompts/             # Prompt templates
+├── schema.py            # Pydantic model for specifying expected GenoLlama output structure
+├── wrapper.py           # Wrapper class for serving, and operating on, stored GenoLlama assets
+```
+
+## Additional asset descriptions
 
 ### Bootstrap
 
