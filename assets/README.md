@@ -6,7 +6,7 @@ Static per-pipeline assets.
 
 Each pipeline assets folder is expected to have the following structure:
 
-```
+```text
 📁 ASSETS
 ├── <pipeline>/
 ├──── examples/            # A set of unstructured input to structured output examples (datagen)
@@ -43,8 +43,3 @@ Additional structural details:
 - `style.yml`: The style sampling file should be formatted according to the structure defined in [`Style`](../lib/types/src/schemallama_types/assets/sampling.py#L69). This model also provides insight on extra elements and their structure.
 
 - `wrapper.py`: Should contain a class that extends [`SchemaLlamaAssets`](../lib/types/src/schemallama_types/assets/wrapper.py#L15), providing implementations for abstract methods. This class can then be passed to relevant [`lib`](../lib/) packages from corresponding [`pipelines`](../pipelines/).
-
-
-
-
-

@@ -13,7 +13,7 @@ Training LLMs for genomic biomarker extraction from NHS genomic laboratory hub r
 
 Within a `.env` file, specify:
 
-```
+```text
 BEDROCK_API_KEY=
 BEDROCK_EXECUTION_ROLE=
 BUCKET=
@@ -25,7 +25,7 @@ IMAGE=
 
 ### Installation
 
-```
+```text
 uv venv
 source .venv/bin/activate
 uv sync
@@ -43,7 +43,7 @@ uv sync
 
     - `-s, --backup`: Whether to store the generated bootstrap file in S3 (requires credentials). Optional.
 
-### Generate synthetic data samples
+### Generate fine-tuning input data
 
 1. Run `datagen` with the following arguments:
 
@@ -57,7 +57,7 @@ uv sync
 
 For example `datagen sonnet4 15` will generate 15 samples in the model's subfolder under `samples`, while `datagen sonnet4 23 -f True` will generate sample reports for any missed indices and at least 8 additional samples.
 
-### Start a fine-tuning run
+### Start a GenoLlama fine-tuning run
 
 1. Run `finetune` with the following arguments:
 
@@ -65,7 +65,7 @@ For example `datagen sonnet4 15` will generate 15 samples in the model's subfold
 
     - `-d, --dry_run`: Whether to simulate calling AWS endpoints. Defaults to `False`.
 
-### Deploy a Llama model
+### Deploy GenoLlama to AWS
 
 1. Run `deploy` with the following arguments:
 
