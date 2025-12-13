@@ -82,7 +82,7 @@ def main() -> None:
             settings.BEDROCK_EXECUTION_ROLE,
         )
     elif args.extract:
-        sample_generator.extract_batch_output()
+        sample_generator.extract_batch_output(settings.BUCKET)
     elif args.backfill:
         sample_generator.run_backfill(
             args.sample_size,
