@@ -14,3 +14,4 @@ template.json
 *.jsonl*
 *.csv
 samples*/
+.job_id.json
