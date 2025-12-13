@@ -446,14 +446,15 @@ class SampleGenerator:
 
         """
         if bucket is not None:
-            with open(".job_id.json") as job_id_file:
-                AWS.download_file(
-                    self.__model_region,
-                    bucket,
-                    file_name,
-                    file_name,
-                    json.loads(job_id_file.read())["job_id"],
-                )
+            if Path(".job_id.json").exists():
+                with open(".job_id.json") as job_id_file:
+                    AWS.download_file(
+                        self.__model_region,
+                        bucket,
+                        file_name,
+                        file_name,
+                        json.loads(job_id_file.read())["job_id"],
+                    )
         successful_generations: int = 0
         failed_generations: int = 0
         with open(file_name + ".out") as batch_output_file:

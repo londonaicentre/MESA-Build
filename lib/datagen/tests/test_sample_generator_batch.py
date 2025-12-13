@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from unittest.mock import MagicMock, mock_open, patch
 
 import pandas as pd
@@ -114,8 +115,12 @@ def test_extract_batch_output_invalid_output_returns_error(
 @patch("builtins.open")
 @patch("utils.aws.boto3.client")
 def test_extract_batch_job_file_present_read_successfully(
-    _: MagicMock, mock_file: MagicMock, sample_generator: TestSampleGenerator
+    _: MagicMock,
+    mock_file: MagicMock,
+    sample_generator: TestSampleGenerator,
+    monkeypatch: MonkeyPatch,
 ) -> None:
+    monkeypatch.setattr(Path, "exists", MagicMock(return_value=True))
     file_mock: MagicMock = mock_open(read_data=json.dumps({"job_id": "foo"}))()
     mock_file.return_value = file_mock
     sample_generator.extract_batch_output("bar")
