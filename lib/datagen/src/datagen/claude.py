@@ -397,7 +397,7 @@ class SampleGenerator:
         sample_size: int,
         bucket: str,
         bedrock_execution_role: str,
-    ) -> None:
+    ) -> str:
         """Generate samples via batch inference
 
         Args:
@@ -408,31 +408,52 @@ class SampleGenerator:
                 permissions to access S3 for batch specification and
                 access cross-region models
 
+        Returns:
+            str: the id of the started job
+
         """
 
         # Process all samples from bootstrap file in batch mode
         # Create batch instruction JSONL file
         self._generate_batch(sample_size)
+        job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
         AWS.run_batch_inference(
-            "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
+            job_id,
             self.__model_id,
             self.__model_batch_file,
             bucket,
             bedrock_execution_role,
             self.__model_region,
         )
+        with open(".job_id.json", "w") as job_id_file:
+            job_id_file.write(json.dumps({"job_id": job_id}))
+        return job_id
 
     def extract_batch_output(
-        self, file_name: str = "anthropic_batch_job.jsonl"
+        self, bucket: str | None = None, file_name: str = "anthropic_batch_job.jsonl"
     ) -> tuple[int, int]:
         """Transform batch inference sample outputs to the same format
             (set of output files) as real-time generated samples.
 
         Args:
+            bucket (str, optional): The bucket from which the batch
+                sample outputs file should be downloaded if it is not local
             file_name (str, optional): Batch output file from which
-                to extract samples
+                to extract samples (default to `anthropic_batch_job.jsonl`)
+
+        Returns:
+            tuple: the number of successfully and unsuccessfully parsed files
 
         """
+        if bucket is not None:
+            with open(".job_id.json") as job_id_file:
+                AWS.download_file(
+                    self.__model_region,
+                    bucket,
+                    file_name,
+                    file_name,
+                    json.loads(job_id_file.read())["job_id"],
+                )
         successful_generations: int = 0
         failed_generations: int = 0
         with open(file_name + ".out") as batch_output_file:
