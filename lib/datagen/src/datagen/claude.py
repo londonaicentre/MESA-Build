@@ -425,7 +425,7 @@ class SampleGenerator:
             bedrock_execution_role,
             self.__model_region,
         )
-        with open(".job_id.json", "w") as job_id_file:
+        with open(self.__config.job_id_file, "w") as job_id_file:
             job_id_file.write(json.dumps({"job_id": job_id}))
         return job_id
 
@@ -446,8 +446,8 @@ class SampleGenerator:
 
         """
         if bucket is not None:
-            if Path(".job_id.json").exists():
-                with open(".job_id.json") as job_id_file:
+            if Path(self.__config.job_id_file).exists():
+                with open(self.__config.job_id_file) as job_id_file:
                     AWS.download_file(
                         self.__model_region,
                         bucket,
