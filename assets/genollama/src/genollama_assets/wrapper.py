@@ -8,6 +8,7 @@ from pydantic import BaseModel, ValidationError
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
 from genollama_assets.schema import GenomicTestReport
+from utils.assets import Assets
 
 
 class GenoLlamaAssets(SchemaLlamaAssets):
@@ -96,7 +97,7 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             e4 = self._load(examples_path, "e4.json")
         except FileNotFoundError as e:
             print(f"Warning: Could not load example file: {e}")
-        return (
+        return Assets.markdown_to_text(
             system_prompt_template.replace("{schema_content}", schema_content)
             .replace("{e1}", e1)
             .replace("{e2}", e2)

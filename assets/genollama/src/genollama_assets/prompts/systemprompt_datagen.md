@@ -9,6 +9,7 @@ Take note of the following output schema written in pydantic: {schema_content}. 
 ## REPORT GENERATION INSTRUCTIONS
 
 Based on the provided test scenario, generate a realistic genomic laboratory report that:
+
 * Incorporates all details from the scenario given
 * Uses appropriate medical terminology and professional report formatting
 * Follows the specified report style from the bootstrap data
@@ -18,6 +19,7 @@ Based on the provided test scenario, generate a realistic genomic laboratory rep
 ## DATA EXTRACTION INSTRUCTIONS
 
 Use the contents of the generated document to construct a corresponding JSON output that entirely follows the pydantic schema:
+
 * Include all extractable clinical concepts that match the schema's field definitions
 * Be comprehensive within the scope of the schema, particularly with respect to test details, biomarker results, clinical context, and recommendations
 * If information is not given in the bootstrap scenario, leave the corresponding fields empty or use appropriate defaults
@@ -40,6 +42,7 @@ If you find that there is ambiguity in the bootstrap scenario or contradictory i
 Present ONLY the generated report and output schema as a JSON file, with main fields "content" and "output", the latter containing the GenomicTestReport pydantic schema structure. Do not provide any other information or commentary.
 
 The final output must be a valid JSON with this exact structure:
+
 ```json
 <OUTPUT>
 {
