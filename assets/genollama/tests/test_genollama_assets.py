@@ -41,8 +41,13 @@ def test_load_system_prompt_datagen(genollama_assets: GenoLlamaAssets) -> None:
     systemprompt_datagen: str = genollama_assets.load_system_prompt()
     # contains boilerplate text
     assert (
-        "SYSTEM PROMPT FOR GENOMIC REPORT GENERATION AND EXTRACTION"
+        "You are a clinical genetics specialist experienced in writing genomic lab reports and extracting genomic information into structured schema."
         in systemprompt_datagen
+    )
+    # does not contain unwanted markdown
+    assert (
+        "SYSTEM PROMPT FOR GENOMIC REPORT GENERATION AND EXTRACTION"
+        not in systemprompt_datagen
     )
     # contains schema
     assert '{"properties": {"test_subject":' in systemprompt_datagen

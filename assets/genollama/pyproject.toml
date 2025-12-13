@@ -12,6 +12,7 @@ license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "litellm>=1.80.9",
     "londonaicentre-schemallama-types",
+    "londonaicentre-schemallama-utils",
     "pydantic>=2.12.4",
 ]
 [build-system]
@@ -19,6 +20,7 @@ requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-schemallama-types = { path = "../../lib/types", editable = true }
+londonaicentre-schemallama-utils = { path = "../../lib/utils", editable = true }
 [tool.setuptools.package-data]
 genollama_assets = [
     "examples/*",
