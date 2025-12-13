@@ -18,7 +18,6 @@ llm__anthropic__api_key=
 llm__local__model=
 BEDROCK_EXECUTION_ROLE=
 BUCKET=
-US_BUCKET=
 SAGEMAKER_EXECUTION_ROLE=
 INSTANCE_TYPE=
 IMAGE=
