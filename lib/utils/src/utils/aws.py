@@ -59,6 +59,40 @@ class AWS:
         return True
 
     @staticmethod
+    def download_file(
+        region_name: str,
+        bucket: str,
+        file_name: str,
+        object_name: str | None = None,
+        path: str | None = None,
+    ) -> bool:
+        """Download a file from S3
+
+        Args:
+            region_name (str): The region in which the bucket exists
+            bucket (str): The name of the target bucket
+            file_name (str): The name to use for the downloaded file
+            object_name (str, optional): the name of the object to download.
+                If absent, file_name is used.
+            path (str, optional): the path to the target object. If absent,
+                file_name is used.
+
+        Returns:
+            bool: Whether the upload was successful
+
+        """
+        if object_name is None:
+            object_name = os.path.basename(file_name)
+        try:
+            boto3.client("s3", region_name=region_name).download_file(
+                bucket, path + "/" + object_name if path else object_name, file_name
+            )
+        except ClientError as e:
+            print(e)
+            return False
+        return True
+
+    @staticmethod
     def bedrock_completion(
         model_name: str,
         system_prompt: str | None,

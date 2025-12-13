@@ -14,6 +14,14 @@ def test_upload_file_valid_input_succeeds(mock_client: MagicMock) -> None:
     mock_s3_client.upload_file.assert_called_once_with("bar", "baz", "quux/qux")
 
 
+@patch("utils.aws.boto3.client")
+def test_download_file_valid_input_succeeds(mock_client: MagicMock) -> None:
+    mock_s3_client = MagicMock()
+    mock_client.return_value = mock_s3_client
+    AWS.download_file("foo", "bar", "baz", "qux", "quux")
+    mock_s3_client.download_file.assert_called_once_with("bar", "quux/qux", "baz")
+
+
 @patch("utils.llm.completion")
 def test_completion_content_returned(
     mock_completion: MagicMock, model_response: MagicMock
