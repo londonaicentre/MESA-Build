@@ -448,13 +448,16 @@ class SampleGenerator:
         if bucket is not None:
             if Path(self.__config.job_id_file).exists():
                 with open(self.__config.job_id_file) as job_id_file:
-                    AWS.download_file(
+                    path: str = json.loads(job_id_file.read())["job_id"] + "/output/*"
+                    if not AWS.download_file_with_wildcard(
                         self.__model_region,
                         bucket,
-                        file_name,
-                        file_name,
-                        json.loads(job_id_file.read())["job_id"],
-                    )
+                        file_name + ".out",
+                        file_name + ".out",
+                        path,
+                    ):
+                        raise ValueError(f"Error downloading file {file_name + ".out"} from {bucket} at path {path}.")
+        os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
         failed_generations: int = 0
         with open(file_name + ".out") as batch_output_file:
