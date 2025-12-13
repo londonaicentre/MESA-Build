@@ -430,7 +430,9 @@ class SampleGenerator:
         return job_id
 
     def extract_batch_output(
-        self, bucket: str | None = None, file_name: str = "anthropic_batch_job.jsonl"
+        self,
+        bucket: str | None = None,
+        file_name: str = "anthropic_batch_job.jsonl.out",
     ) -> tuple[int, int]:
         """Transform batch inference sample outputs to the same format
             (set of output files) as real-time generated samples.
@@ -439,7 +441,7 @@ class SampleGenerator:
             bucket (str, optional): The bucket from which the batch
                 sample outputs file should be downloaded if it is not local
             file_name (str, optional): Batch output file from which
-                to extract samples (default to `anthropic_batch_job.jsonl`)
+                to extract samples (default to `anthropic_batch_job.jsonl.out`)
 
         Returns:
             tuple: the number of successfully and unsuccessfully parsed files
@@ -452,15 +454,17 @@ class SampleGenerator:
                     if not AWS.download_file_with_wildcard(
                         self.__model_region,
                         bucket,
-                        file_name + ".out",
-                        file_name + ".out",
+                        file_name,
+                        file_name,
                         path,
                     ):
-                        raise ValueError(f"Error downloading file {file_name + ".out"} from {bucket} at path {path}.")
+                        raise ValueError(
+                            f"Error downloading file {file_name} from {bucket} at path {path}."
+                        )
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
         failed_generations: int = 0
-        with open(file_name + ".out") as batch_output_file:
+        with open(file_name) as batch_output_file:
             for sample_id, bedrock_batch_output in enumerate(
                 BatchOutputs.model_validate(
                     {"outputs": [json.loads(line) for line in batch_output_file]}
