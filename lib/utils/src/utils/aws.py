@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import random
 import time
 from typing import Any
@@ -91,6 +92,48 @@ class AWS:
             print(e)
             return False
         return True
+
+    @staticmethod
+    def download_file_with_wildcard(
+        region_name: str,
+        bucket: str,
+        file_name: str,
+        object_name: str,
+        path: str,
+    ) -> bool:
+        """Download a file from S3 with a path that contains a wildcard
+
+        Args:
+            region_name (str): The region in which the bucket exists
+            bucket (str): The name of the target bucket
+            file_name (str): The name to use for the downloaded file
+            object_name (str, optional): the name of the object to download.
+            path (str): the path to the target object. Can contain
+                a wildcard.
+
+        Returns:
+            bool: Whether the upload was successful
+
+        """
+        prefix: str
+        suffix: str
+        prefix, suffix = (path + "/" + object_name).split("*/", 1)
+        for page in (
+            boto3.client("s3", region_name=region_name)
+            .get_paginator("list_objects_v2")
+            .paginate(Bucket=bucket, Prefix=prefix)
+        ):
+            for object in page.get("Contents", []):
+                key: str = object["Key"]
+                if key.endswith(suffix):
+                    return AWS.download_file(
+                        region_name,
+                        bucket,
+                        file_name,
+                        object_name,
+                        str(Path(key).parent),
+                    )
+        return False
 
     @staticmethod
     def bedrock_completion(

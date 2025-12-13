@@ -22,6 +22,20 @@ def test_download_file_valid_input_succeeds(mock_client: MagicMock) -> None:
     mock_s3_client.download_file.assert_called_once_with("bar", "quux/qux", "baz")
 
 
+@patch("utils.aws.boto3.client")
+def test_download_file_with_wildcard_invalid_input_fails(
+    mock_client: MagicMock,
+) -> None:
+    mock_object = {"Key": "foo"}
+    mock_page = {"Contents": [mock_object]}
+    mock_paginator = MagicMock()
+    mock_paginator.paginate.return_value = [mock_page]
+    mock_s3_client = MagicMock()
+    mock_s3_client.get_paginator.return_value = mock_paginator
+    mock_client.return_value = mock_s3_client
+    assert not AWS.download_file_with_wildcard("foo", "bar", "baz", "qux", "quux/*")
+
+
 @patch("utils.llm.completion")
 def test_completion_content_returned(
     mock_completion: MagicMock, model_response: MagicMock
