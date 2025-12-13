@@ -48,5 +48,5 @@ def main() -> None:
         args.instruction,
         args.model_name,
         settings.BEDROCK_API_KEY,
-        settings.US_BUCKET if args.backup else "",
+        settings.BUCKET if args.backup else "",
     )
