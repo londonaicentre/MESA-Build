@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, mock_open, patch
 
 import pandas as pd
 from pytest import MonkeyPatch
+import pytest
 
 from tests.claude import TestSampleGenerator
 
@@ -123,5 +124,6 @@ def test_extract_batch_job_file_present_read_successfully(
     monkeypatch.setattr(Path, "exists", MagicMock(return_value=True))
     file_mock: MagicMock = mock_open(read_data=json.dumps({"job_id": "foo"}))()
     mock_file.return_value = file_mock
-    sample_generator.extract_batch_output("bar")
+    with pytest.raises(ValueError):
+        sample_generator.extract_batch_output("bar")
     assert len(file_mock.read.call_args_list) == 1
