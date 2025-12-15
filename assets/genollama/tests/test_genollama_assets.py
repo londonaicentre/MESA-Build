@@ -1,13 +1,10 @@
 import re
 from re import DOTALL
 from typing import Any
-from unittest.mock import MagicMock, mock_open
 
 import pytest
-from pytest import MonkeyPatch
 
 from genollama_assets.wrapper import GenoLlamaAssets
-from genollama_assets.schema import GenomicTestReport
 
 
 @pytest.fixture(scope="session")
