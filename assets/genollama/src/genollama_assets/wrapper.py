@@ -3,7 +3,6 @@ import json
 from typing import Any
 
 from litellm import cast
-from pydantic import BaseModel, ValidationError
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
