@@ -75,7 +75,7 @@ class SchemaLlamaAssets(ABC):
         """
         all_profiles: list[Profile] = []
         items: list[Traversable] = cast(
-            list[Traversable], sorted(self._base_dir.joinpath("profiles").iterdir())
+            list[Traversable], sorted(self._base_dir.joinpath("profiles").iterdir(), key=lambda x: x.name)
         )
         item: Traversable
         for item in items:
