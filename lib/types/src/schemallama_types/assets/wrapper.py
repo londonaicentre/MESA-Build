@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 from typing import Any, cast
 
-from jsonschema import ValidationError
 from pydantic import BaseModel
 
 from schemallama_types.assets.profile import Profile
@@ -16,53 +15,27 @@ class SchemaLlamaAssets(ABC):
     def __init__(self, base_dir: str) -> None:
         self._base_dir: Traversable = files(base_dir)
 
+    @property
+    @abstractmethod
+    def schema(self) -> type[BaseModel]:
+        """Subclasses must define a Pydantic BaseModel schema"""
+        raise NotImplementedError
+
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
 
     # schema
-    def validate_json(
-        self, json_str: str, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
+    def validate_json(self, json_str: str) -> BaseModel:
         """Validate a schema json string (str -> dict)
 
         Args:
             json_str (str): The json string to validate
-            schema: (type[BaseModel]): The schema to validate against
 
         Returns:
-            tuple: The validation result, result description,
-                and parsed string
-
+            The validated schema as a BaseModel instance
         """
-        try:
-            parsed: dict[str, Any] = json.loads(json_str)
-            schema(**parsed)
-            return True, "Valid", parsed
-        except json.JSONDecodeError as e:
-            return False, f"JSON Parse Error: {e}", None
-        except ValidationError as e:
-            return False, f"Schema Validation Error: {e}", None
-        except Exception as e:
-            return False, f"Validation Error: {e}", None
-
-    def validate_schema(
-        self, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
-        """Validate a schema (pydantic -> dict)
-
-        Args:
-            schema: (type[BaseModel]): The schema to validate
-
-        Returns:
-            tuple: The validation result, result description,
-                and json version of the schema
-
-        """
-        try:
-            json_schema: dict[str, Any] = schema.model_json_schema()
-            return True, "Schema validation successful", json_schema
-        except Exception as e:
-            return False, f"Schema validation failed: {e}", None
+        parsed: dict[str, Any] = json.loads(json_str)
+        return self.schema(**parsed)
 
     # prompts
     def load_user_prompt_template(self, template_name: str) -> str:
