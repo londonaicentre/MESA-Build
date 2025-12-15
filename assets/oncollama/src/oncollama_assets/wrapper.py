@@ -1,46 +1,15 @@
 from importlib.resources.abc import Traversable
-import inspect
 from typing import Any
-
-from pydantic import BaseModel
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile, Profiles
-from oncollama_assets import schema
+from oncollama_assets.schema import OncoLlamaModel
 
 
 class OncoLlamaAssets(SchemaLlamaAssets):
     def __init__(self) -> None:
         super().__init__("oncollama_assets")
-
-    # schema
-    def validate_schema(
-        self, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
-        """Validate a schema (pydantic -> dict) with
-            additional checks
-
-        Args:
-            schema: (type[BaseModel]): The schema to validate
-
-        Returns:
-            tuple: The validation result, result description,
-                and json version of the schema
-
-        """
-        result: bool
-        message: str
-        json_schema: dict[str, Any] | None
-        try:
-            result, message, json_schema = super().validate_schema(schema)
-            if result and json_schema is not None:
-                print(f"Properties: {len(json_schema.get('properties', {}))}")
-                print(f"Definitions: {len(json_schema.get('$defs', {}))}")
-                return True, "Schema validation successful", json_schema
-            else:
-                raise ValueError(message)
-        except Exception as e:
-            return False, f"Schema validation failed: {e}", None
+        self.schema = OncoLlamaModel
 
     # prompts
     def load_system_prompt(self, file: str = "systemprompt_infer.md") -> str:
@@ -54,13 +23,14 @@ class OncoLlamaAssets(SchemaLlamaAssets):
             str: The system prompt
 
         """
-        schema_content: str = inspect.getsource(schema)
         system_prompt_template: str = self._load("prompts", file)
-        return system_prompt_template.replace("{SCHEMA}", schema_content)
+        return system_prompt_template.replace(
+            "{SCHEMA}", str(self.schema.model_json_schema())
+        )
 
     def load_bootstrap_user_prompt(self, instructions: str) -> str:
         """TODO: Implement upon the use of bootstrapping in oncollama."""
-        return ""
+        raise NotImplementedError("Bootstrapping not yet implemented for OncoLlama.")
 
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
         return row["content"]
