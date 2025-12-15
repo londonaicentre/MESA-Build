@@ -16,9 +16,8 @@ def test_validate_schema(oncollama_assets: OncoLlamaAssets) -> None:
     result: bool
     message: str
     json_schema: dict[str, Any] | None
-    result, message, json_schema = oncollama_assets.validate_schema(OncoLlamaModel)
+    result, json_schema = oncollama_assets.validate_schema(OncoLlamaModel)
     assert result
-    assert message == "Schema validation successful"
     assert (
         json_schema
         and "document_has_primary_cancer_flag" in json_schema["properties"].keys()
