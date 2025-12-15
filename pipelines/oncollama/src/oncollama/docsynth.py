@@ -35,7 +35,7 @@ def main() -> None:
     settings: Settings = Settings()
     if args.batch:
         Generator().generate(
-            OncoLlamaAssets(), settings.US_BUCKET, settings.BEDROCK_EXECUTION_ROLE
+            OncoLlamaAssets(), settings.BUCKET, settings.BEDROCK_EXECUTION_ROLE
         )
     elif args.extract:
         Generator().extract_batch_output()

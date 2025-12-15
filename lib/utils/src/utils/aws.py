@@ -168,7 +168,7 @@ class AWS:
                     api_key=bedrock_api_key,
                     max_tokens=max_tokens,
                     temperature=temperature,
-                    aws_region_name="us-east-1",
+                    aws_region_name="eu-west-2",
                 )
             except RateLimitError:
                 if attempt == max_retries:

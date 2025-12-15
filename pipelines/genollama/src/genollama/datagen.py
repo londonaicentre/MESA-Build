@@ -78,7 +78,7 @@ def main() -> None:
     if args.batch:
         sample_generator.generate_via_batch(
             args.sample_size,
-            settings.US_BUCKET,
+            settings.BUCKET,
             settings.BEDROCK_EXECUTION_ROLE,
         )
     elif args.extract:
