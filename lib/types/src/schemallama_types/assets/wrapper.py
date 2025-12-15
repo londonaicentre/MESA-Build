@@ -16,6 +16,7 @@ class SchemaLlamaAssets(ABC):
         self._base_dir: Traversable = files(base_dir)
         self.schema: type[BaseModel]
 
+
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
 

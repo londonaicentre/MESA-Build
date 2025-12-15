@@ -19,8 +19,10 @@ def test_load_system_prompt_datagen(oncollama_assets: OncoLlamaAssets) -> None:
     systemprompt_infer: str = oncollama_assets.load_system_prompt()
     # contains boilerplate text
     assert "CANCER CLINICAL DOCUMENT EXTRACTION" in systemprompt_infer
-    # contains schema
+    # doesn't contain python schema
     assert "class OncoLlamaModel(BaseModel)" not in systemprompt_infer
+    # contains json schema
+    assert "#/$defs/PerformanceStatus" in systemprompt_infer
 
 
 def test_load_datagen_user_prompt(oncollama_assets: OncoLlamaAssets) -> None:
