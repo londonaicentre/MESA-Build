@@ -14,12 +14,7 @@ from schemallama_types.assets.sampling import Content, Style
 class SchemaLlamaAssets(ABC):
     def __init__(self, base_dir: str) -> None:
         self._base_dir: Traversable = files(base_dir)
-
-    @property
-    @abstractmethod
-    def schema(self) -> type[BaseModel]:
-        """Subclasses must define a Pydantic BaseModel schema"""
-        raise NotImplementedError
+        self.schema: type[BaseModel]
 
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
@@ -75,7 +70,8 @@ class SchemaLlamaAssets(ABC):
         """
         all_profiles: list[Profile] = []
         items: list[Traversable] = cast(
-            list[Traversable], sorted(self._base_dir.joinpath("profiles").iterdir(), key=lambda x: x.name)
+            list[Traversable],
+            sorted(self._base_dir.joinpath("profiles").iterdir(), key=lambda x: x.name),
         )
         item: Traversable
         for item in items:
