@@ -8,7 +8,7 @@ from finetune.llama import FineTuner
 
 @dataclass
 class FinetuneArgs:
-    file: str
+    folder: str
     dry_run: bool
 
 
@@ -17,10 +17,10 @@ def parse_CLI_args() -> FinetuneArgs:
     parser: ArgumentParser = ArgumentParser()
     parser.add_argument(
         "-f",
-        "--file",
+        "--folder",
         type=str,
-        default="anthropic_batch_job.jsonl.out",
-        help="Name of the AWS Bedrock Anthropic batch inference output file containing sample data",
+        default="samples_sonnet4",
+        help="Name of the folder containing sample data processed from AWS Bedrock Anthropic batch inference output",
     )
     parser.add_argument(
         "-d",
@@ -38,7 +38,7 @@ def main() -> None:
     oncollama_assets: OncoLlamaAssets = OncoLlamaAssets()
     fine_tuner.run_finetune(
         oncollama_assets.load_system_prompt("systemprompt_finetune.md"),
-        args.file,
+        args.folder,
         settings.BUCKET,
         settings.SAGEMAKER_EXECUTION_ROLE,
         args.dry_run,
