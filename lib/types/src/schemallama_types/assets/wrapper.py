@@ -4,7 +4,6 @@ from importlib.resources.abc import Traversable
 import json
 from pathlib import Path
 from typing import Any, cast
-from glob import glob
 
 
 from pydantic import BaseModel
