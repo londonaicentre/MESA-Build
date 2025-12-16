@@ -187,7 +187,7 @@ class AWS:
 
     @staticmethod
     def create_anthropic_bedrock_batch_entry(
-        id: str, system_prompt: str | None, user_prompt: str, max_tokens: int = 4000
+        id: str, system_prompt: str | None, user_prompt: str, max_tokens: int = 8192
     ) -> dict[str, Any]:
         """Create an entry for a Bedrock batch execution file targeting
             Anthropic models.
