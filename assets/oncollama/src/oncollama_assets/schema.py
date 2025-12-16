@@ -53,8 +53,8 @@ class TopographyType(str, Enum):
     OTHER_CNS = "other_cns"
 
     # Head & Neck
-    ORAL = "oral"  # any oral cavity or oropharynx
-    HYPO_NASO_PHARYNX = "hypo_naso_pharynx"
+    ORAL = "oral"  # any oral cavity
+    HYPO_ORO_NASO_PHARYNX = "hypo_oro_naso_pharynx"  # any pharynx
     LARYNX = "larynx"
     SALIVARY_GLAND = "salivary_gland"
     NASAL_CAVITY = "nasal_cavity"
