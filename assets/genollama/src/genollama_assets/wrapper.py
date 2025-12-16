@@ -2,8 +2,6 @@ from importlib.resources.abc import Traversable
 import json
 from typing import Any
 
-from litellm import cast
-
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
 from genollama_assets.schema import GenomicTestReport
@@ -15,23 +13,6 @@ class GenoLlamaAssets(SchemaLlamaAssets):
         super().__init__("genollama_assets")
         self.schema = GenomicTestReport
 
-    # schema
-    def validate_json_examples(self) -> None:
-        """Validate stored genomic example json files.
-
-        Args:
-            schema: (type[BaseModel]): The schema to validate against
-
-        """
-        items: list[Traversable] = cast(
-            list[Traversable],
-            sorted(self._base_dir.joinpath("examples").iterdir(), key=lambda x: x.name),
-        )
-        for item in items:
-            if item.is_file() and item.name.endswith(".json"):
-                self.validate_json(json.dumps(json.loads(item.read_text())["output"]))
-
-    # prompts
     def load_system_prompt(self, file: str = "systemprompt_datagen.md") -> str:
         """Create a system prompt
 
@@ -41,7 +22,6 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
         Returns:
             str: The system prompt
-
         """
         schema_content: str = json.dumps(GenomicTestReport.model_json_schema())
         system_prompt_template: str = self._load("prompts", file)
@@ -106,11 +86,14 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             Then extract the information into the structured schema format."""
         return user_prompt
 
-    # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
         """TODO: Implement upon the use of docsynth profiles in genollama."""
-        return []
+        raise NotImplementedError(
+            "Profile loading is not yet implemented for GenoLlamaAssets."
+        )
 
     def format_profile_prompt(self, profile: Profile) -> str:
         """TODO: Implement upon the use of docsynth profiles in genollama."""
-        return ""
+        raise NotImplementedError(
+            "Profile prompt formatting is not yet implemented for GenoLlamaAssets."
+        )

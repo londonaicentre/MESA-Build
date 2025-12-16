@@ -140,12 +140,7 @@ class SchemaLlamaAssets(ABC):
         self.structures: dict[str, str] = {}
         for filename in enabled_structures:
             file_path: str = "structure/" + filename
-            try:
-                self.structures[filename] = self._base_dir.joinpath(
-                    file_path
-                ).read_text()
-            except FileNotFoundError:
-                raise FileNotFoundError(f"Structure file not found: {file_path}")
+            self.structures[filename] = self._base_dir.joinpath(file_path).read_text()
         return self.structures
 
     def get_structure_name_without_extension(self, filename: str) -> str:

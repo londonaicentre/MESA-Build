@@ -1,3 +1,4 @@
+import json
 import re
 from re import DOTALL
 from typing import Any
@@ -22,7 +23,18 @@ def test_validate_json_examples(genollama_assets: GenoLlamaAssets) -> None:
 
 
 def test_validate_example_schemas(genollama_assets: GenoLlamaAssets) -> None:
-    genollama_assets.validate_json_examples()
+    example_paths = genollama_assets._base_dir.joinpath("examples")
+
+    count_checked = 0
+
+    for item in example_paths.iterdir():
+        if item.is_file() and item.name.endswith(".json"):
+            count_checked += 1
+            genollama_assets.validate_json(
+                json.dumps(json.loads(item.read_text())["output"])
+            )
+
+    assert count_checked > 0, "No example JSON files were found to validate."
 
 
 def test_load_system_prompt_datagen(genollama_assets: GenoLlamaAssets) -> None:
