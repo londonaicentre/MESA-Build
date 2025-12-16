@@ -4,6 +4,8 @@ from importlib.resources.abc import Traversable
 import json
 from pathlib import Path
 from typing import Any, cast
+from glob import glob
+
 
 from pydantic import BaseModel
 
@@ -15,7 +17,6 @@ class SchemaLlamaAssets(ABC):
     def __init__(self, base_dir: str) -> None:
         self._base_dir: Traversable = files(base_dir)
         self.schema: type[BaseModel]
-
 
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
@@ -61,7 +62,6 @@ class SchemaLlamaAssets(ABC):
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
         pass
 
-    # profiles
     def load_all_profiles(self) -> list[Profile]:
         """Load all profiles
 
@@ -86,7 +86,6 @@ class SchemaLlamaAssets(ABC):
 
         Returns:
             list: Loaded profiles
-
         """
         all_profiles: list[Profile] = []
         for filename in filenames:
@@ -137,7 +136,6 @@ class SchemaLlamaAssets(ABC):
 
         Returns:
             dict: A mapping between structure file names and content
-
         """
         self.structures: dict[str, str] = {}
         for filename in enabled_structures:

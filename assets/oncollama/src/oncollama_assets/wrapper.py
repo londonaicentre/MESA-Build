@@ -11,7 +11,6 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         super().__init__("oncollama_assets")
         self.schema = OncoLlamaModel
 
-    # prompts
     def load_system_prompt(self, file: str = "systemprompt_infer.md") -> str:
         """Create a system prompt
 
@@ -35,8 +34,8 @@ class OncoLlamaAssets(SchemaLlamaAssets):
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
         return row["content"]
 
-    # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
+        """Load cancer profiles from a given file path"""
         cancer_profiles: list[Profile] = []
         cancer_type: str = file_path.name
         profiles: Profiles = Profiles(file_path)
@@ -64,7 +63,6 @@ class OncoLlamaAssets(SchemaLlamaAssets):
 
         Returns:
             str: The profile prompt
-
         """
         lines: list[str] = ["## USE THIS PRIMARY CANCER PROFILE"]
         lines.append("")
