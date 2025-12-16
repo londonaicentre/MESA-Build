@@ -13,9 +13,9 @@ from schemallama_types.assets.sampling import Content, Style
 
 
 class SchemaLlamaAssets(ABC):
-    def __init__(self, base_dir: str) -> None:
+    def __init__(self, base_dir: str, schema: type[BaseModel]) -> None:
         self._base_dir: Traversable = files(base_dir)
-        self.schema: type[BaseModel]
+        self._schema: type[BaseModel] = schema
 
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
@@ -30,7 +30,7 @@ class SchemaLlamaAssets(ABC):
             The validated schema as a BaseModel instance
         """
         parsed: dict[str, Any] = json.loads(json_str)
-        return self.schema(**parsed)
+        return self._schema(**parsed)
 
     def load_user_prompt_template(self, template_name: str) -> str:
         """Load a user prompt template from wrapped assets.
