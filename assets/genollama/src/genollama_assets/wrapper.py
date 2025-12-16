@@ -10,8 +10,7 @@ from utils.assets import Assets
 
 class GenoLlamaAssets(SchemaLlamaAssets):
     def __init__(self) -> None:
-        super().__init__("genollama_assets")
-        self.schema = GenomicTestReport
+        super().__init__("genollama_assets", GenomicTestReport)
 
     def load_system_prompt(self, file: str = "systemprompt_datagen.md") -> str:
         """Create a system prompt
