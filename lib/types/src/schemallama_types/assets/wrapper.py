@@ -21,13 +21,14 @@ class SchemaLlamaAssets(ABC):
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
 
     def validate_json(self, json_str: str) -> BaseModel:
-        """Validate a schema json string (str -> dict)
+        """Validate a schema json string
 
         Args:
             json_str (str): The json string to validate
 
         Returns:
             The validated schema as a BaseModel instance
+
         """
         parsed: dict[str, Any] = json.loads(json_str)
         return self._schema(**parsed)
