@@ -21,7 +21,6 @@ class SchemaLlamaAssets(ABC):
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
 
-    # schema
     def validate_json(self, json_str: str) -> BaseModel:
         """Validate a schema json string (str -> dict)
 
@@ -34,7 +33,6 @@ class SchemaLlamaAssets(ABC):
         parsed: dict[str, Any] = json.loads(json_str)
         return self.schema(**parsed)
 
-    # prompts
     def load_user_prompt_template(self, template_name: str) -> str:
         """Load a user prompt template from wrapped assets.
                 Template is assumed to be stored in the form
@@ -107,7 +105,6 @@ class SchemaLlamaAssets(ABC):
     def format_profile_prompt(self, profile: Profile) -> str:
         pass
 
-    # styles
     def load_style_data(self) -> Style:
         """Load data from style file into Style class
 
@@ -126,7 +123,6 @@ class SchemaLlamaAssets(ABC):
         """
         return Content(self._base_dir.joinpath("content.yml"))
 
-    # structures
     def load_structures(self, enabled_structures: list[str]) -> dict[str, str]:
         """Load structures
 
