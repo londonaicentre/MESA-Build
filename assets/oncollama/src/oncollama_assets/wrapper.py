@@ -8,8 +8,7 @@ from oncollama_assets.schema import OncoLlamaModel
 
 class OncoLlamaAssets(SchemaLlamaAssets):
     def __init__(self) -> None:
-        super().__init__("oncollama_assets")
-        self.schema = OncoLlamaModel
+        super().__init__("oncollama_assets", OncoLlamaModel)
 
     def load_system_prompt(self, file: str = "systemprompt_infer.md") -> str:
         """Create a system prompt
@@ -24,7 +23,7 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         """
         system_prompt_template: str = self._load("prompts", file)
         return system_prompt_template.replace(
-            "{SCHEMA}", str(self.schema.model_json_schema())
+            "{SCHEMA}", str(self._schema.model_json_schema())
         )
 
     def load_bootstrap_user_prompt(self, instructions: str) -> str:

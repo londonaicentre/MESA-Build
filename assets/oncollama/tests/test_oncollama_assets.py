@@ -1,6 +1,7 @@
 import pytest
 
 from oncollama_assets.wrapper import OncoLlamaAssets
+from oncollama_assets.schema import OncoLlamaModel
 from schemallama_types.assets.profile import Profile
 
 
@@ -9,10 +10,10 @@ def oncollama_assets() -> OncoLlamaAssets:
     return OncoLlamaAssets()
 
 
-def test_validate_schema(oncollama_assets: OncoLlamaAssets) -> None:
+def test_validate_schema() -> None:
     # Validate that we can instantiate and validate the schema
     # This would probably fail at an earlier stage if there were issues in reality.
-    oncollama_assets.schema.model_json_schema()
+    OncoLlamaModel.model_json_schema()
 
 
 def test_load_system_prompt_datagen(oncollama_assets: OncoLlamaAssets) -> None:

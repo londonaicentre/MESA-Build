@@ -1,3 +1,4 @@
+from importlib.resources.abc import Traversable
 import json
 import re
 from re import DOTALL
@@ -6,6 +7,7 @@ from typing import Any
 import pytest
 
 from genollama_assets.wrapper import GenoLlamaAssets
+from genollama_assets.schema import GenomicTestReport
 
 
 @pytest.fixture(scope="session")
@@ -13,16 +15,16 @@ def genollama_assets() -> GenoLlamaAssets:
     return GenoLlamaAssets()
 
 
-def test_validate_json_examples(genollama_assets: GenoLlamaAssets) -> None:
+def test_validate_schema() -> None:
     # Validate that we can instantiate and validate the schema
     # This would probably fail at an earlier stage if there were issues in reality.
-    genollama_assets.schema.model_json_schema()
+    GenomicTestReport.model_json_schema()
 
 
-def test_validate_example_schemas(genollama_assets: GenoLlamaAssets) -> None:
-    example_paths = genollama_assets._base_dir.joinpath("examples")
+def test_validate_json_examples(genollama_assets: GenoLlamaAssets) -> None:
+    example_paths: Traversable = genollama_assets._base_dir.joinpath("examples")
 
-    count_checked = 0
+    count_checked: int = 0
 
     for item in example_paths.iterdir():
         if item.is_file() and item.name.endswith(".json"):
