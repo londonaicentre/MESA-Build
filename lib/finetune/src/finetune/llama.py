@@ -1,12 +1,14 @@
 import json
+from json import JSONDecodeError
 from datetime import datetime
+import logging
+from pathlib import Path
 from typing import Any
 
 from sagemaker.jumpstart.estimator import JumpStartEstimator
 
 from finetune.config import Config
 from utils.aws import AWS
-from utils.llm import LLM, BatchOutput
 
 
 class FineTuner:
@@ -18,6 +20,7 @@ class FineTuner:
     """
 
     def __init__(self, instance_type: str):
+        self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__config: Config = Config()
         self.__instance_type: str = instance_type
         self.__model_id: str = self.__config.models["llama"].model
@@ -28,7 +31,7 @@ class FineTuner:
         ].template_filename
         self.__model_train_filename: str = self.__config.models["llama"].train_filename
 
-    def __generate_template_file(self, system_prompt: str) -> None:
+    def _generate_template_file(self, system_prompt: str) -> None:
         """Generate template file into which part of the training
             data are embedded.
 
@@ -48,25 +51,18 @@ class FineTuner:
                 file=outfile,
             )
 
-    def __generate_train_file(self, samples_input_file: str) -> None:
+    def _generate_train_file(self, samples_input_folder: str) -> bool:
         """Generate a training file formatted from sample data
 
         Args:
-            samples_input_file (str): path to sample data file
+            samples_input_folder (str): path to sample data file
 
         """
         with open("train.jsonl", "w") as outfile:
-            with open(samples_input_file, "r") as infile:
-                for line in infile:
-                    parsed_line: BatchOutput = BatchOutput.model_validate(
-                        json.loads(line)
-                    )
-                    text: str
-                    _, _, text = LLM.extract_output_content(
-                        parsed_line.modelOutput.content[0].text
-                    )
+            for file in Path(samples_input_folder).glob("*.json"):
+                with open(file) as infile:
                     try:
-                        parsed_text: dict[str, Any] = json.loads(text)
+                        parsed_text: dict[str, Any] = json.loads(infile.read())
                         print(
                             json.dumps(
                                 {
@@ -79,8 +75,10 @@ class FineTuner:
                             ),
                             file=outfile,
                         )
-                    except Exception:
-                        pass
+                    except JSONDecodeError as e:
+                        self.__logger.error(e)
+                        return False
+        return True
 
     def __run_estimator(
         self,
@@ -145,7 +143,7 @@ class FineTuner:
 
         """
         job_id: str = "finetune/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-        self.__generate_template_file(system_prompt)
+        self._generate_template_file(system_prompt)
         upload_path: str = job_id + "/input"
         if not dry_run:
             AWS.upload_file(
@@ -155,7 +153,7 @@ class FineTuner:
                 self.__model_template_filename,
                 upload_path,
             )
-        self.__generate_train_file(sample_data_file)
+        self._generate_train_file(sample_data_file)
         if not dry_run:
             AWS.upload_file(
                 self.__model_region,
