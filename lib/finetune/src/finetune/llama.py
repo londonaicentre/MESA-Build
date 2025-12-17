@@ -86,7 +86,7 @@ class FineTuner:
         input_path: str,
         output_path: str,
         instruction_tuned: bool = True,
-        quantized: bool = True,
+        quantized: bool = False,
     ) -> None:
         """Start fine-tuning process
 
