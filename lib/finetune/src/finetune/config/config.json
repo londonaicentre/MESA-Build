@@ -4,6 +4,6 @@
         "version": "*",
         "region": "eu-west-2",
         "template_filename": "template.json",
-        "train_filename": "train.json"
+        "train_filename": "train.jsonl"
     }
 }
