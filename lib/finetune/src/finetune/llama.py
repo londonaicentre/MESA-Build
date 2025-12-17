@@ -31,7 +31,7 @@ class FineTuner:
         ].template_filename
         self.__model_train_filename: str = self.__config.models["llama"].train_filename
 
-    def __generate_template_file(self, system_prompt: str) -> None:
+    def _generate_template_file(self, system_prompt: str) -> None:
         """Generate template file into which part of the training
             data are embedded.
 
@@ -143,7 +143,7 @@ class FineTuner:
 
         """
         job_id: str = "finetune/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-        self.__generate_template_file(system_prompt)
+        self._generate_template_file(system_prompt)
         upload_path: str = job_id + "/input"
         if not dry_run:
             AWS.upload_file(
