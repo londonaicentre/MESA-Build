@@ -43,7 +43,7 @@ class FineTuner:
             print(
                 json.dumps(
                     {
-                        "prompt": system_prompt
+                        "prompt": system_prompt.replace("{", "{{").replace("}", "}}")
                         + "\n\n### Instruction:\n{instruction}\n\n### Input:\n{context}\n\n",
                         "completion": "{response}",
                     }

@@ -43,9 +43,9 @@ def test_generate_template_file(
 ) -> None:
     file_write_mock: MagicMock = mock_open()
     mock_file.return_value = file_write_mock()
-    fine_tuner.generate_template_file("qux")
+    fine_tuner.generate_template_file("{qux}")
     mock_file.assert_called_with("template.json", "w")
     assert (
         mock_print.call_args[0][0]
-        == '{"prompt": "qux\\n\\n### Instruction:\\n{instruction}\\n\\n### Input:\\n{context}\\n\\n", "completion": "{response}"}'
+        == '{"prompt": "{{qux}}\\n\\n### Instruction:\\n{instruction}\\n\\n### Input:\\n{context}\\n\\n", "completion": "{response}"}'
     )
