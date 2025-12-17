@@ -2,9 +2,6 @@ from importlib.resources.abc import Traversable
 import json
 from typing import Any
 
-from litellm import cast
-from pydantic import BaseModel, ValidationError
-
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
 from schemallama_types.assets.profile import Profile
 from genollama_assets.schema import GenomicTestReport
@@ -13,65 +10,8 @@ from utils.assets import Assets
 
 class GenoLlamaAssets(SchemaLlamaAssets):
     def __init__(self) -> None:
-        super().__init__("genollama_assets")
+        super().__init__("genollama_assets", GenomicTestReport)
 
-    # schema
-    def validate_json_examples(self, schema: type[BaseModel]) -> tuple[bool, str]:
-        """Validate stored genomic example json files (str -> dict)
-
-        Args:
-            schema: (type[BaseModel]): The schema to validate against
-
-        Returns:
-            tuple: The validation result and result description
-
-        """
-        items: list[Traversable] = cast(
-            list[Traversable], sorted(self._base_dir.joinpath("examples").iterdir())
-        )
-        item: Traversable
-        result: bool
-        message: str
-        parsed: dict[str, Any] | None
-        for item in items:
-            if item.is_file() and item.name.endswith(".json"):
-                result, message, parsed = super().validate_json(
-                    json.dumps(json.loads(item.read_text())["output"]), schema
-                )
-                try:
-                    if result and parsed is not None:
-                        loaded_example: BaseModel = schema(**parsed)
-                        loaded_example.model_dump_json()
-                    else:
-                        raise ValueError(message)
-                except (ValidationError, ValueError) as e:
-                    return False, f"Example {item.name} failed validation: {e}"
-        return True, "All examples checked"
-
-    def validate_schema(
-        self, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
-        """Validate a genomic schema (pydantic -> dict),
-            and output the result.
-
-        Args:
-            schema: (type[BaseModel]): The schema to validate
-
-        Returns:
-            tuple: The validation result, result description,
-                and json version of the schema
-
-        """
-        result: bool
-        message: str
-        json_schema: dict[str, Any] | None
-        result, message, json_schema = super().validate_schema(schema)
-        if result and json_schema is not None:
-            with open("schema.json", "w") as output_file:
-                json.dump(json_schema, output_file, indent=4)
-        return result, message, json_schema
-
-    # prompts
     def load_system_prompt(self, file: str = "systemprompt_datagen.md") -> str:
         """Create a system prompt
 
@@ -81,7 +21,6 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
         Returns:
             str: The system prompt
-
         """
         schema_content: str = json.dumps(GenomicTestReport.model_json_schema())
         system_prompt_template: str = self._load("prompts", file)
@@ -146,11 +85,14 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             Then extract the information into the structured schema format."""
         return user_prompt
 
-    # profiles
     def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
         """TODO: Implement upon the use of docsynth profiles in genollama."""
-        return []
+        raise NotImplementedError(
+            "Profile loading is not yet implemented for GenoLlamaAssets."
+        )
 
     def format_profile_prompt(self, profile: Profile) -> str:
         """TODO: Implement upon the use of docsynth profiles in genollama."""
-        return ""
+        raise NotImplementedError(
+            "Profile prompt formatting is not yet implemented for GenoLlamaAssets."
+        )

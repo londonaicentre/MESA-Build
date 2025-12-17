@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any, cast
 
-from jsonschema import ValidationError
+
 from pydantic import BaseModel
 
 from schemallama_types.assets.profile import Profile
@@ -13,58 +13,26 @@ from schemallama_types.assets.sampling import Content, Style
 
 
 class SchemaLlamaAssets(ABC):
-    def __init__(self, base_dir: str) -> None:
+    def __init__(self, base_dir: str, schema: type[BaseModel]) -> None:
         self._base_dir: Traversable = files(base_dir)
+        self._schema: type[BaseModel] = schema
 
     def _load(self, folder: str, file: str) -> str:
         return self._base_dir.joinpath(f"{folder}/{file}").read_text()
 
-    # schema
-    def validate_json(
-        self, json_str: str, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
-        """Validate a schema json string (str -> dict)
+    def validate_json(self, json_str: str) -> BaseModel:
+        """Validate a schema json string
 
         Args:
             json_str (str): The json string to validate
-            schema: (type[BaseModel]): The schema to validate against
 
         Returns:
-            tuple: The validation result, result description,
-                and parsed string
+            The validated schema as a BaseModel instance
 
         """
-        try:
-            parsed: dict[str, Any] = json.loads(json_str)
-            schema(**parsed)
-            return True, "Valid", parsed
-        except json.JSONDecodeError as e:
-            return False, f"JSON Parse Error: {e}", None
-        except ValidationError as e:
-            return False, f"Schema Validation Error: {e}", None
-        except Exception as e:
-            return False, f"Validation Error: {e}", None
+        parsed: dict[str, Any] = json.loads(json_str)
+        return self._schema(**parsed)
 
-    def validate_schema(
-        self, schema: type[BaseModel]
-    ) -> tuple[bool, str, dict[str, Any] | None]:
-        """Validate a schema (pydantic -> dict)
-
-        Args:
-            schema: (type[BaseModel]): The schema to validate
-
-        Returns:
-            tuple: The validation result, result description,
-                and json version of the schema
-
-        """
-        try:
-            json_schema: dict[str, Any] = schema.model_json_schema()
-            return True, "Schema validation successful", json_schema
-        except Exception as e:
-            return False, f"Schema validation failed: {e}", None
-
-    # prompts
     def load_user_prompt_template(self, template_name: str) -> str:
         """Load a user prompt template from wrapped assets.
                 Template is assumed to be stored in the form
@@ -92,7 +60,6 @@ class SchemaLlamaAssets(ABC):
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
         pass
 
-    # profiles
     def load_all_profiles(self) -> list[Profile]:
         """Load all profiles
 
@@ -102,7 +69,8 @@ class SchemaLlamaAssets(ABC):
         """
         all_profiles: list[Profile] = []
         items: list[Traversable] = cast(
-            list[Traversable], sorted(self._base_dir.joinpath("profiles").iterdir())
+            list[Traversable],
+            sorted(self._base_dir.joinpath("profiles").iterdir(), key=lambda x: x.name),
         )
         item: Traversable
         for item in items:
@@ -116,7 +84,6 @@ class SchemaLlamaAssets(ABC):
 
         Returns:
             list: Loaded profiles
-
         """
         all_profiles: list[Profile] = []
         for filename in filenames:
@@ -138,7 +105,6 @@ class SchemaLlamaAssets(ABC):
     def format_profile_prompt(self, profile: Profile) -> str:
         pass
 
-    # styles
     def load_style_data(self) -> Style:
         """Load data from style file into Style class
 
@@ -157,7 +123,6 @@ class SchemaLlamaAssets(ABC):
         """
         return Content(self._base_dir.joinpath("content.yml"))
 
-    # structures
     def load_structures(self, enabled_structures: list[str]) -> dict[str, str]:
         """Load structures
 
@@ -167,17 +132,11 @@ class SchemaLlamaAssets(ABC):
 
         Returns:
             dict: A mapping between structure file names and content
-
         """
         self.structures: dict[str, str] = {}
         for filename in enabled_structures:
             file_path: str = "structure/" + filename
-            try:
-                self.structures[filename] = self._base_dir.joinpath(
-                    file_path
-                ).read_text()
-            except FileNotFoundError:
-                raise FileNotFoundError(f"Structure file not found: {file_path}")
+            self.structures[filename] = self._base_dir.joinpath(file_path).read_text()
         return self.structures
 
     def get_structure_name_without_extension(self, filename: str) -> str:
