@@ -34,7 +34,7 @@ def parse_CLI_args() -> FinetuneArgs:
 def main() -> None:
     args: FinetuneArgs = parse_CLI_args()
     settings: Settings = Settings()
-    fine_tuner: FineTuner = FineTuner(settings.INSTANCE_TYPE)
+    fine_tuner: FineTuner = FineTuner(settings.TRAINING_INSTANCE_TYPE)
     oncollama_assets: OncoLlamaAssets = OncoLlamaAssets()
     fine_tuner.run_finetune(
         oncollama_assets.load_system_prompt("systemprompt_finetune.md"),
