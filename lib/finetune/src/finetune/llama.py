@@ -43,7 +43,7 @@ class FineTuner:
             print(
                 json.dumps(
                     {
-                        "prompt": system_prompt
+                        "prompt": system_prompt.replace("{", "{{").replace("}", "}}")
                         + "\n\n### Instruction:\n{instruction}\n\n### Input:\n{context}\n\n",
                         "completion": "{response}",
                     }
@@ -86,7 +86,8 @@ class FineTuner:
         input_path: str,
         output_path: str,
         instruction_tuned: bool = True,
-        quantized: bool = True,
+        quantized: bool = False,
+        enable_fsdp: bool = True,
     ) -> None:
         """Start fine-tuning process
 
@@ -99,7 +100,9 @@ class FineTuner:
             instruction_tuned (bool, optional): Whether to instruction-train
                 the model (indicated by `template.json`). Defaults to True.
             quantized (bool, optional): Whether to load the base model in
-                lower precision. Defaults to True.
+                lower precision. Defaults to False.
+            enable_fsdp (bool, optional): Whether to split the training
+                job across multiple GPUs. Defaults to True, unless quantized.
 
         """
         estimator: JumpStartEstimator = JumpStartEstimator(
@@ -116,7 +119,7 @@ class FineTuner:
             instruction_tuned="True" if instruction_tuned else "False",
             chat_dataset="False" if instruction_tuned else "True",
             int8_quantization="True" if quantized else "False",
-            enable_fsdp="False" if quantized else "True",
+            enable_fsdp="False" if quantized else enable_fsdp,
         )  # type: ignore[no-untyped-call]
         estimator.fit({"training": input_path})
 

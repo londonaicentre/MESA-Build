@@ -27,7 +27,7 @@ def parse_CLI_args() -> DeployArgs:
 def main() -> None:
     args: DeployArgs = parse_CLI_args()
     settings: Settings = Settings()
-    deployer: Deployer = Deployer(settings.IMAGE, settings.INSTANCE_TYPE)
+    deployer: Deployer = Deployer(settings.IMAGE, settings.INFERENCE_INSTANCE_TYPE)
 
     if args.command == "up":
         deployer.run_deploy_up(
