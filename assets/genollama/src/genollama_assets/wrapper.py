@@ -1,9 +1,7 @@
-from importlib.resources.abc import Traversable
 import json
 from typing import Any
 
 from schemallama_types.assets.wrapper import SchemaLlamaAssets
-from schemallama_types.assets.profile import Profile
 from genollama_assets.schema import GenomicTestReport
 from utils.assets import Assets
 
@@ -84,15 +82,3 @@ class GenoLlamaAssets(SchemaLlamaAssets):
             Generate a realistic genomic laboratory report incorporating all these details.
             Then extract the information into the structured schema format."""
         return user_prompt
-
-    def _load_profiles_from_file(self, file_path: Traversable) -> list[Profile]:
-        """TODO: Implement upon the use of docsynth profiles in genollama."""
-        raise NotImplementedError(
-            "Profile loading is not yet implemented for GenoLlamaAssets."
-        )
-
-    def format_profile_prompt(self, profile: Profile) -> str:
-        """TODO: Implement upon the use of docsynth profiles in genollama."""
-        raise NotImplementedError(
-            "Profile prompt formatting is not yet implemented for GenoLlamaAssets."
-        )
