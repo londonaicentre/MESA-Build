@@ -9,17 +9,16 @@ on:
 jobs:
   build:
     if: startsWith(github.event.release.tag_name, 'llamaserve')
-    runs-on: ubuntu-latest
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     defaults:
       run:
         working-directory: lib/infer/local/llamaserve
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - run: pip install build
-      - run: python -m build
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync
+      - run: uv pip install build
+      - run: uv run python -m build
       - uses: actions/upload-artifact@v5
         with:
           name: dist
@@ -27,7 +26,7 @@ jobs:
 
   publish:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
     permissions:
       id-token: write
