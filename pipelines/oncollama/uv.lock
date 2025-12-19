@@ -1084,14 +1084,44 @@ wheels = [
 ]
 
 [[package]]
+name = "londonaicentre-docsynth"
+version = "1.0.0"
+source = { editable = "../../lib/docsynth" }
+dependencies = [
+    { name = "google-generativeai" },
+    { name = "londonaicentre-schemallama-types" },
+    { name = "londonaicentre-schemallama-utils" },
+    { name = "pydantic-settings" },
+    { name = "pytest" },
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "google-generativeai", specifier = ">=0.8.5" },
+    { name = "londonaicentre-schemallama-types", editable = "../../lib/types" },
+    { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
+    { name = "pydantic-settings", specifier = ">=2.12.0" },
+    { name = "pytest", specifier = ">=9.0.2" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.18.2" },
+    { name = "ruff", specifier = ">=0.14.6" },
+    { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
+]
+
+[[package]]
 name = "londonaicentre-oncollama"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "londonaicentre-docsynth" },
     { name = "londonaicentre-oncollama-assets" },
     { name = "londonaicentre-schemallama-datagen" },
     { name = "londonaicentre-schemallama-deploy" },
-    { name = "londonaicentre-schemallama-docsynth" },
     { name = "londonaicentre-schemallama-finetune" },
 ]
 
@@ -1103,10 +1133,10 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "londonaicentre-docsynth", editable = "../../lib/docsynth" },
     { name = "londonaicentre-oncollama-assets", editable = "../../assets/oncollama" },
     { name = "londonaicentre-schemallama-datagen", editable = "../../lib/datagen" },
     { name = "londonaicentre-schemallama-deploy", editable = "../../lib/infer/demo/llamadeploy" },
-    { name = "londonaicentre-schemallama-docsynth", editable = "../../lib/docsynth" },
     { name = "londonaicentre-schemallama-finetune", editable = "../../lib/finetune" },
 ]
 
@@ -1149,7 +1179,7 @@ source = { editable = "../../lib/datagen" }
 dependencies = [
     { name = "boto3" },
     { name = "litellm" },
-    { name = "londonaicentre-schemallama-types" },
+    { name = "londonaicentre-docsynth" },
     { name = "londonaicentre-schemallama-utils" },
     { name = "pandas" },
     { name = "pydantic-settings" },
@@ -1159,8 +1189,8 @@ dependencies = [
 requires-dist = [
     { name = "boto3", specifier = ">=1.41.1" },
     { name = "litellm", specifier = ">=1.80.0" },
-    { name = "londonaicentre-schemallama-types", editable = "../../lib/types" },
-    { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
+    { name = "londonaicentre-docsynth", editable = "../../lib/docsynth" },
+    { name = "londonaicentre-schemallama-utils" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
 ]
@@ -1199,36 +1229,6 @@ dev = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "transformers", specifier = ">=4.57.1" },
-]
-
-[[package]]
-name = "londonaicentre-schemallama-docsynth"
-version = "1.0.0"
-source = { editable = "../../lib/docsynth" }
-dependencies = [
-    { name = "google-generativeai" },
-    { name = "londonaicentre-schemallama-types" },
-    { name = "londonaicentre-schemallama-utils" },
-    { name = "pydantic-settings" },
-    { name = "pytest" },
-    { name = "pyyaml" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "google-generativeai", specifier = ">=0.8.5" },
-    { name = "londonaicentre-schemallama-types", editable = "../../lib/types" },
-    { name = "londonaicentre-schemallama-utils", editable = "../../lib/utils" },
-    { name = "pydantic-settings", specifier = ">=2.12.0" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "pyyaml", specifier = ">=6.0.3" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.18.2" },
-    { name = "ruff", specifier = ">=0.14.6" },
-    { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
 ]
 
 [[package]]

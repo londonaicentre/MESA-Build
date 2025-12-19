@@ -1005,7 +1005,7 @@ wheels = [
 ]
 
 [[package]]
-name = "londonaicentre-schemallama-docsynth"
+name = "londonaicentre-docsynth"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [

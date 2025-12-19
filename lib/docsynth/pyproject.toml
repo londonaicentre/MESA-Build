@@ -1,5 +1,5 @@
 [project]
-name = "londonaicentre-schemallama-docsynth" 
+name = "londonaicentre-docsynth" 
 description = "SchemaLlama docsynth"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" }
