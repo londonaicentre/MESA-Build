@@ -2,7 +2,6 @@ import pytest
 
 from oncollama_assets.wrapper import OncoLlamaAssets
 from oncollama_assets.schema import OncoLlamaModel
-from schemallama_types.assets.profile import Profile
 
 
 @pytest.fixture(scope="session")
@@ -28,18 +27,3 @@ def test_load_system_prompt_datagen(oncollama_assets: OncoLlamaAssets) -> None:
 
 def test_load_datagen_user_prompt(oncollama_assets: OncoLlamaAssets) -> None:
     assert "foo" in oncollama_assets.load_datagen_user_prompt({"content": "foo"})
-
-
-def test_load_profiles_from_file(oncollama_assets: OncoLlamaAssets) -> None:
-    profiles: list[Profile] = oncollama_assets.load_all_profiles()
-    assert len(profiles) == 2550
-    assert profiles[0].descriptive_name == "Cholangiocarcinoma"
-
-
-def test_format_profile_prompt(oncollama_assets: OncoLlamaAssets) -> None:
-    profiles: list[Profile] = oncollama_assets.load_all_profiles()
-    profile_prompt_portion: str = oncollama_assets.format_profile_prompt(profiles[0])
-    # contains boilerplate text
-    assert "## USE THIS PRIMARY CANCER PROFILE" in profile_prompt_portion
-    # contains an example
-    assert "Cholangiocarcinoma" in profile_prompt_portion

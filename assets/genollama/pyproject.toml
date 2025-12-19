@@ -24,10 +24,7 @@ londonaicentre-schemallama-utils = { path = "../../lib/utils", editable = true }
 [tool.setuptools.package-data]
 genollama_assets = [
     "examples/*",
-    "profiles/*",
     "prompts/*",
-    "structure/*",
-    "*.yml",
     "py.typed"
 ]
 [dependency-groups]

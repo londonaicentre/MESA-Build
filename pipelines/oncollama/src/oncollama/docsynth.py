@@ -2,8 +2,8 @@ from argparse import ArgumentParser
 from dataclasses import dataclass
 
 from oncollama.settings import Settings
-from oncollama_assets.wrapper import OncoLlamaAssets
 from docsynth.generate import Generator
+from docsynth.assets.oncology.wrapper import OncologyAssets
 
 
 @dataclass
@@ -35,9 +35,9 @@ def main() -> None:
     settings: Settings = Settings()
     if args.batch:
         Generator().generate(
-            OncoLlamaAssets(), settings.BUCKET, settings.BEDROCK_EXECUTION_ROLE
+            OncologyAssets(), settings.BUCKET, settings.BEDROCK_EXECUTION_ROLE
         )
     elif args.extract:
         Generator().extract_batch_output()
     else:
-        Generator().generate(OncoLlamaAssets())
+        Generator().generate(OncologyAssets())

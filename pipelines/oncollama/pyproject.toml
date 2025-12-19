@@ -9,7 +9,7 @@ requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "londonaicentre-oncollama-assets",
-    "londonaicentre-schemallama-docsynth",
+    "londonaicentre-docsynth",
     "londonaicentre-schemallama-datagen",
     "londonaicentre-schemallama-finetune",
     "londonaicentre-schemallama-deploy",
@@ -25,7 +25,7 @@ requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-oncollama-assets = { path = "../../assets/oncollama", editable = true }
-londonaicentre-schemallama-docsynth = { path = "../../lib/docsynth", editable = true }
+londonaicentre-docsynth = { path = "../../lib/docsynth", editable = true }
 londonaicentre-schemallama-datagen = { path = "../../lib/datagen", editable = true }
 londonaicentre-schemallama-finetune = { path = "../../lib/finetune", editable = true }
 londonaicentre-schemallama-deploy = { path = "../../lib/infer/demo/llamadeploy", editable = true }

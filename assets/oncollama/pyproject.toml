@@ -11,8 +11,6 @@ license-files = [ "LICENSE.md" ]
 dependencies = [
     "londonaicentre-schemallama-types",
     "pydantic>=2.12.5",
-    "pytest>=9.0.2",
-    "pyyaml>=6.0.3",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
@@ -22,15 +20,12 @@ londonaicentre-schemallama-types = { path = "../../lib/types", editable = true }
 [tool.setuptools.package-data]
 oncollama_assets = [
     "examples/*",
-    "profiles/*",
     "prompts/*",
-    "structure/*",
-    "*.yml",
     "py.typed"
 ]
 [dependency-groups]
 dev = [
     "mypy>=1.18.2",
+    "pytest>=9.0.2",
     "ruff>=0.14.6",
-    "types-pyyaml>=6.0.12.20250915",
 ]
