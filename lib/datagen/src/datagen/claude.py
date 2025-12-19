@@ -14,7 +14,7 @@ from pydantic import BaseModel
 from litellm import Choices, ModelResponse
 
 from datagen.config import Config
-from schemallama_types.docsynth import DocsynthDocument
+from docsynth.types.documents import DocsynthDocument
 from utils.aws import AWS
 from utils.llm import LLM, BatchOutputs
 
