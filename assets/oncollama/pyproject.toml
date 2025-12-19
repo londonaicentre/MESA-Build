@@ -22,10 +22,7 @@ londonaicentre-schemallama-types = { path = "../../lib/types", editable = true }
 [tool.setuptools.package-data]
 oncollama_assets = [
     "examples/*",
-    "profiles/*",
     "prompts/*",
-    "structure/*",
-    "*.yml",
     "py.typed"
 ]
 [dependency-groups]
