@@ -208,7 +208,9 @@ class Generator:
                 if self.__llm_client:
                     try:
                         self.__logger.info(f"Generating content for {doc_id}")
-                        response = self.__llm_client.generate(prompt, doc_id if batch else None)
+                        response = self.__llm_client.generate(
+                            prompt, doc_id if batch else None
+                        )
                         if batch:
                             continue
                         extracted, extraction_status_message, content = (
