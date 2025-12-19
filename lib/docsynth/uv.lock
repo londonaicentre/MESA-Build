@@ -1013,13 +1013,13 @@ dependencies = [
     { name = "londonaicentre-schemallama-types" },
     { name = "londonaicentre-schemallama-utils" },
     { name = "pydantic-settings" },
-    { name = "pytest" },
     { name = "pyyaml" },
 ]
 
 [package.dev-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "pytest" },
     { name = "ruff" },
     { name = "types-pyyaml" },
 ]
@@ -1030,13 +1030,13 @@ requires-dist = [
     { name = "londonaicentre-schemallama-types", editable = "../types" },
     { name = "londonaicentre-schemallama-utils", editable = "../utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
-    { name = "pytest", specifier = ">=9.0.2" },
     { name = "pyyaml", specifier = ">=6.0.3" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=1.18.2" },
+    { name = "pytest", specifier = ">=9.0.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
 ]
@@ -1061,7 +1061,6 @@ dev = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-jsonschema", specifier = ">=4.25.1.20251009" },
-    { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
 ]
 
 [[package]]
