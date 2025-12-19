@@ -7,9 +7,12 @@ on:
       - published
 
 jobs:
-  build:
+  build-and-publish:
     if: startsWith(github.event.release.tag_name, 'llamaserve')
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
+    permissions:
+      id-token: write
     defaults:
       run:
         working-directory: lib/infer/local/llamaserve
@@ -19,22 +22,6 @@ jobs:
       - run: uv sync
       - run: uv pip install build
       - run: uv run python -m build
-      - uses: actions/upload-artifact@v5
-        with:
-          name: dist
-          path: lib/infer/local/llamaserve/dist
-
-  publish:
-    needs: build
-    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
-    environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@v6
-        with:
-          name: dist
-          path: dist
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ github.event_name == 'release' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
