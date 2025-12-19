@@ -16,7 +16,7 @@ def get_batch_input(sample_generation_input: str = "bar") -> str:
             "modelInput": {
                 "anthropic_version": "bedrock-2023-05-31",
                 "system": "foo",
-                "max_tokens": 4000,
+                "max_tokens": 8192,
                 "messages": [
                     {
                         "role": "user",
@@ -64,7 +64,7 @@ def get_batch_output(sample_json_output: str) -> str:
             "modelInput": {
                 "anthropic_version": "bedrock-2023-05-31",
                 "system": "",
-                "max_tokens": 4000,
+                "max_tokens": 8192,
                 "messages": [
                     {
                         "role": "user",
