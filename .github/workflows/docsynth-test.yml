@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     defaults:
       run:
         working-directory: lib/docsynth
