@@ -32,17 +32,10 @@ jobs:
             echo "type=patch" >> $GITHUB_OUTPUT
           fi
 
-      - name: Bump version and tag
+      - name: Tag new version
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          uv version --bump ${{ steps.bump-type.outputs.type }}
-          NEW_VERSION=$(uv version --short)
-          # Version bump will cause project and lockfile drift
-          git add pyproject.toml uv.lock
-          git commit -m "chore: bump oncollama_assets version to ${NEW_VERSION} [skip ci]"
-          git tag "oncollama-assets-v${NEW_VERSION}"
-          git push --follow-tags
+          git tag "oncollama-assets-v${VERSION}"
+          git push origin "oncollama-assets-v${VERSION}"
 
       - name: Build package
         run: uv build
