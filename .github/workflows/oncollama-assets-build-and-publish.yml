@@ -1,4 +1,4 @@
-name: build and publish llamaserve
+name: build and publish oncollama_assets
 
 on:
   workflow_dispatch:
@@ -8,14 +8,14 @@ on:
 
 jobs:
   build-and-publish:
-    if: startsWith(github.event.release.tag_name, 'llamaserve')
+    if: startsWith(github.event.release.tag_name, 'oncollama-assets')
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
     permissions:
       id-token: write
     defaults:
       run:
-        working-directory: lib/infer/local/llamaserve
+        working-directory: assets/oncollama
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
