@@ -19,9 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
-      - run: uv sync
-      - run: uv pip install build
-      - run: uv run python -m build
+      - run: uv sync --only-dev
+      - run: uv build
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ github.event_name == 'release' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
