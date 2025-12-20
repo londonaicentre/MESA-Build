@@ -24,7 +24,7 @@ class OncoLlamaAssets(SchemaLlamaAssets):
         )
 
     def load_bootstrap_user_prompt(self, instructions: str) -> str:
-        """TODO: Implement upon the use of bootstrapping in oncollama."""
+        """TODO: Implement upon the use of bootstrapping in OncoLlama."""
         raise NotImplementedError("Bootstrapping not yet implemented for OncoLlama.")
 
     def load_datagen_user_prompt(self, row: dict[str, Any]) -> str:
