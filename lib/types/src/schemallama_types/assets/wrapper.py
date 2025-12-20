@@ -1,9 +1,8 @@
+import json
 from abc import ABC, abstractmethod
 from importlib.resources import files
 from importlib.resources.abc import Traversable
-import json
 from typing import Any
-
 
 from pydantic import BaseModel
 
