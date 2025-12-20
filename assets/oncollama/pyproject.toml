@@ -2,7 +2,9 @@
 name = "londonaicentre-oncollama-assets" 
 description = "OncoLlama assets"
 authors = [
-    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" }
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Dr. Martin Chapman", email = "martin.chapman@nhs.net" },
+    { name = "Dr. Lawrence Adams", email = "lawrence.adams2@nhs.net" },
 ]
 version = "1.0.0"
 requires-python = ">=3.12"
