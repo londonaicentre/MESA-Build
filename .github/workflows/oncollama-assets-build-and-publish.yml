@@ -20,20 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
-      - name: Determine version bump type
-        id: bump-type
-        run: |
-          PR_TITLE='${{ github.event.pull_request.title }}'
-          if [[ "$PR_TITLE" =~ [Mm]ajor ]]; then
-            echo "type=major" >> $GITHUB_OUTPUT
-          elif [[ "$PR_TITLE" =~ [Mm]inor ]]; then
-            echo "type=minor" >> $GITHUB_OUTPUT
-          else
-            echo "type=patch" >> $GITHUB_OUTPUT
-          fi
 
       - name: Tag new version
         run: |
+          VERSION=$(uv version --short)
           git tag "oncollama-assets-v${VERSION}"
           git push origin "oncollama-assets-v${VERSION}"
 
