@@ -50,7 +50,6 @@ class GenoLlamaAssets(SchemaLlamaAssets):
 
         Returns:
             str: The user prompt
-
         """
         user_prompt: str = f"""Please now generate 20 rows according to the above instructions as a CSV file. These rows should {instructions}. While conforming to these instructions, please also ensure that rows are varied, and represent a range of different report types and styles."""
         return user_prompt
