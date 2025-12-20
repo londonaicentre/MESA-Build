@@ -19,6 +19,6 @@ jobs:
       - run: |
           uv sync --only-dev
           source .venv/bin/activate
-      - run: uv run flake8 src/ tests/
-      - run: uv run mypy src/ tests/
-      - run: uv run pytest tests
+      - run: flake8 src/ tests/
+      - run: mypy src/ tests/
+      - run: pytest tests
