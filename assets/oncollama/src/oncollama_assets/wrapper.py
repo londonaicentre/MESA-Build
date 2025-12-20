@@ -17,7 +17,6 @@ class OncoLlamaAssets(SchemaLlamaAssets):
 
         Returns:
             str: The system prompt
-
         """
         system_prompt_template: str = self._load("prompts", file)
         return system_prompt_template.replace(
