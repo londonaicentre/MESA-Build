@@ -16,7 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
-      - run: uv sync --only-dev 
-      - run: uv run --only-dev flake8 src/ tests/
-      - run: uv run --only-dev mypy src/ tests/
-      - run: uv run --only-dev pytest tests
+      - run: |
+          uv sync --only-dev
+          source .venv/bin/activate
+      - run: uv run flake8 src/ tests/
+      - run: uv run mypy src/ tests/
+      - run: uv run pytest tests
