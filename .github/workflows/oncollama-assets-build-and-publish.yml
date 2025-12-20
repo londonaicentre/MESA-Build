@@ -37,7 +37,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           uv version --bump ${{ steps.bump-type.outputs.type }}
-          NEW_VERSION=$(uv version)
+          NEW_VERSION=$(uv version --short)
           git tag "oncollama-assets-v${NEW_VERSION}"
           git push --follow-tags
 
