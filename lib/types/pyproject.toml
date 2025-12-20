@@ -10,7 +10,6 @@ version = "1.0.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
-    "jsonschema>=4.25.1",
     "pydantic>=2.12.5",
 ]
 [build-system]
@@ -22,5 +21,4 @@ package-data = {"types" = ["py.typed"]}
 dev = [
     "mypy>=1.18.2",
     "ruff>=0.14.6",
-    "types-jsonschema>=4.25.1.20251009",
 ]
