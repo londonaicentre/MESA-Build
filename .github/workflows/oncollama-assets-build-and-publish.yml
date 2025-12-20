@@ -32,12 +32,14 @@ jobs:
             echo "type=patch" >> $GITHUB_OUTPUT
           fi
 
-      - name: Bump version
+      - name: Bump version and tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           uv version --bump ${{ steps.bump-type.outputs.type }}
-          git push
+          NEW_VERSION=$(uv version)
+          git tag "oncollama-assets-v${NEW_VERSION}"
+          git push --follow-tags
 
       - name: Build package
         run: uv build
