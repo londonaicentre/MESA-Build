@@ -12,6 +12,7 @@ jobs:
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
     permissions:
+      contents: read
       id-token: write
     defaults:
       run:
