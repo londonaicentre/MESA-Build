@@ -10,7 +10,7 @@ jobs:
   build-and-publish:
     if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'llamaserve')
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
-    environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
+    environment: pypi
     permissions:
       contents: read
       id-token: write
@@ -23,5 +23,3 @@ jobs:
       - run: uv sync --only-dev
       - run: uv build
       - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: ${{ github.event_name == 'release' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
