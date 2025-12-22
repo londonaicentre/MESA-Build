@@ -3,7 +3,7 @@ description: Raise a non-code task
 type: Task
 projects: ["londonaicentre/16"]
 body:
-  - type: input
+  - type: textarea
     id: short-description
     attributes:
       label: Description
