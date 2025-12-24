@@ -219,7 +219,7 @@ class BiomarkerStatus(str, Enum):
 
 class MSIStatus(str, Enum):
     MSI_HIGH = "msi_high"
-    MSS = "mss"
+    MSS = "mss"  # what about `ms_stable`?
     NONE = "none"
 
 
