@@ -14,7 +14,6 @@ from pydantic import BaseModel
 from litellm import Choices, ModelResponse
 
 from datagen.config import Config
-from docsynth.types.documents import DocsynthDocument
 from utils.aws import AWS
 from utils.llm import LLM, BatchOutputs
 
@@ -484,75 +483,3 @@ class SampleGenerator:
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
         return successful_generations, failed_generations
-
-
-class BootstrapFileGenerator:
-    @staticmethod
-    def generate(
-        system_prompt: str,
-        user_prompt_function: Callable[[str], str],
-        instruction: str,
-        model_name: str,
-        bedrock_api_key: str,
-        bucket: str = "",
-        bootstrap_file_name: str = "bootstrap.csv",
-    ) -> None:
-        """Generate bootstrap file to vary samples
-
-        Args:
-            system_prompt (str): System prompt for bootstrap file generation
-            user_prompt_function (Callable): User prompt generation
-                function to which instruction is passed
-            instruction (str): Instruction to tailor bootstrap file to
-                specific area
-            model_name (str): Name of model to use on AWS Bedrock
-            bedrock_api_key (str): API key to access AWS Bedrock
-            bucket (str, optional): The name of the bucket in which to store the bootstrap file.
-                If omitted, file is not backed up.
-            bootstrap_file_name(str, optional): Name of output bootstrap file.
-
-        """
-        config: Config = Config()
-        message: ModelResponse | None = AWS.bedrock_completion(
-            config.models[model_name].model,
-            system_prompt,
-            user_prompt_function(instruction),
-            bedrock_api_key,
-        )
-        if message is not None:
-            with open(bootstrap_file_name, "w", newline="") as file:
-                file.write(str(cast(Choices, message.choices[0]).message.content))
-        if bucket != "":
-            AWS.upload_file(
-                config.models[model_name].region,
-                bootstrap_file_name,
-                bucket,
-                bootstrap_file_name,
-                "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M"),
-            )
-
-    @staticmethod
-    def generate_from_existing_synthetic_data(
-        synthetic_data_folder: str = "output",
-        bootstrap_file_name: str = "bootstrap.csv",
-    ) -> None:
-        """Generate bootstrap file version of docsynth samples,
-            compatible with user prompt creation.
-
-        Args:
-            synthetic_data_folder (str, optional): Folder containing
-                docsynth outputs.
-            bootstrap_file_name(str, optional): Name of output bootstrap file.
-
-        """
-        with open(bootstrap_file_name, "w", newline="") as bootstrap_file:
-            writer: _csv._writer = csv.writer(bootstrap_file)
-            writer.writerow(["content"])
-            writer.writerows(
-                [
-                    str(DocsynthDocument.model_validate_json(file.read_text()).content)
-                    .replace("\n", " ")
-                    .replace("\r", " ")
-                ]
-                for file in Path(synthetic_data_folder).iterdir()
-            )
