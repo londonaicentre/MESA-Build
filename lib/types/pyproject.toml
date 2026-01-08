@@ -1,6 +1,6 @@
 [project]
-name = "londonaicentre-schemallama-types"
-description = "SchemaLlama types"
+name = "londonaicentre-mesa-types"
+description = "MESA types"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
@@ -16,7 +16,7 @@ dependencies = [
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.setuptools]
-package-data = {"types" = ["py.typed"]}
+package-data = {"mesa_types" = ["py.typed"]}
 [dependency-groups]
 dev = [
     "mypy>=1.18.2",

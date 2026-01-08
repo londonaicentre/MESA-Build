@@ -1,10 +1,10 @@
-name: build and publish oncollama_assets
+name: build and publish oncoschema
 
 on:
   pull_request:
     types: [closed]
     paths:
-      - "assets/oncollama/**"
+      - "schemas/oncoschema/**"
 
 jobs:
   build-and-publish:
@@ -16,7 +16,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        working-directory: assets/oncollama
+        working-directory: schemas/oncoschema
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
@@ -24,8 +24,8 @@ jobs:
       - name: Tag new version
         run: |
           VERSION=$(uv version --short)
-          git tag "oncollama-assets-v${VERSION}"
-          git push origin "oncollama-assets-v${VERSION}"
+          git tag "oncoschema-v${VERSION}"
+          git push origin "oncoschema-v${VERSION}"
 
       - name: Build package
         run: uv build

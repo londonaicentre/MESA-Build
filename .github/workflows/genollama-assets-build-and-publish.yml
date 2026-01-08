@@ -1,4 +1,4 @@
-name: build and publish genollama_assets
+name: build and publish genoschema
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-publish:
-    if: startsWith(github.event.release.tag_name, 'genollama-assets')
+    if: startsWith(github.event.release.tag_name, 'genoschema')
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
     permissions:
@@ -16,7 +16,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        working-directory: assets/genollama
+        working-directory: schemas/genoschema
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
