@@ -1,36 +1,36 @@
-# SchemaLlama
+# MESA-Build
 
-Training Llama LLMs for biomarker extraction from unstructured NHS documents.
+MESA = and end-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
 
-## Pipelines
+## Overview
 
-Current pipelines in this repository:
+MESA-Build is an internal team monorepo for generating training data and fine-tuning LLMs, supporting:
+- Schema design and release
+- Training data generation and registration
+- Model fine-tuning and registration
+- Bedrock integration by default
 
-- [OncoLlama](pipelines/oncollama/): Generating high fidelity synthetic cancer letters, and fine-tuning LLMs for structured data extraction.
-
-- [GenoLlama](pipelines/genollama/): Training LLMs for genomic biomarker extraction from NHS genomic laboratory hub reports.
-
-## Repository structure
+## Repository Structure
 
 ```text
-📁 SCHEMA_LLAMA
-├── pipelines/             # Individual pipelines for developing text to schema models
-├── assets/                # Static per-pipeline assets
-├── lib/                   # Reusable functionality across pipelines
-├──── docsynth/            # Configuration driven unstructured document generation
-├──── datagen/             # Bootstrapping synthetic data for LLM fine-tuning
-├──── finetune/            # LLM fine-tuning
-├──── infer/               # LLM inference
-├────── demo/llamadeploy   # Deploy a Llama model on AWS SageMaker AI
-├────── demo/deploy        # Deploy LiteLLM proxy for SageMaker AI Llama models
-├────── local/deploy       # Deploy model weight distribution infrastructure for llamaserve
-├────── local/llamaserve   # Serve llama models locally
-├──── types/               # Cross-project type definitions
-├──── utils/               # Reusable functions
-└── README.md              # Project overview and documentation
+📁 MESA-Build
+├── schemas/               # Schema packages (model-agnostic)
+├── lib/                  # Reusable functionality
+│   ├── datagen/         # Training data generation
+│   ├── finetune/        # LLM fine-tuning
+│   ├── types/           # Shared definitions
+│   └── utils/           # Utility functions
+├── pipelines/           # Pipeline code for each model
+└── .github/workflows/   # CI/CD automation
 ```
 
-<img src="_assets/repo.png" alt="isolated" width="500"/>
+## Schema Packages
+
+**oncoschema**: Pydantic schema and prompts for extracting information from cancer clinical documents
+
+**genoschema**: Pydantic schema and prompts for extracting biomarker information from NHS genomic laboratory hub reports.
+
+Each schema package is independently versioned and published to PyPI
 
 ## Development
 
@@ -55,3 +55,7 @@ Most folders are self-contained python packages, allowing for the selective rele
 - Create a tag for the merge commit referencing the version increment
 
 - Build and push the package to pypi (`python -m build` and `uv run twine upload -r pypi dist/*`), or rely on CI/CD for this
+
+## License
+
+This project uses a proprietary license issued by Guy's and St Thomas' NHS Foundation Trust, enabling free (non-commercial) use by NHS organisations. See LICENSE files for details.

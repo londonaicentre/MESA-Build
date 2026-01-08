@@ -3,12 +3,12 @@
 import pytest
 
 from oncoschema.prompt_builder import PromptBuilder
-from oncoschema.schema import OncoLlamaModel
+from oncoschema.schema import OncologyModel
 
 
 def test_validate_schema() -> None:
     """Test that we can instantiate and validate the schema."""
-    OncoLlamaModel.model_json_schema()
+    OncologyModel.model_json_schema()
 
 
 def test_build_datagen_prompt() -> None:
@@ -58,5 +58,5 @@ def test_validate_json() -> None:
     }
     """
     result = PromptBuilder.validate_json(valid_json)
-    assert isinstance(result, OncoLlamaModel)
+    assert isinstance(result, OncologyModel)
     assert result.document_has_primary_cancer_flag is False

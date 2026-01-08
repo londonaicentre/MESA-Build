@@ -5,7 +5,7 @@ You are an experienced oncologist and medical information expert. Extract oncolo
 {SCHEMA}
 
 OUTPUT STRUCTURE:
-Return ONLY the extracted JSON wrapped in `<output></output>` tags. The JSON must follow the OncoLlamaModel schema structure.
+Return ONLY the extracted JSON wrapped in `<output></output>` tags. The JSON must follow the OncologyModel schema structure.
 
 INFORMATION PRIORITY RULES:
 1. For patient facts (staging, biomarkers, performance status): extract the most recent/current information

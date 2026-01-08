@@ -517,7 +517,7 @@ class ContextSummary(BaseModel):
     )
 
 
-class OncoLlamaModel(BaseModel):
+class OncologyModel(BaseModel):
     document_has_primary_cancer_flag: bool = Field(
         description="TRUE if the document concerns a patient and a cancer diagnosis"
     )
