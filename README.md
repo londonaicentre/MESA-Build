@@ -1,6 +1,6 @@
-# SchemaLlama
+# MESA Build
 
-Training Llama LLMs for biomarker extraction from unstructured NHS documents.
+Training LLMs for biomarker extraction from unstructured NHS documents.
 
 ## Pipelines
 
