@@ -1,0 +1,133 @@
+name: assets build docs
+
+on:
+  workflow_call:
+    inputs:
+      assets_dir:
+        required: true
+        type: string
+      description:
+        required: true
+        type: string
+      base_model_path:
+        required: true
+        type: string
+      base_model:
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      assets_dir:
+        required: true
+      description:
+        required: true
+      base_model_path:
+        required: true
+      base_model:
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.assets_dir }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+
+      - name: Generate ER diagram
+        env:
+          BASE_MODEL_PATH: ${{ inputs.base_model_path }}
+          BASE_MODEL: ${{ inputs.base_model }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y graphviz graphviz-dev python3-dev
+          uv add pygraphviz
+          uv add erdantic
+          uv run erdantic $BASE_MODEL_PATH.$BASE_MODEL -o diagram.png
+
+      - name: Add README header
+        env:
+          DESCRIPTION: ${{ inputs.description }}
+        run: |
+          DIRNAME=$(basename "$PWD" | sed 's/\b\(.\)/\U\1/g')
+          TITLE=$(git rev-parse --show-prefix | sed 's|/$||' | tr '/' '\n' | tac | tr '\n' ' ' | sed 's/-$//' | sed 's/\b\(.\)/\U\1/g')
+
+          echo "# $TITLE" > README.md
+          echo "" >> README.md
+
+          echo "Assets for $DIRNAME: $DESCRIPTION" >> README.md
+          echo "" >> README.md
+
+          echo "## Structure" >> README.md
+          echo "" >> README.md
+          echo "\`\`\`text"  >> README.md
+          echo "📁 $TITLE" >> README.md
+          echo "├── prompts/             # Prompt templates" >> README.md
+          echo "├── schema.py            # Pydantic model for specifying expected $DIRNAME output structure" >> README.md
+          echo "├── wrapper.py           # Wrapper class for serving, and operating on, stored $DIRNAME assets" >> README.md
+          echo "\`\`\`" >> README.md
+          echo "" >> README.md
+
+          echo "## Schema" >> README.md
+          echo "" >> README.md
+          echo "![Schema overview](diagram.png)" >> README.md
+          echo "" >> README.md
+        
+      - name: Add enum list to README
+        env:
+          BASE_MODEL_PATH: ${{ inputs.base_model_path }}
+          BASE_MODEL: ${{ inputs.base_model }}
+        run: |
+          uv add pydantic
+          uv run python << EOF
+
+          from pydantic import BaseModel
+          from enum import Enum
+          from typing import Union
+          from typing_extensions import get_origin, get_args
+          from src.$BASE_MODEL_PATH import $BASE_MODEL as base_model
+          import types
+
+          def unwrap_type(annotation):
+              base_type = get_origin(annotation)
+              args = get_args(annotation)
+              if base_type in (Union, types.UnionType):
+                  non_none_args = [arg for arg in args if arg is not type(None)]
+                  return unwrap_type(non_none_args[0]) if non_none_args else None
+              return unwrap_type(args[0]) if base_type is list and args else annotation
+
+          def get_enums(model_class):
+              enums = {}
+              visited = set()
+              def traverse(cls):
+                  if cls in visited or cls is BaseModel:
+                      return
+                  visited.add(cls)
+                  [traverse(parent) for parent in cls.__bases__]
+                  for field in cls.model_fields.values():
+                      unwrapped_type = unwrap_type(field.annotation)
+                      if isinstance(unwrapped_type, type):
+                          if issubclass(unwrapped_type, Enum):
+                              enums[unwrapped_type.__name__] = [e.value for e in unwrapped_type] 
+                          elif issubclass(unwrapped_type, BaseModel): 
+                              traverse(unwrapped_type)
+              traverse(model_class)
+              return enums
+          
+          with open('README.md', 'a') as f:
+              f.write('| Type | Values |\n')
+              f.write('| ---- | ------ |\n')
+              for enum_name, enum_values in get_enums(base_model).items():
+                f.write(f'| {enum_name} | {', '.join(enum_values)} |\n')
+              f.write('\n')
+
+          EOF
+
+      - name: Add README footer
+        run: |
+          echo "## License" >> README.md
+          echo "" >> README.md
+          echo "This project uses a proprietary license." >> README.md
