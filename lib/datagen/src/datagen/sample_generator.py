@@ -1,19 +1,20 @@
-import csv
-import _csv
+import hashlib
+import json
 import logging
 import os
-from pathlib import Path
 import re
-import json
 from datetime import datetime
+from importlib.metadata import version, PackageNotFoundError
+from pathlib import Path
 from typing import Any, Callable, cast
 
-import pandas as pd
 import litellm
-from pydantic import BaseModel
 from litellm import Choices, ModelResponse
+from pydantic import BaseModel
 
 from datagen.config import Config
+from datagen.document_loader import DocumentBatchLoader
+from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import LLM, BatchOutputs
 
@@ -23,18 +24,16 @@ litellm.suppress_debug_info = (
 
 
 class SampleGenerator:
-    """Claude synthetic data generator for fine-tuning
-        schema standardisation LLMs.
+    """Synthetic data generator for fine-tuning LLMs.
 
     Args:
-        system_prompt (str): System prompt for sample generation
-        user_prompt_function (Callable): User prompt generation
-            function to which bootstrap data is passed
-        schema (type[BaseModel]): Schema class to use for validation
-        model_name (str): Name of model to use on AWS Bedrock
-        bootstrap_file_path (str): Path to bootstrap (template) file
-        bedrock_api_key (str, optional): API key to access AWS Bedrock.
-            Defaults to None.
+        system_prompt: System prompt for sample generation
+        user_prompt_function: User prompt generation function
+        schema: Schema class to use for validation
+        schema_name: Schema name for output filenames
+        model_name: Name of model to use on AWS Bedrock
+        document_batches: S3 batch filenames to download
+        bedrock_api_key: API key to access AWS Bedrock
 
     """
 
@@ -43,8 +42,9 @@ class SampleGenerator:
         system_prompt: str,
         user_prompt_function: Callable[[dict[str, Any]], str],
         schema: type[BaseModel],
+        schema_name: str,
         model_name: str,
-        bootstrap_file_path: str,
+        document_batches: list[str],
         bedrock_api_key: str | None = None,
     ):
         self.__config: Config = Config()
@@ -56,13 +56,50 @@ class SampleGenerator:
             user_prompt_function
         )
         self.__schema: type[BaseModel] = schema
+        self.__schema_name: str = schema_name
+
+        # auto-detect version from installed package
+        pypi_package = f"londonaicentre-{schema_name}"
+        try:
+            raw_version = version(pypi_package)  # e.g., "2.0.0"
+            # convert e.g. 1.2.3 -> "123"
+            version_parts = raw_version.split(".")[:3]
+            self.__schema_version = "".join(v.zfill(1) for v in version_parts)
+        except PackageNotFoundError:
+            self.__logger.warning(f"Package {pypi_package} not found, using version '000'")
+            self.__schema_version = "000"
+
         self.__model_id: str = self.__config.models[model_name].model
         self.__model_region: str = self.__config.models[model_name].region
         os.environ["AWS_REGION_NAME"] = self.__model_region
         self.__model_batch_file: str = self.__config.models[model_name].batch_file
-        self.__bootstrap_file_path: str = bootstrap_file_path
         self.__bedrock_api_key: str | None = bedrock_api_key
-        self.__output_folder_name: str = f"samples_{model_name}/"
+        self.__output_folder_name: str = "./data/trainingdata/"
+
+        # download and extract batches from S3
+        self.__document_files: list[Path] = []
+        for batch_filename in document_batches:
+            batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
+            output_folder = Path(f"./data/documents/{batch_name}")
+            self.__logger.info(f"Downloading batch: {batch_filename}")
+            DocumentBatchLoader.download_and_extract(
+                filename=batch_filename,
+                output_folder=output_folder,
+            )
+            self.__document_files.extend(sorted(output_folder.glob("document_*.json")))
+
+    def _get_output_filename(self, doc: Document) -> str:
+        """Generate metadata-embedded output filename for a document.
+
+        Args:
+            doc: Document to generate filename for
+
+        Returns:
+            Filename in format: {schema_name}{version}_{source}_{content_hash}.json
+
+        """
+        content_hash = hashlib.md5(doc.content.encode()).hexdigest()[:8]
+        return f"{self.__schema_name}{self.__schema_version}_{doc.source}_{content_hash}.json"
 
     def _extract_json_from_response(self, response: str) -> dict[str, Any] | None:
         """Extract JSON from Claude's response
@@ -120,16 +157,18 @@ class SampleGenerator:
             self.__logger.error(f"Pydantic validation error: {e}")
             return False, None
 
-    def _extract_validate_and_save_sample(self, response: str, sample_id: int) -> bool:
-        """Extract sample from model response, validate it and save it to a
-            labelled file.
+    def _extract_validate_and_save_sample(
+        self, response: str, source: str, content: str
+    ) -> bool:
+        """Extract sample from model response, validate it and save it.
 
         Args:
-            response (str): The raw response
-            sample_id (int): The id with which to label the sample
+            response: The raw response from the model
+            source: Document source for filename
+            content: Document content for filename hash
 
         Returns:
-            bool: Whether the named operations were successful
+            Whether the operations were successful
 
         """
         json_output: dict[str, Any] | None = self._extract_json_from_response(response)
@@ -139,9 +178,7 @@ class SampleGenerator:
                 or "content" not in json_output
                 or "output" not in json_output
             ):
-                self.__logger.error(
-                    f"Invalid schema format in output for sample {sample_id + 1}"
-                )
+                self.__logger.error("Invalid schema format in output")
                 return False
 
             # validate against schema
@@ -153,8 +190,10 @@ class SampleGenerator:
             if is_valid and validated_output is not None:
                 # convert pydantic model to dict for json serialization
                 json_output["output"] = validated_output.model_dump()
+
+                doc = Document(content=content, source=source, timestamp="")
                 output_filename: str = os.path.join(
-                    self.__output_folder_name, f"sample{sample_id + 1:04d}.json"
+                    self.__output_folder_name, self._get_output_filename(doc)
                 )
                 try:
                     with open(output_filename, "w", encoding="utf-8") as f:
@@ -167,43 +206,38 @@ class SampleGenerator:
                     self.__logger.error(f"Error saving JSON to file: {e}")
                     return False
             else:
-                self.__logger.error(
-                    f"Pydantic validation failed for sample {sample_id + 1}"
-                )
+                self.__logger.error("Pydantic validation failed")
 
                 # for debugging later
+                doc = Document(content=content, source=source, timestamp="")
                 debug_filename: str = os.path.join(
                     self.__output_folder_name,
-                    f"invalid_sample{sample_id + 1:04d}.json",
+                    f"invalid_{self._get_output_filename(doc)}",
                 )
                 with open(debug_filename, "w", encoding="utf-8") as f:
                     json.dump(json_output, f, indent=4, ensure_ascii=False)
                 return False
         else:
-            self.__logger.warning(
-                f"Skipping file save for sample {sample_id + 1} due to JSON parsing failure"
-            )
+            self.__logger.warning("Skipping file save due to JSON parsing failure")
             self.__logger.debug(
                 "Claude response:",
                 response,
             )
             return False
 
-    def _generate_sample(self, bootstrap_file: pd.DataFrame, idx: int) -> bool:
-        """Generate structured output from a synthetic patient report.
+    def _generate_sample(self, doc_path: Path) -> bool:
+        """Generate structured output from a document.
 
         Args:
-            bootstrap_file (pandas.DataFrame): Specialised examples (template) for
-                sample report generation
-            idx (int): Index for row to be processed from bootstrap file
+            doc_path: Path to document JSON file
 
         Returns:
-            bool: Whether sample generation is successful
+            Whether sample generation is successful
 
         """
-        row: pd.Series = bootstrap_file.iloc[idx]
         try:
-            user_prompt: str = self.__user_prompt_function(row.to_dict())
+            doc = Document(**json.loads(doc_path.read_text()))
+            user_prompt: str = self.__user_prompt_function(doc.model_dump())
             if self.__bedrock_api_key is None:
                 return False
             message: ModelResponse | None = AWS.bedrock_completion(
@@ -216,179 +250,147 @@ class SampleGenerator:
                 return False
             content: str | None = cast(Choices, message.choices[0]).message.content
             if content is not None:
-                return self._extract_validate_and_save_sample(content, idx)
+                return self._extract_validate_and_save_sample(
+                    content, doc.source, doc.content
+                )
             else:
                 return False
         except Exception as e:
-            self.__logger.error(f"Error processing row {idx + 1}: {e}")
+            self.__logger.error(f"Error processing document {doc_path.name}: {e}")
             return False
 
     # real-time generation
 
-    def _process_bootstrap_rows(
-        self,
-        sample_size: int = 10,
-    ) -> tuple[int, int]:
-        """Process rows from the specified bootstrap file and
-            generate the requested number of samples
+    def generate(self, sample_size: int) -> None:
+        """Generate samples via individual AWS Bedrock inference calls.
 
         Args:
-            bedrock_api_key (str): API key to access AWS Bedrock
-            sample_size (int, optional): Number of samples to generate.
-                Defaults to 10.
+            sample_size: Number of samples to generate
 
         """
-        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-
-        # Process rows
         os.makedirs(self.__output_folder_name, exist_ok=True)
-        samples_exist: int = len(os.listdir(self.__output_folder_name))
-        successful_generations: int = 0
-        failed_generations: int = 0
-        if samples_exist > sample_size:
-            self.__logger.warning(
-                f"Requested number of samples have already been generated in {self.__output_folder_name}."
-            )
-            return 0, 0
-        max_samples: int = len(bootstrap_file.index)
+        max_samples = len(self.__document_files)
         if sample_size > max_samples:
             self.__logger.warning(
-                f"Requested number of samples is more than number of templates for generation. \
-                    Will create {max_samples} samples instead of {sample_size}"
+                f"Requested {sample_size} samples but only {max_samples} documents available. "
+                f"Will generate {max_samples} samples."
             )
             sample_size = max_samples
-        for idx, _ in bootstrap_file.iterrows():
-            id: int = int(cast(int, idx))
+        successful_generations = 0
+        failed_generations = 0
+        processed = 0
 
-            # Skip rows for which samples have been generated
-            if id < samples_exist:
-                continue
-
-            # Stop generating samples when requested amount is reached
-            if id == sample_size:
-                self.__logger.info(
-                    f"Generated the requested number of samples, {sample_size}."
-                )
+        for doc_path in self.__document_files:
+            if processed >= sample_size:
                 break
-            if self._generate_sample(bootstrap_file, id):
-                successful_generations += 1
-            else:
+
+            # load to check if exists
+            try:
+                doc = Document(**json.loads(doc_path.read_text()))
+                output_filename = os.path.join(
+                    self.__output_folder_name, self._get_output_filename(doc)
+                )
+
+                # skip if exists
+                if os.path.exists(output_filename):
+                    self.__logger.info(f"Output already exists for {doc_path.name}, skipping")
+                    processed += 1
+                    continue
+
+                # generate
+                if self._generate_sample(doc_path):
+                    successful_generations += 1
+                else:
+                    failed_generations += 1
+
+                processed += 1
+
+            except Exception as e:
+                self.__logger.error(f"Error checking document {doc_path.name}: {e}")
                 failed_generations += 1
+                processed += 1
+
         self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
-        )
-        return successful_generations, failed_generations
-
-    def generate(self, sample_size: int) -> None:
-        """Generate samples via individual AWS Bedrock inference calls
-
-        Args:
-            sample_size (int): Number of samples to be generated
-
-        """
-
-        # Generate samples from bootstrap file
-        self._process_bootstrap_rows(
-            sample_size,
         )
 
     # backfill
 
-    def _find_missing_idx(self, sample_size: int) -> list[int]:
-        """For a given folder and expected number of samples,
-            identifies indices for which no sample was generated
+    def run_backfill(self) -> None:
+        """Process documents that don't have output files yet."""
+        os.makedirs(self.__output_folder_name, exist_ok=True)
 
-        Args:
-            sample_size (int): Expected number of samples
+        successful_generations = 0
+        failed_generations = 0
 
-        Returns:
-            list[int]: List of indices without a sample generated
+        for doc_path in self.__document_files:
+            try:
+                # load to check if exists
+                doc = Document(**json.loads(doc_path.read_text()))
+                output_filename = os.path.join(
+                    self.__output_folder_name, self._get_output_filename(doc)
+                )
 
-        """
-        all_files: list[str] = os.listdir(self.__output_folder_name)
-        filenames: list[str] = [
-            file.strip(".json").strip("sample") for file in all_files
-        ]
-        missing_idx: list[int] = []
-        for idx in range(sample_size):
-            if f"{idx + 1:04d}" not in filenames:
-                missing_idx.append(idx)
-        return missing_idx
+                # skip if exists
+                if os.path.exists(output_filename):
+                    continue
 
-    def _backfill(self, idx_list: list[int]) -> tuple[int, int]:
-        """Generate samples for the missing indices
+                # generate
+                self.__logger.info(f"Backfilling {doc_path.name}")
+                if self._generate_sample(doc_path):
+                    successful_generations += 1
+                else:
+                    failed_generations += 1
 
-        Args:
-            idx_list (list[int]): List of indices for a sample to be generated
-
-        """
-        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-        successful_generations: int = 0
-        failed_generations: int = 0
-        for idx in idx_list:
-            self.__logger.debug(f"Processing row {idx + 1}")
-            if self._generate_sample(bootstrap_file, idx):
-                successful_generations += 1
-            else:
+            except Exception as e:
+                self.__logger.error(f"Error processing document {doc_path.name}: {e}")
                 failed_generations += 1
-        self.__logger.info(
-            f"Processing complete: {successful_generations} successful, {failed_generations} failed"
-        )
-        return successful_generations, failed_generations
 
-    def run_backfill(self, sample_size: int) -> None:
-        """Backfill missing samples
-
-        Args:
-            sample_size (int): Number of samples to be generated
-
-        """
-
-        # Generate samples for missed indices in the bootstrap file specified
-        missing_idx: list[int] = self._find_missing_idx(sample_size)
-        self.__logger.info(f"There are {len(missing_idx)} samples missing")
-        self._backfill(missing_idx)
+        if successful_generations == 0 and failed_generations == 0:
+            self.__logger.info("No missing samples to backfill")
+        else:
+            self.__logger.info(
+                f"Backfill complete: {successful_generations} successful, {failed_generations} failed"
+            )
 
     # batch
 
     def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
     ) -> str:
-        """Generate batch request file for Anthropic model
+        """Generate batch request file for Anthropic model.
 
         Args:
-            sample_size (int): Number of samples to be generated
+            sample_size: Number of samples to be generated
+            file_name: Output filename for batch request
 
         Returns:
-            str: The batch request file
+            The batch request filename
 
         """
-        bootstrap_file: pd.DataFrame = pd.read_csv(self.__bootstrap_file_path)
-        max_samples: int = len(bootstrap_file.index)
+        max_samples = len(self.__document_files)
         if sample_size > max_samples:
             self.__logger.warning(
-                f"Requested number of samples is more than number of templates for generation. \
-                    Will create {max_samples} samples instead of {sample_size}"
+                f"Requested {sample_size} samples but only {max_samples} documents available. "
+                f"Will create {max_samples} samples."
             )
             sample_size = max_samples
+
         with open(file_name, "w") as outfile:
-            for idx, row in bootstrap_file.iterrows():
-                # Stop generating samples when requested amount is reached
-                if idx == sample_size:
-                    self.__logger.debug(
-                        f"Generated the requested number of samples, {sample_size}."
-                    )
-                    break
+            for idx, doc_path in enumerate(self.__document_files[:sample_size]):
+                doc = Document(**json.loads(doc_path.read_text()))
                 print(
                     json.dumps(
                         AWS.create_anthropic_bedrock_batch_entry(
                             str(idx),
                             self.__system_prompt,
-                            self.__user_prompt_function(row.to_dict()),
+                            self.__user_prompt_function(doc.model_dump()),
                         )
                     ),
                     file=outfile,
                 )
+
+        self.__logger.info(f"Generated batch file with {sample_size} entries")
         return file_name
 
     def generate_via_batch(
@@ -470,15 +472,20 @@ class SampleGenerator:
                 ).outputs
             ):
                 try:
+                    doc_path = self.__document_files[sample_id]
+                    doc = Document(**json.loads(doc_path.read_text()))
+
                     if self._extract_validate_and_save_sample(
-                        str(bedrock_batch_output.modelOutput.content[0].text), sample_id
+                        str(bedrock_batch_output.modelOutput.content[0].text),
+                        doc.source,
+                        doc.content,
                     ):
                         successful_generations += 1
                     else:
                         failed_generations += 1
                 except Exception as e:
                     failed_generations += 1
-                    self.__logger.error(f"Error processing row {sample_id + 1}: {e}")
+                    self.__logger.error(f"Error processing batch output {sample_id}: {e}")
         self.__logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
