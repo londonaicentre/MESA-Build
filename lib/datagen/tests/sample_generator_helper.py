@@ -1,6 +1,6 @@
 from typing import Any
 
-from datagen.claude import SampleGenerator
+from datagen.sample_generator import SampleGenerator
 from litellm import BaseModel
 import pandas as pd
 

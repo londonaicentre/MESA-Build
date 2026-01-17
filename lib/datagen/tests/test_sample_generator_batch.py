@@ -6,7 +6,7 @@ import pandas as pd
 from pytest import MonkeyPatch
 import pytest
 
-from tests.claude import TestSampleGenerator
+from tests.sample_generator_helper import TestSampleGenerator
 
 
 def get_batch_input(sample_generation_input: str = "bar") -> str:

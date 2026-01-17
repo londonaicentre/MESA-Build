@@ -1,6 +1,6 @@
 [project]
-name = "londonaicentre-schemallama-datagen" 
-description = "SchemaLlama datagen"
+name = "londonaicentre-mesa-datagen" 
+description = "MESA training data generation"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },

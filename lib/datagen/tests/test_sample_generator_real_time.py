@@ -10,7 +10,7 @@ import pytest
 from pytest import MonkeyPatch
 
 from tests.types import TestSchema
-from tests.claude import TestSampleGenerator
+from tests.sample_generator_helper import TestSampleGenerator
 
 
 def test_extract_json_from_response_valid_input_returns_dict(
@@ -113,7 +113,7 @@ def test_extract_validate_and_save_sample_invalid_input_error_write(
     )
 
 
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_generate_sample_valid_content_returns_true(
     mock_aws: MagicMock,
     valid_model_response: ModelResponse,
@@ -129,7 +129,7 @@ def test_generate_sample_valid_content_returns_true(
     )
 
 
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_generate_sample_invalid_content_returns_false(
     mock_aws: MagicMock, sample_generator: TestSampleGenerator
 ) -> None:
@@ -144,7 +144,7 @@ def test_generate_sample_invalid_content_returns_false(
     )
 
 
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_generate_sample_invalid_message_returns_false(
     mock_aws: MagicMock, sample_generator: TestSampleGenerator
 ) -> None:
@@ -158,7 +158,7 @@ def test_generate_sample_invalid_message_returns_false(
 @patch("os.makedirs")
 @patch("os.listdir")
 @patch("pandas.read_csv")
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_process_bootstrap_rows_already_generated_returns_zero(
     mock_aws: MagicMock,
     mock_read_csv: MagicMock,
@@ -177,7 +177,7 @@ def test_process_bootstrap_rows_already_generated_returns_zero(
 @patch("os.makedirs")
 @patch("os.listdir")
 @patch("pandas.read_csv")
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_process_bootstrap_rows_limited_bootstrap_returns_max(
     mock_aws: MagicMock,
     mock_read_csv: MagicMock,
@@ -199,7 +199,7 @@ def test_process_bootstrap_rows_limited_bootstrap_returns_max(
 @patch("os.makedirs")
 @patch("os.listdir")
 @patch("pandas.read_csv")
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_process_bootstrap_rows_correct_samples_return_success(
     mock_aws: MagicMock,
     mock_read_csv: MagicMock,

@@ -4,7 +4,7 @@ import pandas as pd
 from pytest import MonkeyPatch
 from litellm import ModelResponse
 
-from tests.claude import TestSampleGenerator
+from tests.sample_generator_helper import TestSampleGenerator
 
 
 @patch("os.listdir")
@@ -32,7 +32,7 @@ def test_find_missing_idx_on_complete_returns_empty(
 
 
 @patch("pandas.read_csv")
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_backfill_on_missing_outputs_sample(
     mock_aws: MagicMock,
     mock_read_csv: MagicMock,
@@ -49,7 +49,7 @@ def test_backfill_on_missing_outputs_sample(
 
 
 @patch("pandas.read_csv")
-@patch("datagen.claude.AWS")
+@patch("datagen.sample_generator.AWS")
 def test_backfill_on_complete_outputs_unchanged(
     mock_aws: MagicMock,
     mock_read_csv: MagicMock,

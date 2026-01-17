@@ -47,7 +47,7 @@ class DocumentBatchLoader:
         except ImportError:
             raise RuntimeError(
                 "AWS support not available. "
-                "Install with: pip install londonaicentre-schemallama-datagen[aws]"
+                "Install with: pip install londonaicentre-mesa-datagen[aws]"
             )
 
         # S3 -> local dir

@@ -4,7 +4,7 @@ import pytest
 from litellm import ModelResponse, Choices, Message
 
 from tests.types import TestSchema
-from tests.claude import TestSampleGenerator
+from tests.sample_generator_helper import TestSampleGenerator
 
 
 @pytest.fixture(scope="session")
