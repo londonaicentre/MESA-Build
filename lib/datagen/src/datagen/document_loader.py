@@ -50,7 +50,7 @@ class DocumentBatchLoader:
                 "Install with: pip install londonaicentre-mesa-datagen[aws]"
             )
 
-        # S3 -> local dir
+        # S3 -> local cache dir
         cache_dir = Path("data/_cache/document_batches")
         cache_dir.mkdir(parents=True, exist_ok=True)
         tar_path = cache_dir / filename
@@ -73,14 +73,16 @@ class DocumentBatchLoader:
 
         with tarfile.open(tar_path, mode) as tar:
             for member in tar.getmembers():
-                if member.name.startswith("document_") and member.name.endswith(".json"):
+                # we expect documents to have basename "document_*"
+                basename = member.name.split('/')[-1]
+                if basename.startswith("document_") and basename.endswith(".json"):
                     file = tar.extractfile(member)
                     if file:
                         data = json.loads(file.read().decode("utf-8"))
 
                         doc = Document(**data)
 
-                        output_path = output_folder / member.name
+                        output_path = output_folder / basename
                         output_path.write_text(json.dumps(doc.model_dump(), indent=2))
                         doc_count += 1
 
