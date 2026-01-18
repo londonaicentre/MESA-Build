@@ -56,17 +56,19 @@ class DocumentBatchLoader:
         tar_path = cache_dir / filename
         s3_key = f"{s3_prefix}/{filename}" if s3_prefix else filename
 
-        success = AWS.download_file(
-            region_name=region,
-            bucket=bucket,
-            file_name=str(tar_path),
-            object_name=s3_key,
-        )
+        # do not redownload
+        if not tar_path.exists():
+            success = AWS.download_file(
+                region_name=region,
+                bucket=bucket,
+                file_name=str(tar_path),
+                object_name=s3_key,
+            )
 
-        if not success:
-            raise Exception(f"Failed to download s3://{bucket}/{s3_key}")
+            if not success:
+                raise Exception(f"Failed to download s3://{bucket}/{s3_key}")
 
-        # extraction
+        # always re-extract
         output_folder.mkdir(parents=True, exist_ok=True)
         mode = "r:gz" if tar_path.suffix == ".gz" else "r"
         doc_count = 0
