@@ -1,2 +1,0 @@
-prettier:
-	terraform fmt
