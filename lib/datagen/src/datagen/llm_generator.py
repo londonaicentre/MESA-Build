@@ -66,11 +66,10 @@ class LLMGenerator:
             # convert e.g. 1.2.3 -> "1_2_3"
             version_parts = raw_version.split(".")[:3]
             self.__schema_version = "_".join(version_parts)
-        except PackageNotFoundError:
-            self.__logger.warning(
-                f"Package {pypi_package} not found, using version '0_0_0'"
-            )
-            self.__schema_version = "0_0_0"
+        except PackageNotFoundError as e:
+            raise RuntimeError(
+                f"Schema package '{pypi_package}' not found. "
+            ) from e
 
         self.__output_folder_name: str = "./data/trainingdata/"
 
@@ -111,7 +110,7 @@ class LLMGenerator:
 
             content: str | None = message.choices[0].message.content
             if content is not None:
-                return extraction.extract_validate_and_save_sample(
+                return extraction.save_training_sample(
                     content,
                     doc.source,
                     doc.content,

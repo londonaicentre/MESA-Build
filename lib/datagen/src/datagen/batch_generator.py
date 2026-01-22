@@ -64,11 +64,10 @@ class BedrockBatchGenerator:
             # convert e.g. 1.2.3 -> "1_2_3"
             version_parts = raw_version.split(".")[:3]
             self.__schema_version = "_".join(version_parts)
-        except PackageNotFoundError:
-            self.__logger.warning(
-                f"Package {pypi_package} not found, using version '0_0_0'"
-            )
-            self.__schema_version = "0_0_0"
+        except PackageNotFoundError as e:
+            raise RuntimeError(
+                f"Schema package '{pypi_package}' not found. "
+            ) from e
 
         self.__model_id: str = self.__config.models[model_name].model
         self.__model_region: str = self.__config.models[model_name].region
@@ -208,7 +207,7 @@ class BedrockBatchGenerator:
                     doc_path = self.__document_files[sample_id]
                     doc = Document(**json.loads(doc_path.read_text()))
 
-                    if extraction.extract_validate_and_save_sample(
+                    if extraction.save_training_sample(
                         str(bedrock_batch_output.modelOutput.content[0].text),
                         doc.source,
                         doc.content,

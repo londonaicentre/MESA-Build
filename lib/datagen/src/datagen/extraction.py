@@ -12,10 +12,11 @@ import os
 import re
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from mesa_types import Document
-from utils.llm import LLM
+
+logger = logging.getLogger(__name__)
 
 
 def get_output_filename(
@@ -36,66 +37,89 @@ def get_output_filename(
     return f"{schema_name}{schema_version}_{doc.source}_{content_hash}.json"
 
 
-def extract_json_from_response(response: str) -> dict[str, Any] | None:
-    """Extract JSON from LLM response.
+def _try_parse_and_validate(
+    text: str, schema: type[BaseModel]
+) -> tuple[BaseModel | None, dict[str, Any] | None]:
+    """Try to parse text as JSON and validate against schema.
 
     Args:
-        response: LLM response text
+        text: Text to parse as JSON
+        schema: Pydantic schema for validation
 
     Returns:
-        Parsed JSON dict if successful, None otherwise
-
+        Tuple of (validated_model, extracted_data)
     """
-    logger = logging.getLogger(__name__)
-
-    # try to parse response as JSON
     try:
-        return json.loads(response)
-    except json.JSONDecodeError:
-        # try to find JSON in a code block
-        extracted: bool
-        content: str
-        extracted, _, content = LLM.extract_output_content(response)
-        if extracted:
-            try:
-                return json.loads(content)
-            except json.JSONDecodeError:
-                pass
-
-        # if fails, try to find any JSON-like structure
-        json_match = re.search(r"{[\s\S]*}", response)
-        if json_match:
-            try:
-                return json.loads(json_match.group(0))
-            except json.JSONDecodeError:
-                raise json.JSONDecodeError("Could not parse JSON from response", "", 0)
-        logger.error("No valid JSON found in response")
-        return None
+        data = json.loads(text)
+        if not isinstance(data, dict):
+            return None, None
+        validated = schema.model_validate(data)
+        return validated, data
+    except (json.JSONDecodeError, ValidationError):
+        return None, None
 
 
-def validate_with_pydantic(
-    output_data: dict[str, Any], schema: type[BaseModel]
-) -> tuple[bool, BaseModel | None]:
-    """Validate output against Pydantic schema.
+def _save_json_file(data: dict[str, Any], filepath: str) -> bool:
+    """Save JSON data to file.
 
     Args:
-        output_data: JSON data to validate
-        schema: Pydantic schema class
+        data: Data to save
+        filepath: Full file path
 
     Returns:
-        Tuple of (is_valid, validated_model)
+        True if successful
 
     """
-    logger = logging.getLogger(__name__)
     try:
-        validated_report: BaseModel = schema(**output_data)
-        return True, validated_report
-    except Exception as e:
-        logger.error(f"Pydantic validation error: {e}")
-        return False, None
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception:
+        return False
 
 
-def extract_validate_and_save_sample(
+def extract_and_validate_json(
+    response: str, schema: type[BaseModel]
+) -> tuple[BaseModel | None, dict[str, Any] | None]:
+    """Extract JSON from response and validate against Pydantic schema.
+
+    Stepwise:
+    1. Content between <output> tags (lowercase)
+    2. Take whole response
+    3. Largest JSON-like object (greedy regex)
+
+    At each stage, validates both JSON parsing and Pydantic schema.
+    """
+    # extract from <output> tags
+    output_match = re.search(r"<output>([\s\S]*?)</output>", response)
+    if output_match:
+        validated, data = _try_parse_and_validate(output_match.group(1).strip(), schema)
+        if validated:
+            return validated, data
+        if data:
+            return None, data
+
+    # try whole response
+    validated, data = _try_parse_and_validate(response.strip(), schema)
+    if validated:
+        return validated, data
+    if data:
+        return None, data
+
+    # greedy regex fallback
+    json_match = re.search(r"\{[\s\S]*\}", response)
+    if json_match:
+        validated, data = _try_parse_and_validate(json_match.group(0), schema)
+        if validated:
+            return validated, data
+        if data:
+            return None, data
+
+    logger.error("No valid JSON found in response")
+    return None, None
+
+
+def save_training_sample(
     response: str,
     source: str,
     content: str,
@@ -104,7 +128,7 @@ def extract_validate_and_save_sample(
     schema_version: str,
     output_folder: str,
 ) -> bool:
-    """Extract sample from model response, validate it and save it.
+    """Save training sample from LLM response.
 
     Args:
         response: Raw response from the model
@@ -119,61 +143,34 @@ def extract_validate_and_save_sample(
         Whether the operations were successful
 
     """
-    logger = logging.getLogger(__name__)
+    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(os.path.join(output_folder, "invalid"), exist_ok=True)
 
-    extracted_json: dict[str, Any] | None = extract_json_from_response(response)
+    validated_output, extracted_data = extract_and_validate_json(response, schema)
 
-    #print for debugging
-    print(f"LLM returned JSON: {json.dumps(extracted_json, indent=2)[:500] if extracted_json else 'None'}")
-    if extracted_json is not None:
-        if not isinstance(extracted_json, dict):
-            logger.error("Extracted output is not a dictionary")
-            return False
-
-        # vs schema
-        is_valid: bool
-        validated_output: BaseModel | None
-        is_valid, validated_output = validate_with_pydantic(extracted_json, schema)
-
-        if is_valid and validated_output is not None:
-            # build training example
-            json_output = {
-                "content": content,
-                "output": validated_output.model_dump()
-            }
-
-            doc = Document(content=content, source=source, timestamp="")
-            output_filename: str = os.path.join(
-                output_folder, get_output_filename(schema_name, schema_version, doc)
-            )
-            try:
-                with open(output_filename, "w", encoding="utf-8") as f:
-                    json.dump(json_output, f, indent=4, ensure_ascii=False)
-                logger.info(f"Successfully saved output to {output_filename}")
-                return True
-            except Exception as e:
-                logger.error(f"Error saving JSON to file: {e}")
-                return False
-        else:
-            logger.error("Pydantic validation failed")
-
-            # save invalid
-            doc = Document(content=content, source=source, timestamp="")
-            debug_filename: str = os.path.join(
-                output_folder,
-                f"invalid_{get_output_filename(schema_name, schema_version, doc)}",
-            )
-            debug_output = {
-                "content": content,
-                "output": extracted_json
-            }
-            with open(debug_filename, "w", encoding="utf-8") as f:
-                json.dump(debug_output, f, indent=4, ensure_ascii=False)
-            return False
+    if extracted_data:
+        print(f"LLM returned JSON: {json.dumps(extracted_data, indent=2)[:500]}")
     else:
-        logger.warning("Skipping file save due to JSON parsing failure")
-        logger.debug(
-            "LLM response:",
-            response,
-        )
+        print("LLM response: No valid JSON extracted")
+
+    doc = Document(content=content, source=source, timestamp="")
+    base_filename = get_output_filename(schema_name, schema_version, doc)
+
+    # success case
+    if validated_output is not None:
+        json_output = {"content": content, "output": validated_output.model_dump()}
+        output_filepath = os.path.join(output_folder, base_filename)
+        return _save_json_file(json_output, output_filepath)
+
+    # fail case: schema validation
+    if extracted_data is not None:
+        logger.error("Validation failed")
+        debug_output = {"content": content, "output": extracted_data}
+        debug_filepath = os.path.join(output_folder, "invalid", base_filename)
+        _save_json_file(debug_output, debug_filepath)
         return False
+
+    # fail case: no json
+    logger.warning("Skipping due to JSON extraction failure")
+    logger.debug(f"LLM response: {response[:500]}")
+    return False
