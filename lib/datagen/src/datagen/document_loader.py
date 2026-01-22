@@ -12,7 +12,7 @@ from mesa_types import Document
 from utils.aws import AWS
 
 
-class DocumentBatchLoader:
+class DocumentLoader:
     """
     Download document batches from S3, extract, and validate
     """

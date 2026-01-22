@@ -8,15 +8,15 @@ import json
 import logging
 import os
 from datetime import datetime
-from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Callable
 
 from pydantic import BaseModel
 
 from datagen.config import Config
-from datagen.document_loader import DocumentBatchLoader
+from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
+from datagen.version_detector import get_schema_version
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
@@ -56,18 +56,7 @@ class BedrockBatchGenerator:
         )
         self.__schema: type[BaseModel] = schema
         self.__schema_name: str = schema_name
-
-        # auto-detect version from installed package
-        pypi_package = f"londonaicentre-{schema_name}"
-        try:
-            raw_version = version(pypi_package)  # e.g., "2.0.0"
-            # convert e.g. 1.2.3 -> "1_2_3"
-            version_parts = raw_version.split(".")[:3]
-            self.__schema_version = "_".join(version_parts)
-        except PackageNotFoundError as e:
-            raise RuntimeError(
-                f"Schema package '{pypi_package}' not found. "
-            ) from e
+        self.__schema_version: str = get_schema_version(schema_name)
 
         self.__model_id: str = self.__config.models[model_name].model
         self.__model_region: str = self.__config.models[model_name].region
@@ -81,7 +70,7 @@ class BedrockBatchGenerator:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
             self.__logger.info(f"Downloading batch: {batch_filename}")
-            DocumentBatchLoader.download_and_extract(
+            DocumentLoader.download_and_extract(
                 filename=batch_filename,
                 output_folder=output_folder,
             )

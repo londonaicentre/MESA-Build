@@ -7,15 +7,15 @@ Class to handle real-time APIs via LiteLLM
 import json
 import logging
 import os
-from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Callable
 
 from litellm import ModelResponse
 from pydantic import BaseModel
 
-from datagen.document_loader import DocumentBatchLoader
+from datagen.document_loader import DocumentLoader
 from datagen.extraction import get_output_filename, save_training_sample
+from datagen.version_detector import get_schema_version
 from mesa_types import Document
 from utils.llm import LLM
 
@@ -58,19 +58,7 @@ class LLMGenerator:
         self.__schema_name: str = schema_name
         self.__model_name: str = model_name
         self.__api_key: str = api_key
-
-        # auto-detect version from installed package
-        pypi_package = f"londonaicentre-{schema_name}"
-        try:
-            raw_version = version(pypi_package)
-            # convert e.g. 1.2.3 -> "1_2_3"
-            version_parts = raw_version.split(".")[:3]
-            self.__schema_version = "_".join(version_parts)
-        except PackageNotFoundError as e:
-            raise RuntimeError(
-                f"Schema package '{pypi_package}' not found. "
-            ) from e
-
+        self.__schema_version: str = get_schema_version(schema_name)
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # batches from S3
@@ -79,7 +67,7 @@ class LLMGenerator:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
             self.__logger.info(f"Downloading batch: {batch_filename}")
-            DocumentBatchLoader.download_and_extract(
+            DocumentLoader.download_and_extract(
                 filename=batch_filename,
                 output_folder=output_folder,
             )
