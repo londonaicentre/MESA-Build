@@ -1,5 +1,8 @@
 # Llama serve
 
+> [!WARNING]
+> This package is now deprecated. Use `londonaicentre-mesa-local` rather than `londonaicentre-llama-serve` for pip commands.
+
 Serve llama models locally.
 
 - ⬇️ Downloads weights from S3
