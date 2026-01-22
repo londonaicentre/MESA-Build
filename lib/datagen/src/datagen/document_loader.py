@@ -9,6 +9,7 @@ from pathlib import Path
 import json
 import tarfile
 from mesa_types import Document
+from utils.aws import AWS
 
 
 class DocumentBatchLoader:
@@ -42,14 +43,6 @@ class DocumentBatchLoader:
         Returns:
             Count of documents extracted and validated
         """
-        try:
-            from utils.aws import AWS
-        except ImportError:
-            raise RuntimeError(
-                "AWS support not available. "
-                "Install with: pip install londonaicentre-mesa-datagen[aws]"
-            )
-
         # S3 -> local cache dir
         cache_dir = Path("data/_cache/document_batches")
         cache_dir.mkdir(parents=True, exist_ok=True)

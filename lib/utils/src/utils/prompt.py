@@ -48,18 +48,6 @@ class BasePromptBuilder(ABC):
         """
         return self._base_dir.joinpath(file).read_text()
 
-    def validate_json(self, json_str: str) -> BaseModel:
-        """Validate a schema json string.
-
-        Args:
-            json_str: The json string to validate
-
-        Returns:
-            The validated schema as a BaseModel instance
-        """
-        parsed: dict[str, Any] = json.loads(json_str)
-        return self._schema(**parsed)
-
     def build_datagen_prompt(self) -> str:
         """Build data generation prompt with schema and example.
 
@@ -85,17 +73,3 @@ class BasePromptBuilder(ABC):
 
         prompt = prompt.replace("{SCHEMA}", schema_json)
         return prompt
-
-    def validate_example(self) -> BaseModel:
-        """Validate the canonical example against schema.
-
-        Returns:
-            Validated example output
-        """
-        from mesa_types.training_example import TrainingExample
-
-        example_str = self._load("examples", "example.json")
-        example_data = TrainingExample(**json.loads(example_str))
-
-        # Validate the output field
-        return self.validate_json(json.dumps(example_data.output))

@@ -41,20 +41,3 @@ def test_build_main_prompt() -> None:
     # Schema JSON fields present
     assert "is_genomic_report" in prompt, "Schema should contain key field"
     assert "biomarker_test_results" in prompt or "TestType" in prompt, "Schema should contain test types"
-
-
-def test_validate_json() -> None:
-    """Test JSON validation."""
-    valid_json = """
-    {
-        "sufficient_data_quality": true,
-        "is_genomic_report": false,
-        "clinical_context": null,
-        "biomarker_test_results": null,
-        "clinical_outcome": null
-    }
-    """
-    result = PromptBuilder.validate_json(valid_json)
-    assert isinstance(result, GenomicTestReport)
-    assert result.sufficient_data_quality is True
-    assert result.is_genomic_report is False

@@ -41,22 +41,3 @@ def test_build_main_prompt() -> None:
     # Schema JSON fields present
     assert "document_has_primary_cancer_flag" in prompt, "Schema should contain key field"
     assert "TopographyType" in prompt or "primary_cancer" in prompt, "Schema should contain cancer types"
-
-
-def test_validate_json() -> None:
-    """Test JSON validation."""
-    valid_json = """
-    {
-        "document_has_primary_cancer_flag": false,
-        "primary_cancer_confirmed_flag": false,
-        "primary_cancer": null,
-        "performance_status": null,
-        "other_cancers": null,
-        "patient_findings": null,
-        "future_plans": null,
-        "context_summary": null
-    }
-    """
-    result = PromptBuilder.validate_json(valid_json)
-    assert isinstance(result, OncologyModel)
-    assert result.document_has_primary_cancer_flag is False
