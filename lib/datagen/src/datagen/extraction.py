@@ -55,8 +55,10 @@ def _try_parse_and_validate(
             return None, None
         validated = schema.model_validate(data)
         return validated, data
-    except (json.JSONDecodeError, ValidationError):
+    except json.JSONDecodeError:
         return None, None
+    except ValidationError:
+        return None, data
 
 
 def _save_json_file(data: dict[str, Any], filepath: str) -> bool:
