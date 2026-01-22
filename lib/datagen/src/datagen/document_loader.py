@@ -73,9 +73,7 @@ class DocumentBatchLoader:
                 if basename.startswith("document_") and basename.endswith(".json"):
                     file = tar.extractfile(member)
                     if file:
-                        data = json.loads(file.read().decode("utf-8"))
-
-                        doc = Document(**data)
+                        doc = Document.model_validate_json(file.read())
 
                         output_path = output_folder / basename
                         output_path.write_text(json.dumps(doc.model_dump(), indent=2))

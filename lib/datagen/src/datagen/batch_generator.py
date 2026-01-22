@@ -110,7 +110,7 @@ class BedrockBatchGenerator:
 
         with open(file_name, "w") as outfile:
             for idx, doc_path in enumerate(self.__document_files[:sample_size]):
-                doc = Document(**json.loads(doc_path.read_text()))
+                doc = Document.model_validate_json(doc_path.read_text())
                 print(
                     json.dumps(
                         AWS.create_anthropic_bedrock_batch_entry(
@@ -205,7 +205,7 @@ class BedrockBatchGenerator:
             ):
                 try:
                     doc_path = self.__document_files[sample_id]
-                    doc = Document(**json.loads(doc_path.read_text()))
+                    doc = Document.model_validate_json(doc_path.read_text())
 
                     if extraction.save_training_sample(
                         str(bedrock_batch_output.modelOutput.content[0].text),

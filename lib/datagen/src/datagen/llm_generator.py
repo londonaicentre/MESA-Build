@@ -96,7 +96,7 @@ class LLMGenerator:
 
         """
         try:
-            doc = Document(**json.loads(doc_path.read_text()))
+            doc = Document.model_validate_json(doc_path.read_text())
             user_prompt: str = self.__user_prompt_function(doc.model_dump())
 
             message: ModelResponse | None = LLM.completion(
@@ -151,7 +151,7 @@ class LLMGenerator:
 
             # load to check if exists
             try:
-                doc = Document(**json.loads(doc_path.read_text()))
+                doc = Document.model_validate_json(doc_path.read_text())
                 output_filename = os.path.join(
                     self.__output_folder_name,
                     extraction.get_output_filename(
@@ -194,7 +194,7 @@ class LLMGenerator:
         for doc_path in self.__document_files:
             try:
                 # load to check if exists
-                doc = Document(**json.loads(doc_path.read_text()))
+                doc = Document.model_validate_json(doc_path.read_text())
                 output_filename = os.path.join(
                     self.__output_folder_name,
                     extraction.get_output_filename(
