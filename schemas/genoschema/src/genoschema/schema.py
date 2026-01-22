@@ -59,10 +59,16 @@ class ClinicalContext(BaseModel):
 
 
 class GeneIdentifier(BaseModel):
-    nomenclature_system: str  # "HGNC", "Entrez", "Ensembl", etc.
-    identifier: str  # The actual ID/symbol
-    version: Optional[str]  # If there are version references
-
+    nomenclature_system: str = Field(
+        description="Gene nomenclature system (e.g., HGNC, Entrez, Ensembl)"
+    )
+    identifier: str = Field(
+        description="The actual gene ID or symbol"
+    )
+    version: Optional[str] = Field(
+        default=None,
+        description="Version reference for the gene identifier"
+    )
 
 class QuantitativeResult(BaseModel):
     result_name: str = Field(
