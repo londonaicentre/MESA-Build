@@ -63,14 +63,14 @@ class LLMGenerator:
         pypi_package = f"londonaicentre-{schema_name}"
         try:
             raw_version = version(pypi_package)
-            # convert e.g. 1.2.3 -> "123"
+            # convert e.g. 1.2.3 -> "1_2_3"
             version_parts = raw_version.split(".")[:3]
-            self.__schema_version = "".join(v.zfill(1) for v in version_parts)
+            self.__schema_version = "_".join(version_parts)
         except PackageNotFoundError:
             self.__logger.warning(
-                f"Package {pypi_package} not found, using version '000'"
+                f"Package {pypi_package} not found, using version '0_0_0'"
             )
-            self.__schema_version = "000"
+            self.__schema_version = "0_0_0"
 
         self.__output_folder_name: str = "./data/trainingdata/"
 
