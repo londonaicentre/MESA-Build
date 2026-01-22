@@ -21,7 +21,7 @@ class DocumentBatchLoader:
     def download_and_extract(
         filename: str,
         output_folder: Path,
-        bucket: str = "aicentre-nlpteam-documents",
+        bucket: str = "aicentre-nlpteam-mesa-build",
         s3_prefix: str = "documents",
         region: str = "eu-west-2",
     ) -> int:
@@ -34,7 +34,7 @@ class DocumentBatchLoader:
             output_folder:
                 Local folder to extract to
             bucket:
-                S3 bucket name (default: "aicentre-nlpteam-documents")
+                S3 bucket name (default: "aicentre-nlpteam-mesa-build")
             s3_prefix:
                 S3 folder (default: "documents")
             region:
