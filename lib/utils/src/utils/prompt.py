@@ -1,10 +1,10 @@
 """Base prompt builder for schemas"""
 
+import inspect
 import json
 from abc import ABC
 from importlib.resources import files
 from importlib.resources.abc import Traversable
-from typing import Any
 
 from pydantic import BaseModel
 
@@ -55,10 +55,14 @@ class BasePromptBuilder(ABC):
             Complete prompt with {SCHEMA} and {EXAMPLE} replaced
         """
         prompt = self._load_root("prompt_datagen.txt")
-        schema_json = json.dumps(self._schema.model_json_schema(), indent=2)
+
+        # inserts full schema
+        schema_module = inspect.getmodule(self._schema)
+        schema_source = inspect.getsource(schema_module)
+
         example_json = self._load("examples", "example.json")
 
-        prompt = prompt.replace("{SCHEMA}", schema_json)
+        prompt = prompt.replace("{SCHEMA}", schema_source)
         prompt = prompt.replace("{EXAMPLE}", example_json)
         return prompt
 
@@ -69,7 +73,9 @@ class BasePromptBuilder(ABC):
             Complete prompt with {SCHEMA} replaced
         """
         prompt = self._load_root("prompt_main.txt")
-        schema_json = json.dumps(self._schema.model_json_schema(), indent=2)
 
-        prompt = prompt.replace("{SCHEMA}", schema_json)
+        schema_module = inspect.getmodule(self._schema)
+        schema_source = inspect.getsource(schema_module)
+
+        prompt = prompt.replace("{SCHEMA}", schema_source)
         return prompt

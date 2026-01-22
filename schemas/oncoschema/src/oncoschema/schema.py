@@ -219,15 +219,13 @@ class BiomarkerStatus(str, Enum):
 
 class MSIStatus(str, Enum):
     MSI_HIGH = "msi_high"
-    MSS = "mss"
-    NONE = "none"
+    MS_STABLE = "ms_stable"
 
 
 class TMBStatus(str, Enum):
     TMB_HIGH = "tmb_high"
     TMB_LOW = "tmb_low"
     TMB_INTERMEDIATE = "tmb_intermediate"
-    NONE = "none"
 
 
 class PatientFindingStatus(str, Enum):

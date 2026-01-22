@@ -5,14 +5,14 @@ from pydantic import BaseModel, Field
 
 
 class TestType(str, Enum):
-    DNA = "DNA"  # broad-spectrum sequencing approaches (e.g. WGS, WES, targeted panels, Sanger sequencing)
-    FISH = "FISH"  # Cytogenetic technique using fluorescent probes to detect specific chromosomal regions
+    DNA = "dna"  # broad-spectrum sequencing approaches (e.g. WGS, WES, targeted panels, Sanger sequencing)
+    FISH = "fish"  # Cytogenetic technique using fluorescent probes to detect specific chromosomal regions
     KARYOTYPE = (
-        "Karyotype"  # Classical cytogenetic analysis of chromosome structure and number
+        "karyotype"  # Classical cytogenetic analysis of chromosome structure and number
     )
-    PCR = "PCR"  # Amplification-based methods including qPCR, RT-PCR, digital PCR
-    MLPA = "MLPA"  # Copy number detection technique
-    OTHER = "Other"
+    PCR = "pcr"  # Amplification-based methods including qPCR, RT-PCR, digital PCR
+    MLPA = "mlpa"  # Copy number detection technique
+    OTHER = "other"
 
 
 class ResultStatus(str, Enum):

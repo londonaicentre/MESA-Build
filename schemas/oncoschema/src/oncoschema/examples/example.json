@@ -16,7 +16,7 @@
         "numeric_group_stage": "IIIA"
       },
       "primary_cancer_tumour_facts": {
-        "msi_status": "mss",
+        "msi_status": "ms_stable",
         "msi_desc": "MSI-stable",
         "tmb_status": "tmb_low",
         "tmb_numeric_value": 3.2,

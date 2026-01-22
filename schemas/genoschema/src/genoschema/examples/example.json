@@ -28,7 +28,7 @@
         "biomarker_test_results": [
             {
                 "test_subject": "patient",
-                "test_type": "Karyotype",
+                "test_type": "karyotype",
                 "other_test_type": null,
                 "test_methodology": "G-banded analysis at 550 band resolution from peripheral blood lymphocytes",
                 "sample_origin": "Peripheral blood",
@@ -55,7 +55,7 @@
             },
             {
                 "test_subject": "patient",
-                "test_type": "FISH",
+                "test_type": "fish",
                 "other_test_type": null,
                 "test_methodology": "Fluorescence in situ hybridisation with SNRPN probe and D15Z1 control",
                 "sample_origin": "Peripheral blood",
@@ -87,7 +87,7 @@
             },
             {
                 "test_subject": "patient",
-                "test_type": "MLPA",
+                "test_type": "mlpa",
                 "other_test_type": null,
                 "test_methodology": "Methylation-specific MLPA using SALSA MS-MLPA P245 Microdeletion Syndromes kit",
                 "sample_origin": "Peripheral blood",
@@ -123,7 +123,7 @@
             },
             {
                 "test_subject": "patient",
-                "test_type": "Other",
+                "test_type": "other",
                 "other_test_type": "SNP microarray",
                 "test_methodology": "Illumina CytoSNP-850K array with SNP and copy number analysis",
                 "sample_origin": "Peripheral blood",
