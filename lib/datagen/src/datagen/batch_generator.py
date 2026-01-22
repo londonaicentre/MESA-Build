@@ -14,9 +14,9 @@ from typing import Any, Callable
 
 from pydantic import BaseModel
 
-from datagen import extraction
 from datagen.config import Config
 from datagen.document_loader import DocumentBatchLoader
+from datagen.extraction import save_training_sample
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
@@ -207,7 +207,7 @@ class BedrockBatchGenerator:
                     doc_path = self.__document_files[sample_id]
                     doc = Document.model_validate_json(doc_path.read_text())
 
-                    if extraction.save_training_sample(
+                    if save_training_sample(
                         str(bedrock_batch_output.modelOutput.content[0].text),
                         doc.source,
                         doc.content,

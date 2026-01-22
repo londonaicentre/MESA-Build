@@ -14,8 +14,8 @@ from typing import Any, Callable
 from litellm import ModelResponse
 from pydantic import BaseModel
 
-from datagen import extraction
 from datagen.document_loader import DocumentBatchLoader
+from datagen.extraction import get_output_filename, save_training_sample
 from mesa_types import Document
 from utils.llm import LLM
 
@@ -110,7 +110,7 @@ class LLMGenerator:
 
             content: str | None = message.choices[0].message.content
             if content is not None:
-                return extraction.save_training_sample(
+                return save_training_sample(
                     content,
                     doc.source,
                     doc.content,
@@ -154,7 +154,7 @@ class LLMGenerator:
                 doc = Document.model_validate_json(doc_path.read_text())
                 output_filename = os.path.join(
                     self.__output_folder_name,
-                    extraction.get_output_filename(
+                    get_output_filename(
                         self.__schema_name, self.__schema_version, doc
                     ),
                 )
@@ -197,7 +197,7 @@ class LLMGenerator:
                 doc = Document.model_validate_json(doc_path.read_text())
                 output_filename = os.path.join(
                     self.__output_folder_name,
-                    extraction.get_output_filename(
+                    get_output_filename(
                         self.__schema_name, self.__schema_version, doc
                     ),
                 )
