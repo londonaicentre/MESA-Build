@@ -8,6 +8,7 @@ Before passing into training data generation
 from pathlib import Path
 import json
 import tarfile
+from typing import Literal
 from mesa_types import Document
 from utils.aws import AWS
 
@@ -63,7 +64,7 @@ class DocumentLoader:
 
         # always re-extract
         output_folder.mkdir(parents=True, exist_ok=True)
-        mode = "r:gz" if tar_path.suffix == ".gz" else "r"
+        mode: Literal["r", "w", "r:gz", "w:gz"] = "r:gz" if tar_path.suffix == ".gz" else "r"
         doc_count = 0
 
         with tarfile.open(tar_path, mode) as tar:

@@ -9,6 +9,7 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, ValidationError
@@ -25,7 +26,7 @@ class TrainingDataUploader:
 
     @staticmethod
     def _create_jsonl(
-        samples: list[dict],
+        samples: list[dict[str, Any]],
         system_prompt: str,
         short_description: str,
     ) -> str:

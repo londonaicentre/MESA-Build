@@ -4,7 +4,6 @@ llm_generator.py
 Class to handle real-time APIs via LiteLLM
 """
 
-import json
 import logging
 import os
 from pathlib import Path
@@ -95,18 +94,22 @@ class LLMGenerator:
             )
             if message is None:
                 return False
-
-            content: str | None = message.choices[0].message.content
-            if content is not None:
-                return save_training_sample(
-                    content,
-                    doc.source,
-                    doc.content,
-                    self.__schema,
-                    self.__schema_name,
-                    self.__schema_version,
-                    self.__output_folder_name,
-                )
+            
+            choices = message.choices
+            if hasattr(choices[0], 'message'):
+                content: str | None = choices[0].message.content
+                if content is not None:
+                    return save_training_sample(
+                        content,
+                        doc.source,
+                        doc.content,
+                        self.__schema,
+                        self.__schema_name,
+                        self.__schema_version,
+                        self.__output_folder_name,
+                    )
+                else:
+                    return False
             else:
                 return False
         except Exception as e:
