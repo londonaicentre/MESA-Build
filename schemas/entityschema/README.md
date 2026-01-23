@@ -1,11 +1,11 @@
-# Genoschema
+# Entityschema
 
-Schema package for genomic biomarker extraction from NHS genomic laboratory hub reports.
+Schema package for clinical entity extraction from NHS medical documents.
 
 ## Structure
 
 ```text
-📁 genoschema
+📁 entityschema
 ├── examples/            # Training examples showing document input and structured output
 ├── schema.py            # Pydantic model for specifying expected output structure
 ├── prompt_builder.py    # Prompt builder for data generation and inference
@@ -17,7 +17,7 @@ Schema package for genomic biomarker extraction from NHS genomic laboratory hub 
 ## Usage
 
 ```python
-from genoschema.prompt_builder import PromptBuilder
+from entityschema.prompt_builder import PromptBuilder
 
 # Initialize builder
 builder = PromptBuilder()

@@ -27,9 +27,6 @@ datagen_prompt = builder.build_datagen_prompt()
 
 # Build main/inference prompt (without example)
 main_prompt = builder.build_main_prompt()
-
-# Validate JSON output against schema
-validated = builder.validate_json(json_string)
 ```
 
 ## License
