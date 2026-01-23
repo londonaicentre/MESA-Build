@@ -1,0 +1,15 @@
+# Install all local packages in editable mode for projects
+
+# Usage:
+#   pip install -r requirements_dev.txt
+
+# mesa
+-e lib/types
+-e lib/utils
+-e lib/datagen
+-e lib/finetune
+
+# schemas
+-e schemas/oncoschema
+-e schemas/entityschema
+-e schemas/genoschema
