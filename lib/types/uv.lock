@@ -64,7 +64,7 @@ wheels = [
 ]
 
 [[package]]
-name = "londonaicentre-schemallama-types"
+name = "londonaicentre-mesa-types"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
