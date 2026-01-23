@@ -1,6 +1,5 @@
 """Tests for genoschema package."""
 
-import pytest
 
 from genoschema.prompt_builder import PromptBuilder
 from genoschema.schema import GenomicTestReport

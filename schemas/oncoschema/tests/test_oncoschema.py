@@ -1,6 +1,5 @@
 """Tests for oncoschema package."""
 
-import pytest
 
 from oncoschema.prompt_builder import PromptBuilder
 from oncoschema.schema import OncologyModel

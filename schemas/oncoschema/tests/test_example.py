@@ -5,7 +5,7 @@ from oncoschema.prompt_builder import PromptBuilder
 from oncoschema.schema import OncologyModel
 
 
-def test_example_validates():
+def test_example_validates() -> None:
     """Test that the canonical example validates against the schema."""
     builder = PromptBuilder()
 

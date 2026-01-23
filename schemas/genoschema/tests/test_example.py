@@ -5,7 +5,7 @@ from genoschema.prompt_builder import PromptBuilder
 from genoschema.schema import GenomicTestReport
 
 
-def test_example_validates():
+def test_example_validates() -> None:
     """Test that the canonical example validates against the schema."""
     builder = PromptBuilder()
 
