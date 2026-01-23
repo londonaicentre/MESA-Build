@@ -3,6 +3,8 @@ name: build and publish oncoschema
 on:
   pull_request:
     types: [closed]
+    branches:
+      - main
     paths:
       - "schemas/oncoschema/**"
 
