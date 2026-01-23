@@ -7,6 +7,7 @@ Upload training data batches to S3
 import json
 import logging
 import os
+import tarfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -90,6 +91,26 @@ class TrainingDataUploader:
         return filename
 
     @staticmethod
+    def _create_samples_archive(
+        valid_files: list[Path],
+        short_description: str,
+    ) -> str:
+        """Create tar.gz archive of valid training samples.
+
+        Args:
+            valid_files: List of valid JSON file paths
+            short_description: Short description for filename
+
+        Returns:
+            Filename of created tar.gz archive
+        """
+        filename = f"train_openai_{short_description}_samples.tar.gz"
+        with tarfile.open(filename, "w:gz") as tar:
+            for json_file in valid_files:
+                tar.add(json_file, arcname=json_file.name)
+        return filename
+
+    @staticmethod
     def upload(
         schema: type[BaseModel],
         schema_name: str,
@@ -127,12 +148,14 @@ class TrainingDataUploader:
 
         # collect samples after validation
         samples = []
+        valid_files = []
 
         for json_file in input_folder.glob("*.json"):
             try:
                 example = TrainingExample.model_validate_json(json_file.read_text())
                 schema.model_validate(example.output)
                 samples.append({"content": example.content, "output": example.output})
+                valid_files.append(json_file)
             except ValidationError as e:
                 logger.warning(f"Skipping invalid sample {json_file.name}: {e}")
             except Exception as e:
@@ -172,15 +195,12 @@ class TrainingDataUploader:
         )
         os.remove(metadata_filename)
 
-        # upload samples
-        for json_file in input_folder.glob("*.json"):
-            AWS.upload_file(
-                region,
-                str(json_file),
-                bucket,
-                json_file.name,
-                f"{s3_run_path}/samples",
-            )
+        # create and upload samples archive
+        archive_filename = TrainingDataUploader._create_samples_archive(
+            valid_files, short_description
+        )
+        AWS.upload_file(region, archive_filename, bucket, archive_filename, s3_run_path)
+        os.remove(archive_filename)
 
         s3_uri = f"s3://{bucket}/{s3_run_path}/"
         logger.info(f"Upload complete: {s3_uri}")
