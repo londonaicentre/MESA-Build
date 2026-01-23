@@ -1,0 +1,40 @@
+name: oncoschema test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/oncoschema/**
+
+jobs:
+  test:
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    defaults:
+      run:
+        working-directory: schemas/oncoschema
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync
+      - run: uv run ruff check src/ tests/
+      - run: uv run mypy src/ tests/
+      - run: uv run pytest tests
+      - name: Check version was bumped
+        run: |
+          # Get the current version in this PR
+          CURRENT_VERSION=$(uv version --short)
+
+          # Get the version from main branch
+          git fetch origin main
+          git show origin/main:assets/oncollama/pyproject.toml > /tmp/main-pyproject.toml
+          MAIN_VERSION=$(grep '^version = ' /tmp/main-pyproject.toml | cut -d'"' -f2)
+
+          if [ "$CURRENT_VERSION" == "$MAIN_VERSION" ]; then
+            echo "❌ Error: Version was not bumped in this PR"
+            echo "Current version: $CURRENT_VERSION"
+            echo "Please bump the version using: uv version --bump [patch|minor|major]"
+            exit 1
+          fi
+
+          echo "✅ Version bumped from $MAIN_VERSION to $CURRENT_VERSION"

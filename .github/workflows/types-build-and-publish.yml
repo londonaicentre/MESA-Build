@@ -3,6 +3,8 @@ name: build and publish types
 on:
   pull_request:
     types: [closed]
+    branches:
+      - main
     paths:
       - "lib/types/**"
 

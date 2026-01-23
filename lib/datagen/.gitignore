@@ -10,3 +10,4 @@ __pycache__/
 .cache
 .venv/
 .env
+.DS_Store

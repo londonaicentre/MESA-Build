@@ -1,6 +1,6 @@
 [project]
-name = "londonaicentre-schemallama-utils" 
-description = "SchemaLlama utils"
+name = "londonaicentre-mesa-utils"
+description = "MESA utils"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
@@ -14,10 +14,14 @@ dependencies = [
     "bs4>=0.0.2",
     "litellm>=1.80.0",
     "markdown>=3.10",
+    "pydantic>=2.12.5",
+    "londonaicentre-mesa-types>=1.0.0",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
+[tool.uv.sources]
+londonaicentre-mesa-types = { path = "../types", editable = true }
 [tool.setuptools]
 package-data = {"utils" = ["py.typed"]}
 [dependency-groups]

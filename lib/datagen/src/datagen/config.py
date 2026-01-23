@@ -1,3 +1,10 @@
+"""
+config.py
+
+Model config definitions for batch generation
+"""
+
+
 import json
 from importlib.resources import files
 

@@ -1,0 +1,142 @@
+{
+  "content": "Patient Name: John Smith, MRN: 123456, DOB: 01/15/1960\n\nDiagnosis: Adenocarcinoma of the lung, stage IIIA (T4N0M0), diagnosed November 2021. No evidence of recurrence from prior malignancy.\n\nMolecular Profile: EGFR mutation positive (exon 19 deletion, VAF 45%), TMB-low (3.2 mut/Mb), MSI-stable, PDL1 expression 10%, ALK fusion negative.\n\nCurrent Status: Progressive disease on recent CT (12/2024) with new liver metastases and increasing primary mass. Shortness of breath worsening over past 2 weeks. Weight loss of 5kg. Performance status ECOG 1.\n\nComorbidities: Type 2 diabetes (well-controlled), ex-smoker (20 pack-years, quit 2019).\n\nPrior Treatment: Completed concurrent chemoradiotherapy (carboplatin/pemetrexed + 60Gy) March 2022 with partial response. Stopped maintenance pemetrexed October 2024 due to fatigue.\n\nMDM Plan:\nStart osimertinib 80mg daily\nRepeat CT chest/abdomen in 8 weeks\nConsider clinical trial enrollment if progression on osimertinib\nPalliative care referral for symptom management",
+  "output": {
+    "document_has_primary_cancer_flag": true,
+    "primary_cancer_confirmed_flag": true,
+    "primary_cancer": {
+      "primary_cancer_facts": {
+        "topography": "lung",
+        "topography_name_desc": "lung",
+        "morphology": "adenocarcinoma",
+        "morphology_name_desc": "Adenocarcinoma",
+        "is_recurrence": false,
+        "diagnosis_year": 2021,
+        "diagnosis_month": 11,
+        "tnm_stage": "T4N0M0",
+        "numeric_group_stage": "IIIA"
+      },
+      "primary_cancer_tumour_facts": {
+        "msi_status": "ms_stable",
+        "msi_desc": "MSI-stable",
+        "tmb_status": "tmb_low",
+        "tmb_numeric_value": 3.2,
+        "tmb_desc": "TMB-low (3.2 mut/Mb)",
+        "molecular_biomarker_profiles": [
+          {
+            "biomarker": "egfr",
+            "biomarker_name_desc": "EGFR",
+            "biomarker_status": "altered",
+            "biomarker_alteration": "exon 19 deletion",
+            "biomarker_expression_level": null,
+            "biomarker_vaf_numeric_value": 45,
+            "biomarker_vaf_desc": "VAF 45%",
+            "biomarker_desc": "EGFR mutation positive (exon 19 deletion, VAF 45%)"
+          },
+          {
+            "biomarker": "pdl1",
+            "biomarker_name_desc": "PDL1",
+            "biomarker_status": "altered",
+            "biomarker_alteration": null,
+            "biomarker_expression_level": "10%",
+            "biomarker_vaf_numeric_value": null,
+            "biomarker_vaf_desc": null,
+            "biomarker_desc": "PDL1 expression 10%"
+          },
+          {
+            "biomarker": "alk",
+            "biomarker_name_desc": "ALK",
+            "biomarker_status": "negative",
+            "biomarker_alteration": null,
+            "biomarker_expression_level": null,
+            "biomarker_vaf_numeric_value": null,
+            "biomarker_vaf_desc": null,
+            "biomarker_desc": "ALK fusion negative"
+          }
+        ]
+      },
+      "primary_cancer_scores": null,
+      "primary_cancer_spread": [
+        {
+          "spread_type": "liver",
+          "spread_site_desc": "liver metastases"
+        }
+      ],
+      "primary_cancer_timeline_events": [
+        {
+          "event_type": "had_systemic_or_radiotherapy_treatment",
+          "event_year": 2022,
+          "event_month": 3,
+          "event_summary": "Completed concurrent chemoradiotherapy with partial response",
+          "event_desc": "Completed concurrent chemoradiotherapy (carboplatin/pemetrexed + 60Gy) March 2022 with partial response"
+        },
+        {
+          "event_type": "experienced_treatment_reduction_or_stop",
+          "event_year": 2024,
+          "event_month": 10,
+          "event_summary": "Stopped maintenance pemetrexed due to fatigue",
+          "event_desc": "Stopped maintenance pemetrexed October 2024 due to fatigue"
+        },
+        {
+          "event_type": "radiology_evidence_of_disease_progression",
+          "event_year": 2024,
+          "event_month": 12,
+          "event_summary": "Progressive disease on CT with new liver metastases",
+          "event_desc": "Progressive disease on recent CT (12/2024) with new liver metastases and increasing primary mass"
+        }
+      ]
+    },
+    "performance_status": {
+      "ps_scale": "ECOG",
+      "ps_score_value": "1",
+      "ps_desc": "Performance status ECOG 1"
+    },
+    "other_cancers": null,
+    "patient_findings": [
+      {
+        "patient_finding_type": "symptom_finding",
+        "patient_finding_name_desc": "Shortness of breath",
+        "patient_finding_desc": "Shortness of breath worsening over past 2 weeks",
+        "patient_finding_status": "is_present"
+      },
+      {
+        "patient_finding_type": "symptom_finding",
+        "patient_finding_name_desc": "Weight loss",
+        "patient_finding_desc": "Weight loss of 5kg",
+        "patient_finding_status": "is_present"
+      },
+      {
+        "patient_finding_type": "comorbidity_finding",
+        "patient_finding_name_desc": "Type 2 diabetes",
+        "patient_finding_desc": "Type 2 diabetes (well-controlled)",
+        "patient_finding_status": "is_present"
+      },
+      {
+        "patient_finding_type": "social_or_family_finding",
+        "patient_finding_name_desc": "Smoking history",
+        "patient_finding_desc": "ex-smoker (20 pack-years, quit 2019)",
+        "patient_finding_status": "is_present"
+      }
+    ],
+    "future_plans": [
+      {
+        "future_plan_type": "planned_systemic_or_radiotherapy_treatment",
+        "future_plan_summary": "Start osimertinib 80mg daily",
+        "future_plan_desc": "Start osimertinib 80mg daily"
+      },
+      {
+        "future_plan_type": "planned_investigation",
+        "future_plan_summary": "Repeat CT chest/abdomen in 8 weeks",
+        "future_plan_desc": "Repeat CT chest/abdomen in 8 weeks"
+      },
+      {
+        "future_plan_type": "planned_clinical_trial_involvement",
+        "future_plan_summary": "Consider clinical trial if progression on osimertinib",
+        "future_plan_desc": "Consider clinical trial enrollment if progression on osimertinib"
+      }
+    ],
+    "context_summary": {
+      "doc_context": "MDM note",
+      "doc_summary": "Patient with stage IIIA lung adenocarcinoma showing progression after chemoradiotherapy, now starting targeted therapy with osimertinib"
+    }
+  }
+}

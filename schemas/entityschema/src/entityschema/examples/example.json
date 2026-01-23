@@ -1,0 +1,357 @@
+{
+    "content": "DISCHARGE SUMMARY\n\nPatient: 68-year-old male\n\nADMISSION DATE: 15/03/2024\nDISCHARGE DATE: 22/03/2024\n\nPRESENTING COMPLAINT\nAcute dyspnoea and chest pain\n\nHISTORY OF PRESENTING COMPLAINT\nPatient presented to A&E with severe acute dyspnoea and pleuritic chest pain. Symptoms started suddenly 6 hours prior to admission. Associated with tachypnoea and hypoxia (SpO2 88% on room air). ?PE was queried given clinical presentation.\n\nPAST MEDICAL HISTORY\n- Type 2 diabetes mellitus (2015)\n- Hypertension\n- Atrial fibrillation (paroxysmal)\n- Previous DVT (left leg, March 2020)\n- Chronic kidney disease stage 3\n- No history of MI or stroke\n\nFAMILY HISTORY\n- Father: Myocardial infarction at age 52\n- Mother: Breast cancer\n\nCURRENT MEDICATIONS\n- Metformin 500mg BD\n- Ramipril 10mg OD\n- Rivaroxaban 20mg OD\n- Bisoprolol 5mg OD\n\nEXAMINATION ON ADMISSION\n- Alert and oriented\n- Tachypnoea (RR 28/min), tachycardia (HR 110bpm)\n- BP 145/85\n- SpO2 88% on room air, improved to 94% on 4L O2\n- Chest: reduced air entry right base, no wheeze\n- CVS: irregular rhythm, no murmurs\n- Abdomen: soft, non-tender\n- Calves: no pain or swelling\n\nINVESTIGATIONS\n- D-dimer: 2850 ng/ml (markedly elevated)\n- Troponin: normal\n- ECG: atrial fibrillation with rapid ventricular response\n- CXR: small right pleural effusion\n- CTPA: confirmed pulmonary embolism (bilateral subsegmental PE)\n\nDIAGNOSIS\n1. Acute pulmonary embolism (bilateral subsegmental)\n2. Type 1 respiratory failure\n3. Atrial fibrillation with rapid ventricular response\n4. Background T2DM, CKD3, hypertension\n\nMANAGEMENT\n- Therapeutic anticoagulation with rivaroxaban continued\n- High flow oxygen therapy initially, weaned to 2L by day 3\n- Rate control achieved with increased bisoprolol to 7.5mg OD\n- Monitored on telemetry\n\nCOMPLICATIONS\nNone\n\nPROGRESS\nPatient improved steadily. Oxygen saturations normalised by day 4. Dyspnoea resolved. Discharged on day 7 with improved exercise tolerance.\n\nDISCHARGE MEDICATIONS\n- Metformin 500mg BD\n- Ramipril 10mg OD\n- Rivaroxaban 20mg OD (continue for 6 months minimum)\n- Bisoprolol 7.5mg OD\n\nFOLLOW-UP\n- Anticoagulation clinic in 2 weeks\n- Repeat CTPA in 3 months\n- Haematology review to assess for thrombophilia\n\nDr James Smith\nConsultant Respiratory Medicine",
+    "output": {
+        "is_clinical_document": true,
+        "extraction_reasoning": "(1) AMBIGUITIES: '?PE' is hypothetical on admission but confirmed on CTPA so extract both hypothetical (historical) and positive (active). DVT in 2020 is clearly historical (PMH). T2DM/HTN/AF/CKD3 in PMH are chronic conditions so active by default. Father's MI and mother's breast cancer are family_history. No chest pain/swelling on exam are negated entities. (2) EXACT/UMBRELLA MATCHING: PE→pulmonary_embolism+venous_thromboembolism; DVT→deep_vein_thrombosis+venous_thromboembolism; T2DM→type_2_diabetes_mellitus+diabetes_mellitus; CKD3→ckd_stage_3+chronic_kidney_disease; AF→atrial_fibrillation+tachyarrhythmia. Direct matches: dyspnoea, chest_pain (pleuritic), tachypnoea, hypoxia, hypertension, type_1_respiratory_failure, pleural_effusion, acute_myocardial_infarction (family), primary_cancer_breast (family), high_flow_oxygen_therapy, tachycardia. (3) OMISSIONS: 'D-dimer 2850' is lab value not diagnosis; 'SpO2 88%' is measurement not entity; medications cannot infer conditions; 'irregular rhythm' covered by AF; 'no murmurs' has no entity. Primary entities: pulmonary_embolism and dyspnoea are chief complaints.",
+        "document_content": {
+            "doc_type": "Discharge summary",
+            "doc_summary": "68M admitted with acute PE and respiratory failure. Background AF, T2DM, CKD3, previous DVT. Treated with anticoagulation and oxygen, improved and discharged.",
+            "has_active_malignancy": false
+        },
+        "entities": [
+            {
+                "entity": "dyspnoea",
+                "entity_source_text": "acute dyspnoea",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": true,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["presenting complaint", "resolved"],
+                "characterisation": {
+                    "summary": "severe, acute onset, resolved",
+                    "source_text": ["severe", "acute", "resolved"]
+                },
+                "year": 2024,
+                "month": 3
+            },
+            {
+                "entity": "chest_pain",
+                "entity_source_text": "pleuritic chest pain",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["presenting complaint"],
+                "characterisation": null,
+                "year": 2024,
+                "month": 3
+            },
+            {
+                "entity": "pleuritic_pain",
+                "entity_source_text": "pleuritic chest pain",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["presenting complaint"],
+                "characterisation": null,
+                "year": 2024,
+                "month": 3
+            },
+            {
+                "entity": "tachypnoea",
+                "entity_source_text": "tachypnoea",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["on admission"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "hypoxia",
+                "entity_source_text": "hypoxia",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["on admission", "normalised by day 4"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "pulmonary_embolism",
+                "entity_source_text": "?PE",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": true,
+                "assertion": "hypothetical",
+                "subject": "patient",
+                "relevance": "historical",
+                "status_source_text": ["?"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "pulmonary_embolism",
+                "entity_source_text": "pulmonary embolism",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": true,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["confirmed", "bilateral subsegmental"],
+                "characterisation": {
+                    "summary": "acute, bilateral subsegmental",
+                    "source_text": ["acute", "bilateral subsegmental"]
+                },
+                "year": 2024,
+                "month": 3
+            },
+            {
+                "entity": "venous_thromboembolism",
+                "entity_source_text": "pulmonary embolism",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["confirmed"],
+                "characterisation": null,
+                "year": 2024,
+                "month": 3
+            },
+            {
+                "entity": "type_2_diabetes_mellitus",
+                "entity_source_text": "Type 2 diabetes mellitus",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["PMH"],
+                "characterisation": null,
+                "year": 2015,
+                "month": null
+            },
+            {
+                "entity": "diabetes_mellitus",
+                "entity_source_text": "Type 2 diabetes mellitus",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["PMH"],
+                "characterisation": null,
+                "year": 2015,
+                "month": null
+            },
+            {
+                "entity": "hypertension",
+                "entity_source_text": "Hypertension",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["PMH"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "atrial_fibrillation",
+                "entity_source_text": "Atrial fibrillation",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["PMH", "irregular rhythm"],
+                "characterisation": {
+                    "summary": "paroxysmal, with rapid ventricular response on admission",
+                    "source_text": ["paroxysmal", "rapid ventricular response"]
+                },
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "tachyarrhythmia",
+                "entity_source_text": "atrial fibrillation with rapid ventricular response",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["on admission"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "deep_vein_thrombosis",
+                "entity_source_text": "Previous DVT",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "historical",
+                "status_source_text": ["Previous", "March 2020", "PMH"],
+                "characterisation": {
+                    "summary": "left leg",
+                    "source_text": ["left leg"]
+                },
+                "year": 2020,
+                "month": 3
+            },
+            {
+                "entity": "venous_thromboembolism",
+                "entity_source_text": "Previous DVT",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "historical",
+                "status_source_text": ["Previous", "PMH"],
+                "characterisation": null,
+                "year": 2020,
+                "month": 3
+            },
+            {
+                "entity": "ckd_stage_3",
+                "entity_source_text": "Chronic kidney disease stage 3",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["PMH"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "chronic_kidney_disease",
+                "entity_source_text": "Chronic kidney disease stage 3",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["PMH"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "acute_myocardial_infarction",
+                "entity_source_text": "Myocardial infarction at age 52",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "family_history",
+                "relevance": "historical",
+                "status_source_text": ["Father"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "primary_cancer_breast",
+                "entity_source_text": "Breast cancer",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "family_history",
+                "relevance": "historical",
+                "status_source_text": ["Mother"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "ischaemic_stroke",
+                "entity_source_text": "No history of stroke",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "negated",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["No history"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "tachycardia",
+                "entity_source_text": "tachycardia (HR 110bpm)",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["on admission"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "calf_pain_or_swelling",
+                "entity_source_text": "no pain or swelling",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "negated",
+                "subject": "patient",
+                "relevance": "active",
+                "status_source_text": ["no"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "pleural_effusion",
+                "entity_source_text": "right pleural effusion",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["CXR"],
+                "characterisation": {
+                    "summary": "small, right-sided",
+                    "source_text": ["small", "right"]
+                },
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "type_1_respiratory_failure",
+                "entity_source_text": "Type 1 respiratory failure",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["diagnosis"],
+                "characterisation": null,
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "high_flow_oxygen_therapy",
+                "entity_source_text": "High flow oxygen therapy",
+                "is_exact_or_umbrella_match": true,
+                "is_primary_entity": false,
+                "assertion": "positive",
+                "subject": "patient",
+                "relevance": "recent",
+                "status_source_text": ["initially", "weaned"],
+                "characterisation": {
+                    "summary": "initially, weaned to 2L by day 3",
+                    "source_text": ["initially", "weaned to 2L"]
+                },
+                "year": null,
+                "month": null
+            }
+        ]
+    }
+}

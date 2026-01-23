@@ -1,0 +1,33 @@
+[project]
+name = "londonaicentre-entityschema"
+description = "Clinical entity extraction schema for MESA"
+authors = [
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Dr. Martin Chapman", email = "martin.chapman@nhs.net" },
+    { name = "Dr. Lawrence Adams", email = "lawrence.adams2@nhs.net" },
+]
+version = "1.0.0"
+requires-python = ">=3.12"
+license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "pydantic>=2.12.4",
+    "londonaicentre-mesa-utils>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+entityschema = [
+    "*.txt",
+    "examples/example.json",
+    "py.typed"
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "pytest>=9.0.2",
+    "ruff>=0.14.6",
+]

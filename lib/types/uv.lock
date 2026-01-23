@@ -64,8 +64,8 @@ wheels = [
 ]
 
 [[package]]
-name = "londonaicentre-schemallama-types"
-version = "1.0.0"
+name = "londonaicentre-mesa-types"
+version = "2.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },

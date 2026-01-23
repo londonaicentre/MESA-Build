@@ -1,0 +1,166 @@
+{
+    "content": "CYTOGENETICS AND MOLECULAR GENETICS REPORT\nGreat Ormond Street Hospital NHS Foundation Trust\n\nCLINICAL INFORMATION\nPatient: 8-month-old male infant\nReferral reason: Developmental delay, hypotonia, dysmorphic features suggestive of Prader-Willi syndrome\nClinical features: Poor feeding in neonatal period requiring NG tube, central hypotonia with peripheral hypertonia, almond-shaped eyes, narrow bifrontal diameter, small hands and feet\n\nTESTS PERFORMED\n1. Karyotype analysis (G-banding)\n2. FISH for 15q11-q13 deletion (SNRPN probe)\n3. Methylation-specific MLPA (MS-MLPA) for PWS/AS region\n4. SNP microarray analysis\n\nRESULTS\n\n1. KARYOTYPE ANALYSIS\nMethod: G-banded analysis at 550 band resolution from peripheral blood lymphocytes\nResult: 46,XY\nNo visible deletions or rearrangements detected at this resolution\n20 metaphases analysed\n\n2. FLUORESCENCE IN SITU HYBRIDISATION (FISH)\nProbe: SNRPN (15q11.2) with control probe D15Z1\nResult: nuc ish del(15)(q11.2q11.2)(SNRPN-)\nABNORMAL - Deletion of SNRPN locus detected\n200 interphase nuclei scored: 198 with single SNRPN signal\n\n3. METHYLATION-SPECIFIC MLPA (MS-MLPA)\nKit: SALSA MS-MLPA P245 Microdeletion Syndromes\nResult: \n- Copy number: 0.5 ratio for all probes in PWS critical region (MKRN3, MAGEL2, NDN, SNRPN exons)\n- Methylation: Abnormal pattern consistent with paternal deletion\n- Size: Approximately 5.8 Mb deletion (BP1-BP3)\n\n4. SNP MICROARRAY\nPlatform: Illumina CytoSNP-850K\nResult: arr[GRCh38] 15q11.2q13.1(22,805,313-28,609,476)x1 pat\nDe novo 5.8 Mb deletion\nParental studies: Neither parent carries deletion (confirmed paternity)\n\nCOMBINED INTERPRETATION\nThe molecular and cytogenetic findings confirm a diagnosis of Prader-Willi syndrome due to a de novo 5.8 Mb paternal deletion of 15q11.2-q13.1, encompassing the PWS critical region. This is a Class I deletion (BP1-BP3), the most common type seen in approximately 70% of PWS deletion cases.\n\nThe deletion includes all imprinted genes in the PWS region including MKRN3, MAGEL2, NDN, and the SNORD116 cluster, which are critical for the PWS phenotype.\n\nRECOMMENDATIONS\n1. Referral to specialist PWS multidisciplinary team\n2. Growth hormone therapy evaluation when appropriate\n3. Nutritional management and monitoring for hyperphagia development\n4. Developmental assessment and early intervention services\n5. Endocrine evaluation for hypogonadism and other hormone deficiencies\n6. Sleep study to assess for sleep-disordered breathing\n7. Recurrence risk is <1% for future pregnancies (recommend prenatal testing)\n\nAuthorised by: Dr Sarah Johnson, Consultant Clinical Geneticist",
+    "output": {
+        "sufficient_data_quality": true,
+        "is_genomic_report": true,
+        "clinical_context": {
+            "referral_reason": "Developmental delay, hypotonia, dysmorphic features suggestive of Prader-Willi syndrome",
+            "test_clinical_rationale": "Comprehensive genetic testing to confirm suspected Prader-Willi syndrome diagnosis and determine molecular mechanism",
+            "clinical_findings": [
+                {
+                    "type": "patient_finding",
+                    "value": "8-month-old male infant"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Poor feeding in neonatal period requiring NG tube"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Central hypotonia with peripheral hypertonia"
+                },
+                {
+                    "type": "patient_finding",
+                    "value": "Almond-shaped eyes, narrow bifrontal diameter, small hands and feet"
+                }
+            ]
+        },
+        "biomarker_test_results": [
+            {
+                "test_subject": "patient",
+                "test_type": "karyotype",
+                "other_test_type": null,
+                "test_methodology": "G-banded analysis at 550 band resolution from peripheral blood lymphocytes",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "Karyotype",
+                "gene_nomenclature": [],
+                "result_region": null,
+                "result_status": "normal",
+                "result_description": "46,XY - No visible deletions or rearrangements detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Metaphases Analysed",
+                        "result_value": 20,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Sex Chromosomes",
+                        "result_value": "XY"
+                    }
+                ],
+                "clinical_implications": null
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "fish",
+                "other_test_type": null,
+                "test_methodology": "Fluorescence in situ hybridisation with SNRPN probe and D15Z1 control",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "SNRPN",
+                "gene_nomenclature": [],
+                "result_region": "15q11.2",
+                "result_status": "abnormal",
+                "result_description": "Deletion of SNRPN locus detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Nuclei with Deletion",
+                        "result_value": 198,
+                        "result_units": "cells"
+                    },
+                    {
+                        "result_name": "Total Nuclei Scored",
+                        "result_value": 200,
+                        "result_units": "cells"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "FISH Result",
+                        "result_value": "nuc ish del(15)(q11.2q11.2)(SNRPN-)"
+                    }
+                ],
+                "clinical_implications": "Deletion in Prader-Willi syndrome critical region"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "mlpa",
+                "other_test_type": null,
+                "test_methodology": "Methylation-specific MLPA using SALSA MS-MLPA P245 Microdeletion Syndromes kit",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "gene",
+                "result_entity": "PWS critical region",
+                "gene_nomenclature": [],
+                "result_region": "15q11.2-q13.1 (BP1-BP3)",
+                "result_status": "abnormal",
+                "result_description": "Paternal deletion of PWS critical region detected",
+                "quantitative_results": [
+                    {
+                        "result_name": "Copy Number Ratio",
+                        "result_value": 0.5,
+                        "result_units": "ratio"
+                    },
+                    {
+                        "result_name": "Deletion Size",
+                        "result_value": 5.8,
+                        "result_units": "Mb"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Methylation Pattern",
+                        "result_value": "Abnormal - consistent with paternal deletion"
+                    },
+                    {
+                        "result_name": "Deletion Class",
+                        "result_value": "Class I (BP1-BP3)"
+                    }
+                ],
+                "clinical_implications": "Confirms Prader-Willi syndrome diagnosis"
+            },
+            {
+                "test_subject": "patient",
+                "test_type": "other",
+                "other_test_type": "SNP microarray",
+                "test_methodology": "Illumina CytoSNP-850K array with SNP and copy number analysis",
+                "sample_origin": "Peripheral blood",
+                "result_entity_type": "chromosome",
+                "result_entity": "15",
+                "gene_nomenclature": [],
+                "result_region": "15q11.2q13.1(22,805,313-28,609,476)",
+                "result_status": "abnormal",
+                "result_description": "De novo 5.8 Mb paternal deletion confirmed",
+                "quantitative_results": [
+                    {
+                        "result_name": "Deletion Start",
+                        "result_value": 22805313,
+                        "result_units": "genomic coordinate"
+                    },
+                    {
+                        "result_name": "Deletion End",
+                        "result_value": 28609476,
+                        "result_units": "genomic coordinate"
+                    }
+                ],
+                "categorical_results": [
+                    {
+                        "result_name": "Array Result",
+                        "result_value": "arr[GRCh38] 15q11.2q13.1(22,805,313-28,609,476)x1 pat"
+                    },
+                    {
+                        "result_name": "Inheritance",
+                        "result_value": "De novo"
+                    }
+                ],
+                "clinical_implications": "Neither parent carries deletion, confirming de novo event with <1% recurrence risk"
+            }
+        ],
+        "clinical_outcome": {
+            "overall_implications": "Confirmed diagnosis of Prader-Willi syndrome due to de novo 5.8 Mb paternal deletion of 15q11.2-q13.1 (Class I deletion). This deletion encompasses all critical PWS genes including MKRN3, MAGEL2, NDN, and SNORD116 cluster",
+            "overall_recommendations": "Referral to specialist PWS multidisciplinary team. Growth hormone therapy evaluation. Nutritional management and monitoring for hyperphagia. Developmental assessment and early intervention. Endocrine evaluation. Sleep study for sleep-disordered breathing. Recurrence risk <1% - prenatal testing available for future pregnancies"
+        }
+    }
+}
