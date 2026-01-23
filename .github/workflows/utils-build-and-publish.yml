@@ -1,0 +1,36 @@
+name: build and publish utils
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - "lib/utils/**"
+
+jobs:
+  build-and-publish:
+    if: github.event.pull_request.merged == true
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    environment: pypi
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: lib/utils
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+
+      - name: Tag new version
+        run: |
+          VERSION=$(uv version --short)
+          git tag "utils-v${VERSION}"
+          git push origin "utils-v${VERSION}"
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish to PyPI
+        run: uv publish
