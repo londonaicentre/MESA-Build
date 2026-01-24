@@ -55,9 +55,9 @@ class TrainingDataHandler:
 
         all_samples = []
 
-        for valid_name in training_batch_names:
+        for batch_name in training_batch_names:
             # each batch folder expected to contain exactly 1 JSONL file
-            s3_valid_prefix = f"{s3_prefix}/{valid_name}"
+            s3_valid_prefix = f"{s3_prefix}/{batch_name}"
 
             objects = AWS.list_s3_objects(
                 region_name=region,
@@ -72,16 +72,16 @@ class TrainingDataHandler:
             ]
 
             if len(jsonl_files) == 0:
-                raise ValueError(f"No JSONL file found in {valid_name}")
+                raise ValueError(f"No JSONL file found in {batch_name}")
             elif len(jsonl_files) > 1:
                 raise ValueError(
-                    f"Multiple JSONL files found in {valid_name}: {jsonl_files}"
+                    f"Multiple JSONL files found in {batch_name}: {jsonl_files}"
                 )
 
             jsonl_key = jsonl_files[0]
 
             # download to cache
-            jsonl_path = cache_dir / f"{valid_name}.jsonl"
+            jsonl_path = cache_dir / f"{batch_name}.jsonl"
 
             if not jsonl_path.exists():
                 logger.info(f"Downloading {jsonl_key}...")
@@ -127,7 +127,7 @@ class TrainingDataHandler:
                         invalid_samples += 1
 
             logger.info(
-                f"Loaded {valid_samples} valid samples from {valid_name} "
+                f"Loaded {valid_samples} valid samples from {batch_name} "
                 f"({invalid_samples} invalid)"
             )
 
