@@ -94,6 +94,29 @@ class AWS:
         return True
 
     @staticmethod
+    def list_s3_objects(
+        region_name: str,
+        bucket: str,
+        prefix: str,
+    ) -> list[dict[str, Any]]:
+        """
+        List objects in S3 with a given prefix
+
+        Returns:
+            list[dict]:
+                List of object metadata dictionaries
+
+        """
+        try:
+            response = boto3.client("s3", region_name=region_name).list_objects_v2(
+                Bucket=bucket, Prefix=prefix
+            )
+            return response.get("Contents", [])
+        except ClientError as e:
+            print(e)
+            return []
+
+    @staticmethod
     def download_file_with_wildcard(
         region_name: str,
         bucket: str,
