@@ -10,7 +10,7 @@ import json
 import logging
 import os
 import re
-from typing import Any
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
@@ -37,9 +37,10 @@ def get_output_filename(
     return f"{schema_name}{schema_version}_{doc.source}_{content_hash}.json"
 
 
+T = TypeVar("T", bound=BaseModel)
 def _try_parse_and_validate(
-    text: str, schema: type[BaseModel]
-) -> tuple[BaseModel | None, dict[str, Any] | None]:
+    text: str, schema: type[T]
+) -> tuple[T | None, dict[str, Any] | None]:
     """Try to parse text as JSON and validate against schema.
 
     Args:
@@ -81,8 +82,8 @@ def _save_json_file(data: dict[str, Any], filepath: str) -> bool:
 
 
 def extract_and_validate_json(
-    response: str, schema: type[BaseModel]
-) -> tuple[BaseModel | None, dict[str, Any] | None]:
+    response: str, schema: type[T]
+) -> tuple[T | None, dict[str, Any] | None]:
     """Extract JSON from response and validate against Pydantic schema.
 
     Stepwise:
