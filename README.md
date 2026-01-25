@@ -1,10 +1,11 @@
 # MESA-Build
 
-MESA = and end-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
+End-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
 
 ## Overview
 
 MESA-Build is an internal team monorepo for generating training data and fine-tuning LLMs, supporting:
+
 - Schema design and release
 - Training data generation and registration
 - Model fine-tuning and registration
@@ -14,8 +15,8 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 
 ```text
 📁 MESA-Build
-├── schemas/               # Schema packages (model-agnostic)
-├── lib/                  # Reusable functionality
+├── schemas/             # Schema packages (model-agnostic)
+├── lib/                 # Reusable functionality
 │   ├── datagen/         # Training data generation
 │   ├── finetune/        # LLM fine-tuning
 │   ├── types/           # Shared definitions
