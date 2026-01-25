@@ -2,6 +2,8 @@
 
 End-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
 
+<img src="_assets/repo.png" alt="repo" width="500"/>
+
 ## Overview
 
 MESA-Build is an internal team monorepo for generating training data and fine-tuning LLMs, supporting:
