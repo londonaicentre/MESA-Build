@@ -1,7 +1,22 @@
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Self, Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+
+
+class CaseInsensitiveEnumModel(BaseModel):
+    @model_validator(mode="before")
+    @classmethod
+    def lowercase_enums(cls: type[Self], data: dict[str, Any]) -> dict[str, Any]:
+        for name, info in cls.model_fields.items():
+            annotation, value = info.annotation, data.get(name)
+            if (
+                isinstance(annotation, type)
+                and issubclass(annotation, Enum)
+                and isinstance(value, str)
+            ):
+                data[name] = value.lower()
+        return data
 
 
 class TestType(str, Enum):
@@ -36,7 +51,7 @@ class ClinicalFindingType(str, Enum):
     FAMILY_HISTORY = "family_history"  # morbidity or finding in a family member
 
 
-class ClinicalFinding(BaseModel):
+class ClinicalFinding(CaseInsensitiveEnumModel):
     type: ClinicalFindingType = Field(..., description="Type of clinical finding")
     value: str = Field(
         ...,
@@ -44,7 +59,7 @@ class ClinicalFinding(BaseModel):
     )
 
 
-class ClinicalContext(BaseModel):
+class ClinicalContext(CaseInsensitiveEnumModel):
     referral_reason: str = Field(
         ...,
         description="The reason given for genomic test referral, including suspected diagnosis or clinical question",
@@ -58,19 +73,17 @@ class ClinicalContext(BaseModel):
     )
 
 
-class GeneIdentifier(BaseModel):
+class GeneIdentifier(CaseInsensitiveEnumModel):
     nomenclature_system: str = Field(
         description="Gene nomenclature system (e.g., HGNC, Entrez, Ensembl)"
     )
-    identifier: str = Field(
-        description="The actual gene ID or symbol"
-    )
+    identifier: str = Field(description="The actual gene ID or symbol")
     version: Optional[str] = Field(
-        default=None,
-        description="Version reference for the gene identifier"
+        default=None, description="Version reference for the gene identifier"
     )
 
-class QuantitativeResult(BaseModel):
+
+class QuantitativeResult(CaseInsensitiveEnumModel):
     result_name: str = Field(
         ...,
         description="Type of measurement (e.g., 'Allele Frequency', 'Copy Number', etc)",
@@ -79,7 +92,7 @@ class QuantitativeResult(BaseModel):
     result_units: str = Field(..., description="Units of measurement where applicable")
 
 
-class CategoricalResult(BaseModel):
+class CategoricalResult(CaseInsensitiveEnumModel):
     result_name: str = Field(
         ...,
         description="Classification system (e.g., 'Pathogenicity', 'Expression Level' etc)",
@@ -89,7 +102,7 @@ class CategoricalResult(BaseModel):
     )
 
 
-class BiomarkerTestResult(BaseModel):
+class BiomarkerTestResult(CaseInsensitiveEnumModel):
     test_subject: str = Field(
         ...,
         description="Person whose test is reported, e.g. patient, child, other relative",
@@ -138,7 +151,7 @@ class BiomarkerTestResult(BaseModel):
     )
 
 
-class ClinicalOutcome(BaseModel):
+class ClinicalOutcome(CaseInsensitiveEnumModel):
     overall_implications: str = Field(
         ...,
         description="Interpretation of test significance for the patient",
@@ -149,7 +162,7 @@ class ClinicalOutcome(BaseModel):
     )
 
 
-class GenomicTestReport(BaseModel):
+class GenomicTestReport(CaseInsensitiveEnumModel):
     sufficient_data_quality: bool = Field(
         ...,
         description="This is True if the text is readable, and False if the text appears corrupted. It is not a reflection of content, but is here to flag poor text quality (e.g. OCR artefacts preventing text from being read).",
