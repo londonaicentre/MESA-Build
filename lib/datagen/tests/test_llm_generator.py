@@ -58,7 +58,7 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
             "datagen.llm_generator.DocumentLoader.download_and_extract", autospec=True
         ),
         get_schema_version=mocker.patch(
-            "datagen.llm_generator.get_schema_version", autospec=True, return_value="v1"
+            "datagen.llm_generator.get_schema_version", autospec=True, return_value="1_2_3"
         ),
     )
 

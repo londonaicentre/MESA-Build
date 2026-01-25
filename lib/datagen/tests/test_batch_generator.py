@@ -89,7 +89,7 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
         get_schema_version=mocker.patch(
             "datagen.batch_generator.get_schema_version",
             autospec=True,
-            return_value="v1",
+            return_value="1_2_3",
         ),
     )
 

@@ -78,26 +78,26 @@ class TestGetOutputFilename:
     def test_get_output_filename_valid_input_returns_formatted_string(self) -> None:
         assert (
             get_output_filename(
-                "foo_schema", "v1", Document(content="foo", source="bar", timestamp="")
+                "foo_schema", "1_2_3", Document(content="foo", source="bar", timestamp="")
             )
-            == "foo_schemav1_bar_acbd18db.json"
+            == "foo_schema1_2_3_bar_acbd18db.json"
         )
 
     def test_get_output_filename_same_src_returns_same_hash(self) -> None:
         assert (
             get_output_filename(
-                "foo_schema", "v1", Document(content="foo", source="bar", timestamp="")
+                "foo_schema", "1_2_3", Document(content="foo", source="bar", timestamp="")
             ).split("_")[-1]
             == get_output_filename(
-                "foo_schema", "v1", Document(content="foo", source="baz", timestamp="")
+                "foo_schema", "1_2_3", Document(content="foo", source="baz", timestamp="")
             ).split("_")[-1]
         )
 
     def test_get_output_filename_different_src_returns_different_hash(self) -> None:
         assert get_output_filename(
-            "foo_schema", "v1", Document(content="foo", source="bar", timestamp="")
+            "foo_schema", "1_2_3", Document(content="foo", source="bar", timestamp="")
         ) != get_output_filename(
-            "foo_schema", "v1", Document(content="baz", source="bar", timestamp="")
+            "foo_schema", "1_2_3", Document(content="baz", source="bar", timestamp="")
         )
 
 
@@ -263,7 +263,7 @@ class TestSaveTrainingSample:
                 "foobarbaz",
                 MockSchema,
                 "foo_schema",
-                "v1",
+                "1_2_3",
                 "/output",
             )
             is True
@@ -287,7 +287,7 @@ class TestSaveTrainingSample:
                 "foobarbaz",
                 MockSchema,
                 "foo_schema",
-                "v1",
+                "1_2_3",
                 "/output",
             )
             is False
@@ -311,7 +311,7 @@ class TestSaveTrainingSample:
                 "foobarbaz",
                 MockSchema,
                 "foo_schema",
-                "v1",
+                "1_2_3",
                 "/output",
             )
             is False
@@ -337,7 +337,7 @@ class TestSaveTrainingSample:
                 "foobarbaz",
                 MockSchema,
                 "foo_schema",
-                "v1",
+                "1_2_3",
                 "/output",
             )
             is False
@@ -359,7 +359,7 @@ class TestSaveTrainingSample:
             "foobarbaz",
             MockSchema,
             "foo_schema",
-            "v1",
+            "1_2_3",
             "/output",
         )
         assert mock_makedirs.call_count == 2

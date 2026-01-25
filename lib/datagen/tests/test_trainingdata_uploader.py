@@ -61,7 +61,7 @@ def mock_upload_dependencies(mocker: MockerFixture) -> UploadDependencies:
         get_schema_version=mocker.patch(
             "datagen.trainingdata_uploader.get_schema_version",
             autospec=True,
-            return_value="v1",
+            return_value="1_2_3",
         ),
         upload_file=mocker.patch(
             "datagen.trainingdata_uploader.AWS.upload_file", autospec=True
@@ -152,7 +152,7 @@ def test_create_metadata_valid_params_writes_yaml(
     )
     mock_datetime.now.return_value.isoformat.return_value = "2026-01-01T00:00:00"
     schema: str = "foo_schema"
-    schema_version: str = "v1"
+    schema_version: str = "1_2_3"
     short_description: str = "foo"
     description: str = "foobar"
     num_samples: int = 10
@@ -345,7 +345,7 @@ def test_upload_long_description_none_uses_short_description(
     )
     TrainingDataUploader.upload(mock_schema, "foo_schema", "bar", "foo")
     mock_helper_methods.create_metadata.assert_called_once_with(
-        "foo_schema", "v1", "foo", "foo", 3
+        "foo_schema", "1_2_3", "foo", "foo", 3
     )
 
 
@@ -370,7 +370,7 @@ def test_upload_long_description_provided_uses_long_description(
         long_description="foobar",
     )
     mock_helper_methods.create_metadata.assert_called_once_with(
-        "foo_schema", "v1", "foo", "foobar", 3
+        "foo_schema", "1_2_3", "foo", "foobar", 3
     )
 
 
