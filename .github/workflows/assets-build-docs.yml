@@ -85,6 +85,30 @@ jobs:
           echo "└── py.typed             # Type checking marker" >> README.md
           echo "\`\`\`" >> README.md
           echo "" >> README.md
+      
+      - name: Add usage to README
+        run: |
+          DIRNAME=$(basename "$PWD")
+          
+          echo "## Usage" >> README.md
+          echo "" >> README.md
+          echo "\`\`\`python"  >> README.md
+          echo "from $DIRNAME.prompt_builder import PromptBuilder" >> README.md
+          echo "" >> README.md
+          echo "# Initialize builder" >> README.md
+          echo "builder = PromptBuilder()" >> README.md
+          echo "" >> README.md
+          echo "# Build data generation prompt (with example)" >> README.md
+          echo "datagen_prompt = builder.build_datagen_prompt()" >> README.md
+          echo "" >> README.md
+          echo "# Build main/inference prompt (without example)" >> README.md
+          echo "main_prompt = builder.build_main_prompt()" >> README.md
+          echo "\`\`\`" >> README.md
+          echo "" >> README.md
+      
+      - name: Add schema to README
+        run: |
+          DIRNAME=$(basename "$PWD")
 
           echo "## Schema" >> README.md
           echo "" >> README.md
@@ -140,26 +164,6 @@ jobs:
               f.write('\n')
 
           EOF
-      
-      - name: Add usage to README
-        run: |
-          DIRNAME=$(basename "$PWD")
-          
-          echo "## Usage" >> README.md
-          echo "" >> README.md
-          echo "\`\`\`python"  >> README.md
-          echo "from $DIRNAME.prompt_builder import PromptBuilder" >> README.md
-          echo "" >> README.md
-          echo "# Initialize builder" >> README.md
-          echo "builder = PromptBuilder()" >> README.md
-          echo "" >> README.md
-          echo "# Build data generation prompt (with example)" >> README.md
-          echo "datagen_prompt = builder.build_datagen_prompt()" >> README.md
-          echo "" >> README.md
-          echo "# Build main/inference prompt (without example)" >> README.md
-          echo "main_prompt = builder.build_main_prompt()" >> README.md
-          echo "\`\`\`" >> README.md
-          echo "" >> README.md
 
       - name: Add license to README
         run: |

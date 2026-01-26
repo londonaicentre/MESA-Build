@@ -14,6 +14,21 @@ Schema package for oncology extraction from cancer clinical documents.
 └── py.typed             # Type checking marker
 ```
 
+## Usage
+
+```python
+from oncoschema.prompt_builder import PromptBuilder
+
+# Initialize builder
+builder = PromptBuilder()
+
+# Build data generation prompt (with example)
+datagen_prompt = builder.build_datagen_prompt()
+
+# Build main/inference prompt (without example)
+main_prompt = builder.build_main_prompt()
+```
+
 ## Schema
 
 ![Schema overview](https://londonaicentre.github.io/MESA-Build/schemas/oncoschema.png)
@@ -32,21 +47,6 @@ Schema package for oncology extraction from cancer clinical documents.
 | PatientFindingType | comorbidity_finding, social_or_family_finding, symptom_finding, physical_examination_finding, functional_finding, mental_state_finding |
 | PatientFindingStatus | is_present, is_not_present, uncertain |
 | FuturePlanType | planned_systemic_or_radiotherapy_treatment, planned_surgery_treatment, planned_investigation, planned_clinical_trial_involvement |
-
-## Usage
-
-```python
-from oncoschema.prompt_builder import PromptBuilder
-
-# Initialize builder
-builder = PromptBuilder()
-
-# Build data generation prompt (with example)
-datagen_prompt = builder.build_datagen_prompt()
-
-# Build main/inference prompt (without example)
-main_prompt = builder.build_main_prompt()
-```
 
 ## License
 
