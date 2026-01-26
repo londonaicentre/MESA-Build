@@ -1,0 +1,172 @@
+name: assets build docs
+
+on:
+  workflow_call:
+    inputs:
+      assets_dir:
+        required: true
+        type: string
+      description:
+        required: true
+        type: string
+      base_model_path:
+        required: true
+        type: string
+      base_model:
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      assets_dir:
+        required: true
+      description:
+        required: true
+      base_model_path:
+        required: true
+      base_model:
+        required: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.assets_dir }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+
+      - name: Generate ER diagram
+        env:
+          BASE_MODEL_PATH: ${{ inputs.base_model_path }}
+          BASE_MODEL: ${{ inputs.base_model }}
+          ASSETS_DIR: ${{ inputs.assets_dir }}
+        run: |
+          DIRNAME=$(basename "$PWD")
+
+          sudo apt-get update && sudo apt-get install -y graphviz graphviz-dev python3-dev
+          uv add pygraphviz
+          uv add erdantic
+          uv run erdantic $BASE_MODEL_PATH.$BASE_MODEL -o _assets/$DIRNAME.png
+
+      - name: Deploy to Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          destination_dir: "schemas"
+          full_commit_message: "docs(schemas): update ${{ inputs.base_model }} diagram"
+          publish_dir: ${{ inputs.assets_dir }}/_assets
+          keep_files: true
+
+      - name: Add README header
+        env:
+          DESCRIPTION: ${{ inputs.description }}
+        run: |
+          DIRNAME=$(basename "$PWD")
+          TITLE=$(echo "$DIRNAME" | sed 's/\b\(.\)/\U\1/g')
+
+          echo "# $TITLE" > README.md
+          echo "" >> README.md
+
+          echo "$DESCRIPTION" >> README.md
+          echo "" >> README.md
+
+          echo "## Structure" >> README.md
+          echo "" >> README.md
+          echo "\`\`\`text"  >> README.md
+          echo "📁 $DIRNAME" >> README.md
+          echo "├── examples/            # Training examples showing document input and structured output" >> README.md
+          echo "├── schema.py            # Pydantic model for specifying expected output structure" >> README.md
+          echo "├── prompt_builder.py    # Prompt builder for data generation and inference" >> README.md
+          echo "├── prompt_datagen.txt   # Prompt template with example (for training data generation)" >> README.md
+          echo "├── prompt_main.txt      # Prompt template without example (for inference/deployment)" >> README.md
+          echo "└── py.typed             # Type checking marker" >> README.md
+          echo "\`\`\`" >> README.md
+          echo "" >> README.md
+      
+      - name: Add usage to README
+        run: |
+          DIRNAME=$(basename "$PWD")
+          
+          echo "## Usage" >> README.md
+          echo "" >> README.md
+          echo "\`\`\`python"  >> README.md
+          echo "from $DIRNAME.prompt_builder import PromptBuilder" >> README.md
+          echo "" >> README.md
+          echo "# Initialize builder" >> README.md
+          echo "builder = PromptBuilder()" >> README.md
+          echo "" >> README.md
+          echo "# Build data generation prompt (with example)" >> README.md
+          echo "datagen_prompt = builder.build_datagen_prompt()" >> README.md
+          echo "" >> README.md
+          echo "# Build main/inference prompt (without example)" >> README.md
+          echo "main_prompt = builder.build_main_prompt()" >> README.md
+          echo "\`\`\`" >> README.md
+          echo "" >> README.md
+      
+      - name: Add schema to README
+        run: |
+          DIRNAME=$(basename "$PWD")
+
+          echo "## Schema" >> README.md
+          echo "" >> README.md
+          echo "![Schema overview](https://londonaicentre.github.io/MESA-Build/schemas/$DIRNAME.png)" >> README.md
+          echo "" >> README.md
+        
+      - name: Add enum list to README
+        env:
+          BASE_MODEL_PATH: ${{ inputs.base_model_path }}
+          BASE_MODEL: ${{ inputs.base_model }}
+        run: |
+          uv add pydantic
+          uv run python << EOF
+
+          from pydantic import BaseModel
+          from enum import Enum
+          from typing import Union
+          from typing_extensions import get_origin, get_args
+          from src.$BASE_MODEL_PATH import $BASE_MODEL as base_model
+          import types
+
+          def unwrap_type(annotation):
+              base_type = get_origin(annotation)
+              args = get_args(annotation)
+              if base_type in (Union, types.UnionType):
+                  non_none_args = [arg for arg in args if arg is not type(None)]
+                  return unwrap_type(non_none_args[0]) if non_none_args else None
+              return unwrap_type(args[0]) if base_type is list and args else annotation
+
+          def get_enums(model_class):
+              enums = {}
+              visited = set()
+              def traverse(cls):
+                  if cls in visited or cls is BaseModel:
+                      return
+                  visited.add(cls)
+                  [traverse(parent) for parent in cls.__bases__]
+                  for field in cls.model_fields.values():
+                      unwrapped_type = unwrap_type(field.annotation)
+                      if isinstance(unwrapped_type, type):
+                          if issubclass(unwrapped_type, Enum):
+                              enums[unwrapped_type.__name__] = [e.value for e in unwrapped_type] 
+                          elif issubclass(unwrapped_type, BaseModel): 
+                              traverse(unwrapped_type)
+              traverse(model_class)
+              return enums
+          
+          with open('README.md', 'a') as f:
+              f.write('| Type | Values |\n')
+              f.write('| ---- | ------ |\n')
+              for enum_name, enum_values in get_enums(base_model).items():
+                f.write(f'| {enum_name} | {', '.join(enum_values)} |\n')
+              f.write('\n')
+
+          EOF
+
+      - name: Add license to README
+        run: |
+          echo "## License" >> README.md
+          echo "" >> README.md
+          echo "This project uses a proprietary license issued by Guy's and St Thomas' NHS Foundation Trust, enabling free (non-commercial) use by NHS organisations. See LICENSE files for details." >> README.md
