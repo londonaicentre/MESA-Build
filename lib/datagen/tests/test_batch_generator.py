@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from logging import Logger
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, mock_open
@@ -14,9 +13,6 @@ from tests.types import PathOperations
 class BatchGeneratorFixture(BedrockBatchGenerator):
     def generate_batch(self, sample_size: int, file_name: str = "foo.jsonl") -> str:
         return self._generate_batch(sample_size, file_name)
-
-    def get_logger(self) -> Logger:
-        return self._logger
 
 
 @dataclass
