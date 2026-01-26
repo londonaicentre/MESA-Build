@@ -78,7 +78,9 @@ class TestGetOutputFilename:
     def test_get_output_filename_valid_input_returns_formatted_string(self) -> None:
         assert (
             get_output_filename(
-                "foo_schema", "1_2_3", Document(content="foo", source="bar", timestamp="")
+                "foo_schema",
+                "1_2_3",
+                Document(content="foo", source="bar", timestamp=""),
             )
             == "foo_schema1_2_3_bar_acbd18db.json"
         )
@@ -86,10 +88,14 @@ class TestGetOutputFilename:
     def test_get_output_filename_same_src_returns_same_hash(self) -> None:
         assert (
             get_output_filename(
-                "foo_schema", "1_2_3", Document(content="foo", source="bar", timestamp="")
+                "foo_schema",
+                "1_2_3",
+                Document(content="foo", source="bar", timestamp=""),
             ).split("_")[-1]
             == get_output_filename(
-                "foo_schema", "1_2_3", Document(content="foo", source="baz", timestamp="")
+                "foo_schema",
+                "1_2_3",
+                Document(content="foo", source="baz", timestamp=""),
             ).split("_")[-1]
         )
 
