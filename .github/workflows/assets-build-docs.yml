@@ -42,11 +42,23 @@ jobs:
         env:
           BASE_MODEL_PATH: ${{ inputs.base_model_path }}
           BASE_MODEL: ${{ inputs.base_model }}
+          ASSETS_DIR: ${{ inputs.assets_dir }}
         run: |
+          DIRNAME=$(basename "$PWD")
+
           sudo apt-get update && sudo apt-get install -y graphviz graphviz-dev python3-dev
           uv add pygraphviz
           uv add erdantic
-          uv run erdantic $BASE_MODEL_PATH.$BASE_MODEL -o diagram.png
+          uv run erdantic $BASE_MODEL_PATH.$BASE_MODEL -o _assets/$DIRNAME.png
+
+      - name: Deploy to Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          destination_dir: "schemas"
+          full_commit_message: "docs(schemas): update ${{ inputs.base_model }} diagram"
+          publish_dir: ${{ inputs.assets_dir }}/_assets
+          keep_files: true
 
       - name: Add README header
         env:
@@ -76,7 +88,7 @@ jobs:
 
           echo "## Schema" >> README.md
           echo "" >> README.md
-          echo "![Schema overview](diagram.png)" >> README.md
+          echo "![Schema overview](https://londonaicentre.github.io/MESA-Build/schemas/$DIRNAME.png)" >> README.md
           echo "" >> README.md
         
       - name: Add enum list to README

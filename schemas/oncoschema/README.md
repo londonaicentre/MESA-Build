@@ -16,7 +16,7 @@ Schema package for oncology extraction from cancer clinical documents.
 
 ## Schema
 
-![Schema overview](diagram.png)
+![Schema overview](https://londonaicentre.github.io/MESA-Build/schemas/oncoschema.png)
 
 | Type | Values |
 | ---- | ------ |
