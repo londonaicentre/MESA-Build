@@ -45,9 +45,9 @@ class LLMGenerator:
         api_key: str,
         document_batches: list[str],
     ):
-        self.__logger: logging.Logger = logging.getLogger(__name__)
-        if not self.__logger.hasHandlers():
-            self.__logger.addHandler(logging.StreamHandler())
+        self._logger: logging.Logger = logging.getLogger(__name__)
+        if not self._logger.hasHandlers():
+            self._logger.addHandler(logging.StreamHandler())
 
         self.__system_prompt: str = system_prompt
         self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
@@ -65,7 +65,7 @@ class LLMGenerator:
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
-            self.__logger.info(f"Downloading batch: {batch_filename}")
+            self._logger.info(f"Downloading batch: {batch_filename}")
             DocumentLoader.download_and_extract(
                 filename=batch_filename,
                 output_folder=output_folder,
@@ -113,7 +113,7 @@ class LLMGenerator:
             else:
                 return False
         except Exception as e:
-            self.__logger.error(f"Error processing document {doc_path.name}: {e}")
+            self._logger.error(f"Error processing document {doc_path.name}: {e}")
             return False
 
     def generate(self, sample_size: int) -> None:
@@ -126,7 +126,7 @@ class LLMGenerator:
         os.makedirs(self.__output_folder_name, exist_ok=True)
         max_samples = len(self.__document_files)
         if sample_size > max_samples:
-            self.__logger.warning(
+            self._logger.warning(
                 f"Requested {sample_size} samples but only {max_samples} documents available. "
                 f"Will generate {max_samples} samples."
             )
@@ -152,7 +152,7 @@ class LLMGenerator:
 
                 # skip if exists
                 if os.path.exists(output_filename):
-                    self.__logger.info(
+                    self._logger.info(
                         f"Output already exists for {doc_path.name}, skipping"
                     )
                     processed += 1
@@ -167,11 +167,11 @@ class LLMGenerator:
                 processed += 1
 
             except Exception as e:
-                self.__logger.error(f"Error checking document {doc_path.name}: {e}")
+                self._logger.error(f"Error checking document {doc_path.name}: {e}")
                 failed_generations += 1
                 processed += 1
 
-        self.__logger.info(
+        self._logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
 
@@ -198,19 +198,19 @@ class LLMGenerator:
                     continue
 
                 # generate
-                self.__logger.info(f"Backfilling {doc_path.name}")
+                self._logger.info(f"Backfilling {doc_path.name}")
                 if self._generate_sample(doc_path):
                     successful_generations += 1
                 else:
                     failed_generations += 1
 
             except Exception as e:
-                self.__logger.error(f"Error processing document {doc_path.name}: {e}")
+                self._logger.error(f"Error processing document {doc_path.name}: {e}")
                 failed_generations += 1
 
         if successful_generations == 0 and failed_generations == 0:
-            self.__logger.info("No missing samples to backfill")
+            self._logger.info("No missing samples to backfill")
         else:
-            self.__logger.info(
+            self._logger.info(
                 f"Backfill complete: {successful_generations} successful, {failed_generations} failed"
             )
