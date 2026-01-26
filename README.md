@@ -1,10 +1,13 @@
 # MESA-Build
 
-MESA = and end-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
+End-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
+
+<img src="_assets/repo.png" alt="repo" width="500"/>
 
 ## Overview
 
 MESA-Build is an internal team monorepo for generating training data and fine-tuning LLMs, supporting:
+
 - Schema design and release
 - Training data generation and registration
 - Model fine-tuning and registration
@@ -14,8 +17,8 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 
 ```text
 📁 MESA-Build
-├── schemas/               # Schema packages (model-agnostic)
-├── lib/                  # Reusable functionality
+├── schemas/             # Schema packages (model-agnostic)
+├── lib/                 # Reusable functionality
 │   ├── datagen/         # Training data generation
 │   ├── finetune/        # LLM fine-tuning
 │   ├── types/           # Shared definitions
@@ -26,9 +29,9 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 
 ## Schema Packages
 
-**oncoschema**: Pydantic schema and prompts for extracting information from cancer clinical documents
+[**oncoschema**](schemas/oncoschema/src/oncoschema/schema.py): Pydantic schema and prompts for extracting information from cancer clinical documents
 
-**genoschema**: Pydantic schema and prompts for extracting biomarker information from NHS genomic laboratory hub reports.
+[**genoschema**](schemas/genoschema/src/genoschema/schema.py): Pydantic schema and prompts for extracting biomarker information from NHS genomic laboratory hub reports.
 
 Each schema package is independently versioned and published to PyPI
 
