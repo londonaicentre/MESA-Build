@@ -26,7 +26,7 @@ trainer = HuggingFaceLoRATrainer(
     aws_config={
         "bucket": "aicentre-nlpteam-mesa-build",
         "region": "eu-west-2",
-        "role": "...", # placeholder
+        "role": "SagemakerExecutionRole",
     },
     description="qwen-basic-test",
     instance_type="ml.g5.12xlarge",
