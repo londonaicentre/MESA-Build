@@ -61,14 +61,14 @@ class RunMocks:
 
 @pytest.fixture
 def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
-    mock_datetime = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
     return ConstructorMocks(mock_datetime)
 
 
 @pytest.fixture
 def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
-    mock_datetime = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
     return PrepareDataMocks(
         mocker.patch(
@@ -83,11 +83,11 @@ def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
 
 @pytest.fixture
 def launch_job_mocks(mocker: MockerFixture) -> LaunchJobMocks:
-    mock_datetime = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
-    mock_hf = mocker.patch("finetune.hf_estimator.HuggingFace")
+    mock_hf: MagicMock = mocker.patch("finetune.hf_estimator.HuggingFace")
     mock_hf.return_value.latest_training_job.name = "mesa-foo-bar"
-    mock_path = mocker.patch("finetune.hf_estimator.Path")
+    mock_path: MagicMock = mocker.patch("finetune.hf_estimator.Path")
     mock_path.return_value.parent.__truediv__.return_value = "/foo/scripts"
     return LaunchJobMocks(
         mock_hf,
@@ -99,7 +99,7 @@ def launch_job_mocks(mocker: MockerFixture) -> LaunchJobMocks:
 
 @pytest.fixture
 def run_mocks(mocker: MockerFixture) -> RunMocks:
-    mock_datetime = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
     return RunMocks(
         mocker.patch.object(
@@ -159,7 +159,7 @@ class TestConstructor:
     def test_init_sets_s3_output_path_with_full_uri(
         self, constructor_mocks: ConstructorMocks
     ) -> None:
-        trainer = create_trainer(
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(
             aws_config={"bucket": "xyzzy", "region": "thud", "role": "wibble"},
             description="wobble",
         )
@@ -173,7 +173,7 @@ class TestPrepareData:
     def test_prepare_data_calls_training_data_handler_prepare(
         self, prepare_data_mocks: PrepareDataMocks
     ) -> None:
-        trainer = create_trainer(
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(
             training_batch_names=["20260101-120000_corge-quux"],
             aws_config={"bucket": "foo-bar", "region": "foo-bar-1", "role": "foo"},
         )
@@ -192,7 +192,7 @@ class TestPrepareData:
     def test_prepare_data_calls_aws_upload_file(
         self, prepare_data_mocks: PrepareDataMocks
     ) -> None:
-        trainer = create_trainer(
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(
             aws_config={"bucket": "foo-bar", "region": "foo-bar-1", "role": "bar"},
         )
         trainer.prepare_data()
@@ -207,7 +207,7 @@ class TestPrepareData:
     def test_prepare_data_returns_s3_path(
         self, prepare_data_mocks: PrepareDataMocks
     ) -> None:
-        trainer = create_trainer(
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(
             aws_config={"bucket": "foo-bar", "region": "foo-bar-1", "role": "baz"},
         )
         assert (
@@ -236,7 +236,7 @@ class TestLaunchJob:
     def test_launch_job_creates_huggingface_estimator(
         self, launch_job_mocks: LaunchJobMocks
     ) -> None:
-        trainer = create_trainer(
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(
             hyperparameters={"base_model": "foo-bar/Baz-1-2qux"},
             aws_config={
                 "bucket": "foo-bar",

@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, mock_open
 
 import pytest
@@ -136,7 +137,7 @@ class TestSampleValidation:
     def test_prepare_system_prompt_mismatch_skips_sample(
         self, prepare_mocks: PrepareMocks
     ) -> None:
-        mismatched_sample = {
+        mismatched_sample: dict[str, Any] = {
             "messages": [
                 {"role": "system", "content": "qux"},
                 {"role": "user", "content": "quux"},
@@ -159,7 +160,7 @@ class TestSampleValidation:
     def test_prepare_invalid_schema_skips_sample(
         self, prepare_mocks: PrepareMocks
     ) -> None:
-        invalid_schema_sample = {
+        invalid_schema_sample: dict[str, Any] = {
             "messages": [
                 {"role": "system", "content": "foo"},
                 {"role": "user", "content": "bar"},
