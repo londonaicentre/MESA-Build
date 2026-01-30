@@ -30,6 +30,7 @@ trainer = HuggingFaceLoRATrainer(
     },
     description="qwen-basic-test",
     instance_type="ml.g5.xlarge",
+    # ml.g5.xlarge = 1xA10G w/ 24GB VRAM 
     # ml.g5.48xlarge = 8xA10G w/ 192GB VRAM (needs >0 instances)
     # ml.g5.12xlarge = 4xA10G w/ 96GB VRAM (works w/ 0 instances)
     # A100 instances unavailable in EU without request?
