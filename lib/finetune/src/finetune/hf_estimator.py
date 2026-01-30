@@ -47,9 +47,9 @@ class HuggingFaceLoRATrainer:
         description: str,
         instance_type: str = "ml.g5.xlarge",
         instance_count: int = 1,
-        transformers_version: str = "4.36",
-        pytorch_version: str = "2.1",
-        py_version: str = "py310",
+        transformers_version: str = "4.56",
+        pytorch_version: str = "2.8",
+        py_version: str = "py312",
     ):
         self.schema = schema
         self.prompt_builder = prompt_builder
