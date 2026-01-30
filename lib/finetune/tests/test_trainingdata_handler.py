@@ -8,8 +8,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from finetune.trainingdata_handler import TrainingDataHandler
-
-from conftest import SchemaFixture
+from fixtures import SchemaFixture
 
 
 @dataclass

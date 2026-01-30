@@ -7,8 +7,7 @@ from pytest_mock import MockerFixture
 
 from finetune.hf_estimator import HuggingFaceLoRATrainer
 from utils.prompt import BasePromptBuilder
-
-from conftest import SchemaFixture
+from fixtures import SchemaFixture
 
 
 class PromptBuilderFixture(BasePromptBuilder):
