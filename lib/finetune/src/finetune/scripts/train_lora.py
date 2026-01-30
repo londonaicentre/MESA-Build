@@ -9,7 +9,7 @@ https://huggingface.co/docs/sagemaker/train
 import argparse
 import os
 from typing import cast
-from datasets import load_dataset
+from datasets import load_dataset # type: ignore
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 from peft import LoraConfig, PeftModel, get_peft_model
 from trl import SFTTrainer
