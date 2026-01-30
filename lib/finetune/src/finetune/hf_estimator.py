@@ -45,7 +45,7 @@ class HuggingFaceLoRATrainer:
         hyperparameters: dict[str, Any],
         aws_config: dict[str, str],
         description: str,
-        instance_type: str = "ml.p4d.24xlarge",  # 4 x A100s
+        instance_type: str = "ml.g5.xlarge",
         instance_count: int = 1,
         transformers_version: str = "4.36",
         pytorch_version: str = "2.1",
