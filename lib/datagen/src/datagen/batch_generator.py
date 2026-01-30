@@ -46,9 +46,9 @@ class BedrockBatchGenerator:
         document_batches: list[str],
     ):
         self.__config: Config = Config()
-        self.__logger: logging.Logger = logging.getLogger(__name__)
-        if not self.__logger.hasHandlers():
-            self.__logger.addHandler(logging.StreamHandler())
+        self._logger: logging.Logger = logging.getLogger(__name__)
+        if not self._logger.hasHandlers():
+            self._logger.addHandler(logging.StreamHandler())
 
         self.__system_prompt: str = system_prompt
         self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
@@ -69,7 +69,7 @@ class BedrockBatchGenerator:
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
-            self.__logger.info(f"Downloading batch: {batch_filename}")
+            self._logger.info(f"Downloading batch: {batch_filename}")
             DocumentLoader.download_and_extract(
                 filename=batch_filename,
                 output_folder=output_folder,
@@ -91,7 +91,7 @@ class BedrockBatchGenerator:
         """
         max_samples = len(self.__document_files)
         if sample_size > max_samples:
-            self.__logger.warning(
+            self._logger.warning(
                 f"Requested {sample_size} samples but only {max_samples} documents available. "
                 f"Will create {max_samples} samples."
             )
@@ -111,7 +111,7 @@ class BedrockBatchGenerator:
                     file=outfile,
                 )
 
-        self.__logger.info(f"Generated batch file with {sample_size} entries")
+        self._logger.info(f"Generated batch file with {sample_size} entries")
         return file_name
 
     def generate_via_batch(
@@ -210,10 +210,10 @@ class BedrockBatchGenerator:
                         failed_generations += 1
                 except Exception as e:
                     failed_generations += 1
-                    self.__logger.error(
+                    self._logger.error(
                         f"Error processing batch output {sample_id}: {e}"
                     )
-        self.__logger.info(
+        self._logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
         return successful_generations, failed_generations

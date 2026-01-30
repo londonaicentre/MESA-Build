@@ -27,7 +27,7 @@ jobs:
 
           # Get the version from main branch
           git fetch origin main
-          git show origin/main:assets/oncollama/pyproject.toml > /tmp/main-pyproject.toml
+          git show origin/main:schemas/oncoschema/pyproject.toml > /tmp/main-pyproject.toml
           MAIN_VERSION=$(grep '^version = ' /tmp/main-pyproject.toml | cut -d'"' -f2)
 
           if [ "$CURRENT_VERSION" == "$MAIN_VERSION" ]; then

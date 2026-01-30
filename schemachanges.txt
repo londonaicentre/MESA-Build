@@ -1,6 +1,0 @@
-oncoschema
-MSS = "mss" -> MS_STABLE = "ms_stable"
-Removed: NONE = "none" enum from optional fields
-
-genoschema
-TestType enum all lowercase

@@ -12,34 +12,51 @@ Training data generation for MESA models.
 
 - (Batch inference only) Obtain information on the name of an S3 bucket to upload a batch specification to.
 
-- Enable [one of the target models](src/claudedatagen/config/config.json) on the AWS Bedrock interface. Ask an account manager if not available already.
-
 ## Usage
 
-1. Generate a bootstrap file:
+1. Download documents from batch
 
     ```python
-    from datagen.sample_generator import run_bootstrap_file_generation
-    run_bootstrap_file_generation(
-        <System prompt>,
-        <User prompt function>, 
-        <Customisation instruction>,
-        <Target model name>, 
-        <Bedrock API key>
+    from datagen import BedrockBatchGenerator
+    gen = BedrockBatchGenerator(
+        system_prompt =
+        user_prompt_function =
+        schema =
+        schema_name =
+        model_name =
+        document_batches =
     )
     ```
 
-2. Generate synthetic input data, e.g.:
+2. Start batch generation
 
     ```python
-    from datagen.sample_generator import run_sample_generation
-    run_sample_generation(
-        <System prompt>,
-        <User prompt function>,
-        <Target model name>,
-        <Bootstrap file>,
-        <Number of samples>,
-        <Bedrock API key>,
-        <Schema>
+    gen.generate_via_batch(
+        sample_size =
+        bucket = 
+        bedrock_execution_role =
+    )
+    ```
+
+3. Download and parse batch outputs
+
+    ```python
+    gen.extract_batch_output(
+        bucket = 
+        file_name =
+    )
+    ```
+
+4. Upload formatted document:schema pairs as training data
+
+    ```python
+    from datagen import TrainingDataUploader
+    s3_uri = TrainingDataUploader.upload(
+        schema =
+        schema_name =
+        system_prompt =
+        short_description =
+        long_description =
+        input_folder =
     )
     ```
