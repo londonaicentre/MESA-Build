@@ -9,10 +9,10 @@ https://huggingface.co/docs/sagemaker/train
 import argparse
 import os
 from typing import cast
-from datasets import load_dataset # type: ignore
+from datasets import load_dataset  # type: ignore
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 from peft import LoraConfig, PeftModel, get_peft_model
-from trl import SFTTrainer
+from trl import SFTTrainer, SFTConfig
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     peft_model.print_trainable_parameters()
 
     # training
-    training_args = TrainingArguments(
+    training_args = SFTConfig(
         output_dir="/opt/ml/model",
         num_train_epochs=args.num_epochs,
         per_device_train_batch_size=args.per_device_train_batch_size,
@@ -74,15 +74,15 @@ if __name__ == "__main__":
         save_total_limit=1,  # keep only best checkpoint
         bf16=True,
         report_to="none",
+        dataset_text_field="messages",  # openAI messages format
+        max_length=args.max_seq_length,
     )
 
     trainer = SFTTrainer(
         model=peft_model,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         train_dataset=dataset,
         args=training_args,
-        max_seq_length=args.max_seq_length,
-        dataset_text_field="messages",  # openAI messages format
     )
 
     trainer.train()
