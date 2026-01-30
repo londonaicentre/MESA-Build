@@ -20,7 +20,9 @@ if __name__ == "__main__":
     parser.add_argument("--learning_rate", type=float, default=2e-4)
     parser.add_argument("--lora_r", type=int, default=16)
     parser.add_argument("--lora_alpha", type=int, default=32)
-    parser.add_argument("--lora_target_modules", type=str, default="q_proj,k_proj,v_proj,o_proj")
+    parser.add_argument(
+        "--lora_target_modules", type=str, default="q_proj,k_proj,v_proj,o_proj"
+    )
     parser.add_argument("--per_device_train_batch_size", type=int, default=4)
     parser.add_argument("--max_seq_length", type=int, default=2048)
     args = parser.parse_args()
@@ -30,9 +32,7 @@ if __name__ == "__main__":
     train_data_path = os.environ["SM_CHANNEL_TRAINING"]
     print(f"Loading data from: {train_data_path}")
     dataset = load_dataset(
-        "json",
-        data_files=f"{train_data_path}/train.jsonl",
-        split="train"
+        "json", data_files=f"{train_data_path}/train.jsonl", split="train"
     )
     print(f"Training samples: {len(dataset)}")
 

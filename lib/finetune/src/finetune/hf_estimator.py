@@ -44,7 +44,7 @@ class HuggingFaceLoRATrainer:
         hyperparameters: dict[str, Any],
         aws_config: dict[str, str],
         description: str,
-        instance_type: str = "ml.p4d.24xlarge", # 4 x A100s
+        instance_type: str = "ml.p4d.24xlarge",  # 4 x A100s
         instance_count: int = 1,
         transformers_version: str = "4.36",
         pytorch_version: str = "2.1",
@@ -64,7 +64,9 @@ class HuggingFaceLoRATrainer:
 
         # job ID
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.job_id = f"{timestamp}-{description}" #sagemaker does not like underscores!
+        self.job_id = (
+            f"{timestamp}-{description}"  # sagemaker does not like underscores!
+        )
 
         # pass from an aws config dict
         self.bucket = aws_config["bucket"]
