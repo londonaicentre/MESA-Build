@@ -66,9 +66,7 @@ class TrainingDataHandler:
             )
 
             jsonl_files = [
-                obj["Key"]
-                for obj in objects
-                if obj["Key"].endswith(".jsonl")
+                obj["Key"] for obj in objects if obj["Key"].endswith(".jsonl")
             ]
 
             if len(jsonl_files) == 0:
@@ -143,8 +141,6 @@ class TrainingDataHandler:
             for sample in all_samples:
                 f.write(json.dumps(sample) + "\n")
 
-        logger.info(
-            f"Prepared {len(all_samples)} total samples in {output_path}"
-        )
+        logger.info(f"Prepared {len(all_samples)} total samples in {output_path}")
 
         return str(output_path)

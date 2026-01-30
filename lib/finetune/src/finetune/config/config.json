@@ -1,9 +1,0 @@
-{
-    "llama": {
-        "model": "meta-textgeneration-llama-3-1-8b-instruct",
-        "version": "*",
-        "region": "eu-west-2",
-        "template_filename": "template.json",
-        "train_filename": "train.jsonl"
-    }
-}

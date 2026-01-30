@@ -8,9 +8,10 @@ https://huggingface.co/docs/sagemaker/train
 
 import argparse
 import os
-from datasets import load_dataset
+from typing import cast
+from datasets import load_dataset # type: ignore
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, PeftModel, get_peft_model
 from trl import SFTTrainer
 
 if __name__ == "__main__":
@@ -20,7 +21,9 @@ if __name__ == "__main__":
     parser.add_argument("--learning_rate", type=float, default=2e-4)
     parser.add_argument("--lora_r", type=int, default=16)
     parser.add_argument("--lora_alpha", type=int, default=32)
-    parser.add_argument("--lora_target_modules", type=str, default="q_proj,k_proj,v_proj,o_proj")
+    parser.add_argument(
+        "--lora_target_modules", type=str, default="q_proj,k_proj,v_proj,o_proj"
+    )
     parser.add_argument("--per_device_train_batch_size", type=int, default=4)
     parser.add_argument("--max_seq_length", type=int, default=2048)
     args = parser.parse_args()
@@ -30,9 +33,7 @@ if __name__ == "__main__":
     train_data_path = os.environ["SM_CHANNEL_TRAINING"]
     print(f"Loading data from: {train_data_path}")
     dataset = load_dataset(
-        "json",
-        data_files=f"{train_data_path}/train.jsonl",
-        split="train"
+        "json", data_files=f"{train_data_path}/train.jsonl", split="train"
     )
     print(f"Training samples: {len(dataset)}")
 
@@ -57,10 +58,10 @@ if __name__ == "__main__":
         task_type="CAUSAL_LM",
         target_modules=target_modules,
     )
-    model = get_peft_model(model, peft_config)
+    peft_model = cast(PeftModel, get_peft_model(model, peft_config))
 
     print("Trainable parameters:")
-    model.print_trainable_parameters()
+    peft_model.print_trainable_parameters()
 
     # training
     training_args = TrainingArguments(
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     )
 
     trainer = SFTTrainer(
-        model=model,
+        model=peft_model,
         tokenizer=tokenizer,
         train_dataset=dataset,
         args=training_args,

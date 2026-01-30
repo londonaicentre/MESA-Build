@@ -7,10 +7,11 @@ Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from pydantic import BaseModel
 from sagemaker.huggingface import HuggingFace
+from sagemaker.estimator import _TrainingJob
 
 from finetune.trainingdata_handler import TrainingDataHandler
 from utils.aws import AWS
@@ -44,7 +45,7 @@ class HuggingFaceLoRATrainer:
         hyperparameters: dict[str, Any],
         aws_config: dict[str, str],
         description: str,
-        instance_type: str = "ml.p4d.24xlarge", # 4 x A100s
+        instance_type: str = "ml.g5.xlarge",
         instance_count: int = 1,
         transformers_version: str = "4.36",
         pytorch_version: str = "2.1",
@@ -64,7 +65,9 @@ class HuggingFaceLoRATrainer:
 
         # job ID
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.job_id = f"{timestamp}-{description}" #sagemaker does not like underscores!
+        self.job_id = (
+            f"{timestamp}-{description}"  # sagemaker does not like underscores!
+        )
 
         # pass from an aws config dict
         self.bucket = aws_config["bucket"]
@@ -135,7 +138,10 @@ class HuggingFaceLoRATrainer:
         logger.info("Launching SageMaker training job")
         estimator.fit({"training": training_s3_path}, wait=False)
 
-        job_name = estimator.latest_training_job.name
+        training_job = cast(_TrainingJob | None, estimator.latest_training_job)
+        if training_job is None:
+            raise RuntimeError("SageMaker training job failed to launch") 
+        job_name = training_job.name
         logger.info(f"Job launched: {job_name}")
 
         return job_name

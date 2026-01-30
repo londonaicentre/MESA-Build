@@ -1,6 +1,6 @@
-# SchemaLlama: Fine-tune
+# MESA: Fine-tune
 
-Fine-tune a Llama model on AWS Sagemaker.
+Fine-tune a MESA model on AWS Sagemaker.
 
 ## Getting started
 
@@ -13,12 +13,27 @@ Fine-tune a Llama model on AWS Sagemaker.
 1. Start a fine-tuning run:
 
 ```python
-from finetune.llama import run_finetune
-run_finetune(
-    <System prompt>,
-    <Samples file>, 
-    <Bucket>, 
-    <Sagemaker execution role>, 
-    <Instance flavour>
-)
+from finetune import HuggingFaceLoRATrainer
+HuggingFaceLoRATrainer(
+    schema=,
+    prompt_builder=,
+    training_batch_names=[],
+    hyperparameters={
+        "base_model":,
+        "num_epochs":,
+        "learning_rate":,
+        "lora_r":,
+        "lora_alpha":,
+        "lora_target_modules":,
+        "per_device_train_batch_size":,
+        "max_seq_length":,
+    },
+    aws_config={
+        "bucket":,
+        "region":,
+        "role":,
+    },
+    description=,
+    instance_type=,
+).run()
 ```
