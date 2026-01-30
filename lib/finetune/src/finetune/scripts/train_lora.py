@@ -8,9 +8,10 @@ https://huggingface.co/docs/sagemaker/train
 
 import argparse
 import os
+from typing import cast
 from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, PeftModel, get_peft_model
 from trl import SFTTrainer
 
 if __name__ == "__main__":
@@ -57,10 +58,10 @@ if __name__ == "__main__":
         task_type="CAUSAL_LM",
         target_modules=target_modules,
     )
-    model = get_peft_model(model, peft_config)
+    peft_model = cast(PeftModel, get_peft_model(model, peft_config))
 
     print("Trainable parameters:")
-    model.print_trainable_parameters()
+    peft_model.print_trainable_parameters()
 
     # training
     training_args = TrainingArguments(
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     )
 
     trainer = SFTTrainer(
-        model=model,
+        model=peft_model,
         tokenizer=tokenizer,
         train_dataset=dataset,
         args=training_args,
