@@ -1,6 +1,6 @@
-# SchemaLlama: Fine-tune
+# MESA: Fine-tune
 
-Fine-tune a Llama model on AWS Sagemaker.
+Fine-tune a MESA model on AWS Sagemaker.
 
 ## Getting started
 

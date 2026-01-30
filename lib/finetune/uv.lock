@@ -912,6 +912,49 @@ dev = [
 ]
 
 [[package]]
+name = "londonaicentre-mesa-finetune"
+version = "1.0.0"
+source = { editable = "." }
+dependencies = [
+    { name = "accelerate" },
+    { name = "datasets" },
+    { name = "londonaicentre-mesa-datagen" },
+    { name = "londonaicentre-mesa-utils" },
+    { name = "peft" },
+    { name = "sagemaker" },
+    { name = "transformers" },
+    { name = "trl" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-mock" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "accelerate", specifier = ">=0.25.0" },
+    { name = "datasets", specifier = ">=2.15.0" },
+    { name = "londonaicentre-mesa-datagen", editable = "../datagen" },
+    { name = "londonaicentre-mesa-utils", editable = "../utils" },
+    { name = "peft", specifier = ">=0.7.0" },
+    { name = "sagemaker", specifier = "==2.254.1" },
+    { name = "transformers", specifier = ">=4.36.0" },
+    { name = "trl", specifier = ">=0.7.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "mypy", specifier = ">=1.18.2" },
+    { name = "pytest", specifier = ">=8.0.0" },
+    { name = "pytest-mock", specifier = ">=3.14.0" },
+    { name = "ruff", specifier = ">=0.14.6" },
+]
+
+[[package]]
 name = "londonaicentre-mesa-types"
 version = "2.0.0"
 source = { editable = "../types" }
@@ -958,49 +1001,6 @@ dev = [
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-markdown", specifier = ">=3.10.0.20251106" },
-]
-
-[[package]]
-name = "londonaicentre-schemallama-finetune"
-version = "1.0.0"
-source = { editable = "." }
-dependencies = [
-    { name = "accelerate" },
-    { name = "datasets" },
-    { name = "londonaicentre-mesa-datagen" },
-    { name = "londonaicentre-mesa-utils" },
-    { name = "peft" },
-    { name = "sagemaker" },
-    { name = "transformers" },
-    { name = "trl" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "pytest-mock" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "accelerate", specifier = ">=0.25.0" },
-    { name = "datasets", specifier = ">=2.15.0" },
-    { name = "londonaicentre-mesa-datagen", editable = "../datagen" },
-    { name = "londonaicentre-mesa-utils", editable = "../utils" },
-    { name = "peft", specifier = ">=0.7.0" },
-    { name = "sagemaker", specifier = "==2.254.1" },
-    { name = "transformers", specifier = ">=4.36.0" },
-    { name = "trl", specifier = ">=0.7.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.18.2" },
-    { name = "pytest", specifier = ">=8.0.0" },
-    { name = "pytest-mock", specifier = ">=3.14.0" },
-    { name = "ruff", specifier = ">=0.14.6" },
 ]
 
 [[package]]
