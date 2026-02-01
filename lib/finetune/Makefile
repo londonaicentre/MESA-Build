@@ -1,5 +1,5 @@
 test:
-	mypy src/
+	mypy src/ tests/
 	pytest tests
 
 prettier:
