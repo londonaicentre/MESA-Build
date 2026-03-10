@@ -104,7 +104,9 @@ class TrainingDataHandler:
 
                         # vs expected system prompt
                         sample_system_prompt = sample["messages"][0]["content"]
-                        if sample_system_prompt != system_prompt:
+                        if sample_system_prompt.replace("\n", "").replace(
+                            " ", ""
+                        ) != system_prompt.replace("\n", "").replace(" ", ""):
                             raise ValueError("System prompt mismatch")
 
                         # vs schema
