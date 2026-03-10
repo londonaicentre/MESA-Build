@@ -247,6 +247,7 @@ class TestLaunchJob:
         launch_job_mocks.huggingface.assert_called_once_with(
             entry_point="train_lora.py",
             source_dir="/foo/scripts",
+            code_location="s3://foo-bar/jobs/train/20260101-120000-foo",
             role="arn:aws:iam::123:role/foo",
             instance_type="foo.bar1.2baz",
             instance_count=1,
