@@ -196,22 +196,33 @@ class HuggingFaceLoRATrainer:
     def merge(self, source_folder: str, target_folder: str) -> bool:
         if Path(f"{target_folder}/model.safetensors").exists():
             return True
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
         from peft import PeftModel
 
-        base = AutoModelForCausalLM.from_pretrained(self.hyperparameters["base_model"])
-        model = PeftModel.from_pretrained(base, source_folder)
+        base = AutoModelForCausalLM.from_pretrained(
+            self.hyperparameters["base_model"], dtype=torch.bfloat16
+        )
+        model = PeftModel.from_pretrained(
+            base, source_folder, autocast_adapter_dtype=False
+        )
         merged = model.merge_and_unload()
         merged.save_pretrained(target_folder)
         AutoTokenizer.from_pretrained(source_folder).save_pretrained(target_folder)
         return True
 
-    def upload_output(self, target_folder: str, model_card: ModelCard, bucket: str = "aicentre-nlpteam-mesa-public") -> bool:
+    def upload_output(
+        self,
+        target_folder: str,
+        model_card: ModelCard,
+        bucket: str = "aicentre-nlpteam-mesa-public",
+    ) -> bool:
         target_path = Path(target_folder)
         archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
         archive_path = target_path.parent / archive_name
         if not archive_path.exists():
             import io
+
             with tarfile.open(archive_path, "w:gz") as tar:
                 for item in target_path.iterdir():
                     tar.add(item, arcname=item.name)
@@ -224,7 +235,7 @@ class HuggingFaceLoRATrainer:
             file_name=str(archive_path),
             bucket=bucket,
             object_name=archive_name,
-            path=self.model_name
+            path=self.model_name,
         )
         if not success:
             raise ValueError("Failed to upload merged model weights")
@@ -243,7 +254,9 @@ class HuggingFaceLoRATrainer:
             output_schema=self.schema,
         )
 
-    def post_process(self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None) -> bool:
+    def post_process(
+        self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None
+    ) -> bool:
         model_folder = f"data/models/{self.description}"
         source_folder = Path(f"{model_folder}/source")
         source_folder.mkdir(parents=True, exist_ok=True)
