@@ -7,6 +7,7 @@ Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator
 import logging
 from datetime import datetime
 from pathlib import Path
+import tarfile
 from typing import Any, cast
 
 from pydantic import BaseModel
@@ -169,3 +170,33 @@ class HuggingFaceLoRATrainer:
         print(f"Job launched: {job_name}")
         self.last_job_name = job_name
         return job_name
+
+    def download_output(
+        self, source_folder: str, s3_output_path: str, job_name: str
+    ) -> bool:
+        source_file: Path = Path(f"{source_folder}/model.tar.gz")
+        if source_file.exists():
+            return True
+        success = AWS.download_file(
+            region_name=self.region,
+            bucket=self.bucket,
+            file_name=str(source_file),
+            object_name="model.tar.gz",
+            path=f"{s3_output_path}/{job_name}/output",
+        )
+        if not success:
+            raise ValueError("Failed to download training output")
+        with tarfile.open(source_file, "r:*") as tar:
+            tar.extractall(source_file.parent)
+        return True
+
+    def post_process(self, s3_output_path: str | None, job_name: str | None) -> bool:
+        model_folder = f"data/models/{self.description}"
+        source_folder = Path(f"{model_folder}/source")
+        source_folder.mkdir(parents=True, exist_ok=True)
+        s3_output_path = s3_output_path or self.s3_output_path
+        job_name = job_name or self.last_job_name
+        if not job_name:
+            raise ValueError("no last job available and no job name specified")
+        if not self.download_output(str(source_folder), str(s3_output_path), job_name):
+            raise ValueError("downloading low-rank weights failed")
