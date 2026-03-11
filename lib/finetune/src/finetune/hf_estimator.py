@@ -124,6 +124,7 @@ class HuggingFaceLoRATrainer:
         estimator = HuggingFace(
             entry_point="train_lora.py",
             source_dir=str(scripts_dir),
+            code_location=f"s3://{self.bucket}/jobs/train/{self.job_id}",
             role=self.role,
             instance_type=self.instance_type,
             instance_count=self.instance_count,
@@ -140,7 +141,7 @@ class HuggingFaceLoRATrainer:
 
         training_job = cast(_TrainingJob | None, estimator.latest_training_job)
         if training_job is None:
-            raise RuntimeError("SageMaker training job failed to launch") 
+            raise RuntimeError("SageMaker training job failed to launch")
         job_name = training_job.name
         logger.info(f"Job launched: {job_name}")
 

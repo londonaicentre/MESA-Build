@@ -4,11 +4,13 @@ version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
     "londonaicentre-mesa-datagen",
+    "londonaicentre-mesa-finetune",
     "londonaicentre-genoschema",
     "python-dotenv>=1.2.1",
 ]
 [tool.uv.sources]
 londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
+londonaicentre-mesa-finetune = { path = "../../lib/finetune", editable = true }
 londonaicentre-genoschema = { path = "../../schemas/genoschema", editable = true }
 
 [dependency-groups]
