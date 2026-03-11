@@ -74,7 +74,10 @@ class HuggingFaceLoRATrainer:
         self.region = aws_config["region"]
         self.role = aws_config["role"]
         self.s3_input_path = f"jobs/train/{self.job_id}/input"
-        self.s3_output_path = f"s3://{self.bucket}/jobs/train/{self.job_id}/output"  # sagemaker expects full uri
+        self.s3_output_path = f"jobs/train/{self.job_id}/output"
+        self.s3_full_output_path = (
+            f"s3://{self.bucket}/{self.s3_output_path}"  # sagemaker expects full uri
+        )
 
     def prepare_data(self) -> str:
         """
@@ -131,7 +134,7 @@ class HuggingFaceLoRATrainer:
             transformers_version=self.transformers_version,
             pytorch_version=self.pytorch_version,
             py_version=self.py_version,
-            output_path=self.s3_output_path,
+            output_path=self.s3_full_output_path,
             base_job_name=f"mesa-{self.job_id}",
             hyperparameters=self.hyperparameters,
         )

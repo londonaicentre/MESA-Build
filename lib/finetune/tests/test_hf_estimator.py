@@ -26,7 +26,7 @@ class HuggingFaceLoRATrainerFixture(HuggingFaceLoRATrainer):
         return self.s3_input_path
 
     def get_s3_output_path(self) -> str:
-        return self.s3_output_path
+        return self.s3_full_output_path
 
 
 @dataclass
