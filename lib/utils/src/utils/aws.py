@@ -35,6 +35,7 @@ class AWS:
         bucket: str,
         object_name: str | None = None,
         path: str | None = None,
+        force: bool = False,
     ) -> bool:
         """Upload a file to S3
 
@@ -46,6 +47,8 @@ class AWS:
                 If absent, file_name is used.
             path (str, optional): the path to the uploaded object. If absent,
                 object_name is used.
+            force (bool, optional): Whether to overwrite if object exists.
+                Defaults to False.
 
         Returns:
             bool: Whether the upload was successful
@@ -53,9 +56,21 @@ class AWS:
         """
         if object_name is None:
             object_name = os.path.basename(file_name)
+        full_path: str = path + "/" + object_name if path else object_name
+        try:
+            boto3.client("s3", region_name=region_name).head_object(
+                Bucket=bucket, Key=full_path
+            )
+            if not force:
+                return True
+        except ClientError as e:
+            if e.response["Error"]["Code"] == "404":
+                pass
+            else:
+                raise
         try:
             boto3.client("s3", region_name=region_name).upload_file(
-                file_name, bucket, path + "/" + object_name if path else object_name
+                file_name, bucket, full_path
             )
         except ClientError as e:
             logger.error(e)
