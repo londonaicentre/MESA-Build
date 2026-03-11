@@ -42,11 +42,16 @@ class ModelCard(BaseModel):
     def schema_version(self) -> str:
         return importlib.metadata.version(self.schema_name)
 
+    def __get_yaml_str(self) -> str:
+        return yaml.dump(
+            self.model_dump(exclude={"major", "minor", "patch", "output_schema"}),
+            default_flow_style=False,
+            sort_keys=False,
+        )
+
     def to_yaml(self, path: str = "model_card.yml") -> None:
         with Path(path).open("w") as file:
-            yaml.dump(
-                self.model_dump(exclude={"major", "minor", "patch", "output_schema"}),
-                file,
-                default_flow_style=False,
-                sort_keys=False,
-            )
+            file.write(self.__get_yaml_str())
+
+    def to_yaml_bytes(self) -> bytes:
+        return self.__get_yaml_str().encode("utf-8")
