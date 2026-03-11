@@ -239,6 +239,7 @@ class HuggingFaceLoRATrainer:
         )
         if not success:
             raise ValueError("Failed to upload merged model weights")
+        return True
 
     def create_model_card(
         self, major: int, minor: int, patch: int, model_description: str | None = None
@@ -270,5 +271,5 @@ class HuggingFaceLoRATrainer:
         target_folder.mkdir(parents=True, exist_ok=True)
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
-        self.upload_output(target_folder, model_card)
+        self.upload_output(str(target_folder), model_card)
         return True
