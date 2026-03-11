@@ -45,6 +45,7 @@ class HuggingFaceLoRATrainer:
         training_batch_names: list[str],
         hyperparameters: dict[str, Any],
         aws_config: dict[str, str],
+        model_name: str,
         description: str,
         instance_type: str = "ml.g5.xlarge",
         instance_count: int = 1,
@@ -57,6 +58,7 @@ class HuggingFaceLoRATrainer:
         self.training_batch_names = training_batch_names
         self.hyperparameters = hyperparameters
         self.aws_config = aws_config
+        self.model_name = model_name
         self.description = description
         self.instance_type = instance_type
         self.instance_count = instance_count

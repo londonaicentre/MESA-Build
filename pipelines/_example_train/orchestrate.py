@@ -28,6 +28,7 @@ trainer = HuggingFaceLoRATrainer(
         "region": "eu-west-2",
         "role": "SagemakerExecutionRole",
     },
+    model_name="qwen-basic-test",
     description="qwen-basic-test",
     instance_type="ml.g5.xlarge",
     # ml.g5.xlarge = 1xA10G w/ 24GB VRAM 
