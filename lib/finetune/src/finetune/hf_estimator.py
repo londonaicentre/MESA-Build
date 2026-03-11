@@ -78,6 +78,7 @@ class HuggingFaceLoRATrainer:
         self.s3_full_output_path = (
             f"s3://{self.bucket}/{self.s3_output_path}"  # sagemaker expects full uri
         )
+        self.last_job_name: str | None = None
 
     def prepare_data(self) -> str:
         """
@@ -166,5 +167,5 @@ class HuggingFaceLoRATrainer:
         job_name = self.launch_job(training_s3_path)
 
         print(f"Job launched: {job_name}")
-
+        self.last_job_name = job_name
         return job_name
