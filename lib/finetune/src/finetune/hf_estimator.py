@@ -10,6 +10,7 @@ from pathlib import Path
 import tarfile
 from typing import Any, cast
 
+from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
 from sagemaker.huggingface import HuggingFace
 from sagemaker.estimator import _TrainingJob
@@ -204,6 +205,20 @@ class HuggingFaceLoRATrainer:
         merged.save_pretrained(target_folder)
         AutoTokenizer.from_pretrained(source_folder).save_pretrained(target_folder)
         return True
+
+    def create_model_card(
+        self, major: int, minor: int, patch: int, model_description: str | None = None
+    ) -> ModelCard:
+        return ModelCard(
+            base_model_hf=self.hyperparameters["base_model"],
+            model_name=self.model_name,
+            major=major,
+            minor=minor,
+            patch=patch,
+            model_description=model_description or self.description,
+            training_data=[self.s3_input_path],
+            output_schema=self.schema,
+        )
 
     def post_process(self, s3_output_path: str | None, job_name: str | None) -> bool:
         model_folder = f"data/models/{self.description}"
