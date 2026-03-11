@@ -42,7 +42,7 @@ class AWS:
             object_name (str, optional): the name of the uploaded object.
                 If absent, file_name is used.
             path (str, optional): the path to the uploaded object. If absent,
-                file_name is used.
+                object_name is used.
 
         Returns:
             bool: Whether the upload was successful
@@ -76,7 +76,7 @@ class AWS:
             object_name (str, optional): the name of the object to download.
                 If absent, file_name is used.
             path (str, optional): the path to the target object. If absent,
-                file_name is used.
+                object_name is used.
 
         Returns:
             bool: Whether the upload was successful
