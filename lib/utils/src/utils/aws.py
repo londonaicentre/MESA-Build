@@ -57,10 +57,9 @@ class AWS:
         if object_name is None:
             object_name = os.path.basename(file_name)
         full_path: str = path + "/" + object_name if path else object_name
+        s3_client = boto3.client("s3", region_name=region_name)
         try:
-            boto3.client("s3", region_name=region_name).head_object(
-                Bucket=bucket, Key=full_path
-            )
+            s3_client.head_object(Bucket=bucket, Key=full_path)
             if not force:
                 return True
         except ClientError as e:
@@ -69,9 +68,7 @@ class AWS:
             else:
                 raise
         try:
-            boto3.client("s3", region_name=region_name).upload_file(
-                file_name, bucket, full_path
-            )
+            s3_client.upload_file(file_name, bucket, full_path)
         except ClientError as e:
             logger.error(e)
             return False
@@ -103,10 +100,9 @@ class AWS:
         if object_name is None:
             object_name = os.path.basename(file_name)
         full_path: str = path + "/" + object_name if path else object_name
+        s3_client = boto3.client("s3", region_name=region_name)
         try:
-            boto3.client("s3", region_name=region_name).download_file(
-                bucket, full_path, file_name
-            )
+            s3_client.download_file(bucket, full_path, file_name)
         except ClientError as e:
             logger.error(
                 f"error in download from {full_path} to {file_name} (bucket: {bucket}, region: {region_name}): {e}"
