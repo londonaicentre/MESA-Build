@@ -206,6 +206,29 @@ class HuggingFaceLoRATrainer:
         AutoTokenizer.from_pretrained(source_folder).save_pretrained(target_folder)
         return True
 
+    def upload_output(self, target_folder: str, model_card: ModelCard, bucket: str = "aicentre-nlpteam-mesa-public") -> bool:
+        target_path = Path(target_folder)
+        archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
+        archive_path = target_path.parent / archive_name
+        if not archive_path.exists():
+            import io
+            with tarfile.open(archive_path, "w:gz") as tar:
+                for item in target_path.iterdir():
+                    tar.add(item, arcname=item.name)
+                yaml_bytes: bytes = model_card.to_yaml_bytes()
+                tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
+                tarinfo.size = len(yaml_bytes)
+                tar.addfile(tarinfo, io.BytesIO(yaml_bytes))
+        success = AWS.upload_file(
+            region_name=self.region,
+            file_name=str(archive_path),
+            bucket=bucket,
+            object_name=archive_name,
+            path=self.model_name
+        )
+        if not success:
+            raise ValueError("Failed to upload merged model weights")
+
     def create_model_card(
         self, major: int, minor: int, patch: int, model_description: str | None = None
     ) -> ModelCard:
@@ -220,7 +243,7 @@ class HuggingFaceLoRATrainer:
             output_schema=self.schema,
         )
 
-    def post_process(self, s3_output_path: str | None, job_name: str | None) -> bool:
+    def post_process(self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None) -> bool:
         model_folder = f"data/models/{self.description}"
         source_folder = Path(f"{model_folder}/source")
         source_folder.mkdir(parents=True, exist_ok=True)
@@ -234,4 +257,5 @@ class HuggingFaceLoRATrainer:
         target_folder.mkdir(parents=True, exist_ok=True)
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
+        self.upload_output(target_folder, model_card)
         return True
