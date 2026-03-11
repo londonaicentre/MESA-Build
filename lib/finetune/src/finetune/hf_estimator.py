@@ -190,6 +190,19 @@ class HuggingFaceLoRATrainer:
             tar.extractall(source_file.parent)
         return True
 
+    def merge(self, source_folder: str, target_folder: str) -> bool:
+        if Path(f"{target_folder}/model.safetensors").exists():
+            return True
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from peft import PeftModel
+
+        base = AutoModelForCausalLM.from_pretrained(self.hyperparameters["base_model"])
+        model = PeftModel.from_pretrained(base, source_folder)
+        merged = model.merge_and_unload()
+        merged.save_pretrained(target_folder)
+        AutoTokenizer.from_pretrained(source_folder).save_pretrained(target_folder)
+        return True
+
     def post_process(self, s3_output_path: str | None, job_name: str | None) -> bool:
         model_folder = f"data/models/{self.description}"
         source_folder = Path(f"{model_folder}/source")
@@ -200,3 +213,8 @@ class HuggingFaceLoRATrainer:
             raise ValueError("no last job available and no job name specified")
         if not self.download_output(str(source_folder), str(s3_output_path), job_name):
             raise ValueError("downloading low-rank weights failed")
+        target_folder = Path(f"{model_folder}/target")
+        target_folder.mkdir(parents=True, exist_ok=True)
+        if not self.merge(str(source_folder), str(target_folder)):
+            raise ValueError("merging with base model failed")
+        return True
