@@ -230,6 +230,7 @@ class HuggingFaceLoRATrainer:
                 tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
                 tarinfo.size = len(yaml_bytes)
                 tar.addfile(tarinfo, io.BytesIO(yaml_bytes))
+                tar.add(Path(__file__).parents[2] / "LICENSE.md", arcname="LICENSE.md")
         success = AWS.upload_file(
             region_name=self.region,
             file_name=str(archive_path),
