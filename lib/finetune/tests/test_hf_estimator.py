@@ -76,6 +76,15 @@ class UploadOutputMocks:
     datetime: MagicMock
 
 
+@dataclass
+class PostProcessMocks:
+    path: MagicMock
+    download_output: MagicMock
+    merge: MagicMock
+    upload_output: MagicMock
+    datetime: MagicMock
+
+
 @pytest.fixture
 def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
     mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
@@ -152,6 +161,19 @@ def upload_output_mocks(mocker: MockerFixture) -> UploadOutputMocks:
         mocker.patch("finetune.hf_estimator.tarfile.TarInfo"),
         mocker.patch("io.BytesIO"),
         mocker.patch("finetune.hf_estimator.AWS.upload_file"),
+        mock_datetime,
+    )
+
+
+@pytest.fixture
+def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
+    return PostProcessMocks(
+        mocker.patch("finetune.hf_estimator.Path"),
+        mocker.patch.object(HuggingFaceLoRATrainer, "download_output"),
+        mocker.patch.object(HuggingFaceLoRATrainer, "merge"),
+        mocker.patch.object(HuggingFaceLoRATrainer, "upload_output"),
         mock_datetime,
     )
 
@@ -584,3 +606,160 @@ class TestUploadOutput:
         upload_output_mocks.path.return_value.iterdir.return_value = []
         with pytest.raises(ValueError, match="Failed to upload merged model weights"):
             create_trainer().upload_output("baz/qux", mock_model_card)
+
+
+class TestPostProcess:
+    @pytest.fixture
+    def mock_model_card(self) -> MagicMock:
+        mock: MagicMock = MagicMock()
+        mock.model_name = "foo"
+        mock.major = 1
+        mock.minor = 2
+        mock.patch = 3
+        return mock
+
+    def test_post_process_creates_source_folder(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer(description="foo").post_process(
+            mock_model_card, "bar/baz", "qux"
+        )
+        post_process_mocks.path.return_value.mkdir.assert_any_call(
+            parents=True, exist_ok=True
+        )
+
+    def test_post_process_creates_target_folder(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer(description="foo").post_process(
+            mock_model_card, "bar/baz", "qux"
+        )
+        assert post_process_mocks.path.return_value.mkdir.call_count == 2
+
+    def test_post_process_uses_provided_s3_output_path(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+        post_process_mocks.download_output.assert_called_once()
+        assert post_process_mocks.download_output.call_args[0][1] == "foo/bar"
+
+    def test_post_process_uses_default_s3_output_path_when_none(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(description="foo")
+        trainer.post_process(mock_model_card, None, "bar")
+        post_process_mocks.download_output.assert_called_once()
+        assert (
+            post_process_mocks.download_output.call_args[0][1]
+            == "jobs/train/20260101-120000-foo/output"
+        )
+
+    def test_post_process_uses_provided_job_name(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+        post_process_mocks.download_output.assert_called_once()
+        assert post_process_mocks.download_output.call_args[0][2] == "baz"
+
+    def test_post_process_uses_last_job_name_when_none(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer()
+        trainer.last_job_name = "foo-bar"
+        trainer.post_process(mock_model_card, "baz/qux", None)
+        post_process_mocks.download_output.assert_called_once()
+        assert post_process_mocks.download_output.call_args[0][2] == "foo-bar"
+
+    def test_post_process_no_job_name_raises_value_error(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer()
+        trainer.last_job_name = None
+        with pytest.raises(
+            ValueError, match="no last job available and no job name specified"
+        ):
+            trainer.post_process(mock_model_card, "foo/bar", None)
+
+    def test_post_process_download_fails_raises_value_error(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = False
+        with pytest.raises(ValueError, match="downloading low-rank weights failed"):
+            create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+
+    def test_post_process_download_fails_does_not_call_merge(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = False
+        with pytest.raises(ValueError):
+            create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+        post_process_mocks.merge.assert_not_called()
+
+    def test_post_process_merge_fails_raises_value_error(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = False
+        with pytest.raises(ValueError, match="merging with base model failed"):
+            create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+
+    def test_post_process_merge_fails_does_not_call_upload(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = False
+        with pytest.raises(ValueError):
+            create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+        post_process_mocks.upload_output.assert_not_called()
+
+    def test_post_process_calls_download_output(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer(description="foo").post_process(
+            mock_model_card, "bar/baz", "qux"
+        )
+        post_process_mocks.download_output.assert_called_once_with(
+            str(post_process_mocks.path.return_value), "bar/baz", "qux"
+        )
+
+    def test_post_process_calls_merge(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+        post_process_mocks.merge.assert_called_once_with(
+            str(post_process_mocks.path.return_value),
+            str(post_process_mocks.path.return_value),
+        )
+
+    def test_post_process_calls_upload_output(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        create_trainer().post_process(mock_model_card, "foo/bar", "baz")
+        post_process_mocks.upload_output.assert_called_once_with(
+            str(post_process_mocks.path.return_value), mock_model_card
+        )
+
+    def test_post_process_success_returns_true(
+        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
+    ) -> None:
+        post_process_mocks.download_output.return_value = True
+        post_process_mocks.merge.return_value = True
+        assert create_trainer().post_process(mock_model_card, "foo/bar", "baz")
