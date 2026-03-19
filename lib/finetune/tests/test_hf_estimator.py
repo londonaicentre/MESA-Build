@@ -58,6 +58,14 @@ class RunMocks:
     datetime: MagicMock
 
 
+@dataclass
+class DownloadOutputMocks:
+    path: MagicMock
+    aws: MagicMock
+    tarfile: MagicMock
+    datetime: MagicMock
+
+
 @pytest.fixture
 def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
     mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
@@ -108,6 +116,18 @@ def run_mocks(mocker: MockerFixture) -> RunMocks:
             HuggingFaceLoRATrainer, "launch_job", return_value="mesa-foo-bar"
         ),
         mocker.patch("builtins.print"),
+        mock_datetime,
+    )
+
+
+@pytest.fixture
+def download_output_mocks(mocker: MockerFixture) -> DownloadOutputMocks:
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
+    return DownloadOutputMocks(
+        mocker.patch("finetune.hf_estimator.Path"),
+        mocker.patch("finetune.hf_estimator.AWS.download_file"),
+        mocker.patch("finetune.hf_estimator.tarfile.open"),
         mock_datetime,
     )
 
@@ -324,3 +344,86 @@ class TestRun:
     def test_run_prints_job_launched_message(self, run_mocks: RunMocks) -> None:
         create_trainer().run()
         run_mocks.print.assert_any_call("Job launched: mesa-foo-bar")
+
+
+class TestDownloadOutput:
+    def test_download_output_file_exists_returns_true(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = True
+        assert create_trainer().download_output("foo/bar", "baz/qux", "quux")
+
+    def test_download_output_file_exists_does_not_call_download(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = True
+        create_trainer().download_output("foo/bar", "baz/qux", "quux")
+        download_output_mocks.aws.assert_not_called()
+
+    def test_download_output_file_exists_does_not_call_tarfile(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = True
+        create_trainer().download_output("foo/bar", "baz/qux", "quux")
+        download_output_mocks.tarfile.assert_not_called()
+
+    def test_download_output_calls_aws_download_file(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = False
+        download_output_mocks.aws.return_value = True
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer(
+            aws_config={"bucket": "foo-bar", "region": "foo-bar-1", "role": "corge"}
+        )
+        trainer.download_output("grault/garply", "waldo/fred", "plugh")
+        download_output_mocks.aws.assert_called_once_with(
+            region_name="foo-bar-1",
+            bucket="foo-bar",
+            file_name=str(download_output_mocks.path.return_value),
+            object_name="model.tar.gz",
+            path="waldo/fred/plugh/output",
+        )
+
+    def test_download_output_download_fails_raises_value_error(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = False
+        download_output_mocks.aws.return_value = False
+        with pytest.raises(ValueError, match="Failed to download training output"):
+            create_trainer().download_output("foo/bar", "baz/qux", "quux")
+
+    def test_download_output_download_fails_does_not_call_tarfile(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = False
+        download_output_mocks.aws.return_value = False
+        with pytest.raises(ValueError):
+            create_trainer().download_output("foo/bar", "baz/qux", "quux")
+        download_output_mocks.tarfile.assert_not_called()
+
+    def test_download_output_success_extracts_tarfile(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = False
+        download_output_mocks.aws.return_value = True
+        create_trainer().download_output("foo/bar", "baz/qux", "quux")
+        download_output_mocks.tarfile.assert_called_once_with(
+            download_output_mocks.path.return_value, "r:*"
+        )
+
+    def test_download_output_success_extracts_to_parent_directory(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = False
+        download_output_mocks.aws.return_value = True
+        create_trainer().download_output("foo/bar", "baz/qux", "quux")
+        download_output_mocks.tarfile.return_value.__enter__.return_value.extractall.assert_called_once_with(
+            download_output_mocks.path.return_value.parent
+        )
+
+    def test_download_output_success_returns_true(
+        self, download_output_mocks: DownloadOutputMocks
+    ) -> None:
+        download_output_mocks.path.return_value.exists.return_value = False
+        download_output_mocks.aws.return_value = True
+        assert create_trainer().download_output("foo/bar", "baz/qux", "quux")
