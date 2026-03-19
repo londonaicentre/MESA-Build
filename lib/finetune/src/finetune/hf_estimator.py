@@ -177,6 +177,17 @@ class HuggingFaceLoRATrainer:
     def download_output(
         self, source_folder: str, s3_output_path: str, job_name: str
     ) -> bool:
+        """Download and extract training output from S3.
+
+        Args:
+            source_folder (str): Local folder to download model archive to.
+            s3_output_path (str): S3 path prefix for output.
+            job_name (str): SageMaker job name.
+
+        Returns:
+            bool: True if download and extraction successful.
+
+        """
         source_file: Path = Path(f"{source_folder}/model.tar.gz")
         if source_file.exists():
             return True
@@ -194,6 +205,16 @@ class HuggingFaceLoRATrainer:
         return True
 
     def merge(self, source_folder: str, target_folder: str) -> bool:
+        """Merge LoRA weights with base model and save full model.
+
+        Args:
+            source_folder (str): Folder containing LoRA adapter weights.
+            target_folder (str): Folder to save merged model to.
+
+        Returns:
+            bool: True if merge successful.
+
+        """
         if Path(f"{target_folder}/model.safetensors").exists():
             return True
         import torch
@@ -217,6 +238,17 @@ class HuggingFaceLoRATrainer:
         model_card: ModelCard,
         bucket: str = "aicentre-nlpteam-mesa-public",
     ) -> bool:
+        """Archive merged model with metadata and upload to S3.
+
+        Args:
+            target_folder (str): Folder containing merged model.
+            model_card (ModelCard): Model card metadata.
+            bucket (str): S3 bucket name. Defaults to 'aicentre-nlpteam-mesa-public'.
+
+        Returns:
+            bool: True if upload successful.
+
+        """
         target_path = Path(target_folder)
         archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
         archive_path = target_path.parent / archive_name
@@ -245,6 +277,18 @@ class HuggingFaceLoRATrainer:
     def create_model_card(
         self, major: int, minor: int, patch: int, model_description: str | None = None
     ) -> ModelCard:
+        """Create model card with training metadata.
+
+        Args:
+            major (int): Major version number.
+            minor (int): Minor version number.
+            patch (int): Patch version number.
+            model_description (str | None): Model description. Defaults to None (uses self.description).
+
+        Returns:
+            ModelCard: Model card instance.
+
+        """
         return ModelCard(
             base_model_hf=self.hyperparameters["base_model"],
             model_name=self.model_name,
@@ -259,6 +303,17 @@ class HuggingFaceLoRATrainer:
     def post_process(
         self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None
     ) -> bool:
+        """Download, merge and upload fine-tuned model.
+
+        Args:
+            model_card (ModelCard): Model card metadata.
+            s3_output_path (str | None): S3 output path. If None, uses self.s3_output_path.
+            job_name (str | None): SageMaker job name. If None, uses self.last_job_name.
+
+        Returns:
+            bool: True if post-processing successful.
+
+        """
         model_folder = f"data/models/{self.description}"
         source_folder = Path(f"{model_folder}/source")
         source_folder.mkdir(parents=True, exist_ok=True)
