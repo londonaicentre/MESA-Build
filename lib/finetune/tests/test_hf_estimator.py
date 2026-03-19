@@ -66,6 +66,16 @@ class DownloadOutputMocks:
     datetime: MagicMock
 
 
+@dataclass
+class UploadOutputMocks:
+    path: MagicMock
+    tarfile: MagicMock
+    tarinfo: MagicMock
+    io: MagicMock
+    aws: MagicMock
+    datetime: MagicMock
+
+
 @pytest.fixture
 def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
     mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
@@ -128,6 +138,20 @@ def download_output_mocks(mocker: MockerFixture) -> DownloadOutputMocks:
         mocker.patch("finetune.hf_estimator.Path"),
         mocker.patch("finetune.hf_estimator.AWS.download_file"),
         mocker.patch("finetune.hf_estimator.tarfile.open"),
+        mock_datetime,
+    )
+
+
+@pytest.fixture
+def upload_output_mocks(mocker: MockerFixture) -> UploadOutputMocks:
+    mock_datetime: MagicMock = mocker.patch("finetune.hf_estimator.datetime")
+    mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
+    return UploadOutputMocks(
+        mocker.patch("finetune.hf_estimator.Path"),
+        mocker.patch("finetune.hf_estimator.tarfile.open"),
+        mocker.patch("finetune.hf_estimator.tarfile.TarInfo"),
+        mocker.patch("io.BytesIO"),
+        mocker.patch("finetune.hf_estimator.AWS.upload_file"),
         mock_datetime,
     )
 
@@ -427,3 +451,136 @@ class TestDownloadOutput:
         download_output_mocks.path.return_value.exists.return_value = False
         download_output_mocks.aws.return_value = True
         assert create_trainer().download_output("foo/bar", "baz/qux", "quux")
+
+
+class TestUploadOutput:
+    @pytest.fixture
+    def mock_model_card(self) -> MagicMock:
+        mock: MagicMock = MagicMock()
+        mock.model_name = "foo"
+        mock.major = 1
+        mock.minor = 2
+        mock.patch = 3
+        mock.to_yaml_bytes.return_value = b"bar"
+        return mock
+
+    def test_upload_output_archive_exists_does_not_create_tarfile(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
+        upload_output_mocks.aws.return_value = True
+        create_trainer().upload_output("bar/baz", mock_model_card)
+        upload_output_mocks.tarfile.assert_not_called()
+
+    def test_upload_output_archive_exists_calls_aws_upload_file(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
+        upload_output_mocks.aws.return_value = True
+        create_trainer(
+            model="bar", aws_config={"bucket": "baz", "region": "qux", "role": "quux"}
+        ).upload_output("grault/garply", mock_model_card, "waldo")
+        upload_output_mocks.aws.assert_called_once_with(
+            region_name="qux",
+            file_name=str(
+                upload_output_mocks.path.return_value.parent.__truediv__.return_value
+            ),
+            bucket="waldo",
+            object_name="foo_1_2_3.tar.gz",
+            path="bar",
+        )
+
+    def test_upload_output_archive_exists_upload_succeeds_returns_true(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
+        upload_output_mocks.aws.return_value = True
+        assert create_trainer().upload_output("bar/baz", mock_model_card)
+
+    def test_upload_output_archive_exists_upload_fails_raises_value_error(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
+        upload_output_mocks.aws.return_value = False
+        with pytest.raises(ValueError, match="Failed to upload merged model weights"):
+            create_trainer().upload_output("bar/baz", mock_model_card)
+
+    def test_upload_output_archive_not_exists_creates_tarfile(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
+        upload_output_mocks.aws.return_value = True
+        create_trainer().upload_output("bar/baz", mock_model_card)
+        upload_output_mocks.tarfile.assert_called_once_with(
+            upload_output_mocks.path.return_value.parent.__truediv__.return_value,
+            "w:gz",
+        )
+
+    def test_upload_output_archive_not_exists_adds_all_items_from_target_path(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
+        upload_output_mocks.aws.return_value = True
+        mock_item1: MagicMock = MagicMock()
+        mock_item1.name = "baz.txt"
+        mock_item2: MagicMock = MagicMock()
+        mock_item2.name = "qux.txt"
+        upload_output_mocks.path.return_value.iterdir.return_value = [
+            mock_item1,
+            mock_item2,
+        ]
+        create_trainer().upload_output("quux/corge", mock_model_card)
+        mock_tar: MagicMock = (
+            upload_output_mocks.tarfile.return_value.__enter__.return_value
+        )
+        assert mock_tar.add.call_count == 3
+        mock_tar.add.assert_any_call(mock_item1, arcname="baz.txt")
+        mock_tar.add.assert_any_call(mock_item2, arcname="qux.txt")
+
+    def test_upload_output_archive_not_exists_adds_model_card_yaml(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
+        upload_output_mocks.aws.return_value = True
+        upload_output_mocks.path.return_value.iterdir.return_value = []
+        create_trainer().upload_output("baz/qux", mock_model_card)
+        upload_output_mocks.tarinfo.assert_called_once_with(name="model_card.yml")
+        upload_output_mocks.tarfile.return_value.__enter__.return_value.addfile.assert_called_once_with(
+            upload_output_mocks.tarinfo.return_value,
+            upload_output_mocks.io.return_value,
+        )
+        upload_output_mocks.io.assert_called_once_with(b"bar")
+
+    def test_upload_output_archive_not_exists_adds_license(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
+        upload_output_mocks.aws.return_value = True
+        upload_output_mocks.path.return_value.iterdir.return_value = []
+        create_trainer().upload_output("baz/qux", mock_model_card)
+        mock_tar: MagicMock = (
+            upload_output_mocks.tarfile.return_value.__enter__.return_value
+        )
+        assert mock_tar.add.call_count == 1
+        mock_tar.add.assert_called_once_with(
+            upload_output_mocks.path.return_value.parents.__getitem__.return_value
+            / "LICENSE.md",
+            arcname="LICENSE.md",
+        )
+
+    def test_upload_output_archive_not_exists_upload_succeeds_returns_true(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
+        upload_output_mocks.aws.return_value = True
+        upload_output_mocks.path.return_value.iterdir.return_value = []
+        assert create_trainer().upload_output("baz/qux", mock_model_card)
+
+    def test_upload_output_archive_not_exists_upload_fails_raises_value_error(
+        self, upload_output_mocks: UploadOutputMocks, mock_model_card: MagicMock
+    ) -> None:
+        upload_output_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
+        upload_output_mocks.aws.return_value = False
+        upload_output_mocks.path.return_value.iterdir.return_value = []
+        with pytest.raises(ValueError, match="Failed to upload merged model weights"):
+            create_trainer().upload_output("baz/qux", mock_model_card)
