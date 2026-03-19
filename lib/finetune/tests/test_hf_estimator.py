@@ -26,6 +26,9 @@ class HuggingFaceLoRATrainerFixture(HuggingFaceLoRATrainer):
         return self.s3_input_path
 
     def get_s3_output_path(self) -> str:
+        return self.s3_output_path
+
+    def get_s3_full_output_path(self) -> str:
         return self.s3_full_output_path
 
 
@@ -223,7 +226,15 @@ class TestConstructor:
             == "jobs/train/20260101-120000-plugh/input"
         )
 
-    def test_init_sets_s3_output_path_with_full_uri(
+    def test_init_sets_s3_output_path(
+        self, constructor_mocks: ConstructorMocks
+    ) -> None:
+        assert (
+            create_trainer(description="waldo").get_s3_output_path()
+            == "jobs/train/20260101-120000-waldo/output"
+        )
+
+    def test_init_sets_s3_full_output_path(
         self, constructor_mocks: ConstructorMocks
     ) -> None:
         trainer: HuggingFaceLoRATrainerFixture = create_trainer(
@@ -231,7 +242,7 @@ class TestConstructor:
             description="wobble",
         )
         assert (
-            trainer.get_s3_output_path()
+            trainer.get_s3_full_output_path()
             == "s3://xyzzy/jobs/train/20260101-120000-wobble/output"
         )
 
