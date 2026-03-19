@@ -402,6 +402,11 @@ class TestRun:
         create_trainer().run()
         run_mocks.print.assert_any_call("Job launched: mesa-foo-bar")
 
+    def test_run_sets_last_job_name(self, run_mocks: RunMocks) -> None:
+        trainer: HuggingFaceLoRATrainerFixture = create_trainer()
+        trainer.run()
+        assert trainer.last_job_name == "mesa-foo-bar"
+
 
 class TestDownloadOutput:
     def test_download_output_file_exists_returns_true(
