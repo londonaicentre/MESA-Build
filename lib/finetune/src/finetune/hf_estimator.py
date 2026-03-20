@@ -302,16 +302,13 @@ class HuggingFaceLoRATrainer:
 
     def post_process(
         self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None
-    ) -> bool:
+    ) -> None:
         """Download, merge and upload fine-tuned model.
 
         Args:
             model_card (ModelCard): Model card metadata.
             s3_output_path (str | None): S3 output path. If None, uses self.s3_output_path.
             job_name (str | None): SageMaker job name. If None, uses self.last_job_name.
-
-        Returns:
-            bool: True if post-processing successful.
 
         """
         model_folder = f"data/models/{self.description}"
@@ -328,4 +325,3 @@ class HuggingFaceLoRATrainer:
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
         self.upload_output(str(target_folder), model_card)
-        return True
