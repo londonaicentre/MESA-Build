@@ -10,7 +10,7 @@ from utils.aws import AWS
 def test_upload_file_valid_input_succeeds(mock_client: MagicMock) -> None:
     mock_s3_client = MagicMock()
     mock_client.return_value = mock_s3_client
-    AWS.upload_file("foo", "bar", "baz", "qux", "quux")
+    AWS.upload_file("foo", "bar", "baz", "qux", "quux", True)
     mock_s3_client.upload_file.assert_called_once_with("bar", "baz", "quux/qux")
 
 
