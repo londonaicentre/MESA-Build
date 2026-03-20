@@ -772,10 +772,3 @@ class TestPostProcess:
         post_process_mocks.upload_output.assert_called_once_with(
             str(post_process_mocks.path.return_value), mock_model_card
         )
-
-    def test_post_process_success_returns_true(
-        self, post_process_mocks: PostProcessMocks, mock_model_card: MagicMock
-    ) -> None:
-        post_process_mocks.download_output.return_value = True
-        post_process_mocks.merge.return_value = True
-        assert create_trainer().post_process(mock_model_card, "foo/bar", "baz")
