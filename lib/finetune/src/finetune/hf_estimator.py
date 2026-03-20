@@ -217,19 +217,23 @@ class HuggingFaceLoRATrainer:
         """
         if Path(f"{target_folder}/model.safetensors").exists():
             return True
-        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
         from peft import PeftModel
 
         base = AutoModelForCausalLM.from_pretrained(
-            self.hyperparameters["base_model"], dtype=torch.bfloat16
+            self.hyperparameters["base_model"],
+            torch_dtype="auto",
+            trust_remote_code=True
         )
         model = PeftModel.from_pretrained(
             base, source_folder, autocast_adapter_dtype=False
         )
         merged = model.merge_and_unload()
-        merged.save_pretrained(target_folder)
-        AutoTokenizer.from_pretrained(source_folder).save_pretrained(target_folder)
+        merged.save_pretrained(target_folder, safe_serialization=True)
+        tokenizer = AutoTokenizer.from_pretrained(
+            self.hyperparameters["base_model"], trust_remote_code=True
+        )
+        tokenizer.save_pretrained(target_folder)
         return True
 
     def upload_output(
