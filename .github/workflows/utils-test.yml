@@ -15,6 +15,16 @@ jobs:
         working-directory: lib/utils
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: check version is bumped
+        run: |
+          current=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          main=$(git show origin/main:lib/utils/pyproject.toml | grep '^version = ' | cut -d'"' -f2)
+          if [ "$current" = "$main" ]; then
+            echo "version must be bumped from $main"
+            exit 1
+          fi
       - uses: astral-sh/setup-uv@v7
       - run: uv sync
       - run: uv run ruff check src/ tests/
