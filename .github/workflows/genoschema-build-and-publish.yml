@@ -2,17 +2,20 @@ name: build and publish genoschema
 
 on:
   workflow_dispatch:
-  release:
-    types:
-      - published
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - "schemas/genoschema/**"
 
 jobs:
   build-and-publish:
-    if: startsWith(github.event.release.tag_name, 'genoschema')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
-    environment: ${{ github.event_name == 'release' && 'pypi' || 'testpypi' }}
+    environment: pypi
     permissions:
-      contents: read
+      contents: write
       id-token: write
     defaults:
       run:
@@ -21,8 +24,16 @@ jobs:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
       - run: uv sync
-      - run: uv pip install build
-      - run: uv run python -m build
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - name: extract version
+        id: version
+        run: |
+          version=$(uv version --short)
+          echo "tag=genoschema-v$version" >> "$GITHUB_OUTPUT"
+      - name: tag and release
+        uses: softprops/action-gh-release@v2
         with:
-          repository-url: ${{ github.event_name == 'release' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
+          tag_name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          make_latest: false
+      - run: uv build
+      - run: uv publish
