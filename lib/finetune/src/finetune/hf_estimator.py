@@ -223,7 +223,7 @@ class HuggingFaceLoRATrainer:
         base = AutoModelForCausalLM.from_pretrained(
             self.hyperparameters["base_model"],
             torch_dtype="auto",
-            trust_remote_code=True
+            trust_remote_code=True,
         )
         model = PeftModel.from_pretrained(
             base, source_folder, autocast_adapter_dtype=False
