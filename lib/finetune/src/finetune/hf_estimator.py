@@ -97,6 +97,8 @@ class HuggingFaceLoRATrainer:
             schema=self.schema,
             system_prompt=self.prompt_builder.build_main_prompt(),
             training_batch_names=self.training_batch_names,
+            base_model=self.hyperparameters["base_model"],
+            max_seq_length=self.hyperparameters["max_seq_length"],
             bucket=self.bucket,
             s3_prefix="trainingdata",
             output_file="train.jsonl",

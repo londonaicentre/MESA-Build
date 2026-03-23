@@ -29,6 +29,8 @@ class TrainingDataHandler:
         schema: type[BaseModel],
         system_prompt: str,
         training_batch_names: list[str],
+        base_model: str,
+        max_seq_length: int,
         bucket: str = "aicentre-nlpteam-mesa-build",
         s3_prefix: str = "trainingdata",
         output_file: str = "train.jsonl",
@@ -135,6 +137,11 @@ class TrainingDataHandler:
         if not all_samples:
             raise ValueError("No valid training samples found")
 
+        if base_model and max_seq_length:
+            all_samples = TrainingDataHandler.exclude_overlong_samples(
+                all_samples, max_seq_length, base_model
+            )
+
         if shuffle:
             random.shuffle(all_samples)
             logger.info("Shuffled training samples")
@@ -147,3 +154,54 @@ class TrainingDataHandler:
         logger.info(f"Prepared {len(all_samples)} total samples in {output_path}")
 
         return str(output_path)
+
+    @staticmethod
+    def exclude_overlong_samples(
+        samples: list[TrainingSample],
+        max_seq_length: int,
+        base_model: str,
+        buffer_ratio: float = 0.1,
+    ) -> list[TrainingSample]:
+        """Exclude samples that exceed max token length.
+
+        Args:
+            samples: Training samples to filter
+            max_seq_length: Maximum token length
+            base_model: Model name for tokenizer
+            buffer_ratio: Ratio of samples to use as confidence buffer (default 0.1)
+
+        Returns:
+            List of samples that fit within max_seq_length
+
+        """
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(  # type: ignore[no-untyped-call]
+            base_model, trust_remote_code=True
+        )
+        sorted_samples: list[TrainingSample] = sorted(
+            samples,
+            key=lambda sample: sum(len(message.content) for message in sample.messages),
+            reverse=True,
+        )
+        passing_samples: list[TrainingSample] = []
+        consecutive_passing: int = 0
+        for sample_index, sample in enumerate(sorted_samples):
+            if (
+                len(
+                    tokenizer.encode(
+                        " ".join(message.content for message in sample.messages)
+                    )
+                )
+                < max_seq_length
+            ):
+                passing_samples.append(sample)
+                consecutive_passing += 1
+                if consecutive_passing >= max(
+                    1, int(len(sorted_samples) * buffer_ratio)
+                ):
+                    passing_samples.extend(sorted_samples[sample_index + 1 :])
+                    break
+            else:
+                consecutive_passing = 0
+        return passing_samples
