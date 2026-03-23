@@ -13,6 +13,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from mesa_types import TrainingSample
 from utils.aws import AWS
 
 logger = logging.getLogger(__name__)
@@ -100,17 +101,17 @@ class TrainingDataHandler:
             with open(jsonl_path) as f:
                 for line_num, line in enumerate(f, 1):
                     try:
-                        sample = json.loads(line)
+                        sample = TrainingSample.model_validate(json.loads(line))
 
                         # vs expected system prompt
-                        sample_system_prompt = sample["messages"][0]["content"]
+                        sample_system_prompt = sample.messages[0].content
                         if sample_system_prompt.replace("\n", "").replace(
                             " ", ""
                         ) != system_prompt.replace("\n", "").replace(" ", ""):
                             raise ValueError("System prompt mismatch")
 
                         # vs schema
-                        assistant_content = sample["messages"][2]["content"]
+                        assistant_content = sample.messages[2].content
                         json_str = (
                             assistant_content.replace("<output>", "")
                             .replace("</output>", "")
@@ -141,7 +142,7 @@ class TrainingDataHandler:
         output_path = Path(output_file)
         with open(output_path, "w") as f:
             for sample in all_samples:
-                f.write(json.dumps(sample) + "\n")
+                f.write(sample.model_dump_json() + "\n")
 
         logger.info(f"Prepared {len(all_samples)} total samples in {output_path}")
 
