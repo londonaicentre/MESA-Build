@@ -38,7 +38,7 @@ if __name__ == "__main__":
     print(f"Training samples: {len(dataset)}")
 
     print(f"Loading model/tokenizer: {args.base_model}")
-    tokenizer = AutoTokenizer.from_pretrained(args.base_model)
+    tokenizer = AutoTokenizer.from_pretrained(args.base_model)  # type: ignore[no-untyped-call]
     tokenizer.pad_token = tokenizer.eos_token
 
     model = AutoModelForCausalLM.from_pretrained(

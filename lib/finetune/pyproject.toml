@@ -13,7 +13,7 @@ dependencies = [
     "londonaicentre-mesa-utils",
     "londonaicentre-mesa-datagen",
     "sagemaker==2.254.1",
-    "transformers>=4.36.0",
+    "transformers>=4.36.0,<5",
     "trl>=0.7.0",
     "peft>=0.7.0",
     "accelerate>=0.25.0",
