@@ -137,21 +137,27 @@ class TrainingDataHandler:
         if not all_samples:
             raise ValueError("No valid training samples found")
 
+        passing_samples = all_samples
         if base_model and max_seq_length:
-            all_samples = TrainingDataHandler.exclude_overlong_samples(
+            passing_samples = TrainingDataHandler.exclude_overlong_samples(
                 all_samples, max_seq_length, base_model
             )
 
+        if len(passing_samples) < (len(all_samples) / 2):
+            logger.warning(
+                "Samples consistently exceed max_seq_length, consider increasing"
+            )
+
         if shuffle:
-            random.shuffle(all_samples)
+            random.shuffle(passing_samples)
             logger.info("Shuffled training samples")
 
         output_path = Path(output_file)
         with open(output_path, "w") as f:
-            for sample in all_samples:
+            for sample in passing_samples:
                 f.write(sample.model_dump_json() + "\n")
 
-        logger.info(f"Prepared {len(all_samples)} total samples in {output_path}")
+        logger.info(f"Prepared {len(passing_samples)} total samples in {output_path}")
 
         return str(output_path)
 

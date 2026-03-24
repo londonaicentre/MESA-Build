@@ -41,7 +41,23 @@ class ExcludeOverlongSamplesMocks:
 
 
 @pytest.fixture
-def prepare_mocks(mocker: MockerFixture) -> PrepareMocks:
+def valid_sample_json() -> str:
+    return json.dumps(
+        {
+            "messages": [
+                {"role": "system", "content": "foo"},
+                {"role": "user", "content": "bar"},
+                {
+                    "role": "assistant",
+                    "content": '<output>{"foo": "baz", "bar": 42}</output>',
+                },
+            ]
+        }
+    )
+
+
+@pytest.fixture
+def prepare_mocks(mocker: MockerFixture, valid_sample_json: str) -> PrepareMocks:
     path_mocks: PathMocks = PathMocks(
         mocker.patch.object(Path, "mkdir"),
         mocker.patch.object(Path, "exists", return_value=False),
@@ -60,21 +76,7 @@ def prepare_mocks(mocker: MockerFixture) -> PrepareMocks:
         aws_mocks,
         mocker.patch(
             "builtins.open",
-            mock_open(
-                read_data=json.dumps(
-                    {
-                        "messages": [
-                            {"role": "system", "content": "foo"},
-                            {"role": "user", "content": "bar"},
-                            {
-                                "role": "assistant",
-                                "content": '<output>{"foo": "baz", "bar": 42}</output>',
-                            },
-                        ]
-                    }
-                )
-                + "\n"
-            ),
+            mock_open(read_data=valid_sample_json + "\n"),
         ),
         mocker.patch("finetune.trainingdata_handler.random.shuffle"),
         mocker.patch("finetune.trainingdata_handler.logger"),
@@ -328,6 +330,53 @@ class TestExcludeOverlongSamples:
     ) -> None:
         TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 0)
         prepare_mocks.exclude_overlong_samples.assert_not_called()
+
+    def test_prepare_warns_when_more_than_half_samples_excluded(
+        self, prepare_mocks: PrepareMocks, valid_sample_json: str
+    ) -> None:
+        prepare_mocks.open_mock.return_value.__iter__ = lambda _: iter(
+            [valid_sample_json] * 3
+        )
+        prepare_mocks.exclude_overlong_samples.side_effect = (
+            lambda samples, *_, **__: samples[: len(samples) // 3]
+        )
+        TrainingDataHandler.prepare(
+            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+        )
+        prepare_mocks.logger.warning.assert_called_once_with(
+            "Samples consistently exceed max_seq_length, consider increasing"
+        )
+
+    @pytest.mark.parametrize(
+        "total_samples,remaining_samples",
+        [
+            (3, 2),
+            (2, 1),
+        ],
+    )
+    def test_prepare_does_not_warn_when_half_or_fewer_samples_excluded(
+        self,
+        prepare_mocks: PrepareMocks,
+        valid_sample_json: str,
+        total_samples: int,
+        remaining_samples: int,
+    ) -> None:
+        prepare_mocks.open_mock.return_value.__iter__ = lambda _: iter(
+            [valid_sample_json] * total_samples
+        )
+        prepare_mocks.exclude_overlong_samples.side_effect = (
+            lambda samples, *_, **__: samples[:remaining_samples]
+        )
+        TrainingDataHandler.prepare(
+            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+        )
+        prepare_mocks.logger.warning.assert_not_called()
+
+    def test_prepare_does_not_warn_when_exclude_overlong_samples_not_called(
+        self, prepare_mocks: PrepareMocks
+    ) -> None:
+        TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"], "", 1024)
+        prepare_mocks.logger.warning.assert_not_called()
 
     def create_sample(self, content_length: int = 1) -> TrainingSample:
         return TrainingSample(
