@@ -1,0 +1,15 @@
+# Dependencies for LoRA fine-tuning on RunPod
+torch>=2.1.0
+transformers>=4.36.0
+peft>=0.7.0
+trl>=0.7.0
+datasets>=2.14.0
+accelerate>=0.25.0
+bitsandbytes>=0.41.0
+sentencepiece>=0.1.99
+protobuf>=3.20.0
+scipy>=1.11.0
+pyyaml>=6.0
+
+# Flash Attention 2 (install separately with --no-build-isolation)
+# pip install flash-attn --no-build-isolation
