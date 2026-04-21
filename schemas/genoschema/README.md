@@ -29,8 +29,17 @@ datagen_prompt = builder.build_datagen_prompt()
 main_prompt = builder.build_main_prompt()
 ```
 
+## Schema
+
+![Schema overview](https://londonaicentre.github.io/MESA-Build/schemas/genoschema.png)
+
+| Type | Values |
+| ---- | ------ |
+| ClinicalFindingType | morbidity, patient_finding, family_history |
+| TestType | dna, fish, karyotype, pcr, mlpa, other |
+| ResultEntityType | chromosome, gene, exon, variant, protein |
+| ResultStatus | abnormal, normal, uncertain_significance, failed_or_inconclusive |
+
 ## License
 
-This project uses a proprietary license issued by Guy's and St Thomas' NHS Foundation Trust (see [LICENSE.md](LICENSE.md)).
-
-The contents of this repository are designed for NHS organisations to use on private data.
+This project uses a proprietary license issued by Guy's and St Thomas' NHS Foundation Trust, enabling free (non-commercial) use by NHS organisations. See LICENSE files for details.
