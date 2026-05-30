@@ -1,7 +1,5 @@
 """Tests for entityschema package."""
 
-import pytest
-
 from entityschema.prompt_builder import PromptBuilder
 from entityschema.schema import EntitySchemaModel
 
