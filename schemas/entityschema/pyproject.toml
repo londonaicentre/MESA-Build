@@ -7,7 +7,7 @@ authors = [
     { name = "Dr. Lawrence Adams", email = "lawrence.adams2@nhs.net" },
 ]
 readme = "README.md"
-version = "1.0.0"
+version = "1.1.0"
 requires-python = ">=3.12"
 license = "LicenseRef-Proprietary"
 dependencies = [
