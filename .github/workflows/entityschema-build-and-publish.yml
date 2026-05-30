@@ -1,0 +1,39 @@
+name: build and publish entityschema
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - "schemas/entityschema/**"
+
+jobs:
+  build-and-publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    environment: pypi
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: schemas/entityschema
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync
+      - name: extract version
+        id: version
+        run: |
+          version=$(uv version --short)
+          echo "tag=entityschema-v$version" >> "$GITHUB_OUTPUT"
+      - name: tag and release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          make_latest: false
+      - run: uv build
+      - run: uv publish
