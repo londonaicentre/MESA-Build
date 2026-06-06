@@ -7,7 +7,7 @@ Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator
 import logging
 from pathlib import Path
 import tarfile
-from typing import Any, cast
+from typing import cast
 
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
@@ -19,6 +19,7 @@ from finetune._common_utils import (
     build_model_card,
     make_job_id,
 )
+from finetune.config import load_config, to_hf_hyperparameters
 from finetune.trainingdata_handler import TrainingDataHandler
 from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
@@ -33,7 +34,7 @@ class HuggingFaceLoRATrainer:
         schema: Pydantic schema class for validation
         prompt_builder: Prompt builder instance
         training_batch_names: List of S3 training batch folder names
-        hyperparameters: Training hyperparameters dict (base_model, num_epochs, learning_rate, etc.)
+        config_path: Path to a neutral config.yaml holding training parameters
         aws_config: AWS configuration dict with bucket, region, role
         description: Job description for naming
         instance_type: SageMaker instance type
@@ -48,7 +49,7 @@ class HuggingFaceLoRATrainer:
         schema: type[BaseModel],
         prompt_builder: BasePromptBuilder,
         training_batch_names: list[str],
-        hyperparameters: dict[str, Any],
+        config_path: str,
         aws_config: dict[str, str],
         model_name: str,
         description: str,
@@ -61,7 +62,9 @@ class HuggingFaceLoRATrainer:
         self.schema = schema
         self.prompt_builder = prompt_builder
         self.training_batch_names = training_batch_names
-        self.hyperparameters = hyperparameters
+        self.config = load_config(config_path)
+        self.hyperparameters = to_hf_hyperparameters(self.config)
+        self.base_model = self.config.training.base_model
         self.aws_config = aws_config
         self.model_name = model_name
         self.description = description
@@ -222,7 +225,7 @@ class HuggingFaceLoRATrainer:
         from peft import PeftModel
 
         base = AutoModelForCausalLM.from_pretrained(
-            self.hyperparameters["base_model"],
+            self.base_model,
             torch_dtype="auto",
             trust_remote_code=True
         )
@@ -232,7 +235,7 @@ class HuggingFaceLoRATrainer:
         merged = model.merge_and_unload()
         merged.save_pretrained(target_folder, safe_serialization=True)
         tokenizer = AutoTokenizer.from_pretrained(
-            self.hyperparameters["base_model"], trust_remote_code=True
+            self.base_model, trust_remote_code=True
         )
         tokenizer.save_pretrained(target_folder)
         return True
@@ -253,7 +256,7 @@ class HuggingFaceLoRATrainer:
 
         """
         return build_model_card(
-            base_model=self.hyperparameters["base_model"],
+            base_model=self.base_model,
             model_name=self.model_name,
             major=major,
             minor=minor,

@@ -21,6 +21,7 @@ if __name__ == "__main__":
     parser.add_argument("--learning_rate", type=float, default=2e-4)
     parser.add_argument("--lora_r", type=int, default=16)
     parser.add_argument("--lora_alpha", type=int, default=32)
+    parser.add_argument("--lora_dropout", type=float, default=0.05)
     parser.add_argument(
         "--lora_target_modules", type=str, default="q_proj,k_proj,v_proj,o_proj"
     )
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     peft_config = LoraConfig(
         r=args.lora_r,
         lora_alpha=args.lora_alpha,
-        lora_dropout=0.05,
+        lora_dropout=args.lora_dropout,
         bias="none",
         task_type="CAUSAL_LM",
         target_modules=target_modules,

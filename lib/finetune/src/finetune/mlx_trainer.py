@@ -17,7 +17,6 @@ mlx_lm CLIs — so ``finetune`` still imports fine on machines without mlx insta
 import logging
 import subprocess
 from pathlib import Path
-from typing import Any
 
 import yaml
 from mesa_types.model_card import ModelCard
@@ -28,6 +27,7 @@ from finetune._common_utils import (
     build_model_card,
     make_job_id,
 )
+from finetune.config import load_config, to_mlx_config
 from finetune.trainingdata_handler import TrainingDataHandler
 from utils.prompt import BasePromptBuilder
 
@@ -37,16 +37,17 @@ logger = logging.getLogger(__name__)
 class MLXLoRATrainer:
     """Orchestrate LoRA fine-tuning locally on Apple Silicon using mlx_lm.
 
-    Mirrors the public shape of ``HuggingFaceLoRATrainer`` but trains locally and is
-    driven by an mlx_lm-native YAML config rather than a ``hyperparameters`` dict. LoRA
-    params (``rank``, ``scale``, ``dropout``, ``keys``) live in the YAML — mlx_lm only
-    reads them from there.
+    Mirrors the public shape of ``HuggingFaceLoRATrainer`` and is driven by the same
+    mesa-neutral ``config.yaml``. The neutral config is translated into the mlx_lm-native
+    run-config via ``to_mlx_config`` (``finetune.config``), which derives ``iters`` from the
+    dataset size and emits the ``lora_parameters`` block (``scale = alpha / rank``,
+    ``self_attn.*`` keys).
 
     Args:
         schema: Pydantic schema class for validation.
         prompt_builder: Prompt builder instance.
         training_batch_names: List of S3 training batch folder names.
-        config_path: Path to the mlx_lm-style YAML config (e.g. ``mlx_lora_config.yaml``).
+        config_path: Path to the neutral ``config.yaml`` holding training parameters.
         aws_config: AWS configuration dict with ``bucket``, ``region``, ``role``
             (``role`` is unused for local training).
         model_name: Model name used for the model card and the uploaded archive.
@@ -93,14 +94,10 @@ class MLXLoRATrainer:
         self.mlx_dir = f"{self.model_folder}/mlx"
         self.resolved_config_path = f"{self.model_folder}/mlx_lora_config.resolved.yaml"
 
-        # base model is the source of truth in the YAML config
-        self.base_model = self._load_config()["model"]
-
-    def _load_config(self) -> dict[str, Any]:
-        """Load the mlx_lm YAML config at ``self.config_path``."""
-        with open(self.config_path) as f:
-            config: dict[str, Any] = yaml.safe_load(f)
-        return config
+        # neutral config drives training; iters derives from num_samples at _write_config time
+        self.config = load_config(config_path)
+        self.base_model = self.config.training.base_model
+        self.num_samples: int | None = None
 
     def prepare_data(self) -> str:
         """Prepare training data into a local directory for mlx_lm.
@@ -117,26 +114,35 @@ class MLXLoRATrainer:
         data_path = Path(self.data_dir)
         data_path.mkdir(parents=True, exist_ok=True)
 
+        train_jsonl = data_path / "train.jsonl"
         TrainingDataHandler.prepare(
             schema=self.schema,
             system_prompt=self.prompt_builder.build_main_prompt(),
             training_batch_names=self.training_batch_names,
             bucket=self.bucket,
             s3_prefix="trainingdata",
-            output_file=str(data_path / "train.jsonl"),
+            output_file=str(train_jsonl),
             region=self.region,
             shuffle=True,
         )
 
-        logger.info(f"Prepared training data in: {self.data_dir}")
+        # mlx trains by iters (derived from sample count); count non-empty lines
+        self.num_samples = sum(
+            1 for line in train_jsonl.read_text().splitlines() if line.strip()
+        )
+
+        logger.info(
+            f"Prepared {self.num_samples} training samples in: {self.data_dir}"
+        )
         return self.data_dir
 
     def _write_config(self, data_dir: str) -> str:
-        """Write a resolved copy of the YAML config for this run.
+        """Write a resolved mlx_lm config for this run.
 
-        Loads the YAML at ``self.config_path``, injects the runtime-derived ``data``
-        directory and ``adapter_path``, and writes the resolved config into the working
-        directory for ``mlx_lm.lora --config`` to consume.
+        Translates the neutral config into the mlx_lm-native form via ``to_mlx_config``
+        (using the sample count from ``prepare_data`` to derive ``iters``), injects the
+        runtime-derived ``data`` directory and ``adapter_path``, and writes the resolved
+        config into the working directory for ``mlx_lm.lora --config`` to consume.
 
         Args:
             data_dir: The prepared training-data directory.
@@ -144,7 +150,11 @@ class MLXLoRATrainer:
         Returns:
             Path to the resolved config file.
         """
-        config = self._load_config()
+        if self.num_samples is None:
+            raise ValueError(
+                "prepare_data must run before _write_config (num_samples unset)"
+            )
+        config = to_mlx_config(self.config, num_samples=self.num_samples)
         config["data"] = data_dir
         config["adapter_path"] = self.adapter_dir
 
@@ -247,7 +257,7 @@ class MLXLoRATrainer:
     ) -> ModelCard:
         """Create model card with training metadata.
 
-        The base model is read from the YAML config, the training data references from
+        The base model comes from the neutral config, the training data references from
         the batch names.
 
         Args:
