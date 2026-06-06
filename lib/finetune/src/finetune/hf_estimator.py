@@ -16,7 +16,6 @@ from sagemaker.estimator import _TrainingJob
 
 from finetune._common_utils import (
     archive_and_upload,
-    build_model_card,
     make_job_id,
 )
 from finetune.config import load_config, to_hf_hyperparameters
@@ -239,32 +238,6 @@ class HuggingFaceLoRATrainer:
         )
         tokenizer.save_pretrained(target_folder)
         return True
-
-    def create_model_card(
-        self, major: int, minor: int, patch: int, model_description: str | None = None
-    ) -> ModelCard:
-        """Create model card with training metadata.
-
-        Args:
-            major (int): Major version number.
-            minor (int): Minor version number.
-            patch (int): Patch version number.
-            model_description (str | None): Model description. Defaults to None (uses self.description).
-
-        Returns:
-            ModelCard: Model card instance.
-
-        """
-        return build_model_card(
-            base_model=self.base_model,
-            model_name=self.model_name,
-            major=major,
-            minor=minor,
-            patch=patch,
-            model_description=model_description or self.description,
-            training_data=[self.s3_input_path],
-            output_schema=self.schema,
-        )
 
     def post_process(
         self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None

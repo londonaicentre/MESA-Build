@@ -12,12 +12,22 @@ license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "londonaicentre-mesa-utils",
     "londonaicentre-mesa-datagen",
+    "pydantic>=2.12.5",
+    "pyyaml>=6.0",
     "sagemaker==2.254.1",
     "transformers>=4.36.0",
     "trl>=0.7.0",
     "peft>=0.7.0",
     "accelerate>=0.25.0",
     "datasets>=2.15.0",
+]
+[project.optional-dependencies]
+# Local Apple-Silicon training stack for MLXLoRATrainer
+#   pip install "londonaicentre-mesa-finetune[mlx]"
+#   uv sync --extra mlx
+mlx = [
+    "mlx>=0.18.0; platform_system == 'Darwin' and platform_machine == 'arm64'",
+    "mlx-lm>=0.18.0; platform_system == 'Darwin' and platform_machine == 'arm64'",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]

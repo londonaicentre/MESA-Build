@@ -24,7 +24,6 @@ from pydantic import BaseModel
 
 from finetune._common_utils import (
     archive_and_upload,
-    build_model_card,
     make_job_id,
 )
 from finetune.config import load_config, to_mlx_config
@@ -251,34 +250,6 @@ class MLXLoRATrainer:
             cmd.extend(["-q", self.quantize])
         subprocess.run(cmd, check=True)
         return True
-
-    def create_model_card(
-        self, major: int, minor: int, patch: int, model_description: str | None = None
-    ) -> ModelCard:
-        """Create model card with training metadata.
-
-        The base model comes from the neutral config, the training data references from
-        the batch names.
-
-        Args:
-            major: Major version number.
-            minor: Minor version number.
-            patch: Patch version number.
-            model_description: Model description. Defaults to None (uses self.description).
-
-        Returns:
-            ModelCard instance.
-        """
-        return build_model_card(
-            base_model=self.base_model,
-            model_name=self.model_name,
-            major=major,
-            minor=minor,
-            patch=patch,
-            model_description=model_description or self.description,
-            training_data=list(self.training_batch_names),
-            output_schema=self.schema,
-        )
 
     def post_process(self, model_card: ModelCard) -> None:
         """Fuse, optionally convert, and upload the fine-tuned model.
