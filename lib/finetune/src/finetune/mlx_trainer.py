@@ -14,11 +14,8 @@ Nothing is imported from ``mlx`` at module load — the trainer only ``subproces
 mlx_lm CLIs — so ``finetune`` still imports fine on machines without mlx installed.
 """
 
-import io
 import logging
 import subprocess
-import tarfile
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -26,8 +23,12 @@ import yaml
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
 
+from finetune._common_utils import (
+    archive_and_upload,
+    build_model_card,
+    make_job_id,
+)
 from finetune.trainingdata_handler import TrainingDataHandler
-from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
 
 logger = logging.getLogger(__name__)
@@ -76,9 +77,8 @@ class MLXLoRATrainer:
         self.work_dir = work_dir
         self.quantize = quantize
 
-        # job ID (duplicated from hf_estimator.py — phase-1 duplication is allowed)
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.job_id = f"{timestamp}-{description}"
+        # job ID
+        self.job_id = make_job_id(description)
 
         # pass from an aws config dict (role unused locally)
         self.bucket = aws_config["bucket"]
@@ -242,56 +242,13 @@ class MLXLoRATrainer:
         subprocess.run(cmd, check=True)
         return True
 
-    def upload_output(
-        self,
-        target_folder: str,
-        model_card: ModelCard,
-        bucket: str = "aicentre-nlpteam-mesa-public",
-    ) -> bool:
-        """Archive merged model with metadata and upload to S3.
-
-        Duplicated from ``hf_estimator.py`` (phase-1 duplication is allowed): tar the
-        fused model dir + ``model_card.yml`` + ``LICENSE.md``, then ``AWS.upload_file``.
-
-        Args:
-            target_folder: Folder containing the fused model.
-            model_card: Model card metadata.
-            bucket: S3 bucket name. Defaults to 'aicentre-nlpteam-mesa-public'.
-
-        Returns:
-            True if upload successful.
-        """
-        target_path = Path(target_folder)
-        archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
-        archive_path = target_path.parent / archive_name
-        if not archive_path.exists():
-            with tarfile.open(archive_path, "w:gz") as tar:
-                for item in target_path.iterdir():
-                    tar.add(item, arcname=item.name)
-                yaml_bytes: bytes = model_card.to_yaml_bytes()
-                tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
-                tarinfo.size = len(yaml_bytes)
-                tar.addfile(tarinfo, io.BytesIO(yaml_bytes))
-                tar.add(Path(__file__).parents[2] / "LICENSE.md", arcname="LICENSE.md")
-        success = AWS.upload_file(
-            region_name=self.region,
-            file_name=str(archive_path),
-            bucket=bucket,
-            object_name=archive_name,
-            path=self.model_name,
-        )
-        if not success:
-            raise ValueError("Failed to upload merged model weights")
-        return True
-
     def create_model_card(
         self, major: int, minor: int, patch: int, model_description: str | None = None
     ) -> ModelCard:
         """Create model card with training metadata.
 
-        Duplicated from ``hf_estimator.py`` (phase-1 duplication is allowed). The base
-        model is read from the YAML config, the training data references from the batch
-        names.
+        The base model is read from the YAML config, the training data references from
+        the batch names.
 
         Args:
             major: Major version number.
@@ -302,8 +259,8 @@ class MLXLoRATrainer:
         Returns:
             ModelCard instance.
         """
-        return ModelCard(
-            base_model_hf=self.base_model,
+        return build_model_card(
+            base_model=self.base_model,
             model_name=self.model_name,
             major=major,
             minor=minor,
@@ -331,4 +288,9 @@ class MLXLoRATrainer:
             mlx_folder.mkdir(parents=True, exist_ok=True)
             if not self.convert(str(target_folder), str(mlx_folder)):
                 raise ValueError("converting to MLX format failed")
-        self.upload_output(str(target_folder), model_card)
+        archive_and_upload(
+            target_folder=str(target_folder),
+            model_card=model_card,
+            model_name=self.model_name,
+            region=self.region,
+        )

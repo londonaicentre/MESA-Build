@@ -5,7 +5,6 @@ Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator
 """
 
 import logging
-from datetime import datetime
 from pathlib import Path
 import tarfile
 from typing import Any, cast
@@ -15,6 +14,11 @@ from pydantic import BaseModel
 from sagemaker.huggingface import HuggingFace
 from sagemaker.estimator import _TrainingJob
 
+from finetune._common_utils import (
+    archive_and_upload,
+    build_model_card,
+    make_job_id,
+)
 from finetune.trainingdata_handler import TrainingDataHandler
 from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
@@ -67,11 +71,8 @@ class HuggingFaceLoRATrainer:
         self.pytorch_version = pytorch_version
         self.py_version = py_version
 
-        # job ID
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.job_id = (
-            f"{timestamp}-{description}"  # sagemaker does not like underscores!
-        )
+        # job ID (sagemaker does not like underscores!)
+        self.job_id = make_job_id(description)
 
         # pass from an aws config dict
         self.bucket = aws_config["bucket"]
@@ -236,48 +237,6 @@ class HuggingFaceLoRATrainer:
         tokenizer.save_pretrained(target_folder)
         return True
 
-    def upload_output(
-        self,
-        target_folder: str,
-        model_card: ModelCard,
-        bucket: str = "aicentre-nlpteam-mesa-public",
-    ) -> bool:
-        """Archive merged model with metadata and upload to S3.
-
-        Args:
-            target_folder (str): Folder containing merged model.
-            model_card (ModelCard): Model card metadata.
-            bucket (str): S3 bucket name. Defaults to 'aicentre-nlpteam-mesa-public'.
-
-        Returns:
-            bool: True if upload successful.
-
-        """
-        target_path = Path(target_folder)
-        archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
-        archive_path = target_path.parent / archive_name
-        if not archive_path.exists():
-            import io
-
-            with tarfile.open(archive_path, "w:gz") as tar:
-                for item in target_path.iterdir():
-                    tar.add(item, arcname=item.name)
-                yaml_bytes: bytes = model_card.to_yaml_bytes()
-                tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
-                tarinfo.size = len(yaml_bytes)
-                tar.addfile(tarinfo, io.BytesIO(yaml_bytes))
-                tar.add(Path(__file__).parents[2] / "LICENSE.md", arcname="LICENSE.md")
-        success = AWS.upload_file(
-            region_name=self.region,
-            file_name=str(archive_path),
-            bucket=bucket,
-            object_name=archive_name,
-            path=self.model_name,
-        )
-        if not success:
-            raise ValueError("Failed to upload merged model weights")
-        return True
-
     def create_model_card(
         self, major: int, minor: int, patch: int, model_description: str | None = None
     ) -> ModelCard:
@@ -293,8 +252,8 @@ class HuggingFaceLoRATrainer:
             ModelCard: Model card instance.
 
         """
-        return ModelCard(
-            base_model_hf=self.hyperparameters["base_model"],
+        return build_model_card(
+            base_model=self.hyperparameters["base_model"],
             model_name=self.model_name,
             major=major,
             minor=minor,
@@ -328,4 +287,9 @@ class HuggingFaceLoRATrainer:
         target_folder.mkdir(parents=True, exist_ok=True)
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
-        self.upload_output(str(target_folder), model_card)
+        archive_and_upload(
+            target_folder=str(target_folder),
+            model_card=model_card,
+            model_name=self.model_name,
+            region=self.region,
+        )
