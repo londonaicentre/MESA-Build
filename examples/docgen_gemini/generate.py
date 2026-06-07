@@ -52,6 +52,8 @@ gen = LLMGenerator(
     model_name="gemini/gemini-3-flash-preview",
     api_key="",  # leave empty: LiteLLM reads GEMINI_API_KEY from env (loaded by load_dotenv)
     document_batches=DOCUMENT_BATCHES,  # downloaded + extracted in constructor (needs AWS)
+    temperature=1.0,  # official recommendation for gemini 3 family as minimum temp
+    max_tokens=32768,
 )
 
 gen.generate(SAMPLE_SIZE)

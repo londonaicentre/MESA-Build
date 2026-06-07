@@ -42,6 +42,8 @@ gen = LLMGenerator(
     model_name="bedrock/eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
     api_key="",  # leave this empty, AWS credentials read from env
     document_batches=DOCUMENT_BATCHES,  # downloaded + extracted in constructor
+    temperature=0.001,  # near-deterministic; raise for more diverse samples
+    max_tokens=32768,
 )
 
 gen.generate(SAMPLE_SIZE)
