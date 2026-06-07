@@ -1,0 +1,11 @@
+[project]
+name = "finetune-aws-example"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "londonaicentre-mesa-finetune",
+    "londonaicentre-oncoschema==2.0.2",
+]
+
+[tool.uv.sources]
+londonaicentre-mesa-finetune = { path = "../../lib/finetune", editable = true }

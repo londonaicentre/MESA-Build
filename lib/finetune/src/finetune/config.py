@@ -1,20 +1,14 @@
 """
 config.py
 
-Defines neutral fine-tuning config and translators.
+Defines standard firmnat for training parameters, loaded/validated
+with pydantic, then translated into each trainer's native form
+including MLX and HF estimators.
 
-An example config file can be found in ../config/config.yaml
+An example config file can be found in /config/config.yaml
 
-Single source of truth for training parameters, shared by any trainer
-including HF and local MLX. The neutral config is loaded/validated
-with pydantic, then translated into each trainer's native form:
-  * ``to_hf_hyperparameters`` -> the flat ``hyperparameters`` dict the SageMaker
-    estimator passes to ``scripts/train_lora.py`` as CLI args.
-  * ``to_mlx_config`` -> the ``mlx_lm``-native config dict consumed by
-    ``mlx_lm.lora --config`` (minus the runtime-injected ``data`` / ``adapter_path``).
-
-Operational args (instance type, AWS config, work_dir, quantize, ...) are deliberately
-NOT modelled, they stay per-trainer constructor inputs
+Operational args stay per-trainer constructor inputs:
+E.g. instance type, AWS config, work_dir, quantization etc
 """
 
 import math
@@ -39,7 +33,7 @@ class LoRAConfig(BaseModel):
 
 class MLXOverrides(BaseModel):
     """
-    MLX-only params, consumed ONLY by ``to_mlx_config``
+    MLX-only params, consumed ONLY by to_mlx_config()
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -103,8 +97,7 @@ def load_default_config() -> FinetuneConfig:
 
 def to_hf_hyperparameters(cfg: FinetuneConfig) -> dict[str, Any]:
     """
-    Translate the neutral config into the HF estimator ``hyperparameters`` dict
-    These become CLI args for ``scripts/train_lora.py``
+    Translate the neutral config into dict for HF estimator
     """
     t = cfg.training
     return {
@@ -114,23 +107,22 @@ def to_hf_hyperparameters(cfg: FinetuneConfig) -> dict[str, Any]:
         "lora_r": t.lora.rank,
         "lora_alpha": t.lora.alpha,
         "lora_dropout": t.lora.dropout,
-        "lora_target_modules": ",".join(t.lora.target_modules), ## expected by ``--lora_target_modules``
+        "lora_target_modules": ",".join(t.lora.target_modules), ## format for --lora_target_modules
         "per_device_train_batch_size": t.batch_size,
         "max_seq_length": t.max_seq_length,
     }
 
 
 def to_mlx_config(cfg: FinetuneConfig, num_samples: int) -> dict[str, Any]:
-    """Translate the neutral config into an ``mlx_lm``-native config dict.
+    """Translate into an mlx_lm -native config dict.
 
-    Returns everything ``mlx_lm.lora --config`` needs EXCEPT the runtime-injected
-    ``data`` / ``adapter_path``, which stay the trainer's responsibility.
+    Returns everything EXCEPT the runtime-injected data / adapter_path
+    These stay the trainer's responsibility.
 
-    ``iters`` is taken from ``mlx.iters`` if set, otherwise derived from the dataset size
-    as ``ceil(num_samples / batch_size) * epochs``.
-
-    ``scale`` is ``alpha / rank`` and
-    ``keys`` are the target modules prefixed with ``self_attn.``.
+    Specific args:
+    - iters are derived from samples / batch size if not specified
+    - scale is alpha / rank
+    - keys are the target modules prefixed with self_attn
     """
     t = cfg.training
     iters = (

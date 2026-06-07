@@ -1,12 +1,10 @@
 """
 _common_utils.py
 
-Trainer-agnostic helpers shared by ``HuggingFaceLoRATrainer`` (``hf_estimator.py``)
-and ``MLXLoRATrainer`` (``mlx_trainer.py``). These were previously duplicated verbatim
-across both trainers; centralising them keeps each trainer a thin orchestrator.
-
-Nothing here is HF- or MLX-specific: per-trainer differences (e.g. where the base model
-or training-data references come from) are passed in as arguments.
+Common utilities shared by hf_estimator.py and mlx_trainer.py
+- job id creation
+- model card construction
+- archive (tar) and upload of models
 """
 
 import io

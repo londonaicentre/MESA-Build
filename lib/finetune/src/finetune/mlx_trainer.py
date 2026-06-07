@@ -2,16 +2,6 @@
 mlx_trainer.py
 
 Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
-
-This is the local, MLX-flavoured analogue of ``HuggingFaceLoRATrainer``
-(``hf_estimator.py``). Instead of launching a SageMaker job, it shells out to the
-``mlx_lm.lora`` / ``mlx_lm.fuse`` / ``mlx_lm.convert`` command-line tools, driven by an
-mlx_lm-native YAML config. It reuses the same trainer-agnostic helpers
-(``TrainingDataHandler``, ``ModelCard``, ``AWS``, ``BasePromptBuilder``) and produces the
-same final artifact: a merged model + ``model_card.yml`` tarball in the public S3 bucket.
-
-Nothing is imported from ``mlx`` at module load — the trainer only ``subprocess.run``s the
-mlx_lm CLIs — so ``finetune`` still imports fine on machines without mlx installed.
 """
 
 import logging
@@ -35,12 +25,6 @@ logger = logging.getLogger(__name__)
 
 class MLXLoRATrainer:
     """Orchestrate LoRA fine-tuning locally on Apple Silicon using mlx_lm.
-
-    Mirrors the public shape of ``HuggingFaceLoRATrainer`` and is driven by the same
-    mesa-neutral ``config.yaml``. The neutral config is translated into the mlx_lm-native
-    run-config via ``to_mlx_config`` (``finetune.config``), which derives ``iters`` from the
-    dataset size and emits the ``lora_parameters`` block (``scale = alpha / rank``,
-    ``self_attn.*`` keys).
 
     Args:
         schema: Pydantic schema class for validation.
@@ -101,10 +85,6 @@ class MLXLoRATrainer:
     def prepare_data(self) -> str:
         """Prepare training data into a local directory for mlx_lm.
 
-        Calls ``TrainingDataHandler.prepare`` exactly as the HF trainer does (schema +
-        system-prompt validation, shuffle), then writes the resulting ``train.jsonl``
-        into a local ``data/`` directory (mlx_lm reads a *directory*, not a file).
-
         Returns:
             Path to the local data directory.
         """
@@ -138,11 +118,6 @@ class MLXLoRATrainer:
     def _write_config(self, data_dir: str) -> str:
         """Write a resolved mlx_lm config for this run.
 
-        Translates the neutral config into the mlx_lm-native form via ``to_mlx_config``
-        (using the sample count from ``prepare_data`` to derive ``iters``), injects the
-        runtime-derived ``data`` directory and ``adapter_path``, and writes the resolved
-        config into the working directory for ``mlx_lm.lora --config`` to consume.
-
         Args:
             data_dir: The prepared training-data directory.
 
@@ -167,9 +142,6 @@ class MLXLoRATrainer:
 
     def train(self, config_path: str) -> None:
         """Run mlx_lm LoRA training.
-
-        Local analogue of the HF trainer's ``launch_job`` — shells out to the
-        ``mlx_lm.lora`` CLI with the resolved config.
 
         Args:
             config_path: Path to the resolved mlx_lm YAML config.
@@ -200,8 +172,6 @@ class MLXLoRATrainer:
     def fuse(self, target_folder: str) -> bool:
         """Fuse (merge) the LoRA adapter into the base model.
 
-        Direct analogue of the HF trainer's ``merge`` — shells out to ``mlx_lm.fuse``.
-
         Args:
             target_folder: Folder to save the fused model to.
 
@@ -228,9 +198,6 @@ class MLXLoRATrainer:
     def convert(self, target_folder: str, mlx_folder: str) -> bool:
         """Optionally convert the fused model to MLX format.
 
-        Wraps ``mlx_lm.convert`` exactly as ``_scratch/convert_to_mlx.py``, honouring
-        ``self.quantize``.
-
         Args:
             target_folder: Folder containing the fused (HF-format) model.
             mlx_folder: Folder to save the MLX-format model to.
@@ -253,9 +220,6 @@ class MLXLoRATrainer:
 
     def post_process(self, model_card: ModelCard) -> None:
         """Fuse, optionally convert, and upload the fine-tuned model.
-
-        Local analogue of the HF trainer's ``post_process``. No ``download_output`` step
-        — the adapter is already local.
 
         Args:
             model_card: Model card metadata.
