@@ -562,7 +562,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "londonaicentre-mesa-finetune", editable = "../../lib/finetune" },
-    { name = "londonaicentre-oncoschema", editable = "../../schemas/oncoschema" },
+    { name = "londonaicentre-oncoschema", specifier = "==2.0.2" },
 ]
 
 [[package]]
@@ -1098,23 +1098,14 @@ dev = [
 [[package]]
 name = "londonaicentre-oncoschema"
 version = "2.0.2"
-source = { editable = "../../schemas/oncoschema" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
     { name = "pydantic" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "londonaicentre-mesa-utils", editable = "../../lib/utils" },
-    { name = "pydantic", specifier = ">=2.12.5" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.18.2" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "ruff", specifier = ">=0.14.6" },
+sdist = { url = "https://files.pythonhosted.org/packages/47/d3/e69d0f53d7d281ad96be7f0959f92ac9d3d88cf159639c47990cf1a83449/londonaicentre_oncoschema-2.0.2.tar.gz", hash = "sha256:49f9f798b8a493c7feedb39c05a26f423fb9257a75b2e1b000988d0bf2ec7d8c", size = 24395, upload-time = "2026-04-29T16:50:21.407Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d3/bc/37ab8147a1e9c9b4a703db784e422e71d5819f5cb10934519158bd02ff95/londonaicentre_oncoschema-2.0.2-py3-none-any.whl", hash = "sha256:b1d860bdcd15b86ccc55fbb2d912ad19d1aec891537838a0f34bbaf194b842ec", size = 26375, upload-time = "2026-04-29T16:50:20.396Z" },
 ]
 
 [[package]]
