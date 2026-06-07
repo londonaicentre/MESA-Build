@@ -27,10 +27,6 @@ uv run python generate.py
 uv run python upload.py
 ```
 
-`generate.py` prints progress per document and leaves results in
-`./data/trainingdata/`. `upload.py` prints the final
-`s3://…/trainingdata/<timestamp>_docgen-test/` URI.
-
 ## Notes
 
 - Running `generate.py` is billable — it makes one real-time Bedrock inference call per document.
