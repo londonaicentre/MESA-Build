@@ -41,7 +41,7 @@ The pipeline persists data and artifacts in two S3 buckets. The **build** bucket
 Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_config["region"]` from the trainers).
 
 
-### Project Flow
+## Project Flow
 
 0. **Documents** are packaged as `Document` JSON objects in `.tar.gz` batches. Documents can be manually uploaded, or produced from synthetic document pipelines (outside of MESA-Build):
 
