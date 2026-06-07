@@ -33,7 +33,7 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 
 The pipeline persists data and artifacts in two S3 buckets. The **build** bucket is the working store for training data and built models; the **public** bucket is an opt-in distribution target for finished models.
 
-| Bucket | Role | Where it's set |
+| Bucket | Role |
 |---|---|---|
 | `aicentre-nlpteam-mesa-build` | Synthetic documents + training data + built (unpacked) models |
 | `aicentre-nlpteam-mesa-public` | Public distribution of finished models (tarballs) |
