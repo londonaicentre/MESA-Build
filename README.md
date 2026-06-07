@@ -27,6 +27,50 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 └── .github/workflows/   # CI/CD automation
 ```
 
+## AWS Buckets
+
+The pipeline uses two S3 buckets. The **build** bucket is the working store for training data and built models; the **public** bucket is an opt-in distribution target for finished models.
+
+| Bucket | Role | Where it's set |
+|---|---|---|
+| `aicentre-nlpteam-mesa-build` | Synthetic documents + training data + built (unpacked) models |
+| `aicentre-nlpteam-mesa-public` | Public distribution of finished models (tarballs) |
+
+Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_config["region"]` from the trainers).
+
+### What goes where, per stage
+
+1. **Training-data generation** (`lib/datagen`) — uploads a validated batch to the **build** bucket:
+
+   ```text
+   s3://aicentre-nlpteam-mesa-build/trainingdata/<batch_name>/<batch_name>.jsonl
+   ```
+
+2. **Fine-tuning** (`lib/finetune`) reads that batch and produces a merged model:
+
+   - **HF / SageMaker** (`HuggingFaceLoRATrainer`) will stage `train.jsonl` to S3, and reads/writes job artefacts under the **build** bucket:
+
+     ```text
+     s3://aicentre-nlpteam-mesa-build/jobs/train/<job_id>/input/train.jsonl
+     s3://aicentre-nlpteam-mesa-build/jobs/train/<job_id>/output/...     # adapter from SageMaker
+     ```
+
+   - **MLX** (`MLXLoRATrainer`) trains and fuses locally and does not stage any files to S3
+
+3. **Publish** (`post_process` on either trainer) — the primary target is the build bucket:
+
+   ```text
+   s3://aicentre-nlpteam-mesa-build/models/<model_name>/<model_name>_<major>_<minor>_<patch>/
+       config.json, *.safetensors, tokenizer*, model_card.yaml      # individual files, no tarball
+   ```
+
+   With `push_public=True`, a tarball is additionally pushed to the public bucket:
+
+   ```text
+   s3://aicentre-nlpteam-mesa-public/<model_name>/<model_name>_<major>_<minor>_<patch>.tar.gz
+       (model files + model_card.yml + LICENSE.md)
+   ```
+
 ## Schema Packages
 
 [**oncoschema**](schemas/oncoschema/src/oncoschema/schema.py): Pydantic schema and prompts for extracting information from cancer clinical documents

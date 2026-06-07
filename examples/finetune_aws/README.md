@@ -8,7 +8,9 @@ This folder can be used as the starting point for a real pipeline.
 The flow is split into two scripts:
 
 - `run_example.py` — prepares + validates a training batch in S3 (`20260123-094248_test-batch`, 10 samples), stages `train.jsonl`, and launches a SageMaker training job. The trainer is wired to a schema + prompt builder (`oncoschema`) describing the target output format, and a standard `config.yaml` holding only training params (the trainer translates it into the SageMaker HuggingFace `hyperparameters` dict).
-- `post_process.py` — once the job completes, downloads the trained adapter, merges it with the base model, builds a model card, and uploads the merged model to S3.
+- `post_process.py` — once the job completes, downloads the trained adapter, merges it with the base model, builds a model card, and uploads to the build bucket under `s3://aicentre-nlpteam-mesa-build/models/<model_name>/<model_name>_<major>_<minor>_<patch>/` as individual files (`*.safetensors`, `config.json`, `tokenizer*`, `model_card.yaml`).
+
+Note that this example passes `push_public=False` to `post_process`. If set `push_public=True`, then this would additionally publish a `.tar.gz` to the public bucket for production runs.
 
 ## Prerequisites
 
@@ -35,7 +37,7 @@ uv run python post_process.py \
     --job-name mesa-<job_id>-...
 ```
 
-This downloads the adapter, merges it with the base model, and uploads the merged model to S3.
+This downloads the adapter, merges it with the base model, and uploads the unpacked merged model to the build bucket under `models/qwen-onco-example/qwen-onco-example_1_0_0/`.
 
 ## Notes
 

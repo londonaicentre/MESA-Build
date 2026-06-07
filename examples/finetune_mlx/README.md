@@ -16,11 +16,15 @@ It then runs the full flow end-to-end:
 - prepares + validates the data locally,
 - trains a LoRA adapter via `mlx_lm.lora`,
 - fuses the adapter into the base model via `mlx_lm.fuse`,
-- builds a model card and uploads the merged model to S3.
+- builds a model card and uploads the unpacked merged model to the build bucket.
+
+The merged model is published to the build bucket under `s3://aicentre-nlpteam-mesa-build/models/<model_name>/<model_name>_<major>_<minor>_<patch>/` as individual files (`*.safetensors`, `config.json`, `tokenizer*`, `model_card.yaml`).
+
+The example passes `push_public=False` to `post_process`. If set `push_public=True`, then this would additionally publish a `.tar.gz` to the public bucket for production runs.
 
 ## Prerequisites
 
-- **Apple Silicon (macOS, arm64)** — the `mlx` extra only installs there.
+- Apple Silicon (macOS, arm64) - the `mlx` extra only installs there.
 - [`uv`](https://docs.astral.sh/uv/)
 - AWS credentials with access to the `aicentre-nlpteam-mesa-build` bucket (for the upload)
 
@@ -33,4 +37,4 @@ uv sync                      # installs mlx + mlx-lm too (Apple Silicon only, vi
 uv run python run_example.py
 ```
 
-This prepares the data, trains a LoRA adapter locally, fuses it into the base model, and uploads the merged model to S3. The fused model is left at `data/models/qwen-onco-mlx-example/target/*.safetensors`.
+This prepares the data, trains a LoRA adapter locally, fuses it into the base model, and uploads the unpacked merged model to the build bucket under `models/qwen-onco-mlx-example/qwen-onco-mlx-example_1_0_0/`. The fused model is left locally at `data/models/qwen-onco-mlx-example/target/*.safetensors`.

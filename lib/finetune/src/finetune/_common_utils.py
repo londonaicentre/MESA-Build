@@ -4,7 +4,8 @@ _common_utils.py
 Common utilities shared by hf_estimator.py and mlx_trainer.py
 - job id creation
 - model card construction
-- archive (tar) and upload of models
+- unpacked upload of models to the build bucket (primary publish target)
+- archive (tar) and upload of models to the public bucket (opt-in)
 """
 
 import io
@@ -73,6 +74,45 @@ def build_model_card(
     )
 
 
+def upload_model_folder(
+    *,
+    target_folder: str,
+    model_card: ModelCard,
+    region: str,
+    bucket: str,
+) -> None:
+    """Upload an unpacked model folder + model_card.yaml to the build bucket.
+
+    Args:
+        target_folder: Folder containing the merged/fused model (flat layout).
+        model_card: Model card metadata (written in as ``model_card.yaml``).
+        region: AWS region.
+        bucket: S3 bucket name (the build bucket from ``aws_config``).
+
+    Raises:
+        ValueError: if any per-file upload fails.
+    """
+    target_path = Path(target_folder)
+    # Write model_card.yaml into the folder (same bytes as the public tarball, .yaml filename).
+    (target_path / "model_card.yaml").write_bytes(model_card.to_yaml_bytes())
+
+    version_dir = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}"
+    prefix = f"models/{model_card.model_name}/{version_dir}"
+
+    for item in target_path.iterdir():
+        if not item.is_file():
+            continue  # fused output is flat; skip any sub-dirs
+        success = AWS.upload_file(
+            region_name=region,
+            file_name=str(item),
+            bucket=bucket,
+            object_name=item.name,
+            path=prefix,
+        )
+        if not success:
+            raise ValueError(f"Failed to upload {item.name} to build bucket")
+
+
 def archive_and_upload(
     *,
     target_folder: str,
@@ -81,7 +121,7 @@ def archive_and_upload(
     region: str,
     bucket: str = "aicentre-nlpteam-mesa-public",
 ) -> bool:
-    """Tar the merged model + ``model_card.yml`` + ``LICENSE.md`` and upload to S3.
+    """Tar the merged model + model_card.yml + LICENSE.md and upload to MESA public bucket.
 
     Args:
         target_folder: Folder containing the merged/fused model.

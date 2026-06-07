@@ -43,9 +43,10 @@ def main() -> None:
         output_schema=OncologyModel,
     )
 
-    # Fuse the adapter into the base model on disk, then archive + upload the merged model.
-    trainer.post_process(card)
-    print("Post-processing complete — merged model uploaded to S3.")
+    # Fuse the adapter into the base model on disk, then upload the unpacked merged model
+    # to the build bucket. push_public=False keeps it off the public bucket.
+    trainer.post_process(card, push_public=False)
+    print("Post-processing complete — merged model uploaded to the build bucket.")
 
 
 if __name__ == "__main__":

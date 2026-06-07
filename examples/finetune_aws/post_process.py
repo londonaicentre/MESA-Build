@@ -52,9 +52,12 @@ def main(s3_output_path: str, job_name: str) -> None:
         output_schema=OncologyModel,
     )
 
-    # Download adapter -> merge with base -> upload merged model to S3.
-    trainer.post_process(card, s3_output_path=s3_output_path, job_name=job_name)
-    print("Post-processing complete — merged model uploaded to S3.")
+    # Download adapter -> merge with base -> upload unpacked merged model to the build bucket.
+    # push_public=False keeps it off the public bucket.
+    trainer.post_process(
+        card, s3_output_path=s3_output_path, job_name=job_name, push_public=False
+    )
+    print("Post-processing complete — merged model uploaded to the build bucket.")
 
 
 if __name__ == "__main__":

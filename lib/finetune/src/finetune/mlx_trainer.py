@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from finetune._common_utils import (
     archive_and_upload,
     make_job_id,
+    upload_model_folder,
 )
 from finetune.config import load_config, to_mlx_config
 from finetune.trainingdata_handler import TrainingDataHandler
@@ -218,11 +219,17 @@ class MLXLoRATrainer:
         subprocess.run(cmd, check=True)
         return True
 
-    def post_process(self, model_card: ModelCard) -> None:
+    def post_process(self, model_card: ModelCard, push_public: bool = False) -> None:
         """Fuse, optionally convert, and upload the fine-tuned model.
+
+        The primary publish target is the build bucket (unpacked, under
+        models/{model_name}/{model_name}_{v}/)
+        
+        Set push_public=True to also push tarball to the public bucket.
 
         Args:
             model_card: Model card metadata.
+            push_public: Also upload the public tarball. Defaults to False.
         """
         target_folder = Path(self.target_dir)
         target_folder.mkdir(parents=True, exist_ok=True)
@@ -233,9 +240,16 @@ class MLXLoRATrainer:
             mlx_folder.mkdir(parents=True, exist_ok=True)
             if not self.convert(str(target_folder), str(mlx_folder)):
                 raise ValueError("converting to MLX format failed")
-        archive_and_upload(
+        upload_model_folder(
             target_folder=str(target_folder),
             model_card=model_card,
-            model_name=self.model_name,
             region=self.region,
+            bucket=self.bucket,
         )
+        if push_public:
+            archive_and_upload(
+                target_folder=str(target_folder),
+                model_card=model_card,
+                model_name=self.model_name,
+                region=self.region,
+            )

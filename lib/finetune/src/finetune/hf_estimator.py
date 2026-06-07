@@ -17,6 +17,7 @@ from sagemaker.estimator import _TrainingJob
 from finetune._common_utils import (
     archive_and_upload,
     make_job_id,
+    upload_model_folder,
 )
 from finetune.config import load_config, to_hf_hyperparameters
 from finetune.trainingdata_handler import TrainingDataHandler
@@ -240,14 +241,24 @@ class HuggingFaceLoRATrainer:
         return True
 
     def post_process(
-        self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None
+        self,
+        model_card: ModelCard,
+        s3_output_path: str | None,
+        job_name: str | None,
+        push_public: bool = False,
     ) -> None:
         """Download, merge and upload fine-tuned model.
+
+        The primary publish target is the build bucket (unpacked, under
+        models/{model_name}/{model_name}_{v}/)
+        
+        Set push_public=True to also push tarball to the public bucket.
 
         Args:
             model_card (ModelCard): Model card metadata.
             s3_output_path (str | None): S3 output path. If None, uses self.s3_output_path.
             job_name (str | None): SageMaker job name. If None, uses self.last_job_name.
+            push_public (bool): Also upload the public tarball. Defaults to False.
 
         """
         model_folder = f"data/models/{self.description}"
@@ -263,9 +274,16 @@ class HuggingFaceLoRATrainer:
         target_folder.mkdir(parents=True, exist_ok=True)
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
-        archive_and_upload(
+        upload_model_folder(
             target_folder=str(target_folder),
             model_card=model_card,
-            model_name=self.model_name,
             region=self.region,
+            bucket=self.bucket,
         )
+        if push_public:
+            archive_and_upload(
+                target_folder=str(target_folder),
+                model_card=model_card,
+                model_name=self.model_name,
+                region=self.region,
+            )
