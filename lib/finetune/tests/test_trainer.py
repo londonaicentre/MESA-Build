@@ -22,7 +22,6 @@ def model_card() -> MagicMock:
 
 
 class TestMakeJobId:
-    # Job id is "<timestamp>-<description>". datetime mocked for a deterministic stamp.
     def test_make_job_id_format(
         self, mocker: MockerFixture, make_base_trainer: BaseTrainerFactory
     ) -> None:
@@ -32,20 +31,18 @@ class TestMakeJobId:
 
 
 class TestBuildModelCard:
-    # build_model_card pulls base_model/model_name/schema/training_batch_names from state and
-    # defaults model_description to the trainer description; an explicit description overrides it.
     def test_build_model_card_reads_state(
         self, make_base_trainer: BaseTrainerFactory
     ) -> None:
         card = make_base_trainer(
             model_name="foo", training_batch_names=["batch-a", "batch-b"]
         ).build_model_card(1, 2, 3)
-        assert card.base_model_hf == "baz"  # from the shared config fixture
+        assert card.base_model_hf == "baz"
         assert card.model_name == "foo"
         assert card.major == 1
         assert card.minor == 2
         assert card.patch == 3
-        assert card.model_description == "foo"  # defaults to trainer description
+        assert card.model_description == "foo"
         assert card.training_data == ["batch-a", "batch-b"]
         assert card.output_schema is SchemaFixture
 
@@ -61,8 +58,6 @@ class TestBuildModelCard:
 
 
 class TestPrepareTrainingData:
-    # Delegates to TrainingDataHandler.prepare with the trainer's schema/prompt/batch/bucket/region
-    # and the given output_file. TrainingDataHandler mocked.
     def test_prepare_training_data_delegates(
         self, mocker: MockerFixture, make_base_trainer: BaseTrainerFactory
     ) -> None:
@@ -87,8 +82,6 @@ class TestPrepareTrainingData:
 
 
 class TestUploadModelFolder:
-    # Writes model_card.yaml into the folder then uploads every file (skipping sub-dirs) using the
-    # trainer's region/bucket; an upload failure raises. Uses a real tmp_path; AWS.upload_file mocked.
     def test_writes_model_card_and_uploads_each_file(
         self,
         tmp_path: Path,
@@ -99,20 +92,17 @@ class TestUploadModelFolder:
         upload: MagicMock = mocker.patch(
             "finetune.trainer.AWS.upload_file", return_value=True
         )
-        # Dedicated target folder (the config_path fixture lives in tmp_path itself).
         target = tmp_path / "target"
         target.mkdir()
         (target / "model.safetensors").write_text("weights")
         (target / "config.json").write_text("{}")
-        (target / "subdir").mkdir()  # must be skipped
+        (target / "subdir").mkdir()
 
         make_base_trainer(
             aws_config={"bucket": "baz", "region": "qux", "role": "x"}
         ).upload_model_folder(str(target), model_card)
 
-        # model_card.yaml written into the folder
         assert (target / "model_card.yaml").read_bytes() == b"bar"
-        # one upload per file (model.safetensors, config.json, model_card.yaml); no sub-dir
         uploaded = {call.kwargs["object_name"] for call in upload.call_args_list}
         assert uploaded == {"model.safetensors", "config.json", "model_card.yaml"}
         assert all(
@@ -163,9 +153,6 @@ def archive_mocks(mocker: MockerFixture) -> ArchiveMocks:
 
 
 class TestArchiveAndUpload:
-    # Two arms: when the tarball already exists, skip creation and just upload (kwargs + returns
-    # true) using the trainer's region/model_name; when it doesn't, build it from the target items
-    # + model_card.yml + LICENSE. The default bucket is the public one, and a failure raises.
     def test_archive_exists_calls_aws_upload_file(
         self,
         archive_mocks: ArchiveMocks,
@@ -178,7 +165,7 @@ class TestArchiveAndUpload:
             model_name="waldo",
             aws_config={"bucket": "x", "region": "qux", "role": "y"},
         ).archive_and_upload("grault/garply", model_card, "public-bucket")
-        archive_mocks.tarfile.assert_not_called()  # existing tarball is reused, not rebuilt
+        archive_mocks.tarfile.assert_not_called()
         archive_mocks.aws.assert_called_once_with(
             region_name="qux",
             file_name=str(
@@ -243,7 +230,6 @@ class TestArchiveAndUpload:
         archive_mocks.path.return_value.iterdir.return_value = [item1, item2]
         make_base_trainer().archive_and_upload("quux/corge", model_card)
         mock_tar: MagicMock = archive_mocks.tarfile.return_value.__enter__.return_value
-        # two target items + LICENSE.md
         assert mock_tar.add.call_count == 3
         mock_tar.add.assert_any_call(item1, arcname="baz.txt")
         mock_tar.add.assert_any_call(item2, arcname="qux.txt")
@@ -295,8 +281,6 @@ class TestArchiveAndUpload:
 
 
 class TestPublish:
-    # Always uploads the unpacked folder; only archives to the public bucket when push_public.
-    # The two leaf methods are mocked on the base class.
     def test_publish_uploads_folder(
         self,
         mocker: MockerFixture,
