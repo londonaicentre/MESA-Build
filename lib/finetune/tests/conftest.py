@@ -12,6 +12,7 @@ import pytest
 
 from finetune.hf_estimator import HuggingFaceLoRATrainer
 from finetune.mlx_trainer import MLXLoRATrainer
+from finetune.trainer import LoRATrainer
 from fixtures import SchemaFixture
 from utils.prompt import BasePromptBuilder
 
@@ -54,6 +55,30 @@ def config_path(tmp_path: Path) -> str:
     return str(path)
 
 
+class LoRATrainerFixture(LoRATrainer):
+    """Expose the base trainer's protected methods for direct testing."""
+
+    def make_job_id(self, description: str) -> str:
+        return self._make_job_id(description)
+
+    def prepare_training_data(self, output_file: str) -> str:
+        return self._prepare_training_data(output_file)
+
+    def upload_model_folder(self, target_folder: str, model_card: Any) -> None:
+        return self._upload_model_folder(target_folder, model_card)
+
+    def archive_and_upload(
+        self,
+        target_folder: str,
+        model_card: Any,
+        bucket: str = "aicentre-nlpteam-mesa-public",
+    ) -> bool:
+        return self._archive_and_upload(target_folder, model_card, bucket)
+
+    def publish(self, target_folder: str, model_card: Any, push_public: bool) -> None:
+        return self._publish(target_folder, model_card, push_public)
+
+
 class HuggingFaceLoRATrainerFixture(HuggingFaceLoRATrainer):
     """Expose private path attributes for assertions."""
 
@@ -76,6 +101,10 @@ class TrainerFactory(Protocol):
 
 class MLXTrainerFactory(Protocol):
     def __call__(self, **overrides: Any) -> MLXLoRATrainer: ...
+
+
+class BaseTrainerFactory(Protocol):
+    def __call__(self, **overrides: Any) -> LoRATrainerFixture: ...
 
 
 @pytest.fixture
@@ -127,5 +156,28 @@ def make_mlx_trainer(config_path: str) -> MLXTrainerFactory:
         }
         kwargs.update(overrides)
         return MLXLoRATrainer(**kwargs)
+
+    return _make
+
+
+@pytest.fixture
+def make_base_trainer(config_path: str) -> BaseTrainerFactory:
+    """Factory returning a LoRATrainerFixture with sensible defaults.
+
+    Override any constructor arg via keyword, e.g. ``make_base_trainer(model_name="x")``.
+    """
+
+    def _make(**overrides: Any) -> LoRATrainerFixture:
+        kwargs: dict[str, Any] = {
+            "schema": SchemaFixture,
+            "prompt_builder": PromptBuilderFixture(),
+            "training_batch_names": ["bar"],
+            "config_path": config_path,
+            "aws_config": {"bucket": "qux", "region": "quux", "role": "corge"},
+            "model_name": "foo",
+            "description": "foo",
+        }
+        kwargs.update(overrides)
+        return LoRATrainerFixture(**kwargs)
 
     return _make

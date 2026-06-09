@@ -6,11 +6,13 @@ import pytest
 from pytest_mock import MockerFixture
 
 from conftest import MLXTrainerFactory
+from finetune.config import FinetuneConfig
 from finetune.mlx_trainer import MLXLoRATrainer
+from finetune.trainer import LoRATrainer
 
 
 def _patch_job_id_datetime(mocker: MockerFixture) -> MagicMock:
-    mock_datetime: MagicMock = mocker.patch("finetune._common_utils.datetime")
+    mock_datetime: MagicMock = mocker.patch("finetune.trainer.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
     return mock_datetime
 
@@ -54,11 +56,9 @@ def subprocess_run(mocker: MockerFixture) -> MagicMock:
 def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
     mock_path: MagicMock = mocker.patch("finetune.mlx_trainer.Path")
     # train_jsonl.read_text() -> three non-empty lines
-    mock_path.return_value.__truediv__.return_value.read_text.return_value = (
-        "a\nb\nc\n"
-    )
+    mock_path.return_value.__truediv__.return_value.read_text.return_value = "a\nb\nc\n"
     return PrepareDataMocks(
-        mocker.patch("finetune.mlx_trainer.TrainingDataHandler.prepare"),
+        mocker.patch("finetune.trainer.TrainingDataHandler.prepare"),
         mock_path,
         mocker.patch("finetune.mlx_trainer.logger"),
     )
@@ -69,9 +69,8 @@ def write_config_mocks(mocker: MockerFixture) -> WriteConfigMocks:
     # Real filesystem writes happen under tmp_path (the test passes work_dir=tmp_path),
     # so only the translator and the YAML dump are mocked.
     return WriteConfigMocks(
-        mocker.patch(
-            "finetune.mlx_trainer.to_mlx_config",
-            return_value={"model": "baz"},
+        mocker.patch.object(
+            FinetuneConfig, "to_mlx_config", return_value={"model": "baz"}
         ),
         mocker.patch("finetune.mlx_trainer.yaml.safe_dump"),
     )
@@ -97,8 +96,8 @@ def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
         mocker.patch("finetune.mlx_trainer.Path"),
         mocker.patch.object(MLXLoRATrainer, "fuse"),
         mocker.patch.object(MLXLoRATrainer, "convert"),
-        mocker.patch("finetune.mlx_trainer.upload_model_folder"),
-        mocker.patch("finetune.mlx_trainer.archive_and_upload"),
+        mocker.patch.object(LoRATrainer, "_upload_model_folder"),
+        mocker.patch.object(LoRATrainer, "_archive_and_upload"),
     )
 
 
@@ -121,29 +120,21 @@ class TestConstructor:
         _patch_job_id_datetime(mocker)
         assert make_mlx_trainer(description="grault").job_id == "20260101-120000-grault"
 
-    def test_init_sets_local_paths(
-        self, make_mlx_trainer: MLXTrainerFactory
-    ) -> None:
-        trainer: MLXLoRATrainer = make_mlx_trainer(
-            description="bar", work_dir="work"
-        )
+    def test_init_sets_local_paths(self, make_mlx_trainer: MLXTrainerFactory) -> None:
+        trainer: MLXLoRATrainer = make_mlx_trainer(description="bar", work_dir="work")
         assert trainer.model_folder == "work/bar"
         assert trainer.data_dir == "work/bar/data"
         assert trainer.adapter_dir == "work/bar/adapter"
         assert trainer.target_dir == "work/bar/target"
         assert trainer.mlx_dir == "work/bar/mlx"
-        assert (
-            trainer.resolved_config_path == "work/bar/mlx_lora_config.resolved.yaml"
-        )
+        assert trainer.resolved_config_path == "work/bar/mlx_lora_config.resolved.yaml"
 
     def test_init_loads_base_model_from_config(
         self, make_mlx_trainer: MLXTrainerFactory
     ) -> None:
         assert make_mlx_trainer().base_model == "baz"
 
-    def test_init_num_samples_unset(
-        self, make_mlx_trainer: MLXTrainerFactory
-    ) -> None:
+    def test_init_num_samples_unset(self, make_mlx_trainer: MLXTrainerFactory) -> None:
         assert make_mlx_trainer().num_samples is None
 
 
@@ -208,9 +199,7 @@ class TestWriteConfig:
         )
         trainer.num_samples = 5
         trainer._write_config(f"{tmp_path}/foo/data")
-        write_config_mocks.to_mlx_config.assert_called_once_with(
-            trainer.config, num_samples=5
-        )
+        write_config_mocks.to_mlx_config.assert_called_once_with(5)
         dumped = write_config_mocks.yaml.call_args[0][0]
         assert dumped["data"] == f"{tmp_path}/foo/data"
         assert dumped["adapter_path"] == f"{tmp_path}/foo/adapter"
@@ -254,7 +243,10 @@ class TestRun:
         run_mocks.train.assert_called_once_with("resolved.yaml")
 
     def test_returns_job_id(
-        self, mocker: MockerFixture, run_mocks: RunMocks, make_mlx_trainer: MLXTrainerFactory
+        self,
+        mocker: MockerFixture,
+        run_mocks: RunMocks,
+        make_mlx_trainer: MLXTrainerFactory,
     ) -> None:
         _patch_job_id_datetime(mocker)
         trainer: MLXLoRATrainer = make_mlx_trainer(description="foo")
@@ -265,16 +257,20 @@ class TestFuse:
     # Two branches: an already-fused target short-circuits without shelling out; otherwise fuse()
     # runs `mlx_lm.fuse` with the right args. Path.exists and subprocess.run mocked.
     def test_existing_model_returns_true_without_subprocess(
-        self, subprocess_run: MagicMock, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+        self,
+        subprocess_run: MagicMock,
+        mocker: MockerFixture,
+        make_mlx_trainer: MLXTrainerFactory,
     ) -> None:
-        mocker.patch(
-            "finetune.mlx_trainer.Path.exists", return_value=True
-        )
+        mocker.patch("finetune.mlx_trainer.Path.exists", return_value=True)
         assert make_mlx_trainer().fuse("target")
         subprocess_run.assert_not_called()
 
     def test_calls_mlx_lm_fuse(
-        self, subprocess_run: MagicMock, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+        self,
+        subprocess_run: MagicMock,
+        mocker: MockerFixture,
+        make_mlx_trainer: MLXTrainerFactory,
     ) -> None:
         mocker.patch("finetune.mlx_trainer.Path.exists", return_value=False)
         trainer: MLXLoRATrainer = make_mlx_trainer(description="foo", work_dir="work")
@@ -329,10 +325,7 @@ class TestPostProcess:
         ).post_process(model_card)
         post_process_mocks.fuse.assert_called_once()
         post_process_mocks.upload_model_folder.assert_called_once_with(
-            target_folder=str(post_process_mocks.path.return_value),
-            model_card=model_card,
-            region="qux",
-            bucket="baz",
+            str(post_process_mocks.path.return_value), model_card
         )
 
     def test_fuse_fails_raises_value_error(
@@ -399,8 +392,5 @@ class TestPostProcess:
             aws_config={"bucket": "baz", "region": "qux", "role": "x"},
         ).post_process(model_card, push_public=True)
         post_process_mocks.archive_and_upload.assert_called_once_with(
-            target_folder=str(post_process_mocks.path.return_value),
-            model_card=model_card,
-            model_name="grault",
-            region="qux",
+            str(post_process_mocks.path.return_value), model_card
         )
