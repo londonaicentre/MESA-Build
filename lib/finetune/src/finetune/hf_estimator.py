@@ -14,20 +14,14 @@ from pydantic import BaseModel
 from sagemaker.huggingface import HuggingFace
 from sagemaker.estimator import _TrainingJob
 
-from finetune._common_utils import (
-    archive_and_upload,
-    make_job_id,
-    upload_model_folder,
-)
-from finetune.config import load_config, to_hf_hyperparameters
-from finetune.trainingdata_handler import TrainingDataHandler
+from finetune.trainer import LoRATrainer
 from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
 
 logger = logging.getLogger(__name__)
 
 
-class HuggingFaceLoRATrainer:
+class HuggingFaceLoRATrainer(LoRATrainer):
     """Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator.
 
     Args:
@@ -59,28 +53,22 @@ class HuggingFaceLoRATrainer:
         pytorch_version: str = "2.8",
         py_version: str = "py312",
     ):
-        self.schema = schema
-        self.prompt_builder = prompt_builder
-        self.training_batch_names = training_batch_names
-        self.config = load_config(config_path)
-        self.hyperparameters = to_hf_hyperparameters(self.config)
-        self.base_model = self.config.training.base_model
-        self.aws_config = aws_config
-        self.model_name = model_name
-        self.description = description
+        super().__init__(
+            schema,
+            prompt_builder,
+            training_batch_names,
+            config_path,
+            aws_config,
+            model_name,
+            description,
+        )
+        self.hyperparameters = self.config.to_hf_hyperparameters()
         self.instance_type = instance_type
         self.instance_count = instance_count
         self.transformers_version = transformers_version
         self.pytorch_version = pytorch_version
         self.py_version = py_version
 
-        # job ID (sagemaker does not like underscores!)
-        self.job_id = make_job_id(description)
-
-        # pass from an aws config dict
-        self.bucket = aws_config["bucket"]
-        self.region = aws_config["region"]
-        self.role = aws_config["role"]
         self.s3_input_path = f"jobs/train/{self.job_id}/input"
         self.s3_output_path = f"jobs/train/{self.job_id}/output"
         self.s3_full_output_path = (
@@ -97,16 +85,7 @@ class HuggingFaceLoRATrainer:
         """
         logger.info(f"Preparing training data for job: {self.job_id}")
 
-        train_jsonl = TrainingDataHandler.prepare(
-            schema=self.schema,
-            system_prompt=self.prompt_builder.build_main_prompt(),
-            training_batch_names=self.training_batch_names,
-            bucket=self.bucket,
-            s3_prefix="trainingdata",
-            output_file="train.jsonl",
-            region=self.region,
-            shuffle=True,
-        )
+        train_jsonl = self._prepare_training_data("train.jsonl")
 
         logger.info(f"Uploading to S3: {self.s3_input_path}")
         AWS.upload_file(
@@ -225,9 +204,7 @@ class HuggingFaceLoRATrainer:
         from peft import PeftModel
 
         base = AutoModelForCausalLM.from_pretrained(
-            self.base_model,
-            torch_dtype="auto",
-            trust_remote_code=True
+            self.base_model, torch_dtype="auto", trust_remote_code=True
         )
         model = PeftModel.from_pretrained(
             base, source_folder, autocast_adapter_dtype=False
@@ -251,7 +228,7 @@ class HuggingFaceLoRATrainer:
 
         The primary publish target is the build bucket (unpacked, under
         models/{model_name}/{model_name}_{v}/)
-        
+
         Set push_public=True to also push tarball to the public bucket.
 
         Args:
@@ -274,16 +251,4 @@ class HuggingFaceLoRATrainer:
         target_folder.mkdir(parents=True, exist_ok=True)
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
-        upload_model_folder(
-            target_folder=str(target_folder),
-            model_card=model_card,
-            region=self.region,
-            bucket=self.bucket,
-        )
-        if push_public:
-            archive_and_upload(
-                target_folder=str(target_folder),
-                model_card=model_card,
-                model_name=self.model_name,
-                region=self.region,
-            )
+        self._publish(str(target_folder), model_card, push_public)

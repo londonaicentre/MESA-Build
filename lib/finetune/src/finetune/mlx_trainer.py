@@ -12,19 +12,13 @@ import yaml
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
 
-from finetune._common_utils import (
-    archive_and_upload,
-    make_job_id,
-    upload_model_folder,
-)
-from finetune.config import load_config, to_mlx_config
-from finetune.trainingdata_handler import TrainingDataHandler
+from finetune.trainer import LoRATrainer
 from utils.prompt import BasePromptBuilder
 
 logger = logging.getLogger(__name__)
 
 
-class MLXLoRATrainer:
+class MLXLoRATrainer(LoRATrainer):
     """Orchestrate LoRA fine-tuning locally on Apple Silicon using mlx_lm.
 
     Args:
@@ -52,23 +46,17 @@ class MLXLoRATrainer:
         work_dir: str = "data/models",
         quantize: str | None = None,
     ):
-        self.schema = schema
-        self.prompt_builder = prompt_builder
-        self.training_batch_names = training_batch_names
-        self.config_path = config_path
-        self.aws_config = aws_config
-        self.model_name = model_name
-        self.description = description
+        super().__init__(
+            schema,
+            prompt_builder,
+            training_batch_names,
+            config_path,
+            aws_config,
+            model_name,
+            description,
+        )
         self.work_dir = work_dir
         self.quantize = quantize
-
-        # job ID
-        self.job_id = make_job_id(description)
-
-        # pass from an aws config dict (role unused locally)
-        self.bucket = aws_config["bucket"]
-        self.region = aws_config["region"]
-        self.role = aws_config.get("role", "")
 
         # local working paths under {work_dir}/{description}/
         self.model_folder = f"{work_dir}/{description}"
@@ -78,9 +66,8 @@ class MLXLoRATrainer:
         self.mlx_dir = f"{self.model_folder}/mlx"
         self.resolved_config_path = f"{self.model_folder}/mlx_lora_config.resolved.yaml"
 
-        # neutral config drives training; iters derives from num_samples at _write_config time
-        self.config = load_config(config_path)
-        self.base_model = self.config.training.base_model
+        # neutral config (loaded by the base) drives training; iters derives from
+        # num_samples at _write_config time
         self.num_samples: int | None = None
 
     def prepare_data(self) -> str:
@@ -95,25 +82,14 @@ class MLXLoRATrainer:
         data_path.mkdir(parents=True, exist_ok=True)
 
         train_jsonl = data_path / "train.jsonl"
-        TrainingDataHandler.prepare(
-            schema=self.schema,
-            system_prompt=self.prompt_builder.build_main_prompt(),
-            training_batch_names=self.training_batch_names,
-            bucket=self.bucket,
-            s3_prefix="trainingdata",
-            output_file=str(train_jsonl),
-            region=self.region,
-            shuffle=True,
-        )
+        self._prepare_training_data(str(train_jsonl))
 
         # mlx trains by iters (derived from sample count); count non-empty lines
         self.num_samples = sum(
             1 for line in train_jsonl.read_text().splitlines() if line.strip()
         )
 
-        logger.info(
-            f"Prepared {self.num_samples} training samples in: {self.data_dir}"
-        )
+        logger.info(f"Prepared {self.num_samples} training samples in: {self.data_dir}")
         return self.data_dir
 
     def _write_config(self, data_dir: str) -> str:
@@ -129,7 +105,7 @@ class MLXLoRATrainer:
             raise ValueError(
                 "prepare_data must run before _write_config (num_samples unset)"
             )
-        config = to_mlx_config(self.config, num_samples=self.num_samples)
+        config = self.config.to_mlx_config(self.num_samples)
         config["data"] = data_dir
         config["adapter_path"] = self.adapter_dir
 
@@ -224,7 +200,7 @@ class MLXLoRATrainer:
 
         The primary publish target is the build bucket (unpacked, under
         models/{model_name}/{model_name}_{v}/)
-        
+
         Set push_public=True to also push tarball to the public bucket.
 
         Args:
@@ -240,16 +216,4 @@ class MLXLoRATrainer:
             mlx_folder.mkdir(parents=True, exist_ok=True)
             if not self.convert(str(target_folder), str(mlx_folder)):
                 raise ValueError("converting to MLX format failed")
-        upload_model_folder(
-            target_folder=str(target_folder),
-            model_card=model_card,
-            region=self.region,
-            bucket=self.bucket,
-        )
-        if push_public:
-            archive_and_upload(
-                target_folder=str(target_folder),
-                model_card=model_card,
-                model_name=self.model_name,
-                region=self.region,
-            )
+        self._publish(str(target_folder), model_card, push_public)
