@@ -12,7 +12,6 @@ A fused model is uploaded at the end.
 """
 
 from finetune import MLXLoRATrainer
-from finetune._common_utils import build_model_card
 from oncoschema.prompt_builder import PromptBuilder
 from oncoschema.schema import OncologyModel
 
@@ -81,16 +80,7 @@ def main():
     #
     # Re-running with the same model_name and same version numbers OVERWRITES the artifacts at
     # that prefix, so bump the version yourself when you want to keep a previous build.
-    card = build_model_card(
-        base_model=trainer.base_model,
-        model_name=trainer.model_name,
-        major=1,
-        minor=0,
-        patch=0,
-        model_description=trainer.description,
-        training_data=list(trainer.training_batch_names),
-        output_schema=OncologyModel,
-    )
+    card = trainer.build_model_card(1, 0, 0)
 
     ############################################################################################
     # 4. Fuse and publish.
