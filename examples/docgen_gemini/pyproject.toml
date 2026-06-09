@@ -1,0 +1,12 @@
+[project]
+name = "docgen-gemini-example"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "londonaicentre-mesa-datagen",
+    "londonaicentre-oncoschema==2.0.2",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.uv.sources]
+londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
