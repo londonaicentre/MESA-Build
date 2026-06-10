@@ -74,6 +74,8 @@ def prepare_mocks(mocker: MockerFixture) -> PrepareMocks:
 
 
 class TestS3Operations:
+    # S3 discovery + download branches: correct prefix, download-when-uncached, and the
+    # no-file / multiple-file / download-failure error paths. AWS/Path/open/shuffle mocked.
     def test_prepare_calls_list_s3_objects_with_correct_prefix(
         self, prepare_mocks: PrepareMocks
     ) -> None:
@@ -118,6 +120,7 @@ class TestS3Operations:
 
 
 class TestCaching:
+    # Two distinct behaviours: create the cache dir, and skip the download when already cached.
     def test_prepare_creates_cache_directory(self, prepare_mocks: PrepareMocks) -> None:
         TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"])
         prepare_mocks.path_mocks.mkdir.assert_called_once_with(
@@ -133,6 +136,8 @@ class TestCaching:
 
 
 class TestSampleValidation:
+    # Each invalid-sample path is skipped (with a logged warning) and an all-invalid batch raises:
+    # system-prompt mismatch / schema mismatch / bad JSON / no-valid-samples. open/logger mocked.
     def test_prepare_system_prompt_mismatch_skips_sample(
         self, prepare_mocks: PrepareMocks
     ) -> None:
@@ -196,6 +201,7 @@ class TestSampleValidation:
 
 
 class TestShuffle:
+    # Distinct branches: shuffle on by default vs off when disabled. random.shuffle mocked.
     def test_prepare_shuffles_samples_by_default(
         self, prepare_mocks: PrepareMocks
     ) -> None:
@@ -211,13 +217,7 @@ class TestShuffle:
 
 
 class TestOutput:
-    def test_prepare_single_batch_valid_sample_returns_path(
-        self, prepare_mocks: PrepareMocks
-    ) -> None:
-        assert (
-            TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"]) == "train.jsonl"
-        )
-
+    # prepare() echoes back the output_file it wrote to (a non-default value proves the behaviour).
     def test_prepare_custom_output_file_returns_custom_path(
         self, prepare_mocks: PrepareMocks
     ) -> None:
@@ -230,7 +230,8 @@ class TestOutput:
 
 
 class TestMultipleBatches:
-    def test_prepare_multiple_batches_combines_samples(
+    # Passing several batch names iterates S3 discovery once per batch. AWS.list_s3_objects mocked.
+    def test_prepare_iterates_over_each_batch_name(
         self, prepare_mocks: PrepareMocks
     ) -> None:
         prepare_mocks.aws_mocks.list_s3_objects.side_effect = [

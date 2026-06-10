@@ -190,6 +190,56 @@ def test_generate_sample_valid_input_returns_true(
     mock_sample_dependencies.save_training_sample.assert_called_once()
 
 
+def test_generate_sample_passes_default_sampling_params_to_completion(
+    mock_sample_dependencies: SampleDependencies, generator: GeneratorFixture
+) -> None:
+    mock_sample_dependencies.model_validate_json.return_value = MagicMock(
+        model_dump=lambda: {"source": "foo", "content": "bar"},
+        source="foo",
+        content="bar",
+    )
+    mock_message: MagicMock = MagicMock()
+    mock_message.choices = [MagicMock(message=MagicMock(content="baz"))]
+    mock_sample_dependencies.completion.return_value = mock_message
+    mock_sample_dependencies.save_training_sample.return_value = True
+    generator.generate_sample(Path("foo.json"))
+    _, kwargs = mock_sample_dependencies.completion.call_args
+    assert kwargs["max_tokens"] == 32768
+    assert kwargs["temperature"] == 0.001
+
+
+def test_generate_sample_passes_custom_sampling_params_to_completion(
+    mock_sample_dependencies: SampleDependencies,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+) -> None:
+    custom_generator: GeneratorFixture = GeneratorFixture(
+        system_prompt="foo",
+        user_prompt_function=lambda x: f"bar: {x}",
+        schema=MagicMock,
+        schema_name="baz",
+        model_name="qux",
+        api_key="quux",
+        document_batches=["foobar.tar.gz"],
+        max_tokens=4096,
+        temperature=0.7,
+    )
+    mock_sample_dependencies.model_validate_json.return_value = MagicMock(
+        model_dump=lambda: {"source": "foo", "content": "bar"},
+        source="foo",
+        content="bar",
+    )
+    mock_message: MagicMock = MagicMock()
+    mock_message.choices = [MagicMock(message=MagicMock(content="baz"))]
+    mock_sample_dependencies.completion.return_value = mock_message
+    mock_sample_dependencies.save_training_sample.return_value = True
+    custom_generator.generate_sample(Path("foo.json"))
+    _, kwargs = mock_sample_dependencies.completion.call_args
+    assert kwargs["max_tokens"] == 4096
+    assert kwargs["temperature"] == 0.7
+
+
 @pytest.mark.parametrize(
     "completion_return",
     [

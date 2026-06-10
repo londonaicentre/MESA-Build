@@ -5,31 +5,30 @@ Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator
 """
 
 import logging
-from datetime import datetime
 from pathlib import Path
 import tarfile
-from typing import Any, cast
+from typing import cast
 
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
 from sagemaker.huggingface import HuggingFace
 from sagemaker.estimator import _TrainingJob
 
-from finetune.trainingdata_handler import TrainingDataHandler
+from finetune.trainer import LoRATrainer
 from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
 
 logger = logging.getLogger(__name__)
 
 
-class HuggingFaceLoRATrainer:
+class HuggingFaceLoRATrainer(LoRATrainer):
     """Orchestrate LoRA fine-tuning on SageMaker using HuggingFace estimator.
 
     Args:
         schema: Pydantic schema class for validation
         prompt_builder: Prompt builder instance
         training_batch_names: List of S3 training batch folder names
-        hyperparameters: Training hyperparameters dict (base_model, num_epochs, learning_rate, etc.)
+        config_path: Path to a neutral config.yaml holding training parameters
         aws_config: AWS configuration dict with bucket, region, role
         description: Job description for naming
         instance_type: SageMaker instance type
@@ -44,7 +43,7 @@ class HuggingFaceLoRATrainer:
         schema: type[BaseModel],
         prompt_builder: BasePromptBuilder,
         training_batch_names: list[str],
-        hyperparameters: dict[str, Any],
+        config_path: str,
         aws_config: dict[str, str],
         model_name: str,
         description: str,
@@ -54,29 +53,22 @@ class HuggingFaceLoRATrainer:
         pytorch_version: str = "2.8",
         py_version: str = "py312",
     ):
-        self.schema = schema
-        self.prompt_builder = prompt_builder
-        self.training_batch_names = training_batch_names
-        self.hyperparameters = hyperparameters
-        self.aws_config = aws_config
-        self.model_name = model_name
-        self.description = description
+        super().__init__(
+            schema,
+            prompt_builder,
+            training_batch_names,
+            config_path,
+            aws_config,
+            model_name,
+            description,
+        )
+        self.hyperparameters = self.config.to_hf_hyperparameters()
         self.instance_type = instance_type
         self.instance_count = instance_count
         self.transformers_version = transformers_version
         self.pytorch_version = pytorch_version
         self.py_version = py_version
 
-        # job ID
-        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.job_id = (
-            f"{timestamp}-{description}"  # sagemaker does not like underscores!
-        )
-
-        # pass from an aws config dict
-        self.bucket = aws_config["bucket"]
-        self.region = aws_config["region"]
-        self.role = aws_config["role"]
         self.s3_input_path = f"jobs/train/{self.job_id}/input"
         self.s3_output_path = f"jobs/train/{self.job_id}/output"
         self.s3_full_output_path = (
@@ -93,16 +85,7 @@ class HuggingFaceLoRATrainer:
         """
         logger.info(f"Preparing training data for job: {self.job_id}")
 
-        train_jsonl = TrainingDataHandler.prepare(
-            schema=self.schema,
-            system_prompt=self.prompt_builder.build_main_prompt(),
-            training_batch_names=self.training_batch_names,
-            bucket=self.bucket,
-            s3_prefix="trainingdata",
-            output_file="train.jsonl",
-            region=self.region,
-            shuffle=True,
-        )
+        train_jsonl = self._prepare_training_data("train.jsonl")
 
         logger.info(f"Uploading to S3: {self.s3_input_path}")
         AWS.upload_file(
@@ -221,9 +204,7 @@ class HuggingFaceLoRATrainer:
         from peft import PeftModel
 
         base = AutoModelForCausalLM.from_pretrained(
-            self.hyperparameters["base_model"],
-            torch_dtype="auto",
-            trust_remote_code=True
+            self.base_model, torch_dtype="auto", trust_remote_code=True
         )
         model = PeftModel.from_pretrained(
             base, source_folder, autocast_adapter_dtype=False
@@ -231,88 +212,30 @@ class HuggingFaceLoRATrainer:
         merged = model.merge_and_unload()
         merged.save_pretrained(target_folder, safe_serialization=True)
         tokenizer = AutoTokenizer.from_pretrained(
-            self.hyperparameters["base_model"], trust_remote_code=True
+            self.base_model, trust_remote_code=True
         )
         tokenizer.save_pretrained(target_folder)
         return True
 
-    def upload_output(
-        self,
-        target_folder: str,
-        model_card: ModelCard,
-        bucket: str = "aicentre-nlpteam-mesa-public",
-    ) -> bool:
-        """Archive merged model with metadata and upload to S3.
-
-        Args:
-            target_folder (str): Folder containing merged model.
-            model_card (ModelCard): Model card metadata.
-            bucket (str): S3 bucket name. Defaults to 'aicentre-nlpteam-mesa-public'.
-
-        Returns:
-            bool: True if upload successful.
-
-        """
-        target_path = Path(target_folder)
-        archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
-        archive_path = target_path.parent / archive_name
-        if not archive_path.exists():
-            import io
-
-            with tarfile.open(archive_path, "w:gz") as tar:
-                for item in target_path.iterdir():
-                    tar.add(item, arcname=item.name)
-                yaml_bytes: bytes = model_card.to_yaml_bytes()
-                tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
-                tarinfo.size = len(yaml_bytes)
-                tar.addfile(tarinfo, io.BytesIO(yaml_bytes))
-                tar.add(Path(__file__).parents[2] / "LICENSE.md", arcname="LICENSE.md")
-        success = AWS.upload_file(
-            region_name=self.region,
-            file_name=str(archive_path),
-            bucket=bucket,
-            object_name=archive_name,
-            path=self.model_name,
-        )
-        if not success:
-            raise ValueError("Failed to upload merged model weights")
-        return True
-
-    def create_model_card(
-        self, major: int, minor: int, patch: int, model_description: str | None = None
-    ) -> ModelCard:
-        """Create model card with training metadata.
-
-        Args:
-            major (int): Major version number.
-            minor (int): Minor version number.
-            patch (int): Patch version number.
-            model_description (str | None): Model description. Defaults to None (uses self.description).
-
-        Returns:
-            ModelCard: Model card instance.
-
-        """
-        return ModelCard(
-            base_model_hf=self.hyperparameters["base_model"],
-            model_name=self.model_name,
-            major=major,
-            minor=minor,
-            patch=patch,
-            model_description=model_description or self.description,
-            training_data=[self.s3_input_path],
-            output_schema=self.schema,
-        )
-
     def post_process(
-        self, model_card: ModelCard, s3_output_path: str | None, job_name: str | None
+        self,
+        model_card: ModelCard,
+        s3_output_path: str | None,
+        job_name: str | None,
+        push_public: bool = False,
     ) -> None:
         """Download, merge and upload fine-tuned model.
+
+        The primary publish target is the build bucket (unpacked, under
+        models/{model_name}/{model_name}_{v}/)
+
+        Set push_public=True to also push tarball to the public bucket.
 
         Args:
             model_card (ModelCard): Model card metadata.
             s3_output_path (str | None): S3 output path. If None, uses self.s3_output_path.
             job_name (str | None): SageMaker job name. If None, uses self.last_job_name.
+            push_public (bool): Also upload the public tarball. Defaults to False.
 
         """
         model_folder = f"data/models/{self.description}"
@@ -328,4 +251,4 @@ class HuggingFaceLoRATrainer:
         target_folder.mkdir(parents=True, exist_ok=True)
         if not self.merge(str(source_folder), str(target_folder)):
             raise ValueError("merging with base model failed")
-        self.upload_output(str(target_folder), model_card)
+        self._publish(str(target_folder), model_card, push_public)

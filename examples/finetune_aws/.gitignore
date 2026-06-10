@@ -1,0 +1,5 @@
+.venv/
+data/
+train.jsonl
+__pycache__/
+.env
