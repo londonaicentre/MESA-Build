@@ -6,9 +6,10 @@ from pytest_mock import MockerFixture
 
 from conftest import HuggingFaceLoRATrainerFixture, TrainerFactory
 from finetune.hf_estimator import HuggingFaceLoRATrainer
+from finetune.trainer import LoRATrainer
 
 # Expected hyperparameters for the shared config fixture (see conftest.CONFIG_YAML),
-# i.e. to_hf_hyperparameters(load_config(config_path)).
+# i.e. FinetuneConfig.load(config_path).to_hf_hyperparameters().
 EXPECTED_HYPERPARAMETERS = {
     "base_model": "baz",
     "num_epochs": 2,
@@ -66,8 +67,8 @@ class PostProcessMocks:
 
 
 def _patch_job_id_datetime(mocker: MockerFixture) -> MagicMock:
-    """Make make_job_id deterministic: it lives in _common_utils now."""
-    mock_datetime: MagicMock = mocker.patch("finetune._common_utils.datetime")
+    """Make _make_job_id deterministic: it lives on the base trainer now."""
+    mock_datetime: MagicMock = mocker.patch("finetune.trainer.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
     return mock_datetime
 
@@ -82,7 +83,7 @@ def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
     mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
     return PrepareDataMocks(
         mocker.patch(
-            "finetune.hf_estimator.TrainingDataHandler.prepare",
+            "finetune.trainer.TrainingDataHandler.prepare",
             return_value="train.jsonl",
         ),
         mocker.patch("finetune.hf_estimator.AWS.upload_file"),
@@ -134,8 +135,8 @@ def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
         mocker.patch("finetune.hf_estimator.Path"),
         mocker.patch.object(HuggingFaceLoRATrainer, "download_output"),
         mocker.patch.object(HuggingFaceLoRATrainer, "merge"),
-        mocker.patch("finetune.hf_estimator.upload_model_folder"),
-        mocker.patch("finetune.hf_estimator.archive_and_upload"),
+        mocker.patch.object(LoRATrainer, "_upload_model_folder"),
+        mocker.patch.object(LoRATrainer, "_archive_and_upload"),
         mock_datetime,
     )
 
@@ -157,9 +158,7 @@ class TestConstructor:
             aws_config={"bucket": "xyzzy", "region": "thud", "role": "wibble"},
             description="wobble",
         )
-        assert (
-            trainer.get_s3_input_path() == "jobs/train/20260101-120000-wobble/input"
-        )
+        assert trainer.get_s3_input_path() == "jobs/train/20260101-120000-wobble/input"
         assert (
             trainer.get_s3_output_path() == "jobs/train/20260101-120000-wobble/output"
         )
@@ -223,7 +222,8 @@ class TestPrepareData:
             aws_config={"bucket": "foo-bar", "region": "foo-bar-1", "role": "baz"},
         )
         assert (
-            trainer.prepare_data() == "s3://foo-bar/jobs/train/20260101-120000-foo/input"
+            trainer.prepare_data()
+            == "s3://foo-bar/jobs/train/20260101-120000-foo/input"
         )
 
 
@@ -373,7 +373,9 @@ class TestPostProcess:
         post_process_mocks.path.return_value.mkdir.assert_any_call(
             parents=True, exist_ok=True
         )
-        assert post_process_mocks.path.return_value.mkdir.call_count == 2  # source + target
+        assert (
+            post_process_mocks.path.return_value.mkdir.call_count == 2
+        )  # source + target
 
     def test_post_process_uses_provided_s3_output_path(
         self,
@@ -525,10 +527,7 @@ class TestPostProcess:
             aws_config={"bucket": "baz", "region": "qux", "role": "quux"}
         ).post_process(mock_model_card, "foo/bar", "fred")
         post_process_mocks.upload_model_folder.assert_called_once_with(
-            target_folder=str(post_process_mocks.path.return_value),
-            model_card=mock_model_card,
-            region="qux",
-            bucket="baz",
+            str(post_process_mocks.path.return_value), mock_model_card
         )
 
     def test_post_process_default_does_not_push_public(
@@ -555,8 +554,5 @@ class TestPostProcess:
             aws_config={"bucket": "baz", "region": "qux", "role": "quux"},
         ).post_process(mock_model_card, "foo/bar", "fred", push_public=True)
         post_process_mocks.archive_and_upload.assert_called_once_with(
-            target_folder=str(post_process_mocks.path.return_value),
-            model_card=mock_model_card,
-            model_name="grault",
-            region="qux",
+            str(post_process_mocks.path.return_value), mock_model_card
         )
