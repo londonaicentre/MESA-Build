@@ -1,0 +1,33 @@
+[project]
+name = "finetune-runner"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "londonaicentre-mesa-finetune>=1.0.0",
+    "londonaicentre-oncoschema>=2.0.2",
+    "londonaicentre-genoschema>=2.1.0",
+    "pydantic-settings>=2.14.1",
+]
+
+[project.optional-dependencies]
+mlx = [
+    "londonaicentre-mesa-finetune[mlx]>=1.0.0",
+]
+
+[project.scripts]
+mesa-build-mlx-finetune = "finetune_runner.__main__:mlx"
+
+[build-system]
+requires = ["uv_build>=0.11.19,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+londonaicentre-mesa-finetune = { path = "../../lib/finetune", editable = true }
+londonaicentre-oncoschema = { path = "../../schemas/oncoschema", editable = true }
+londonaicentre-genoschema = { path = "../../schemas/genoschema", editable = true }
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.16",
+    "ty>=0.0.47",
+]
