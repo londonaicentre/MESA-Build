@@ -5,7 +5,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from conftest import HuggingFaceLoRATrainerFixture, TrainerFactory
-from finetune.hf_estimator import HuggingFaceLoRATrainer
+from finetune.hf_trainer import HuggingFaceLoRATrainer
 from finetune.trainer import LoRATrainer
 
 # Expected hyperparameters for the shared config fixture (see conftest.CONFIG_YAML),
@@ -94,9 +94,9 @@ def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
 @pytest.fixture
 def launch_job_mocks(mocker: MockerFixture) -> LaunchJobMocks:
     mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
-    mock_hf: MagicMock = mocker.patch("finetune.hf_estimator.HuggingFace")
+    mock_hf: MagicMock = mocker.patch("finetune.hf_trainer.HuggingFace")
     mock_hf.return_value.latest_training_job.name = "mesa-foo-bar"
-    mock_path: MagicMock = mocker.patch("finetune.hf_estimator.Path")
+    mock_path: MagicMock = mocker.patch("finetune.hf_trainer.Path")
     mock_path.return_value.parent.__truediv__.return_value = "/foo/scripts"
     return LaunchJobMocks(
         mock_hf,
@@ -122,9 +122,9 @@ def run_mocks(mocker: MockerFixture) -> RunMocks:
 @pytest.fixture
 def download_output_mocks(mocker: MockerFixture) -> DownloadOutputMocks:
     return DownloadOutputMocks(
-        mocker.patch("finetune.hf_estimator.Path"),
-        mocker.patch("finetune.hf_estimator.AWS.download_file"),
-        mocker.patch("finetune.hf_estimator.tarfile.open"),
+        mocker.patch("finetune.hf_trainer.Path"),
+        mocker.patch("finetune.hf_trainer.AWS.download_file"),
+        mocker.patch("finetune.hf_trainer.tarfile.open"),
     )
 
 
@@ -132,7 +132,7 @@ def download_output_mocks(mocker: MockerFixture) -> DownloadOutputMocks:
 def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
     mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
     return PostProcessMocks(
-        mocker.patch("finetune.hf_estimator.Path"),
+        mocker.patch("finetune.hf_trainer.Path"),
         mocker.patch.object(HuggingFaceLoRATrainer, "download_output"),
         mocker.patch.object(HuggingFaceLoRATrainer, "merge"),
         mocker.patch.object(LoRATrainer, "_upload_model_folder"),
