@@ -5,10 +5,12 @@ from enum import Enum
 from importlib import import_module
 from typing import Self
 
+from mesa_types.model_card import ModelCard
 from pydantic import AliasChoices, BaseModel, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, CliApp, CliSuppress, SettingsConfigDict
 
 from finetune.mlx_trainer import MLXLoRATrainer
+from finetune.trainer import LoRATrainer
 from utils.prompt import BasePromptBuilder
 
 
@@ -83,6 +85,17 @@ class FinetuneRunner(BaseSettings):
             import_module(f"{package}.prompt_builder").PromptBuilder(),
         )
 
+    def _build_validated_model_card(self, trainer: LoRATrainer) -> ModelCard | None:
+        model_card: ModelCard = trainer.build_model_card(
+            self.major, self.minor, self.patch
+        )
+        if not trainer.valid_model_card_version(model_card):
+            logging.error(
+                f"Existing model (card) with version: {model_card.model_version}. Please bump."
+            )
+            return None
+        return model_card
+
     @abstractmethod
     def cli_cmd(self) -> None:
         """Run the fine-tuning job for the selected backend and publish its model card."""
@@ -112,13 +125,16 @@ class FinetuneMLXRunner(FinetuneRunner):
             work_dir="data/models",
             quantize=None,
         )
+        model_card: ModelCard | None = self._build_validated_model_card(trainer)
+        if model_card is None:
+            return
         trainer.run()
         trainer.post_process(
-            trainer.build_model_card(self.major, self.minor, self.patch),
+            model_card,
             push_public=False,
         )
         logging.info(
-            "Post-processing complete — merged model uploaded to the build bucket."
+            "Post-processing complete - merged model uploaded to the build bucket."
         )
 
 
