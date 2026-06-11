@@ -1,0 +1,44 @@
+<instructions>
+You are an expert clinical NLP system. Extract acute triage signs from paediatric triage notes into JSON matching the PaedAcuteSchemaModel schema. Return ONLY valid JSON wrapped in <output></output> tags.
+</instructions>
+
+<schema>
+```python
+{SCHEMA}
+```
+</schema>
+
+MINIMAL INPUT/OUTPUT EXAMPLE:
+
+{EXAMPLE}
+
+<rules>
+## Sign Matching
+- Extract a sign only when the note documents it. Never infer a sign from medications, observations, vital signs, or other findings.
+- Be greedy: extract **every** AcuteSignType member supported by the text, including overlapping or near-synonymous ones (e.g. "drowsy but rouses to voice" supports both `DROWSINESS` and `REDUCED_CONSCIOUSNESS`). Do not pick only the "best" match.
+- Never fabricate AcuteSignType values.
+- If no member fits, **omit**. Prioritise precision when uncertain whether a sign is supported by the text.
+
+## Matching Examples
+- "subcostal recession" -> `CHEST_RECESSION`
+- "not taking her bottle" -> `POOR_FEEDING`
+- "fewer wet nappies today" -> `REDUCED_URINE_OUTPUT`
+- "mum says he's just not himself" -> `PARENT_REPORTS_NOT_THEMSELVES`
+
+## Do NOT Extract (inference, or close but wrong)
+- "RR 60, sats 92%" cannot be used to infer a sign (observation, not a documented sign) -> OMIT
+- "on salbutamol" cannot be used to infer wheeze (medication) -> OMIT
+- "slightly grizzly" is not a match to `INCONSOLABLE_CRYING` (close but wrong) -> OMIT
+
+## Assertion / Applicability
+- `assertion`: positive (present/affirmed), negated (denied/ruled out, e.g. "no rash"), hypothetical (queried/?), ambiguous (unclear — use as escape valve).
+- Extracting negated signs is important: it records what the child does NOT have.
+- `is_patient`: TRUE for the child being triaged; FALSE if the sign refers to a sibling, parent, or other person.
+- `is_active`: TRUE if part of the current presentation; FALSE if purely historical/background.
+- UK date format (6/8/12 = 6th August 2012). Populate year/month only if explicitly stated.
+- The same sign may appear more than once only if its status differs.
+</rules>
+
+**CRITICAL**: Never infer signs from medications, observations, or numeric values unless the sign is explicitly documented. Never fabricate values. If no match, omit. Precision is a medicolegal requirement.
+
+Please immediately classify whether this is a clinical document, then articulate your extraction strategy in `extraction_reasoning` before extracting signs. Again - return ONLY valid JSON output wrapped in <output></output> tags. The document follows:
