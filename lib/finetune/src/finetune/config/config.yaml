@@ -11,23 +11,23 @@
 #                               (only set mlx.iters for override of derived value)
 
 training:
-  base_model: Qwen/Qwen3-4B-Instruct-2507
-  epochs: 3
-  learning_rate: 2e-4
-  batch_size: 4
-  max_seq_length: 2048
+  base_model: Qwen/Qwen3-4B-Instruct-2507   # which pre-trained model to start from
+  epochs: 3                         # how many full passes over the training data
+  learning_rate: 2e-4               # how big a step the model takes each update (too high = unstable, too low = slow)
+  batch_size: 1                     # samples processed at once; keep at 1 for long (16k-32k) samples to avoid running out of memory
+  max_seq_length: 16384             # longest sample (in tokens) the model will read - anything longer is cut off
   lora:
-    rank: 16
-    alpha: 32                       # mlx scale = alpha / rank = 2.0
-    dropout: 0.05
-    target_modules: [q_proj, k_proj, v_proj, o_proj]
+    rank: 16                        # size of the small trainable add-on; higher = more capacity to learn but more memory
+    alpha: 32                       # how strongly the add-on influences the model (mlx scale = alpha / rank = 2.0)
+    dropout: 0.05                   # randomly ignores 5% of connections while training to reduce overfitting
+    target_modules: [q_proj, k_proj, v_proj, o_proj]   # which parts of each layer get the trainable add-on
 
   mlx:                              # optional; consumed ONLY by the MLX translation
-    iters: null                    # derived from epochs at runtime; set to override
-    num_layers: -1
-    seed: 0
-    save_every: 100
-    steps_per_report: 10
-    steps_per_eval: 200
-    val_batches: 25
-    lr_schedule: null              # passthrough mlx_lm lr_schedule block
+    iters: null                    # total training steps; left null to auto-derive from epochs, set a number to override
+    num_layers: 16                 # how many of the model's top layers to fine-tune - 16 is good balance, -1 means all layers
+    seed: 0                        # fixed random seed so runs are reproducible
+    save_every: 100                # save a checkpoint every N steps
+    steps_per_report: 10           # print training progress every N steps
+    steps_per_eval: 200            # check performance on held-out data every N steps
+    val_batches: 0                # 0 = no validation (TrainingDataHandler writes train.jsonl only)
+    lr_schedule: null              # optional advanced learning-rate schedule; leave null for a constant rate
