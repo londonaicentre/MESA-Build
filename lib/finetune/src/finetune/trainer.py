@@ -49,7 +49,7 @@ class LoRATrainer:
         self.base_model = self.config.training.base_model
 
         # job ID (sagemaker does not like underscores!)
-        self.job_id = self._make_job_id(description)
+        self.job_id = LoRATrainer._make_job_id(description)
 
         # pass from an aws config dict (role unused for local training)
         self.bucket = aws_config["bucket"]
