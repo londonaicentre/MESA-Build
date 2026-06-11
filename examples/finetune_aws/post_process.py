@@ -60,9 +60,9 @@ def main(s3_output_path: str, job_name: str):
     # 2. Build the model card (and choose the version).
     #
     # The model card is the metadata record that travels with the model. Crucially, the
-    # major/minor/patch numbers you set here are entered MANUALLY, there is no auto-increment
-    # and no lookup of existing versions in S3. These three numbers are carried into the model
-    # folder naming at upload time: the model is published under
+    # major/minor/patch numbers you set here are entered MANUALLY, there is no auto-increment.
+    # These three numbers are carried into the model folder naming at upload time: the model is 
+    # published under
     #
     #     models/<model_name>/<model_name>_<major>_<minor>_<patch>/
     #

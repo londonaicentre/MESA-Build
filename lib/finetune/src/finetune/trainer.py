@@ -60,6 +60,10 @@ class LoRATrainer:
     def _make_job_id(description: str) -> str:
         return f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{description}"
 
+    @staticmethod
+    def _get_uploaded_model_folder_prefix(model_card: ModelCard) -> str:
+        return f"models/{model_card.model_name}/{model_card.model_identifier}"
+
     def build_model_card(
         self,
         major: int,
@@ -91,6 +95,18 @@ class LoRATrainer:
             output_schema=self.schema,
         )
 
+    def valid_model_card_version(self, model_card: ModelCard) -> bool:
+        return (
+            not len(
+                AWS.list_s3_objects(
+                    self.region,
+                    self.bucket,
+                    LoRATrainer._get_uploaded_model_folder_prefix(model_card),
+                )
+            )
+            > 0
+        )
+
     def _prepare_training_data(self, output_file: str) -> str:
         return TrainingDataHandler.prepare(
             schema=self.schema,
@@ -116,7 +132,7 @@ class LoRATrainer:
                 file_name=str(item),
                 bucket=self.bucket,
                 object_name=item.name,
-                path=prefix,
+                path=LoRATrainer._get_uploaded_model_folder_prefix(model_card),
             ):
                 raise ValueError(f"Failed to upload {item.name} to build bucket")
 
