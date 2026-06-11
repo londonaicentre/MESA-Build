@@ -17,6 +17,7 @@ def model_card() -> MagicMock:
     mock.major = 1
     mock.minor = 2
     mock.patch = 3
+    mock.model_identifier = "foo_1_2_3"
     mock.to_yaml_bytes.return_value = b"bar"
     return mock
 

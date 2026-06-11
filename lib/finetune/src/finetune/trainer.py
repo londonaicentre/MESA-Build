@@ -108,9 +108,6 @@ class LoRATrainer:
         # Write model_card.yaml into the folder (same bytes as the public tarball, .yaml filename).
         (target_path / "model_card.yaml").write_bytes(model_card.to_yaml_bytes())
 
-        version_dir = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}"
-        prefix = f"models/{model_card.model_name}/{version_dir}"
-
         for item in target_path.iterdir():
             if not item.is_file():
                 continue  # fused output is flat; skip any sub-dirs
@@ -130,7 +127,7 @@ class LoRATrainer:
         bucket: str = "aicentre-nlpteam-mesa-public",
     ) -> bool:
         target_path = Path(target_folder)
-        archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
+        archive_name = f"{model_card.model_identifier}.tar.gz"
         archive_path = target_path.parent / archive_name
         if not archive_path.exists():
             with tarfile.open(archive_path, "w:gz") as tar:
