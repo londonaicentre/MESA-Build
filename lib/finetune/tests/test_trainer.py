@@ -17,6 +17,7 @@ def model_card() -> MagicMock:
     mock.major = 1
     mock.minor = 2
     mock.patch = 3
+    mock.model_identifier = "foo_1_2_3"
     mock.to_yaml_bytes.return_value = b"bar"
     return mock
 
@@ -278,6 +279,58 @@ class TestArchiveAndUpload:
         archive_mocks.aws.return_value = False
         with pytest.raises(ValueError, match="Failed to upload merged model weights"):
             make_base_trainer().archive_and_upload("baz/qux", model_card)
+
+
+@dataclass
+class ValidVersionMocks:
+    list_s3_objects: MagicMock
+    get_uploaded_model_folder_prefix: MagicMock
+
+
+@pytest.fixture
+def valid_version_mocks(mocker: MockerFixture) -> ValidVersionMocks:
+    return ValidVersionMocks(
+        mocker.patch("finetune.trainer.AWS.list_s3_objects"),
+        mocker.patch.object(
+            LoRATrainer,
+            "_get_uploaded_model_folder_prefix",
+            return_value="models/foo/foo_1_2_3",
+        ),
+    )
+
+
+class TestValidModelCardVersion:
+    def test_no_existing_objects_returns_true(
+        self,
+        valid_version_mocks: ValidVersionMocks,
+        model_card: MagicMock,
+        make_base_trainer: BaseTrainerFactory,
+    ) -> None:
+        valid_version_mocks.list_s3_objects.return_value = []
+        assert make_base_trainer().valid_model_card_version(model_card)
+
+    def test_existing_objects_returns_false(
+        self,
+        valid_version_mocks: ValidVersionMocks,
+        model_card: MagicMock,
+        make_base_trainer: BaseTrainerFactory,
+    ) -> None:
+        valid_version_mocks.list_s3_objects.return_value = [{"Key": "foo"}]
+        assert not make_base_trainer().valid_model_card_version(model_card)
+
+    def test_calls_list_s3_objects_with_correct_args(
+        self,
+        valid_version_mocks: ValidVersionMocks,
+        model_card: MagicMock,
+        make_base_trainer: BaseTrainerFactory,
+    ) -> None:
+        valid_version_mocks.list_s3_objects.return_value = []
+        make_base_trainer(
+            aws_config={"bucket": "foo-bar", "region": "foo-bar-1", "role": "x"}
+        ).valid_model_card_version(model_card)
+        valid_version_mocks.list_s3_objects.assert_called_once_with(
+            "foo-bar-1", "foo-bar", "models/foo/foo_1_2_3"
+        )
 
 
 class TestPublish:

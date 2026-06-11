@@ -28,6 +28,8 @@ londonaicentre-genoschema = { path = "../../schemas/genoschema", editable = true
 
 [dependency-groups]
 dev = [
+    "pytest>=8.0.0",
+    "pytest-mock>=3.14.0",
     "ruff>=0.15.16",
     "ty>=0.0.47",
 ]

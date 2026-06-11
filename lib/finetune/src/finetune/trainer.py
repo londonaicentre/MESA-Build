@@ -49,7 +49,7 @@ class LoRATrainer:
         self.base_model = self.config.training.base_model
 
         # job ID (sagemaker does not like underscores!)
-        self.job_id = self._make_job_id(description)
+        self.job_id = LoRATrainer._make_job_id(description)
 
         # pass from an aws config dict (role unused for local training)
         self.bucket = aws_config["bucket"]
@@ -59,6 +59,10 @@ class LoRATrainer:
     @staticmethod
     def _make_job_id(description: str) -> str:
         return f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{description}"
+
+    @staticmethod
+    def _get_uploaded_model_folder_prefix(model_card: ModelCard) -> str:
+        return f"models/{model_card.model_name}/{model_card.model_identifier}"
 
     def build_model_card(
         self,
@@ -91,6 +95,18 @@ class LoRATrainer:
             output_schema=self.schema,
         )
 
+    def valid_model_card_version(self, model_card: ModelCard) -> bool:
+        return (
+            not len(
+                AWS.list_s3_objects(
+                    self.region,
+                    self.bucket,
+                    LoRATrainer._get_uploaded_model_folder_prefix(model_card),
+                )
+            )
+            > 0
+        )
+
     def _prepare_training_data(self, output_file: str) -> str:
         return TrainingDataHandler.prepare(
             schema=self.schema,
@@ -108,9 +124,6 @@ class LoRATrainer:
         # Write model_card.yaml into the folder (same bytes as the public tarball, .yaml filename).
         (target_path / "model_card.yaml").write_bytes(model_card.to_yaml_bytes())
 
-        version_dir = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}"
-        prefix = f"models/{model_card.model_name}/{version_dir}"
-
         for item in target_path.iterdir():
             if not item.is_file():
                 continue  # fused output is flat; skip any sub-dirs
@@ -119,7 +132,7 @@ class LoRATrainer:
                 file_name=str(item),
                 bucket=self.bucket,
                 object_name=item.name,
-                path=prefix,
+                path=LoRATrainer._get_uploaded_model_folder_prefix(model_card),
             ):
                 raise ValueError(f"Failed to upload {item.name} to build bucket")
 
@@ -130,7 +143,7 @@ class LoRATrainer:
         bucket: str = "aicentre-nlpteam-mesa-public",
     ) -> bool:
         target_path = Path(target_folder)
-        archive_name = f"{model_card.model_name}_{model_card.major}_{model_card.minor}_{model_card.patch}.tar.gz"
+        archive_name = f"{model_card.model_identifier}.tar.gz"
         archive_path = target_path.parent / archive_name
         if not archive_path.exists():
             with tarfile.open(archive_path, "w:gz") as tar:

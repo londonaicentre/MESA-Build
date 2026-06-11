@@ -5,7 +5,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from conftest import HuggingFaceLoRATrainerFixture, TrainerFactory
-from finetune.hf_estimator import HuggingFaceLoRATrainer
+from finetune.hf_trainer import HuggingFaceLoRATrainer
 from finetune.trainer import LoRATrainer
 
 # Expected hyperparameters for the shared config fixture (see conftest.CONFIG_YAML),
@@ -25,28 +25,28 @@ EXPECTED_HYPERPARAMETERS = {
 
 @dataclass
 class ConstructorMocks:
-    datetime: MagicMock
+    make_job_id: MagicMock
 
 
 @dataclass
 class PrepareDataMocks:
     training_data_handler: MagicMock
     aws: MagicMock
-    datetime: MagicMock
+    make_job_id: MagicMock
 
 
 @dataclass
 class LaunchJobMocks:
     huggingface: MagicMock
     path: MagicMock
-    datetime: MagicMock
+    make_job_id: MagicMock
 
 
 @dataclass
 class RunMocks:
     prepare_data: MagicMock
     launch_job: MagicMock
-    datetime: MagicMock
+    make_job_id: MagicMock
 
 
 @dataclass
@@ -63,51 +63,49 @@ class PostProcessMocks:
     merge: MagicMock
     upload_model_folder: MagicMock
     archive_and_upload: MagicMock
-    datetime: MagicMock
+    make_job_id: MagicMock
 
 
-def _patch_job_id_datetime(mocker: MockerFixture) -> MagicMock:
-    """Make _make_job_id deterministic: it lives on the base trainer now."""
-    mock_datetime: MagicMock = mocker.patch("finetune.trainer.datetime")
-    mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
-    return mock_datetime
+def _patch_make_job_id(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch.object(
+        LoRATrainer,
+        "_make_job_id",
+        side_effect=lambda desc: f"20260101-120000-{desc}",
+    )
 
 
 @pytest.fixture
 def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
-    return ConstructorMocks(_patch_job_id_datetime(mocker))
+    return ConstructorMocks(_patch_make_job_id(mocker))
 
 
 @pytest.fixture
 def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
-    mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
     return PrepareDataMocks(
         mocker.patch(
             "finetune.trainer.TrainingDataHandler.prepare",
             return_value="train.jsonl",
         ),
-        mocker.patch("finetune.hf_estimator.AWS.upload_file"),
-        mock_datetime,
+        mocker.patch("finetune.hf_trainer.AWS.upload_file"),
+        _patch_make_job_id(mocker),
     )
 
 
 @pytest.fixture
 def launch_job_mocks(mocker: MockerFixture) -> LaunchJobMocks:
-    mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
-    mock_hf: MagicMock = mocker.patch("finetune.hf_estimator.HuggingFace")
+    mock_hf: MagicMock = mocker.patch("finetune.hf_trainer.HuggingFace")
     mock_hf.return_value.latest_training_job.name = "mesa-foo-bar"
-    mock_path: MagicMock = mocker.patch("finetune.hf_estimator.Path")
+    mock_path: MagicMock = mocker.patch("finetune.hf_trainer.Path")
     mock_path.return_value.parent.__truediv__.return_value = "/foo/scripts"
     return LaunchJobMocks(
         mock_hf,
         mock_path,
-        mock_datetime,
+        _patch_make_job_id(mocker),
     )
 
 
 @pytest.fixture
 def run_mocks(mocker: MockerFixture) -> RunMocks:
-    mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
     return RunMocks(
         mocker.patch.object(
             HuggingFaceLoRATrainer, "prepare_data", return_value="s3://foo/bar"
@@ -115,29 +113,28 @@ def run_mocks(mocker: MockerFixture) -> RunMocks:
         mocker.patch.object(
             HuggingFaceLoRATrainer, "launch_job", return_value="mesa-foo-bar"
         ),
-        mock_datetime,
+        _patch_make_job_id(mocker),
     )
 
 
 @pytest.fixture
 def download_output_mocks(mocker: MockerFixture) -> DownloadOutputMocks:
     return DownloadOutputMocks(
-        mocker.patch("finetune.hf_estimator.Path"),
-        mocker.patch("finetune.hf_estimator.AWS.download_file"),
-        mocker.patch("finetune.hf_estimator.tarfile.open"),
+        mocker.patch("finetune.hf_trainer.Path"),
+        mocker.patch("finetune.hf_trainer.AWS.download_file"),
+        mocker.patch("finetune.hf_trainer.tarfile.open"),
     )
 
 
 @pytest.fixture
 def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
-    mock_datetime: MagicMock = _patch_job_id_datetime(mocker)
     return PostProcessMocks(
-        mocker.patch("finetune.hf_estimator.Path"),
+        mocker.patch("finetune.hf_trainer.Path"),
         mocker.patch.object(HuggingFaceLoRATrainer, "download_output"),
         mocker.patch.object(HuggingFaceLoRATrainer, "merge"),
         mocker.patch.object(LoRATrainer, "_upload_model_folder"),
         mocker.patch.object(LoRATrainer, "_archive_and_upload"),
-        mock_datetime,
+        _patch_make_job_id(mocker),
     )
 
 
