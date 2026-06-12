@@ -85,15 +85,14 @@ class FinetuneRunner(BaseSettings):
             import_module(f"{package}.prompt_builder").PromptBuilder(),
         )
 
-    def _build_validated_model_card(self, trainer: LoRATrainer) -> ModelCard | None:
+    def _build_validated_model_card(self, trainer: LoRATrainer) -> ModelCard:
         model_card: ModelCard = trainer.build_model_card(
             self.major, self.minor, self.patch
         )
         if not trainer.valid_model_card_version(model_card):
-            logging.error(
+            raise ValueError(
                 f"Existing model (card) with version: {model_card.model_version}. Please bump."
             )
-            return None
         return model_card
 
     @abstractmethod
@@ -126,8 +125,6 @@ class FinetuneMLXRunner(FinetuneRunner):
             quantize=None,
         )
         model_card: ModelCard | None = self._build_validated_model_card(trainer)
-        if model_card is None:
-            return
         trainer.run()
         trainer.post_process(
             model_card,
