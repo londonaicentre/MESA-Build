@@ -2,6 +2,8 @@
 
 Training data generation for MESA models.
 
+See [examples](examples/README.md).
+
 ## Quickstart (AWS batch generation)
 
 1. Follow the instructions [here](https://github.com/londonaicentre/sde_aic_internal_docs/blob/main/nlp/using_amazon_sagemaker.md#sso-authentication-for-use-of-the-aws-cli) to set up SSO authentication for use of the AWS CLI.
