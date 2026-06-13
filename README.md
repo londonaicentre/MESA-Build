@@ -87,6 +87,8 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 
 [**genoschema**](schemas/genoschema/src/genoschema/schema.py): Pydantic schema and prompts for extracting biomarker information from NHS genomic laboratory hub reports.
 
+[**entityschema**](schemas/entityschema/src/entityschema/schema.py): Schema package for clinical entity extraction from NHS medical documents.
+
 Each schema package is independently versioned and published to PyPI
 
 ## Development
