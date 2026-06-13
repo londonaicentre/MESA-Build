@@ -25,7 +25,7 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 │   ├── types/           # Shared definitions
 │   └── utils/           # Utility functions (e.g. LiteLLM, AWS)
 ├── pipelines/           # Notebooks for manual end-to-end fine-tuning
-├── runners/             # CLI wrappers (runners) for pipeline functionality
+├── runners/             # CLI wrappers (runners) for automating pipeline functionality
 ├── schemas/             # Domain specified schemas
 └── .github/workflows/   # CI/CD automation
 ```
