@@ -2,19 +2,15 @@
 
 Training data generation for MESA models.
 
-## Getting started
+See [examples](examples/).
 
-### AWS
+## Quickstart (AWS batch generation)
 
-- Obtain a Bedrock API key from an account manager.
+1. Follow the instructions [here](https://github.com/londonaicentre/sde_aic_internal_docs/blob/main/nlp/using_amazon_sagemaker.md#sso-authentication-for-use-of-the-aws-cli) to set up SSO authentication for use of the AWS CLI.
 
-- (Batch inference only) Obtain information on a Bedrock Execution IAM Role with S3 and model access.
+2. Obtain information on a Bedrock Execution IAM Role with S3 and model access and information on the name of an S3 bucket to upload a batch specification to.
 
-- (Batch inference only) Obtain information on the name of an S3 bucket to upload a batch specification to.
-
-## Usage
-
-1. Download documents from batch
+3. Download documents from batch
 
     ```python
     from datagen import BedrockBatchGenerator
@@ -28,17 +24,17 @@ Training data generation for MESA models.
     )
     ```
 
-2. Start batch generation
+4. Start batch generation
 
     ```python
     gen.generate_via_batch(
         sample_size =
-        bucket = 
         bedrock_execution_role =
+        bucket = 
     )
     ```
 
-3. Download and parse batch outputs
+5. Download and parse batch outputs
 
     ```python
     gen.extract_batch_output(
@@ -47,7 +43,7 @@ Training data generation for MESA models.
     )
     ```
 
-4. Upload formatted document:schema pairs as training data
+6. Upload formatted document:schema pairs as training data
 
     ```python
     from datagen import TrainingDataUploader

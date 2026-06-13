@@ -25,7 +25,7 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 │   ├── types/           # Shared definitions
 │   └── utils/           # Utility functions (e.g. LiteLLM, AWS)
 ├── pipelines/           # Notebooks for manual end-to-end fine-tuning
-├── runners/             # CLI wrappers (runners) for pipeline functionality
+├── runners/             # CLI wrappers (runners) for automating pipeline functionality
 ├── schemas/             # Domain specified schemas
 └── .github/workflows/   # CI/CD automation
 ```
@@ -86,6 +86,8 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 [**oncoschema**](schemas/oncoschema/src/oncoschema/schema.py): Pydantic schema and prompts for extracting information from cancer clinical documents
 
 [**genoschema**](schemas/genoschema/src/genoschema/schema.py): Pydantic schema and prompts for extracting biomarker information from NHS genomic laboratory hub reports.
+
+[**entityschema**](schemas/entityschema/src/entityschema/schema.py): Schema package for clinical entity extraction from NHS medical documents.
 
 Each schema package is independently versioned and published to PyPI
 
