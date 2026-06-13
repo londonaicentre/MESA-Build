@@ -2,7 +2,7 @@
 
 Fine-tune a MESA model on AWS Sagemaker and locally on Apple Silicon.
 
-See [examples](examples/README.md).
+See [examples](examples/).
 
 ## Quickstart (AWS Sagemaker)
 

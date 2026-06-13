@@ -2,7 +2,7 @@
 
 Training data generation for MESA models.
 
-See [examples](examples/README.md).
+See [examples](examples/).
 
 ## Quickstart (AWS batch generation)
 
