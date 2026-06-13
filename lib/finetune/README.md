@@ -1,16 +1,12 @@
 # MESA: Fine-tune
 
-Fine-tune a MESA model on AWS Sagemaker.
+Fine-tune a MESA model on AWS Sagemaker and locally on Apple Silicon.
 
-## Getting started
+## Quickstart (AWS Sagemaker)
 
-### AWS
+1. Follow the instructions [here](https://github.com/londonaicentre/sde_aic_internal_docs/blob/main/nlp/using_amazon_sagemaker.md#sso-authentication-for-use-of-the-aws-cli) to set up SSO authentication for use of the AWS CLI.
 
-- Follow the instructions [here](https://github.com/londonaicentre/sde_aic_internal_docs/blob/main/nlp/using_amazon_sagemaker.md#sso-authentication-for-use-of-the-aws-cli) to set up SSO authentication for use of the AWS CLI.
-
-## Usage
-
-1. Start a fine-tuning run:
+2. Start a fine-tuning run:
 
 ```python
 from finetune import HuggingFaceLoRATrainer
