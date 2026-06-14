@@ -398,7 +398,11 @@ class TestExcludeOverlongSamples:
     def test_exclude_overlong_samples_loads_tokenizer_with_base_model(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.return_value = [1, 2, 3]
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
+            1,
+            2,
+            3,
+        ]
         TrainingDataHandler.exclude_overlong_samples(
             [self.create_sample()], 100, "foo.bar1.2baz"
         )
@@ -422,7 +426,9 @@ class TestExcludeOverlongSamples:
         sample_count: int,
         expected_count: int,
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.return_value = [1] * token_count
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
+            1
+        ] * token_count
         assert (
             len(
                 TrainingDataHandler.exclude_overlong_samples(
@@ -435,9 +441,9 @@ class TestExcludeOverlongSamples:
     def test_exclude_overlong_samples_mixed_lengths_returns_acceptable_samples(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.side_effect = lambda text: [
-            1
-        ] * len(text)
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
+            lambda msgs, **_: [1] * sum(len(msg.content) for msg in msgs)
+        )
         result: list[TrainingSample] = TrainingDataHandler.exclude_overlong_samples(
             [
                 self.create_sample(200),
@@ -455,48 +461,33 @@ class TestExcludeOverlongSamples:
             sum(len(msg.content) for msg in sample.messages) < 100 for sample in result
         )
 
-    def test_exclude_overlong_samples_respects_buffer_ratio(
+    def test_exclude_overlong_samples_progressive_lengths_partial_pass(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.side_effect = lambda text: [
-            1
-        ] * len(text)
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
+            lambda msgs, **_: [1] * sum(len(msg.content) for msg in msgs)
+        )
         assert (
             len(
                 TrainingDataHandler.exclude_overlong_samples(
-                    [self.create_sample(i * 3) for i in range(1, 11)],
-                    50,
-                    "foo",
-                    buffer_ratio=0.2,
+                    [self.create_sample(i * 3) for i in range(1, 11)], 50, "foo"
                 )
             )
             == 5
         )
-
-    def test_exclude_overlong_samples_sorts_by_total_character_length(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.return_value = [1, 2, 3]
-        sample_short: TrainingSample = self.create_sample(10)
-        sample_long: TrainingSample = self.create_sample(100)
-        result: list[TrainingSample] = TrainingDataHandler.exclude_overlong_samples(
-            [sample_short, sample_long], 1000, "foo"
-        )
-        assert result[0] == sample_long
-        assert result[1] == sample_short
 
     def test_exclude_overlong_samples_empty_list_returns_empty(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
         assert TrainingDataHandler.exclude_overlong_samples([], 100, "foo") == []
 
-    def test_exclude_overlong_samples_includes_valid_samples_before_buffer_threshold(
+    def test_exclude_overlong_samples_overlong_head_does_not_affect_rest(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
         token_counts: list[int] = [150, 90, 40, 30]
-        exclude_overlong_samples_mocks.tokenizer.encode.side_effect = lambda _: [
-            1
-        ] * token_counts.pop(0)
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
+            lambda _, **__: [1] * token_counts.pop(0)
+        )
         assert (
             len(
                 TrainingDataHandler.exclude_overlong_samples(
@@ -508,7 +499,6 @@ class TestExcludeOverlongSamples:
                     ],
                     100,
                     "foo",
-                    buffer_ratio=0.5,
                 )
             )
             == 3
@@ -518,9 +508,9 @@ class TestExcludeOverlongSamples:
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
         token_counts: list[int] = [50, 150, 40, 30, 20]
-        exclude_overlong_samples_mocks.tokenizer.encode.side_effect = lambda _: [
-            1
-        ] * token_counts.pop(0)
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
+            lambda _, **__: [1] * token_counts.pop(0)
+        )
         assert (
             len(
                 TrainingDataHandler.exclude_overlong_samples(
@@ -533,7 +523,6 @@ class TestExcludeOverlongSamples:
                     ],
                     100,
                     "foo",
-                    buffer_ratio=0.4,
                 )
             )
             == 4
@@ -542,7 +531,9 @@ class TestExcludeOverlongSamples:
     def test_exclude_overlong_samples_boundary_exactly_max_seq_length_fails(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.return_value = [1] * 100
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
+            1
+        ] * 100
         assert (
             TrainingDataHandler.exclude_overlong_samples(
                 [self.create_sample()], 100, "foo"
@@ -550,13 +541,13 @@ class TestExcludeOverlongSamples:
             == []
         )
 
-    def test_exclude_overlong_samples_buffer_never_reached_returns_passing_samples(
+    def test_exclude_overlong_samples_non_consecutive_failures_returns_passing_samples(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
         token_counts: list[int] = [50, 150, 40, 160]
-        exclude_overlong_samples_mocks.tokenizer.encode.side_effect = lambda _: [
-            1
-        ] * token_counts.pop(0)
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
+            lambda _, **__: [1] * token_counts.pop(0)
+        )
         assert (
             len(
                 TrainingDataHandler.exclude_overlong_samples(
@@ -568,23 +559,21 @@ class TestExcludeOverlongSamples:
                     ],
                     100,
                     "foo",
-                    buffer_ratio=0.5,
                 )
             )
             == 2
         )
 
-    def test_exclude_overlong_samples_buffer_size_equals_sample_count(
+    def test_exclude_overlong_samples_all_samples_within_limit_returns_all(
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.encode.return_value = [1] * 50
+        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
+            1
+        ] * 50
         assert (
             len(
                 TrainingDataHandler.exclude_overlong_samples(
-                    [self.create_sample(), self.create_sample()],
-                    100,
-                    "foo",
-                    buffer_ratio=1.0,
+                    [self.create_sample(), self.create_sample()], 100, "foo"
                 )
             )
             == 2

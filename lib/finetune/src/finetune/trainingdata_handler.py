@@ -163,10 +163,7 @@ class TrainingDataHandler:
 
     @staticmethod
     def exclude_overlong_samples(
-        samples: list[TrainingSample],
-        max_seq_length: int,
-        base_model: str,
-        buffer_ratio: float = 0.1,
+        samples: list[TrainingSample], max_seq_length: int, base_model: str
     ) -> list[TrainingSample]:
         """Exclude samples that exceed max token length.
 
@@ -174,7 +171,6 @@ class TrainingDataHandler:
             samples: Training samples to filter
             max_seq_length: Maximum token length
             base_model: Model name for tokenizer
-            buffer_ratio: Ratio of samples to use as confidence buffer (default 0.1)
 
         Returns:
             List of samples that fit within max_seq_length
@@ -185,31 +181,13 @@ class TrainingDataHandler:
         tokenizer = AutoTokenizer.from_pretrained(  # type: ignore[no-untyped-call]
             base_model, trust_remote_code=True
         )
-        sorted_samples: list[TrainingSample] = sorted(
-            samples,
-            key=lambda sample: sum(len(message.content) for message in sample.messages),
-            reverse=True,
-        )
-        passing_samples: list[TrainingSample] = []
-        consecutive_passing: int = 0
-        for sample_index, sample in enumerate(sorted_samples):
-            if (
-                len(
-                    tokenizer.encode(
-                        " ".join(message.content for message in sample.messages)
-                    )
+        return [
+            sample
+            for sample in samples
+            if len(
+                tokenizer.apply_chat_template(
+                    sample.messages, tokenize=True, add_generation_prompt=False
                 )
-                < max_seq_length
-            ):
-                passing_samples.append(sample)
-                consecutive_passing += 1
-                # if N consecutive passing samples seen per buffer threshold
-                # then early exit (we assume all others will pass)
-                if consecutive_passing >= max(
-                    1, int(len(sorted_samples) * buffer_ratio)
-                ):
-                    passing_samples.extend(sorted_samples[sample_index + 1 :])
-                    break
-            else:
-                consecutive_passing = 0
-        return passing_samples
+            )
+            < max_seq_length
+        ]
