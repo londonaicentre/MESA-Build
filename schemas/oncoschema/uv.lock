@@ -790,7 +790,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.1.0"
+version = "2.3.0"
 source = { editable = "../../lib/types" }
 dependencies = [
     { name = "pydantic" },
@@ -840,7 +840,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-oncoschema"
-version = "2.0.2"
+version = "2.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
