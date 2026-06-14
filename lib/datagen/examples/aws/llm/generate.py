@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 os.environ["AWS_REGION_NAME"] = "eu-west-2"
 
-############################################################################################    
+############################################################################################
 # `document_batches` is a list, so you can pass several batches at once, e.g.:
 #
 #     DOCUMENT_BATCHES = [

@@ -18,13 +18,13 @@ from oncoschema.schema import OncologyModel
 # The training batch to fine-tune on, found in S3:
 # s3://aicentre-nlpteam-mesa-build/trainingdata/<batch_name>/
 # This is a small 10-sample oncoschema batch so the example runs quickly.
-# Multiple training batches can be specified as a list[str]
+# Multiple training batches can be specified as a list[str]
 
 TRAINING_BATCH = "20260123-094248_test-batch"
 
 
 def main():
-    ############################################################################################    
+    ############################################################################################
     # 1. Construct the trainer.
     #
     # This wires together four parameters needed for an MLX fine-tuning run:
@@ -52,7 +52,7 @@ def main():
         model_name="qwen-onco-mlx-example",
         description="tutorial model using oncoschema and qwen model",
         work_dir="data/models",
-        quantize=None, # Generally, use `quantize=None` to keep the fused model at full precision.
+        quantize=None,  # Generally, use `quantize=None` to keep the fused model at full precision.
     )
 
     ############################################################################################
@@ -61,7 +61,7 @@ def main():
     # `run()` performs the full local pipeline: prepare_data (download + validate the batch and
     # write train.jsonl) -> _write_config -> invoke `mlx_lm.lora` to train the LoRA adapter.
     # Nothing is staged to S3 during training — MLX works entirely on local disk under work_dir.
-    # To peek behind the hood, MLXLoRATrainer is defined in `finetune/mlx_trainer.py`
+    # To peek behind the hood, MLXLoRATrainer is defined in `finetune/mlx_trainer.py`
     trainer.run()
 
     ############################################################################################
@@ -69,7 +69,7 @@ def main():
     #
     # The model card is the metadata record that travels with the model. Crucially, the
     # major/minor/patch numbers you set here are entered MANUALLY, there is no auto-increment.
-    # These three numbers are carried into the model folder naming at upload time: the model is 
+    # These three numbers are carried into the model folder naming at upload time: the model is
     # published under
     #
     #     models/<model_name>/<model_name>_<major>_<minor>_<patch>/

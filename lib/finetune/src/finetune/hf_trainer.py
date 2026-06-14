@@ -211,7 +211,7 @@ class HuggingFaceLoRATrainer(LoRATrainer):
         )
         merged = model.merge_and_unload()
         merged.save_pretrained(target_folder, safe_serialization=True)
-        tokenizer = AutoTokenizer.from_pretrained(
+        tokenizer = AutoTokenizer.from_pretrained(  # type: ignore[no-untyped-call]
             self.base_model, trust_remote_code=True
         )
         tokenizer.save_pretrained(target_folder)

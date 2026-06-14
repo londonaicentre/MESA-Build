@@ -74,6 +74,8 @@ class TestPrepareTrainingData:
             schema=trainer.schema,
             system_prompt="foo",
             training_batch_names=["batch-a"],
+            base_model="baz",
+            max_seq_length=2048,
             bucket="foo-bar",
             s3_prefix="trainingdata",
             output_file="out.jsonl",

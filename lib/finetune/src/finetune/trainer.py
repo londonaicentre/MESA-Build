@@ -47,6 +47,7 @@ class LoRATrainer:
 
         self.config = FinetuneConfig.load(config_path)
         self.base_model = self.config.training.base_model
+        self.max_seq_length = self.config.training.max_seq_length
 
         # job ID (sagemaker does not like underscores!)
         self.job_id = LoRATrainer._make_job_id(description)
@@ -112,6 +113,8 @@ class LoRATrainer:
             schema=self.schema,
             system_prompt=self.prompt_builder.build_main_prompt(),
             training_batch_names=self.training_batch_names,
+            base_model=self.base_model,
+            max_seq_length=self.max_seq_length,
             bucket=self.bucket,
             s3_prefix="trainingdata",
             output_file=output_file,

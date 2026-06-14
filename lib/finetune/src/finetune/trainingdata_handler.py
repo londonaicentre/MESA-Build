@@ -13,6 +13,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from mesa_types import TrainingSample
 from utils.aws import AWS
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,8 @@ class TrainingDataHandler:
         schema: type[BaseModel],
         system_prompt: str,
         training_batch_names: list[str],
+        base_model: str,
+        max_seq_length: int,
         bucket: str = "aicentre-nlpteam-mesa-build",
         s3_prefix: str = "trainingdata",
         output_file: str = "train.jsonl",
@@ -100,17 +103,17 @@ class TrainingDataHandler:
             with open(jsonl_path) as f:
                 for line_num, line in enumerate(f, 1):
                     try:
-                        sample = json.loads(line)
+                        sample = TrainingSample.model_validate(json.loads(line))
 
                         # vs expected system prompt
-                        sample_system_prompt = sample["messages"][0]["content"]
+                        sample_system_prompt = sample.messages[0].content
                         if sample_system_prompt.replace("\n", "").replace(
                             " ", ""
                         ) != system_prompt.replace("\n", "").replace(" ", ""):
                             raise ValueError("System prompt mismatch")
 
                         # vs schema
-                        assistant_content = sample["messages"][2]["content"]
+                        assistant_content = sample.messages[2].content
                         json_str = (
                             assistant_content.replace("<output>", "")
                             .replace("</output>", "")
@@ -134,15 +137,57 @@ class TrainingDataHandler:
         if not all_samples:
             raise ValueError("No valid training samples found")
 
+        passing_samples = all_samples
+        if base_model and max_seq_length:
+            passing_samples = TrainingDataHandler.exclude_overlong_samples(
+                all_samples, max_seq_length, base_model
+            )
+
+        if len(passing_samples) < (len(all_samples) / 2):
+            logger.warning(
+                "Samples consistently exceed max_seq_length, consider increasing"
+            )
+
         if shuffle:
-            random.shuffle(all_samples)
+            random.shuffle(passing_samples)
             logger.info("Shuffled training samples")
 
         output_path = Path(output_file)
         with open(output_path, "w") as f:
-            for sample in all_samples:
-                f.write(json.dumps(sample) + "\n")
+            for sample in passing_samples:
+                f.write(sample.model_dump_json() + "\n")
 
-        logger.info(f"Prepared {len(all_samples)} total samples in {output_path}")
+        logger.info(f"Prepared {len(passing_samples)} total samples in {output_path}")
 
         return str(output_path)
+
+    @staticmethod
+    def exclude_overlong_samples(
+        samples: list[TrainingSample], max_seq_length: int, base_model: str
+    ) -> list[TrainingSample]:
+        """Exclude samples that exceed max token length.
+
+        Args:
+            samples: Training samples to filter
+            max_seq_length: Maximum token length
+            base_model: Model name for tokenizer
+
+        Returns:
+            List of samples that fit within max_seq_length
+
+        """
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(  # type: ignore[no-untyped-call]
+            base_model, trust_remote_code=True
+        )
+        return [
+            sample
+            for sample in samples
+            if len(
+                tokenizer.apply_chat_template(
+                    sample.messages, tokenize=True, add_generation_prompt=False
+                )
+            )
+            < max_seq_length
+        ]

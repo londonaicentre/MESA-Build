@@ -16,7 +16,7 @@ import yaml
 from pydantic import BaseModel, ValidationError
 
 from datagen.version_detector import get_schema_version
-from mesa_types import TrainingExample
+from mesa_types import TrainingExample, TrainingMessage, TrainingSample
 from utils.aws import AWS
 
 logger = logging.getLogger(__name__)
@@ -47,14 +47,14 @@ class TrainingDataUploader:
                 assistant_response = (
                     f"<output>\n{json.dumps(sample['output'], indent=2)}\n</output>"
                 )
-                message = {
-                    "messages": [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": sample["content"]},
-                        {"role": "assistant", "content": assistant_response},
+                training_sample = TrainingSample(
+                    messages=[
+                        TrainingMessage(role="system", content=system_prompt),
+                        TrainingMessage(role="user", content=sample["content"]),
+                        TrainingMessage(role="assistant", content=assistant_response),
                     ]
-                }
-                f.write(json.dumps(message) + "\n")
+                )
+                f.write(training_sample.model_dump_json() + "\n")
         return filename
 
     @staticmethod

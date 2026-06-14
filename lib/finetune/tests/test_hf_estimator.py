@@ -190,6 +190,8 @@ class TestPrepareData:
             schema=trainer.schema,
             system_prompt="foo",
             training_batch_names=["20260101-120000_corge-quux"],
+            base_model="baz",
+            max_seq_length=2048,
             bucket="foo-bar",
             s3_prefix="trainingdata",
             output_file="train.jsonl",
