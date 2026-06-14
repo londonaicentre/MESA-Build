@@ -1,0 +1,123 @@
+{
+    "content": "PAEDIATRIC ED TRIAGE NOTE\n\n14-month-old girl. Brought in by mum.\n\nPRESENTING COMPLAINT\nFever and poor feeding for 2 days, increasingly drowsy today.\n\nTRIAGE\nMum reports she has been off her feeds since yesterday, refusing the bottle. Not herself - usually very smiley and playful, today just wants to be held and is not interested in her toys. Fewer wet nappies than usual.\n\nOn assessment: looks pale, peripherally cool to touch. Subcostal recession noted. No rash seen, blanching when pressed. Not floppy. Drowsy but rouses to voice. ?meningitis given drowsiness and reduced feeding - to discuss with paediatric registrar.\n\nOlder sibling at home recently had chickenpox.\n\nPLAN: urgent paediatric review, bloods, observations.",
+    "output": {
+        "is_clinical_document": true,
+        "extraction_reasoning": "(1) AMBIGUITIES: '?meningitis' is a query/differential, not a sign in this schema, so it is not extracted as an entity; the drowsiness and poor feeding that prompted it are extracted on their own merits. (2) ASSERTION/APPLICABILITY: fever is not an AcuteSign member so omitted. 'off her feeds'/'refusing the bottle' -> POOR_FEEDING (positive). 'not herself'/'wants to be held' -> PARENT_REPORTS_NOT_THEMSELVES (positive). 'not interested in toys' -> REDUCED_PLAY (positive). 'fewer wet nappies' -> REDUCED_URINE_OUTPUT (positive). 'looks pale' -> PALLOR (positive). 'peripherally cool' -> COLD_PERIPHERIES (positive). 'subcostal recession' -> CHEST_RECESSION (positive). 'drowsy but rouses to voice' -> both DROWSINESS and REDUCED_CONSCIOUSNESS (positive; greedy extraction of overlapping signs from the same phrase). 'No rash, blanching when pressed' -> NON_BLANCHING_RASH (negated). 'Not floppy' -> FLOPPINESS (negated). Sibling's chickenpox is not an AcuteSign and refers to another child, so omitted. (3) OMISSIONS: fever, no numeric vitals to infer from, '?meningitis' is a query not a documented sign. Prioritised precision where support was uncertain.",
+        "document_content": {
+            "doc_type": "Paediatric ED triage note",
+            "doc_summary": "14-month-old with 2 days fever and poor feeding, increasingly drowsy. On assessment pale, cool peripheries, subcostal recession, drowsy rousing to voice. No rash, not floppy. Query meningitis, for urgent paediatric review."
+        },
+        "entities": [
+            {
+                "entity": "poor_feeding",
+                "entity_source_text": "refusing the bottle",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["off her feeds", "refusing the bottle"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "parent_reports_not_themselves",
+                "entity_source_text": "Not herself",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["Not herself", "just wants to be held"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "reduced_play",
+                "entity_source_text": "not interested in her toys",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["not interested in her toys"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "reduced_urine_output",
+                "entity_source_text": "Fewer wet nappies",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["Fewer wet nappies than usual"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "pallor",
+                "entity_source_text": "looks pale",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["looks pale"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "cold_peripheries",
+                "entity_source_text": "peripherally cool to touch",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["peripherally cool"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "chest_recession",
+                "entity_source_text": "Subcostal recession noted",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["Subcostal recession"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "drowsiness",
+                "entity_source_text": "Drowsy but rouses to voice",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["increasingly drowsy", "rouses to voice"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "reduced_consciousness",
+                "entity_source_text": "Drowsy but rouses to voice",
+                "assertion": "positive",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["increasingly drowsy", "rouses to voice"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "non_blanching_rash",
+                "entity_source_text": "No rash seen, blanching when pressed",
+                "assertion": "negated",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["No rash", "blanching when pressed"],
+                "year": null,
+                "month": null
+            },
+            {
+                "entity": "floppiness",
+                "entity_source_text": "Not floppy",
+                "assertion": "negated",
+                "is_patient": true,
+                "is_active": true,
+                "status_source_text": ["Not floppy"],
+                "year": null,
+                "month": null
+            }
+        ]
+    }
+}
