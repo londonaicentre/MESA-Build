@@ -722,7 +722,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-genoschema"
-version = "2.0.1"
+version = "2.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
@@ -751,7 +751,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.0.0"
+version = "2.3.0"
 source = { editable = "../../lib/types" }
 dependencies = [
     { name = "pydantic" },
@@ -764,11 +764,12 @@ requires-dist = [{ name = "pydantic", specifier = ">=2.12.5" }]
 dev = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.6" },
+    { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
 ]
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.0.0"
+version = "1.1.1"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },

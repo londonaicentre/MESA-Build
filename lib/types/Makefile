@@ -1,5 +1,5 @@
 test:
-	mypy src/
+	uv run mypy src/
 
 prettier:
-	ruff check --fix . && ruff format .
+	uv run ruff check --fix . && uv run ruff format .

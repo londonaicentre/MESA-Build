@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 import random
@@ -10,6 +11,8 @@ from litellm import RateLimitError, ModelResponse
 from pydantic import BaseModel
 
 from utils.llm import LLM, Message, TextContent
+
+logger = logging.getLogger(__name__)
 
 
 class ModelInput(BaseModel):
@@ -32,6 +35,7 @@ class AWS:
         bucket: str,
         object_name: str | None = None,
         path: str | None = None,
+        force: bool = False,
     ) -> bool:
         """Upload a file to S3
 
@@ -42,7 +46,9 @@ class AWS:
             object_name (str, optional): the name of the uploaded object.
                 If absent, file_name is used.
             path (str, optional): the path to the uploaded object. If absent,
-                file_name is used.
+                object_name is used.
+            force (bool, optional): Whether to overwrite if object exists.
+                Defaults to False.
 
         Returns:
             bool: Whether the upload was successful
@@ -50,12 +56,21 @@ class AWS:
         """
         if object_name is None:
             object_name = os.path.basename(file_name)
+        full_path: str = path + "/" + object_name if path else object_name
+        s3_client = boto3.client("s3", region_name=region_name)
         try:
-            boto3.client("s3", region_name=region_name).upload_file(
-                file_name, bucket, path + "/" + object_name if path else object_name
-            )
+            s3_client.head_object(Bucket=bucket, Key=full_path)
+            if not force:
+                return True
         except ClientError as e:
-            print(e)
+            if e.response["Error"]["Code"] == "404":
+                pass
+            else:
+                raise
+        try:
+            s3_client.upload_file(file_name, bucket, full_path)
+        except ClientError as e:
+            logger.error(e)
             return False
         return True
 
@@ -76,7 +91,7 @@ class AWS:
             object_name (str, optional): the name of the object to download.
                 If absent, file_name is used.
             path (str, optional): the path to the target object. If absent,
-                file_name is used.
+                object_name is used.
 
         Returns:
             bool: Whether the upload was successful
@@ -84,12 +99,14 @@ class AWS:
         """
         if object_name is None:
             object_name = os.path.basename(file_name)
+        full_path: str = path + "/" + object_name if path else object_name
+        s3_client = boto3.client("s3", region_name=region_name)
         try:
-            boto3.client("s3", region_name=region_name).download_file(
-                bucket, path + "/" + object_name if path else object_name, file_name
-            )
+            s3_client.download_file(bucket, full_path, file_name)
         except ClientError as e:
-            print(e)
+            logger.error(
+                f"error in download from {full_path} to {file_name} (bucket: {bucket}, region: {region_name}): {e}"
+            )
             return False
         return True
 
@@ -113,7 +130,7 @@ class AWS:
             )
             return response.get("Contents", [])
         except ClientError as e:
-            print(e)
+            logger.error(e)
             return []
 
     @staticmethod

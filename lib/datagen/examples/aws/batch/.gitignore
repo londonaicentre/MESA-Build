@@ -1,0 +1,7 @@
+.venv/
+data/
+__pycache__/
+.env
+.job_id.json
+anthropic_batch_job.jsonl
+anthropic_batch_job.jsonl.out

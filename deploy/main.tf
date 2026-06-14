@@ -72,3 +72,7 @@ resource "aws_s3_object" "mesa_build_bucket_models" {
   bucket = aws_s3_bucket.mesa_build_bucket.id
   key    = "models/"
 }
+
+resource "aws_s3_bucket" "mesa_public_bucket" {
+  bucket = "aicentre-nlpteam-mesa-public"
+}
