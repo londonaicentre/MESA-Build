@@ -203,6 +203,8 @@ class TrainingDataHandler:
             ):
                 passing_samples.append(sample)
                 consecutive_passing += 1
+                # if N consecutive passing samples seen per buffer threshold
+                # then early exit (we assume all others will pass)
                 if consecutive_passing >= max(
                     1, int(len(sorted_samples) * buffer_ratio)
                 ):
