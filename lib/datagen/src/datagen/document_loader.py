@@ -50,7 +50,7 @@ class DocumentLoader:
         tar_path = cache_dir / filename
         s3_key = f"{s3_prefix}/{filename}" if s3_prefix else filename
 
-        # do not redownload
+        # do not redownload
         if not tar_path.exists():
             success = AWS.download_file(
                 region_name=region,
@@ -64,13 +64,15 @@ class DocumentLoader:
 
         # always re-extract
         output_folder.mkdir(parents=True, exist_ok=True)
-        mode: Literal["r", "w", "r:gz", "w:gz"] = "r:gz" if tar_path.suffix == ".gz" else "r"
+        mode: Literal["r", "w", "r:gz", "w:gz"] = (
+            "r:gz" if tar_path.suffix == ".gz" else "r"
+        )
         doc_count = 0
 
         with tarfile.open(tar_path, mode) as tar:
             for member in tar.getmembers():
                 # we expect documents to have basename "document_*"
-                basename = member.name.split('/')[-1]
+                basename = member.name.split("/")[-1]
                 if basename.startswith("document_") and basename.endswith(".json"):
                     file = tar.extractfile(member)
                     if file:

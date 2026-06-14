@@ -2,7 +2,6 @@
 
 import json
 
-import pytest
 from importlib.resources import files
 
 from entityschema.schema import EntitySchemaModel

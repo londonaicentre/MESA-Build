@@ -845,7 +845,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.1.0"
+version = "2.2.0"
 source = { editable = "../types" }
 dependencies = [
     { name = "pydantic" },
@@ -863,7 +863,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.1.0"
+version = "1.1.1"
 source = { editable = "../utils" }
 dependencies = [
     { name = "boto3" },

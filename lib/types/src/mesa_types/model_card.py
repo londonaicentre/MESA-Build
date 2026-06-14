@@ -42,9 +42,16 @@ class ModelCard(BaseModel):
     def schema_version(self) -> str:
         return importlib.metadata.version(self.schema_name)
 
+    @computed_field  # type: ignore
+    @property
+    def model_identifier(self) -> str:
+        return f"{self.model_name}_{self.major}_{self.minor}_{self.patch}"
+
     def __get_yaml_str(self) -> str:
         return yaml.dump(
-            self.model_dump(exclude={"major", "minor", "patch", "output_schema"}),
+            self.model_dump(
+                exclude={"major", "minor", "patch", "output_schema", "model_identifier"}
+            ),
             default_flow_style=False,
             sort_keys=False,
         )
