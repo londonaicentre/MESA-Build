@@ -312,6 +312,47 @@ class TestConvert:
         )
 
 
+class TestSerialise:
+    def test_to_dict_extends_with_mlx_fields(
+        self, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        trainer: MLXLoRATrainer = make_mlx_trainer(work_dir="work", quantize="q4")
+        trainer.num_samples = 7
+        data = trainer.to_dict()
+        assert data["work_dir"] == "work"
+        assert data["quantize"] == "q4"
+        assert data["num_samples"] == 7
+
+    def test_from_json_round_trips_mlx_fields(
+        self, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        rebuilt: MLXLoRATrainer = MLXLoRATrainer.from_json(
+            make_mlx_trainer(
+                description="bar", work_dir="work", quantize="q8"
+            ).to_json()
+        )
+        assert rebuilt.work_dir == "work"
+        assert rebuilt.quantize == "q8"
+        assert rebuilt.model_folder == "work/bar"
+        assert rebuilt.adapter_dir == "work/bar/adapter"
+
+    def test_from_json_restores_num_samples(
+        self, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        trainer: MLXLoRATrainer = make_mlx_trainer()
+        trainer.num_samples = 42
+        assert MLXLoRATrainer.from_json(trainer.to_json()).num_samples == 42
+
+    def test_from_json_round_trips_none_fields(
+        self, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        rebuilt: MLXLoRATrainer = MLXLoRATrainer.from_json(
+            make_mlx_trainer(quantize=None).to_json()
+        )
+        assert rebuilt.quantize is None
+        assert rebuilt.num_samples is None
+
+
 class TestPostProcess:
     # Orchestration + branch coverage: fuse->(convert?)->upload ordering, fuse/convert failures
     # raise, the quantize opt-in for convert, and the push_public opt-in. fuse/convert/upload mocked.
