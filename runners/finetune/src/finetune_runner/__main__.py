@@ -21,7 +21,7 @@ class Schema(str, Enum):
 
 
 class FinetuneRunner(BaseSettings):
-    model_config = SettingsConfigDict(cli_kebab_case=True)
+    model_config = SettingsConfigDict(cli_kebab_case=True, cli_implicit_flags=True)
 
     config: str = Field(
         "config.yaml",
