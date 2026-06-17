@@ -1,0 +1,17 @@
+name: schemas structure test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/**
+      - .github/tests/**
+
+jobs:
+  test:
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - run: uvx --with packaging pytest .github/tests/

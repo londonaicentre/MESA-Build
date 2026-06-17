@@ -18,7 +18,6 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 ```text
 📁 MESA-Build
 ├── deploy/              # Terraform for AWS S3 setup  
-├── examples/            # Illustrative runs / smoke tests  
 ├── lib/                 # Reusable functionality
 │   ├── datagen/         # Training data generation
 │   ├── finetune/        # LLM fine-tuning
