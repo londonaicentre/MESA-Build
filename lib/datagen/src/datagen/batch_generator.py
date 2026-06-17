@@ -170,9 +170,7 @@ class BedrockBatchGenerator:
         if bucket is not None:
             if Path(self.__config.job_id_file).exists():
                 with open(self.__config.job_id_file) as job_id_file:
-                    path: str = (
-                        json.loads(job_id_file.read())["job_id"] + "/output/*"
-                    )
+                    path: str = json.loads(job_id_file.read())["job_id"] + "/output/*"
                     if not AWS.download_file_with_wildcard(
                         self.__model_region,
                         bucket,

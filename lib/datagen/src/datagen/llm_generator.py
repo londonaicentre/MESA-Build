@@ -32,6 +32,9 @@ class LLMGenerator:
         model_name: LiteLLM model string (e.g., 'gpt-4', 'claude-3-opus', 'bedrock/...')
         api_key: API key for the model provider
         document_batches: S3 batch filenames to download
+        max_tokens: Maximum output tokens per sample. Defaults to 32768.
+        temperature: Model randomness. Defaults to 0.001 (near-deterministic);
+            raise for more diverse samples.
 
     """
 
@@ -44,6 +47,8 @@ class LLMGenerator:
         model_name: str,
         api_key: str,
         document_batches: list[str],
+        max_tokens: int = 32768,
+        temperature: float = 0.001,
     ):
         self._logger: logging.Logger = logging.getLogger(__name__)
         if not self._logger.hasHandlers():
@@ -57,6 +62,8 @@ class LLMGenerator:
         self.__schema_name: str = schema_name
         self.__model_name: str = model_name
         self.__api_key: str = api_key
+        self.__max_tokens: int = max_tokens
+        self.__temperature: float = temperature
         self.__schema_version: str = get_schema_version(schema_name)
         self.__output_folder_name: str = "./data/trainingdata/"
 
@@ -91,12 +98,14 @@ class LLMGenerator:
                 self.__system_prompt,
                 user_prompt,
                 self.__api_key,
+                max_tokens=self.__max_tokens,
+                temperature=self.__temperature,
             )
             if message is None:
                 return False
-            
+
             choices = message.choices
-            if hasattr(choices[0], 'message'):
+            if hasattr(choices[0], "message"):
                 content: str | None = choices[0].message.content
                 if content is not None:
                     return save_training_sample(
@@ -145,9 +154,7 @@ class LLMGenerator:
                 doc = Document.model_validate_json(doc_path.read_text())
                 output_filename = os.path.join(
                     self.__output_folder_name,
-                    get_output_filename(
-                        self.__schema_name, self.__schema_version, doc
-                    ),
+                    get_output_filename(self.__schema_name, self.__schema_version, doc),
                 )
 
                 # skip if exists
@@ -188,9 +195,7 @@ class LLMGenerator:
                 doc = Document.model_validate_json(doc_path.read_text())
                 output_filename = os.path.join(
                     self.__output_folder_name,
-                    get_output_filename(
-                        self.__schema_name, self.__schema_version, doc
-                    ),
+                    get_output_filename(self.__schema_name, self.__schema_version, doc),
                 )
 
                 # skip if exists

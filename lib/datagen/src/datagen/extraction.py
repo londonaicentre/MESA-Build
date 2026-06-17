@@ -19,9 +19,7 @@ from mesa_types import Document
 logger = logging.getLogger(__name__)
 
 
-def get_output_filename(
-    schema_name: str, schema_version: str, doc: Document
-) -> str:
+def get_output_filename(schema_name: str, schema_version: str, doc: Document) -> str:
     """Generate metadata-embedded output filename for a document.
 
     Args:
@@ -38,6 +36,8 @@ def get_output_filename(
 
 
 T = TypeVar("T", bound=BaseModel)
+
+
 def _try_parse_and_validate(
     text: str, schema: type[T]
 ) -> tuple[T | None, dict[str, Any] | None]:
