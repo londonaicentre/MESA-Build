@@ -7,11 +7,13 @@ Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
 import logging
 import subprocess
 from pathlib import Path
+from typing import Any
 
 import yaml
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
 
+from finetune.config import FinetuneConfig
 from finetune.trainer import LoRATrainer
 from utils.prompt import BasePromptBuilder
 
@@ -32,6 +34,8 @@ class MLXLoRATrainer(LoRATrainer):
         description: Job description, used for naming and the working directory.
         work_dir: Local working/output root. Defaults to ``data/models``.
         quantize: Optional MLX quantisation for ``convert`` (``None`` | ``"q4"`` | ``"q8"``).
+        config: Pre-loaded config, bypassing ``config_path``. Used when rebuilding a
+            trainer from a serialised spec; defaults to loading ``config_path``.
     """
 
     def __init__(
@@ -45,6 +49,7 @@ class MLXLoRATrainer(LoRATrainer):
         description: str,
         work_dir: str = "data/models",
         quantize: str | None = None,
+        config: FinetuneConfig | None = None,
     ):
         super().__init__(
             schema,
@@ -54,6 +59,7 @@ class MLXLoRATrainer(LoRATrainer):
             aws_config,
             model_name,
             description,
+            config,
         )
         self.work_dir = work_dir
         self.quantize = quantize
@@ -69,6 +75,32 @@ class MLXLoRATrainer(LoRATrainer):
         # neutral config (loaded by the base) drives training; iters derives from
         # num_samples at _write_config time
         self.num_samples: int | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialise the trainer's state, extending the base with MLX fields.
+
+        Returns:
+            dict[str, Any]: The trainer state, ready for ``json.dumps``.
+
+        """
+        return {
+            **super().to_dict(),
+            "work_dir": self.work_dir,
+            "quantize": self.quantize,
+            "num_samples": self.num_samples,
+        }
+
+    @classmethod
+    def _constructor_kwargs(cls, data: dict[str, Any]) -> dict[str, Any]:
+        return {
+            **super()._constructor_kwargs(data),
+            "work_dir": data["work_dir"],
+            "quantize": data["quantize"],
+        }
+
+    def _restore_runtime(self, data: dict[str, Any]) -> None:
+        super()._restore_runtime(data)
+        self.num_samples = data["num_samples"]
 
     def prepare_data(self) -> str:
         """Prepare training data into a local directory for mlx_lm.

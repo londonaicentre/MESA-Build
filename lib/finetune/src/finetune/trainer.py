@@ -1,8 +1,11 @@
 import io
+import json
 import logging
 import tarfile
 from datetime import datetime
+from importlib import import_module
 from pathlib import Path
+from typing import Any, Self
 
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
@@ -26,6 +29,8 @@ class LoRATrainer:
         aws_config: AWS configuration dict with bucket, region and (optionally) role.
         model_name: Model name used for the model card and the uploaded archive.
         description: Job description, used for naming.
+        config: Pre-loaded config, bypassing ``config_path``. Used when rebuilding a
+            trainer from a serialised spec; defaults to loading ``config_path``.
     """
 
     def __init__(
@@ -37,6 +42,7 @@ class LoRATrainer:
         aws_config: dict[str, str],
         model_name: str,
         description: str,
+        config: FinetuneConfig | None = None,
     ):
         self.schema = schema
         self.prompt_builder = prompt_builder
@@ -45,7 +51,7 @@ class LoRATrainer:
         self.model_name = model_name
         self.description = description
 
-        self.config = FinetuneConfig.load(config_path)
+        self.config = config if config is not None else FinetuneConfig.load(config_path)
         self.base_model = self.config.training.base_model
         self.max_seq_length = self.config.training.max_seq_length
 
@@ -64,6 +70,80 @@ class LoRATrainer:
     @staticmethod
     def _get_uploaded_model_folder_prefix(model_card: ModelCard) -> str:
         return f"models/{model_card.model_name}/{model_card.model_identifier}"
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialise the trainer's state to a JSON-ready dict.
+
+        Returns:
+            dict[str, Any]: The trainer state, ready for ``json.dumps``.
+
+        """
+        return {
+            "schema": {
+                "module": self.schema.__module__,
+                "qualname": self.schema.__qualname__,
+            },
+            "prompt_builder": {
+                "module": type(self.prompt_builder).__module__,
+                "qualname": type(self.prompt_builder).__qualname__,
+            },
+            "training_batch_names": self.training_batch_names,
+            "config": self.config.model_dump(mode="json"),
+            "aws_config": self.aws_config,
+            "model_name": self.model_name,
+            "description": self.description,
+            "job_id": self.job_id,
+        }
+
+    def to_json(self) -> str:
+        """Serialise the trainer to a single-line JSON string.
+
+        Returns:
+            str: Compact JSON suitable for passing between CI steps.
+
+        """
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def from_json(cls, source: str) -> Self:
+        """Rebuild a trainer from a JSON spec produced by ``to_json``.
+
+        Args:
+            source (str): The JSON spec itself, or a path to a file containing it.
+                Parsed as JSON first; if that fails, read as a file path.
+
+        Returns:
+            Self: A trainer of the calling class with its state restored.
+
+        """
+        try:
+            data: dict[str, Any] = json.loads(source)
+        except json.JSONDecodeError:
+            data = json.loads(Path(source).read_text())
+        trainer: Self = cls(**cls._constructor_kwargs(data))
+        trainer._restore_runtime(data)
+        return trainer
+
+    @classmethod
+    def _constructor_kwargs(cls, data: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "schema": getattr(
+                import_module(data["schema"]["module"]), data["schema"]["qualname"]
+            ),
+            "prompt_builder": getattr(
+                import_module(data["prompt_builder"]["module"]),
+                data["prompt_builder"]["qualname"],
+            )(),
+            "training_batch_names": data["training_batch_names"],
+            "config_path": "",
+            "aws_config": data["aws_config"],
+            "model_name": data["model_name"],
+            "description": data["description"],
+            "config": FinetuneConfig.model_validate(data["config"]),
+        }
+
+    def _restore_runtime(self, data: dict[str, Any]) -> None:
+        self.job_id = data["job_id"]
 
     def build_model_card(
         self,

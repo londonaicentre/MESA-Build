@@ -3,6 +3,7 @@ import os
 from abc import abstractmethod
 from enum import Enum
 from importlib import import_module
+from pathlib import Path
 from typing import Self
 
 from mesa_types.model_card import ModelCard
@@ -50,6 +51,18 @@ class FinetuneRunner(BaseSettings):
         validation_alias=AliasChoices("version", "v"),
         description="Semantic version (<major.minor.patch>) recorded on the model card",
     )
+    train: bool = Field(
+        False,
+        description="Train only; write the serialised trainer spec to --spec-out",
+    )
+    post_process: bool = Field(False, description="Post-process only; requires --spec")
+    spec_out: str = Field(
+        "", description="File to write the serialised trainer spec to (with --train)"
+    )
+    spec: str = Field(
+        "",
+        description="Serialised trainer spec: inline JSON, or a path to the --spec-out file from a prior --train run",
+    )
     major: CliSuppress[int] = 0
     minor: CliSuppress[int] = 0
     patch: CliSuppress[int] = 0
@@ -73,6 +86,15 @@ class FinetuneRunner(BaseSettings):
         self.major, self.minor, self.patch = (
             int(part) for part in self.version.split(".")
         )
+        return self
+
+    @model_validator(mode="after")
+    def _validate_stage(self) -> Self:
+        assert not (self.train and self.post_process), (
+            "pass at most one of --train / --post-process"
+        )
+        assert self.spec or not self.post_process, "--post-process requires --spec"
+        assert self.spec_out or not self.train, "--train requires --spec-out"
         return self
 
     def _load_schema(self) -> tuple[type[BaseModel], BasePromptBuilder]:
@@ -104,13 +126,9 @@ class FinetuneRunner(BaseSettings):
 class FinetuneMLXRunner(FinetuneRunner):
     model_config = SettingsConfigDict(cli_prog_name="mesa-build-mlx-finetune")
 
-    def cli_cmd(self) -> None:
-        logging.info("== mesa-build (finetune) ==")
-        logging.info("Collecting configuration")
-        logging.info(f"  Using config at {self.config}")
-
+    def _make_trainer(self) -> MLXLoRATrainer:
         schema, prompt_builder = self._load_schema()
-        trainer: MLXLoRATrainer = MLXLoRATrainer(
+        return MLXLoRATrainer(
             schema=schema,
             prompt_builder=prompt_builder,
             training_batch_names=[self.training_batch_name],
@@ -124,15 +142,34 @@ class FinetuneMLXRunner(FinetuneRunner):
             work_dir="data/models",
             quantize=None,
         )
-        model_card: ModelCard | None = self._build_validated_model_card(trainer)
+
+    def _train(self) -> MLXLoRATrainer:
+        trainer: MLXLoRATrainer = self._make_trainer()
+        self._build_validated_model_card(trainer)
         trainer.run()
+        return trainer
+
+    def _post_process(self, trainer: MLXLoRATrainer) -> None:
         trainer.post_process(
-            model_card,
+            trainer.build_model_card(self.major, self.minor, self.patch),
             push_public=False,
         )
         logging.info(
             "Post-processing complete - merged model uploaded to the build bucket."
         )
+
+    def cli_cmd(self) -> None:
+        logging.info("== mesa-build (finetune) ==")
+        logging.info("Collecting configuration")
+        logging.info(f"  Using config at {self.config}")
+
+        if self.post_process:
+            self._post_process(MLXLoRATrainer.from_json(self.spec))
+        elif self.train:
+            Path(self.spec_out).write_text(self._train().to_json())
+            logging.info(f"Wrote trainer spec to {self.spec_out}")
+        else:
+            self._post_process(self._train())
 
 
 def mlx() -> None:

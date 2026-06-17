@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from conftest import BaseTrainerFactory, LoRATrainerFixture
+from conftest import BaseTrainerFactory, LoRATrainerFixture, PromptBuilderFixture
 from finetune.trainer import LoRATrainer
 from fixtures import SchemaFixture
 
@@ -333,6 +333,81 @@ class TestValidModelCardVersion:
         valid_version_mocks.list_s3_objects.assert_called_once_with(
             "foo-bar-1", "foo-bar", "models/foo/foo_1_2_3"
         )
+
+
+class TestSerialise:
+    def test_to_dict_stores_import_references(
+        self, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        data = make_base_trainer().to_dict()
+        assert data["schema"] == {"module": "fixtures", "qualname": "SchemaFixture"}
+        assert data["prompt_builder"] == {
+            "module": "conftest",
+            "qualname": "PromptBuilderFixture",
+        }
+
+    def test_to_dict_embeds_config(self, make_base_trainer: BaseTrainerFactory) -> None:
+        assert (
+            make_base_trainer().to_dict()["config"]["training"]["base_model"] == "baz"
+        )
+
+    def test_to_json_is_single_line(
+        self, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        assert "\n" not in make_base_trainer().to_json()
+
+    def test_from_json_rebuilds_schema_by_import(
+        self, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        assert (
+            LoRATrainer.from_json(make_base_trainer().to_json()).schema is SchemaFixture
+        )
+
+    def test_from_json_rebuilds_prompt_builder_by_import(
+        self, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        assert isinstance(
+            LoRATrainer.from_json(make_base_trainer().to_json()).prompt_builder,
+            PromptBuilderFixture,
+        )
+
+    def test_from_json_round_trips_fields(
+        self, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        rebuilt = LoRATrainer.from_json(
+            make_base_trainer(
+                training_batch_names=["batch-a", "batch-b"],
+                aws_config={"bucket": "x", "region": "y", "role": "z"},
+                model_name="grault",
+                description="garply",
+            ).to_json()
+        )
+        assert rebuilt.training_batch_names == ["batch-a", "batch-b"]
+        assert rebuilt.aws_config == {"bucket": "x", "region": "y", "role": "z"}
+        assert rebuilt.model_name == "grault"
+        assert rebuilt.description == "garply"
+        assert rebuilt.base_model == "baz"
+
+    def test_from_json_restores_job_id(
+        self, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        trainer = make_base_trainer()
+        assert LoRATrainer.from_json(trainer.to_json()).job_id == trainer.job_id
+
+    def test_from_json_reads_from_file_path(
+        self, tmp_path: Path, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        spec = tmp_path / "spec.json"
+        spec.write_text(make_base_trainer(model_name="grault").to_json())
+        assert LoRATrainer.from_json(str(spec)).model_name == "grault"
+
+    def test_from_json_rebuilds_config_without_reading_file(
+        self, mocker: MockerFixture, make_base_trainer: BaseTrainerFactory
+    ) -> None:
+        spec = make_base_trainer().to_json()
+        load: MagicMock = mocker.patch("finetune.trainer.FinetuneConfig.load")
+        assert LoRATrainer.from_json(spec).base_model == "baz"
+        load.assert_not_called()
 
 
 class TestPublish:
