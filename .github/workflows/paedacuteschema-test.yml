@@ -1,0 +1,14 @@
+name: paedacuteschema test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/paedacuteschema/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      working-directory: schemas/paedacuteschema
