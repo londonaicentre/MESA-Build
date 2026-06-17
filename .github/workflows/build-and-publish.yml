@@ -1,0 +1,38 @@
+name: reusable build and publish
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
+      package:
+        required: true
+        type: string
+
+jobs:
+  build-and-publish:
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    environment: pypi
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - name: extract version
+        id: version
+        run: |
+          version=$(uv version --short)
+          echo "tag=${{ inputs.package }}-v$version" >> "$GITHUB_OUTPUT"
+      - name: tag and release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          make_latest: false
+      - run: uv build
+      - run: uv publish

@@ -1,18 +1,18 @@
-name: types test
+name: reusable test
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - lib/types/**
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
 
 jobs:
   test:
     runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
     defaults:
       run:
-        working-directory: lib/types
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -20,12 +20,13 @@ jobs:
       - name: check version is bumped
         run: |
           current=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
-          main=$(git show origin/main:lib/types/pyproject.toml | grep '^version = ' | cut -d'"' -f2)
+          main=$(git show origin/main:${{ inputs.working-directory }}/pyproject.toml | grep '^version = ' | cut -d'"' -f2)
           if [ "$current" = "$main" ]; then
             echo "version must be bumped from $main"
             exit 1
           fi
       - uses: astral-sh/setup-uv@v7
       - run: uv sync
-      - run: uv run ruff check src/
-      - run: uv run mypy src/
+      - run: uv run ruff check src/ tests/
+      - run: uv run mypy src/ tests/
+      - run: uv run pytest tests
