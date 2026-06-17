@@ -1,4 +1,4 @@
-name: build and publish utils
+name: build and publish paedacuteschema
 
 on:
   workflow_dispatch:
@@ -7,12 +7,12 @@ on:
     branches:
       - main
     paths:
-      - "lib/utils/**"
+      - "schemas/paedacuteschema/**"
 
 jobs:
   build-and-publish:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     uses: ./.github/workflows/build-and-publish.yml
     with:
-      working-directory: lib/utils
-      package: utils
+      working-directory: schemas/paedacuteschema
+      package: paedacuteschema
