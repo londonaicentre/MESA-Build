@@ -7,7 +7,9 @@ import pytest
 from packaging.version import InvalidVersion, Version
 
 SCHEMA_DIRS: list[Path] = sorted(
-    d for d in (Path(__file__).parent.parent.parent / "schemas").iterdir() if d.is_dir()
+    d
+    for d in (Path(__file__).parent.parent.parent / "schemas").iterdir()
+    if d.is_dir() and not d.name.startswith("_")
 )
 
 
