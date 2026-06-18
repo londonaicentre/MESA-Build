@@ -1,0 +1,11 @@
+"""Prompt builder for {{discipline}} schema."""
+
+from {{schema_name}}.schema import {{output_model}}
+from utils.prompt import BasePromptBuilder
+
+
+class PromptBuilder(BasePromptBuilder):
+    """Build prompts for {{discipline}} extraction."""
+
+    def __init__(self) -> None:
+        super().__init__("{{schema_name}}", {{output_model}})

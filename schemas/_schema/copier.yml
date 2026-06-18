@@ -1,0 +1,27 @@
+# questions
+discipline:
+    type: str
+    help: Which discipline is this schema targeting (e.g. 'Oncology')?
+
+schema_name:
+    type: str
+    help: What is your schema name (e.g. 'oncoschema')?
+
+output_model:
+    type: str
+    help: What is the name of your main schema entry class (e.g. 'OncologyModel')?
+
+_tasks:
+  - "uv init --lib --build-backend setuptools --name {{schema_name}} --description {{discipline | capitalize}}"
+  - "uv add --editable ../../lib/utils"
+  - "uv add pydantic"
+  - "uv add --dev mypy pytest ruff"
+  - |
+    cat >> pyproject.toml << 'EOF'
+    [tool.setuptools.package-data]
+    {{ schema_name }} = [
+        "*.txt", 
+        "examples/*.json", 
+        "py.typed"
+    ]
+    EOF
