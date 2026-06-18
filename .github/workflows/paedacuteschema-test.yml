@@ -1,14 +1,14 @@
-name: oncoschema test
+name: paedacuteschema test
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - schemas/oncoschema/**
+      - schemas/paedacuteschema/**
 
 jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      working-directory: schemas/oncoschema
+      working-directory: schemas/paedacuteschema

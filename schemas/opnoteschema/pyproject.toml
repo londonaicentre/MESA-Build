@@ -1,0 +1,33 @@
+[project]
+name = "opnoteschema"
+version = "0.1.0"
+description = "Operation notes"
+readme = "README.md"
+authors = [
+    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "londonaicentre-mesa-utils",
+    "pydantic>=2.13.4",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+londonaicentre-mesa-utils = { path = "../../lib/utils", editable = true }
+
+[dependency-groups]
+dev = [
+    "mypy>=2.1.0",
+    "pytest>=9.1.0",
+    "ruff>=0.15.17",
+]
+[tool.setuptools.package-data]
+opnoteschema = [
+    "*.txt", 
+    "examples/*.json", 
+    "py.typed"
+]
