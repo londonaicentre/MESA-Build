@@ -1,7 +1,10 @@
+import importlib.util
 import json
 import re
+import sys
 import tomllib
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from packaging.version import InvalidVersion, Version
@@ -52,6 +55,22 @@ class TestSourceStructure:
     def test_prompt_builder_extends_base(self, src: Path) -> None:
         content: str = (src / "prompt_builder.py").read_text()
         assert re.search(r"class \w+\(.*BasePromptBuilder.*\)", content)
+
+    def test_init_exports_schema(self, schema_dir: Path) -> None:
+        package: str = schema_dir.name
+        sys.modules[f"{package}.schema"] = MagicMock()
+        spec = importlib.util.spec_from_file_location(
+            package,
+            schema_dir / "src" / package / "__init__.py",
+            submodule_search_locations=[str(schema_dir / "src" / package)],
+        )
+        module = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(module)
+            assert hasattr(module, "Schema")
+        finally:
+            sys.modules.pop(package, None)
+            sys.modules.pop(f"{package}.schema", None)
 
 
 class TestPromptContent:
