@@ -12,7 +12,7 @@ output_model:
     help: What is the name of your main schema entry class (e.g. 'OncologyModel')?
 
 _tasks:
-  - "uv init --lib --build-backend setuptools --name {{schema_name}} --description {{discipline | capitalize}}"
+  - "uv init --lib --build-backend setuptools --name {{schema_name}} --description '{{discipline | capitalize}}'"
   - "uv add --editable ../../lib/utils"
   - "uv add pydantic"
   - "uv add --dev mypy pytest ruff"
