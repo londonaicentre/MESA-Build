@@ -1,0 +1,15 @@
+[project]
+name = "paedawen"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "ipykernel>=7.3.0",
+    "londonaicentre-mesa-datagen",
+    "londonaicentre-paedacuteschema>=1.0.1",
+]
+
+[tool.uv.sources]
+londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
+
