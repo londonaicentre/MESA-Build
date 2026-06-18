@@ -290,7 +290,7 @@ class AWS:
             boto3.client(
                 "bedrock", region_name=model_region
             ).create_model_invocation_job(
-                jobName="schemallama-" + job_id.replace("/", "-"),
+                jobName="mesa-" + job_id.replace("/", "-"),
                 modelId=model_id,
                 roleArn=bedrock_execution_role,
                 inputDataConfig={
