@@ -27,8 +27,8 @@ dependencies = [
 #   pip install "londonaicentre-mesa-finetune[mlx]"
 #   uv sync --extra mlx
 mlx = [
-    "mlx>=0.18.0; platform_system == 'Darwin' and platform_machine == 'arm64'",
-    "mlx-lm>=0.18.0; platform_system == 'Darwin' and platform_machine == 'arm64'",
+    "mlx==0.31.2; platform_system == 'Darwin' and platform_machine == 'arm64'",
+    "mlx-lm==0.31.3; platform_system == 'Darwin' and platform_machine == 'arm64'",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]

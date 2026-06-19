@@ -23,12 +23,25 @@ def model_card() -> MagicMock:
 
 
 class TestMakeJobId:
-    def test_make_job_id_format(
-        self, mocker: MockerFixture, make_base_trainer: BaseTrainerFactory
+    @pytest.mark.parametrize(
+        "description, expected",
+        [
+            ("grault", "20260101-120000-grault"),
+            ("MLX retrain - spike", "20260101-120000-mlx-retrain-spike"),
+            ("***", "20260101-120000"),
+            ("a" * 60, f"20260101-120000-{'a' * 40}"),
+        ],
+    )
+    def test_make_job_id_slugifies_description(
+        self,
+        mocker: MockerFixture,
+        make_base_trainer: BaseTrainerFactory,
+        description: str,
+        expected: str,
     ) -> None:
         mock_datetime: MagicMock = mocker.patch("finetune.trainer.datetime")
         mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
-        assert make_base_trainer().make_job_id("grault") == "20260101-120000-grault"
+        assert make_base_trainer().make_job_id(description) == expected
 
 
 class TestBuildModelCard:

@@ -1,6 +1,7 @@
 import io
 import json
 import logging
+import re
 import tarfile
 from datetime import datetime
 from importlib import import_module
@@ -55,7 +56,6 @@ class LoRATrainer:
         self.base_model = self.config.training.base_model
         self.max_seq_length = self.config.training.max_seq_length
 
-        # job ID (sagemaker does not like underscores!)
         self.job_id = LoRATrainer._make_job_id(description)
 
         # pass from an aws config dict (role unused for local training)
@@ -65,7 +65,9 @@ class LoRATrainer:
 
     @staticmethod
     def _make_job_id(description: str) -> str:
-        return f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{description}"
+        # job ID (sagemaker does not like underscores!)
+        slug = re.sub(r"[^a-z0-9]+", "-", description.lower()).strip("-")[:40]
+        return f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{slug}".strip("-")
 
     @staticmethod
     def _get_uploaded_model_folder_prefix(model_card: ModelCard) -> str:

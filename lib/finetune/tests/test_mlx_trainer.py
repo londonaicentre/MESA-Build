@@ -1,8 +1,12 @@
+import os
+import signal
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+import yaml
 from pytest_mock import MockerFixture
 
 from conftest import MLXTrainerFactory
@@ -47,6 +51,14 @@ class PostProcessMocks:
     archive_and_upload: MagicMock
 
 
+@dataclass
+class TrainMocks:
+    subprocess_run: MagicMock
+    latest_checkpoint: MagicMock
+    inject_resume: MagicMock
+    logger: MagicMock
+
+
 @pytest.fixture
 def subprocess_run(mocker: MockerFixture) -> MagicMock:
     return mocker.patch("finetune.mlx_trainer.subprocess.run")
@@ -55,8 +67,11 @@ def subprocess_run(mocker: MockerFixture) -> MagicMock:
 @pytest.fixture
 def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
     mock_path: MagicMock = mocker.patch("finetune.mlx_trainer.Path")
-    # train_jsonl.read_text() -> three non-empty lines
-    mock_path.return_value.__truediv__.return_value.read_text.return_value = "a\nb\nc\n"
+    train_jsonl: MagicMock = mock_path.return_value.__truediv__.return_value
+    # train_jsonl.read_text() -> three non-empty lines; absent by default so the
+    # idempotency guard falls through to a real S3 prepare
+    train_jsonl.read_text.return_value = "a\nb\nc\n"
+    train_jsonl.exists.return_value = False
     return PrepareDataMocks(
         mocker.patch("finetune.trainer.TrainingDataHandler.prepare"),
         mock_path,
@@ -102,6 +117,16 @@ def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
 
 
 @pytest.fixture
+def train_mocks(mocker: MockerFixture) -> TrainMocks:
+    return TrainMocks(
+        mocker.patch("finetune.mlx_trainer.subprocess.run"),
+        mocker.patch.object(MLXLoRATrainer, "_latest_checkpoint"),
+        mocker.patch.object(MLXLoRATrainer, "_inject_resume"),
+        mocker.patch("finetune.mlx_trainer.logger"),
+    )
+
+
+@pytest.fixture
 def model_card() -> MagicMock:
     mock: MagicMock = MagicMock()
     mock.model_name = "foo"
@@ -120,14 +145,28 @@ class TestConstructor:
         _patch_job_id_datetime(mocker)
         assert make_mlx_trainer(description="grault").job_id == "20260101-120000-grault"
 
-    def test_init_sets_local_paths(self, make_mlx_trainer: MLXTrainerFactory) -> None:
-        trainer: MLXLoRATrainer = make_mlx_trainer(description="bar", work_dir="work")
-        assert trainer.model_folder == "work/bar"
-        assert trainer.data_dir == "work/bar/data"
-        assert trainer.adapter_dir == "work/bar/adapter"
-        assert trainer.target_dir == "work/bar/target"
-        assert trainer.mlx_dir == "work/bar/mlx"
-        assert trainer.resolved_config_path == "work/bar/mlx_lora_config.resolved.yaml"
+    def test_init_sets_local_paths(
+        self, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        _patch_job_id_datetime(mocker)
+        trainer: MLXLoRATrainer = make_mlx_trainer(
+            model_name="foo", description="bar", work_dir="work"
+        )
+        folder = "work/foo/20260101-120000-bar"
+        assert trainer.model_folder == folder
+        assert trainer.data_dir == f"{folder}/data"
+        assert trainer.adapter_dir == f"{folder}/adapter"
+        assert trainer.target_dir == f"{folder}/target"
+        assert trainer.mlx_dir == f"{folder}/mlx"
+        assert trainer.resolved_config_path == f"{folder}/mlx_lora_config.resolved.yaml"
+
+    def test_restore_runtime_recomputes_paths_with_saved_job_id(
+        self, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        original: MLXLoRATrainer = make_mlx_trainer(model_name="foo", work_dir="work")
+        rebuilt: MLXLoRATrainer = MLXLoRATrainer.from_json(original.to_json())
+        assert rebuilt.job_id == original.job_id
+        assert rebuilt.model_folder == f"work/foo/{original.job_id}"
 
     def test_init_loads_base_model_from_config(
         self, make_mlx_trainer: MLXTrainerFactory
@@ -177,7 +216,14 @@ class TestPrepareData:
         self, prepare_data_mocks: PrepareDataMocks, make_mlx_trainer: MLXTrainerFactory
     ) -> None:
         trainer: MLXLoRATrainer = make_mlx_trainer(description="foo", work_dir="work")
-        assert trainer.prepare_data() == "work/foo/data"
+        assert trainer.prepare_data() == trainer.data_dir
+
+    def test_existing_data_skips_prepare(
+        self, prepare_data_mocks: PrepareDataMocks, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        prepare_data_mocks.path.return_value.__truediv__.return_value.exists.return_value = True
+        make_mlx_trainer().prepare_data()
+        prepare_data_mocks.training_data_handler.assert_not_called()
 
 
 class TestWriteConfig:
@@ -204,7 +250,7 @@ class TestWriteConfig:
         write_config_mocks.to_mlx_config.assert_called_once_with(5)
         dumped = write_config_mocks.yaml.call_args[0][0]
         assert dumped["data"] == f"{tmp_path}/foo/data"
-        assert dumped["adapter_path"] == f"{tmp_path}/foo/adapter"
+        assert dumped["adapter_path"] == trainer.adapter_dir
 
     def test_returns_resolved_config_path(
         self,
@@ -218,19 +264,214 @@ class TestWriteConfig:
         trainer.num_samples = 5
         assert (
             trainer._write_config(f"{tmp_path}/foo/data")
-            == f"{tmp_path}/foo/mlx_lora_config.resolved.yaml"
+            == trainer.resolved_config_path
         )
+
+
+def _write_resolved_config(
+    tmp_path: Path, iters: int = 1000, lr_schedule: dict[str, str] | None = None
+) -> str:
+    config: dict[str, object] = {"iters": iters}
+    if lr_schedule is not None:
+        config["lr_schedule"] = lr_schedule
+    path = tmp_path / "resolved.yaml"
+    path.write_text(yaml.safe_dump(config))
+    return str(path)
 
 
 class TestTrain:
-    # train() shells out to `mlx_lm.lora --config <path>`. subprocess.run mocked.
-    def test_calls_subprocess_run(
-        self, subprocess_run: MagicMock, make_mlx_trainer: MLXTrainerFactory
+    # train() shells out to `mlx_lm.lora --config <path>`, retrying only a SIGABRT (GPU victim) from the latest checkpoint. subprocess.run / checkpoint / inject mocked.
+    def test_success_calls_subprocess_once(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
     ) -> None:
-        make_mlx_trainer().train("resolved.yaml")
-        subprocess_run.assert_called_once_with(
-            ["mlx_lm.lora", "--config", "resolved.yaml"], check=True
+        config = _write_resolved_config(tmp_path)
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=0)
+        make_mlx_trainer().train(config)
+        train_mocks.subprocess_run.assert_called_once_with(
+            ["mlx_lm.lora", "--config", config]
         )
+        train_mocks.inject_resume.assert_not_called()
+
+    @staticmethod
+    def _returncodes(*codes: int) -> list[MagicMock]:
+        return [MagicMock(returncode=code) for code in codes]
+
+    def test_sigabrt_retries_from_checkpoint(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000)
+        train_mocks.latest_checkpoint.return_value = (
+            Path("0000100_adapters.safetensors"),
+            100,
+        )
+        train_mocks.subprocess_run.side_effect = TestTrain._returncodes(
+            -signal.SIGABRT, 0
+        )
+        make_mlx_trainer().train(config)
+        # remaining iters = original (1000) - completed (100)
+        train_mocks.inject_resume.assert_called_once_with(
+            config, Path("0000100_adapters.safetensors"), 900
+        )
+        assert train_mocks.subprocess_run.call_count == 2
+
+    def test_non_sigabrt_does_not_retry(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        train_mocks.latest_checkpoint.return_value = (
+            Path("0000100_adapters.safetensors"),
+            100,
+        )
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=1)
+        with pytest.raises(subprocess.CalledProcessError):
+            make_mlx_trainer().train(_write_resolved_config(tmp_path))
+        train_mocks.inject_resume.assert_not_called()
+
+    def test_sigabrt_without_checkpoint_raises(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        train_mocks.latest_checkpoint.return_value = None
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=-signal.SIGABRT)
+        with pytest.raises(subprocess.CalledProcessError):
+            make_mlx_trainer().train(_write_resolved_config(tmp_path))
+
+    def test_exhausts_retries_and_raises(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        train_mocks.latest_checkpoint.return_value = (
+            Path("0000100_adapters.safetensors"),
+            100,
+        )
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=-signal.SIGABRT)
+        with pytest.raises(subprocess.CalledProcessError):
+            make_mlx_trainer().train(_write_resolved_config(tmp_path), max_retries=2)
+        assert train_mocks.subprocess_run.call_count == 2
+
+
+class TestLatestCheckpoint:
+    @pytest.fixture
+    def trainer(
+        self, tmp_path: Path, make_mlx_trainer: MLXTrainerFactory
+    ) -> MLXLoRATrainer:
+        trainer: MLXLoRATrainer = make_mlx_trainer(work_dir=str(tmp_path))
+        Path(trainer.adapter_dir).mkdir(parents=True)
+        return trainer
+
+    def test_none_when_no_checkpoints(self, trainer: MLXLoRATrainer) -> None:
+        assert trainer._latest_checkpoint() is None
+
+    def test_picks_newest_by_mtime(self, trainer: MLXLoRATrainer) -> None:
+        older = Path(trainer.adapter_dir) / "0012800_adapters.safetensors"
+        newer = Path(trainer.adapter_dir) / "0000100_adapters.safetensors"
+        older.write_text("x")
+        os.utime(older, (1000, 1000))
+        newer.write_text("x")
+        os.utime(newer, (2000, 2000))
+        assert trainer._latest_checkpoint() == (newer, 100)
+
+    def test_ignores_unnumbered_final_adapter(self, trainer: MLXLoRATrainer) -> None:
+        (Path(trainer.adapter_dir) / "adapters.safetensors").write_text("x")
+        assert trainer._latest_checkpoint() is None
+
+
+class TestInjectResume:
+    @pytest.fixture
+    def version_mock(self, mocker: MockerFixture) -> MagicMock:
+        return mocker.patch(
+            "finetune.mlx_trainer.version",
+            return_value=MLXLoRATrainer.MLX_LM_VALIDATED_VERSION,
+        )
+
+    def test_writes_resume_file_and_iters(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000)
+        make_mlx_trainer()._inject_resume(
+            config, Path("0000100_adapters.safetensors"), 900
+        )
+        written = yaml.safe_load(Path(config).read_text())
+        assert written["resume_adapter_file"] == "0000100_adapters.safetensors"
+        assert written["iters"] == 900
+
+    def test_version_mismatch_raises(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        version_mock.return_value = "0.99.0"
+        with pytest.raises(RuntimeError, match="resume validated for mlx-lm"):
+            make_mlx_trainer()._inject_resume(
+                _write_resolved_config(tmp_path),
+                Path("0000100_adapters.safetensors"),
+                900,
+            )
+
+    def test_lr_schedule_raises(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000, {"name": "cosine"})
+        with pytest.raises(ValueError, match="non-constant lr_schedule"):
+            make_mlx_trainer()._inject_resume(
+                config, Path("0000100_adapters.safetensors"), 900
+            )
+
+
+class TestResumeTrain:
+    def test_injects_then_trains(
+        self, tmp_path: Path, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 15000)
+        mocker.patch.object(
+            MLXLoRATrainer,
+            "_latest_checkpoint",
+            return_value=(Path("0012800_adapters.safetensors"), 12800),
+        )
+        inject: MagicMock = mocker.patch.object(MLXLoRATrainer, "_inject_resume")
+        train: MagicMock = mocker.patch.object(MLXLoRATrainer, "train")
+        make_mlx_trainer().resume_train(config)
+        # remaining iters = original (15000) - completed (12800)
+        inject.assert_called_once_with(
+            config, Path("0012800_adapters.safetensors"), 2200
+        )
+        train.assert_called_once_with(config)
+
+    def test_no_checkpoint_raises(
+        self, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        mocker.patch.object(MLXLoRATrainer, "_latest_checkpoint", return_value=None)
+        with pytest.raises(ValueError, match="no checkpoint to resume from"):
+            make_mlx_trainer().resume_train("c.yaml")
+
+
+class TestCleanup:
+    def test_removes_model_folder(
+        self, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        rmtree: MagicMock = mocker.patch("finetune.mlx_trainer.shutil.rmtree")
+        trainer: MLXLoRATrainer = make_mlx_trainer()
+        trainer.cleanup()
+        rmtree.assert_called_once_with(trainer.model_folder, ignore_errors=True)
 
 
 class TestRun:
@@ -283,7 +524,7 @@ class TestFuse:
                 "--model",
                 "baz",
                 "--adapter-path",
-                "work/foo/adapter",
+                trainer.adapter_dir,
                 "--save-path",
                 "target",
             ],
@@ -333,8 +574,8 @@ class TestSerialise:
         )
         assert rebuilt.work_dir == "work"
         assert rebuilt.quantize == "q8"
-        assert rebuilt.model_folder == "work/bar"
-        assert rebuilt.adapter_dir == "work/bar/adapter"
+        assert rebuilt.model_folder == f"work/foo/{rebuilt.job_id}"
+        assert rebuilt.adapter_dir == f"work/foo/{rebuilt.job_id}/adapter"
 
     def test_from_json_restores_num_samples(
         self, make_mlx_trainer: MLXTrainerFactory
