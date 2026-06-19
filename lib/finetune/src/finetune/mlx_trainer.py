@@ -5,6 +5,7 @@ Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
 """
 
 import logging
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -36,7 +37,19 @@ class MLXLoRATrainer(LoRATrainer):
         quantize: Optional MLX quantisation for ``convert`` (``None`` | ``"q4"`` | ``"q8"``).
         config: Pre-loaded config, bypassing ``config_path``. Used when rebuilding a
             trainer from a serialised spec; defaults to loading ``config_path``.
+
+    Attributes:
+        MLX_LM_VALIDATED_VERSION (str): The mlx_lm version whose checkpoint/iters
+            semantics the resume logic is validated against. ``_inject_resume``
+            fails fast on a mismatch, since another version could invalidate the
+            iters arithmetic.
+        CHECKPOINT_PATTERN (re.Pattern[str]): Matches mlx_lm's periodic checkpoint
+            filenames ``{it:07d}_adapters.safetensors`` and captures the iteration
+            count; the unnumbered final ``adapters.safetensors`` is excluded.
     """
+
+    MLX_LM_VALIDATED_VERSION = "0.31.3"
+    CHECKPOINT_PATTERN = re.compile(r"^(\d+)_adapters\.safetensors$")
 
     def __init__(
         self,
@@ -152,9 +165,18 @@ class MLXLoRATrainer(LoRATrainer):
         logger.info(f"Wrote resolved config to: {self.resolved_config_path}")
         return self.resolved_config_path
 
+    def _latest_checkpoint(self) -> tuple[Path, int] | None:
+        # get most recently modified checkpoint file, and extract iteration number from it
+        checkpoints = [
+            (path, int(match.group(1)))
+            for path in Path(self.adapter_dir).glob("*_adapters.safetensors")
+            if (match := MLXLoRATrainer.CHECKPOINT_PATTERN.match(path.name))
+        ]
+        return max(checkpoints, key=lambda item: item[0].stat().st_mtime, default=None)
+
     def train(self, config_path: str) -> None:
         """Run mlx_lm LoRA training.
-
+        
         Args:
             config_path: Path to the resolved mlx_lm YAML config.
         """

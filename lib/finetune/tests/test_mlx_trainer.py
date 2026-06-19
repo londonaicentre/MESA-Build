@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -246,6 +247,31 @@ class TestTrain:
         subprocess_run.assert_called_once_with(
             ["mlx_lm.lora", "--config", "resolved.yaml"], check=True
         )
+        
+class TestLatestCheckpoint:
+    @pytest.fixture
+    def trainer(
+        self, tmp_path: Path, make_mlx_trainer: MLXTrainerFactory
+    ) -> MLXLoRATrainer:
+        trainer: MLXLoRATrainer = make_mlx_trainer(work_dir=str(tmp_path))
+        Path(trainer.adapter_dir).mkdir(parents=True)
+        return trainer
+
+    def test_none_when_no_checkpoints(self, trainer: MLXLoRATrainer) -> None:
+        assert trainer._latest_checkpoint() is None
+
+    def test_picks_newest_by_mtime(self, trainer: MLXLoRATrainer) -> None:
+        older = Path(trainer.adapter_dir) / "0012800_adapters.safetensors"
+        newer = Path(trainer.adapter_dir) / "0000100_adapters.safetensors"
+        older.write_text("x")
+        os.utime(older, (1000, 1000))
+        newer.write_text("x")
+        os.utime(newer, (2000, 2000))
+        assert trainer._latest_checkpoint() == (newer, 100)
+
+    def test_ignores_unnumbered_final_adapter(self, trainer: MLXLoRATrainer) -> None:
+        (Path(trainer.adapter_dir) / "adapters.safetensors").write_text("x")
+        assert trainer._latest_checkpoint() is None
 
 
 class TestRun:
