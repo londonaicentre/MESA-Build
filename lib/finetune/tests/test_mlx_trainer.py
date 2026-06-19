@@ -120,14 +120,28 @@ class TestConstructor:
         _patch_job_id_datetime(mocker)
         assert make_mlx_trainer(description="grault").job_id == "20260101-120000-grault"
 
-    def test_init_sets_local_paths(self, make_mlx_trainer: MLXTrainerFactory) -> None:
-        trainer: MLXLoRATrainer = make_mlx_trainer(description="bar", work_dir="work")
-        assert trainer.model_folder == "work/bar"
-        assert trainer.data_dir == "work/bar/data"
-        assert trainer.adapter_dir == "work/bar/adapter"
-        assert trainer.target_dir == "work/bar/target"
-        assert trainer.mlx_dir == "work/bar/mlx"
-        assert trainer.resolved_config_path == "work/bar/mlx_lora_config.resolved.yaml"
+    def test_init_sets_local_paths(
+        self, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        _patch_job_id_datetime(mocker)
+        trainer: MLXLoRATrainer = make_mlx_trainer(
+            model_name="foo", description="bar", work_dir="work"
+        )
+        folder = "work/foo/20260101-120000-bar"
+        assert trainer.model_folder == folder
+        assert trainer.data_dir == f"{folder}/data"
+        assert trainer.adapter_dir == f"{folder}/adapter"
+        assert trainer.target_dir == f"{folder}/target"
+        assert trainer.mlx_dir == f"{folder}/mlx"
+        assert trainer.resolved_config_path == f"{folder}/mlx_lora_config.resolved.yaml"
+
+    def test_restore_runtime_recomputes_paths_with_saved_job_id(
+        self, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        original: MLXLoRATrainer = make_mlx_trainer(model_name="foo", work_dir="work")
+        rebuilt: MLXLoRATrainer = MLXLoRATrainer.from_json(original.to_json())
+        assert rebuilt.job_id == original.job_id
+        assert rebuilt.model_folder == f"work/foo/{original.job_id}"
 
     def test_init_loads_base_model_from_config(
         self, make_mlx_trainer: MLXTrainerFactory
@@ -177,7 +191,8 @@ class TestPrepareData:
         self, prepare_data_mocks: PrepareDataMocks, make_mlx_trainer: MLXTrainerFactory
     ) -> None:
         trainer: MLXLoRATrainer = make_mlx_trainer(description="foo", work_dir="work")
-        assert trainer.prepare_data() == "work/foo/data"
+        assert trainer.prepare_data() == trainer.data_dir
+
 
 
 class TestWriteConfig:
@@ -204,7 +219,7 @@ class TestWriteConfig:
         write_config_mocks.to_mlx_config.assert_called_once_with(5)
         dumped = write_config_mocks.yaml.call_args[0][0]
         assert dumped["data"] == f"{tmp_path}/foo/data"
-        assert dumped["adapter_path"] == f"{tmp_path}/foo/adapter"
+        assert dumped["adapter_path"] == trainer.adapter_dir
 
     def test_returns_resolved_config_path(
         self,
@@ -218,7 +233,7 @@ class TestWriteConfig:
         trainer.num_samples = 5
         assert (
             trainer._write_config(f"{tmp_path}/foo/data")
-            == f"{tmp_path}/foo/mlx_lora_config.resolved.yaml"
+            == trainer.resolved_config_path
         )
 
 
@@ -283,7 +298,7 @@ class TestFuse:
                 "--model",
                 "baz",
                 "--adapter-path",
-                "work/foo/adapter",
+                trainer.adapter_dir,
                 "--save-path",
                 "target",
             ],
@@ -333,8 +348,8 @@ class TestSerialise:
         )
         assert rebuilt.work_dir == "work"
         assert rebuilt.quantize == "q8"
-        assert rebuilt.model_folder == "work/bar"
-        assert rebuilt.adapter_dir == "work/bar/adapter"
+        assert rebuilt.model_folder == f"work/foo/{rebuilt.job_id}"
+        assert rebuilt.adapter_dir == f"work/foo/{rebuilt.job_id}/adapter"
 
     def test_from_json_restores_num_samples(
         self, make_mlx_trainer: MLXTrainerFactory

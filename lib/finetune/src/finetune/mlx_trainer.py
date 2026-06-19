@@ -63,18 +63,20 @@ class MLXLoRATrainer(LoRATrainer):
         )
         self.work_dir = work_dir
         self.quantize = quantize
+        self._resolve_paths()
 
-        # local working paths under {work_dir}/{description}/
-        self.model_folder = f"{work_dir}/{description}"
+        # neutral config (loaded by the base) drives training; iters derives from
+        # num_samples at _write_config time
+        self.num_samples: int | None = None
+
+    def _resolve_paths(self) -> None:
+        # local working paths under {work_dir}/{model_name}/{job_id}/
+        self.model_folder = f"{self.work_dir}/{self.model_name}/{self.job_id}"
         self.data_dir = f"{self.model_folder}/data"
         self.adapter_dir = f"{self.model_folder}/adapter"
         self.target_dir = f"{self.model_folder}/target"
         self.mlx_dir = f"{self.model_folder}/mlx"
         self.resolved_config_path = f"{self.model_folder}/mlx_lora_config.resolved.yaml"
-
-        # neutral config (loaded by the base) drives training; iters derives from
-        # num_samples at _write_config time
-        self.num_samples: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Serialise the trainer's state, extending the base with MLX fields.
@@ -101,6 +103,7 @@ class MLXLoRATrainer(LoRATrainer):
     def _restore_runtime(self, data: dict[str, Any]) -> None:
         super()._restore_runtime(data)
         self.num_samples = data["num_samples"]
+        self._resolve_paths()
 
     def prepare_data(self) -> str:
         """Prepare training data into a local directory for mlx_lm.
