@@ -54,8 +54,13 @@ class TestValidateStage:
     @pytest.mark.parametrize(
         "overrides, match",
         [
-            ({"train": True, "post_process": True}, "at most one"),
-            ({"post_process": True}, "requires --spec"),
+            ({"train": True, "post_process": True}, "at most one of --train"),
+            (
+                {"post_process": True, "resume": True, "spec": "{}"},
+                "at most one of --post-process",
+            ),
+            ({"post_process": True}, "--post-process requires --spec"),
+            ({"resume": True}, "--resume requires --spec"),
             ({"train": True}, "requires --spec-out"),
         ],
     )
@@ -65,18 +70,69 @@ class TestValidateStage:
 
 
 class TestTrain:
-    def test_validates_then_runs_and_returns_trainer(
-        self, runner: FinetuneMLXRunner, mocker: MockerFixture
+    def test_validates_sets_up_writes_spec_then_trains(
+        self, tmp_path: Path, mocker: MockerFixture
     ) -> None:
-        trainer: MagicMock = mocker.patch.object(
-            FinetuneMLXRunner, "_make_trainer"
-        ).return_value
         validate: MagicMock = mocker.patch.object(
             FinetuneMLXRunner, "_build_validated_model_card"
         )
-        assert runner._train() is trainer
+        trainer: MagicMock = MagicMock()
+        trainer.setup.return_value = "cfg.yaml"
+        trainer.to_json.return_value = '{"foo": 1}'
+        spec_file: Path = tmp_path / "spec.json"
+        _runner(train=True, spec_out=str(spec_file))._train(trainer)
         validate.assert_called_once_with(trainer)
-        trainer.run.assert_called_once()
+        trainer.setup.assert_called_once()
+        assert spec_file.read_text() == '{"foo": 1}'  # spec persisted before train
+        trainer.train.assert_called_once_with("cfg.yaml")
+
+    def test_without_spec_out_skips_spec(
+        self, runner: FinetuneMLXRunner, mocker: MockerFixture
+    ) -> None:
+        mocker.patch.object(FinetuneMLXRunner, "_build_validated_model_card")
+        write_spec: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_write_spec")
+        trainer: MagicMock = MagicMock()
+        trainer.setup.return_value = "cfg.yaml"
+        runner._train(trainer)
+        write_spec.assert_not_called()
+        trainer.train.assert_called_once_with("cfg.yaml")
+
+
+class TestTrainAndPostProcess:
+    def test_trains_then_post_processes(
+        self, runner: FinetuneMLXRunner, mocker: MockerFixture
+    ) -> None:
+        train: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_train")
+        post: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_post_process")
+        trainer: MagicMock = MagicMock()
+        runner._train_and_post_process(trainer)
+        train.assert_called_once_with(trainer)
+        post.assert_called_once_with(trainer)
+
+
+class TestResume:
+    def test_not_train_resumes_then_post_processes(self, mocker: MockerFixture) -> None:
+        post: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_post_process")
+        trainer: MagicMock = MagicMock()
+        trainer.setup.return_value = "cfg.yaml"
+        _runner(resume=True, spec='{"foo": 1}')._resume(trainer)
+        trainer.resume_train.assert_called_once_with("cfg.yaml")
+        post.assert_called_once_with(trainer)
+
+    def test_train_only_writes_spec_without_post_process(
+        self, tmp_path: Path, mocker: MockerFixture
+    ) -> None:
+        post: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_post_process")
+        trainer: MagicMock = MagicMock()
+        trainer.setup.return_value = "cfg.yaml"
+        trainer.to_json.return_value = '{"foo": 1}'
+        spec_file: Path = tmp_path / "spec.json"
+        _runner(
+            resume=True, train=True, spec='{"foo": 1}', spec_out=str(spec_file)
+        )._resume(trainer)
+        assert spec_file.read_text() == '{"foo": 1}'
+        trainer.resume_train.assert_called_once_with("cfg.yaml")
+        post.assert_not_called()
 
 
 class TestPostProcess:
@@ -89,31 +145,80 @@ class TestPostProcess:
         )
 
 
+class TestGuarded:
+    def test_terminal_success_deletes(self, runner: FinetuneMLXRunner) -> None:
+        trainer: MagicMock = MagicMock()
+        runner._guarded(trainer, lambda _: None, True)
+        trainer.cleanup.assert_called_once()
+
+    def test_non_terminal_success_keeps(self, runner: FinetuneMLXRunner) -> None:
+        trainer: MagicMock = MagicMock()
+        runner._guarded(trainer, lambda _: None, False)
+        trainer.cleanup.assert_not_called()
+
+    def test_cancel_deletes_and_reraises(self, runner: FinetuneMLXRunner) -> None:
+        trainer: MagicMock = MagicMock()
+
+        def _cancel(_: MLXLoRATrainer) -> None:
+            raise KeyboardInterrupt
+
+        with pytest.raises(KeyboardInterrupt):
+            runner._guarded(trainer, _cancel, False)
+        trainer.cleanup.assert_called_once()
+
+    def test_error_keeps_and_propagates(self, runner: FinetuneMLXRunner) -> None:
+        trainer: MagicMock = MagicMock()
+
+        def _fail(_: MLXLoRATrainer) -> None:
+            raise ValueError("boom")
+
+        with pytest.raises(ValueError):
+            runner._guarded(trainer, _fail, True)
+        trainer.cleanup.assert_not_called()
+
+
 class TestCliCmd:
-    def test_default_trains_then_post_processes(
+    def test_default_guards_train_and_post_process(
         self, runner: FinetuneMLXRunner, mocker: MockerFixture
     ) -> None:
-        train: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_train")
-        post: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_post_process")
+        guarded: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_guarded")
+        make: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_make_trainer")
         runner.cli_cmd()
-        post.assert_called_once_with(train.return_value)
+        guarded.assert_called_once_with(
+            make.return_value, runner._train_and_post_process, True
+        )
 
-    def test_train_writes_spec_to_file(
-        self, tmp_path: Path, mocker: MockerFixture
+    def test_train_guards_train_without_delete(self, mocker: MockerFixture) -> None:
+        guarded: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_guarded")
+        make: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_make_trainer")
+        cli: FinetuneMLXRunner = _runner(train=True, spec_out="spec.json")
+        cli.cli_cmd()
+        guarded.assert_called_once_with(make.return_value, cli._train, False)
+
+    def test_post_process_guards_from_spec_with_delete(
+        self, mocker: MockerFixture
     ) -> None:
-        spec_file: Path = tmp_path / "spec.json"
-        train: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_train")
-        train.return_value.to_json.return_value = '{"foo": 1}'
-        post: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_post_process")
-        _runner(train=True, spec_out=str(spec_file)).cli_cmd()
-        assert spec_file.read_text() == '{"foo": 1}'
-        post.assert_not_called()
-
-    def test_post_process_rebuilds_from_spec(self, mocker: MockerFixture) -> None:
+        guarded: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_guarded")
         from_json: MagicMock = mocker.patch.object(MLXLoRATrainer, "from_json")
-        train: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_train")
-        post: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_post_process")
-        _runner(post_process=True, spec='{"foo": 1}').cli_cmd()
+        cli: FinetuneMLXRunner = _runner(post_process=True, spec='{"foo": 1}')
+        cli.cli_cmd()
         from_json.assert_called_once_with('{"foo": 1}')
-        post.assert_called_once_with(from_json.return_value)
-        train.assert_not_called()
+        guarded.assert_called_once_with(from_json.return_value, cli._post_process, True)
+
+    def test_resume_guards_resume_with_delete(self, mocker: MockerFixture) -> None:
+        guarded: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_guarded")
+        from_json: MagicMock = mocker.patch.object(MLXLoRATrainer, "from_json")
+        cli: FinetuneMLXRunner = _runner(resume=True, spec='{"foo": 1}')
+        cli.cli_cmd()
+        guarded.assert_called_once_with(from_json.return_value, cli._resume, True)
+
+    def test_resume_train_only_guards_resume_without_delete(
+        self, mocker: MockerFixture
+    ) -> None:
+        guarded: MagicMock = mocker.patch.object(FinetuneMLXRunner, "_guarded")
+        mocker.patch.object(MLXLoRATrainer, "from_json")
+        cli: FinetuneMLXRunner = _runner(
+            resume=True, train=True, spec='{"foo": 1}', spec_out="spec.json"
+        )
+        cli.cli_cmd()
+        assert guarded.call_args.args[2] is False
