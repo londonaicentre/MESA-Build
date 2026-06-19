@@ -233,6 +233,26 @@ class MLXLoRATrainer(LoRATrainer):
                 config_path, checkpoint_path, original_iters - completed
             )
 
+    def resume_train(self, config_path: str) -> None:
+        """Continue training a crashed run from its latest checkpoint.
+
+        Args:
+            config_path: Path to the resolved mlx_lm YAML config.
+
+        Raises:
+            ValueError: If no checkpoint exists to resume from.
+        """
+        checkpoint = self._latest_checkpoint()
+        if checkpoint is None:
+            raise ValueError(f"no checkpoint to resume from in {self.adapter_dir}")
+        checkpoint_path, completed = checkpoint
+        self._inject_resume(
+            config_path,
+            checkpoint_path,
+            yaml.safe_load(Path(config_path).read_text())["iters"] - completed,
+        )
+        self.train(config_path)
+
     def run(self) -> str:
         """Prepare data, write the resolved config, and train.
 

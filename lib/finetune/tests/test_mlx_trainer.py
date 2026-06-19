@@ -437,6 +437,33 @@ class TestInjectResume:
             )
 
 
+class TestResumeTrain:
+    def test_injects_then_trains(
+        self, tmp_path: Path, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 15000)
+        mocker.patch.object(
+            MLXLoRATrainer,
+            "_latest_checkpoint",
+            return_value=(Path("0012800_adapters.safetensors"), 12800),
+        )
+        inject: MagicMock = mocker.patch.object(MLXLoRATrainer, "_inject_resume")
+        train: MagicMock = mocker.patch.object(MLXLoRATrainer, "train")
+        make_mlx_trainer().resume_train(config)
+        # remaining iters = original (15000) - completed (12800)
+        inject.assert_called_once_with(
+            config, Path("0012800_adapters.safetensors"), 2200
+        )
+        train.assert_called_once_with(config)
+
+    def test_no_checkpoint_raises(
+        self, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        mocker.patch.object(MLXLoRATrainer, "_latest_checkpoint", return_value=None)
+        with pytest.raises(ValueError, match="no checkpoint to resume from"):
+            make_mlx_trainer().resume_train("c.yaml")
+
+
 class TestRun:
     # Orchestration: run() chains prepare_data -> _write_config -> train and returns the job_id.
     # The three steps mocked; datetime mocked for the job_id assertion.
