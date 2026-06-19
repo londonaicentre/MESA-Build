@@ -442,7 +442,7 @@ class TestExcludeOverlongSamples:
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
         exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda msgs, **_: [1] * sum(len(msg.content) for msg in msgs)
+            lambda msgs, **_: [1] * sum(len(msg["content"]) for msg in msgs)
         )
         result: list[TrainingSample] = TrainingDataHandler.exclude_overlong_samples(
             [
@@ -465,7 +465,7 @@ class TestExcludeOverlongSamples:
         self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
     ) -> None:
         exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda msgs, **_: [1] * sum(len(msg.content) for msg in msgs)
+            lambda msgs, **_: [1] * sum(len(msg["content"]) for msg in msgs)
         )
         assert (
             len(
