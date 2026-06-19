@@ -57,8 +57,11 @@ def subprocess_run(mocker: MockerFixture) -> MagicMock:
 @pytest.fixture
 def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
     mock_path: MagicMock = mocker.patch("finetune.mlx_trainer.Path")
-    # train_jsonl.read_text() -> three non-empty lines
-    mock_path.return_value.__truediv__.return_value.read_text.return_value = "a\nb\nc\n"
+    train_jsonl: MagicMock = mock_path.return_value.__truediv__.return_value
+    # train_jsonl.read_text() -> three non-empty lines; absent by default so the
+    # idempotency guard falls through to a real S3 prepare
+    train_jsonl.read_text.return_value = "a\nb\nc\n"
+    train_jsonl.exists.return_value = False
     return PrepareDataMocks(
         mocker.patch("finetune.trainer.TrainingDataHandler.prepare"),
         mock_path,
@@ -195,6 +198,12 @@ class TestPrepareData:
         trainer: MLXLoRATrainer = make_mlx_trainer(description="foo", work_dir="work")
         assert trainer.prepare_data() == trainer.data_dir
 
+    def test_existing_data_skips_prepare(
+        self, prepare_data_mocks: PrepareDataMocks, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        prepare_data_mocks.path.return_value.__truediv__.return_value.exists.return_value = True
+        make_mlx_trainer().prepare_data()
+        prepare_data_mocks.training_data_handler.assert_not_called()
 
 
 class TestWriteConfig:

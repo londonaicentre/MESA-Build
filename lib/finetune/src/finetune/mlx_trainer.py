@@ -131,7 +131,8 @@ class MLXLoRATrainer(LoRATrainer):
         data_path.mkdir(parents=True, exist_ok=True)
 
         train_jsonl = data_path / "train.jsonl"
-        self._prepare_training_data(str(train_jsonl))
+        if not train_jsonl.exists():
+            self._prepare_training_data(str(train_jsonl))
 
         # mlx trains by iters (derived from sample count); count non-empty lines
         self.num_samples = sum(
