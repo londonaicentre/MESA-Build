@@ -464,6 +464,16 @@ class TestResumeTrain:
             make_mlx_trainer().resume_train("c.yaml")
 
 
+class TestCleanup:
+    def test_removes_model_folder(
+        self, mocker: MockerFixture, make_mlx_trainer: MLXTrainerFactory
+    ) -> None:
+        rmtree: MagicMock = mocker.patch("finetune.mlx_trainer.shutil.rmtree")
+        trainer: MLXLoRATrainer = make_mlx_trainer()
+        trainer.cleanup()
+        rmtree.assert_called_once_with(trainer.model_folder, ignore_errors=True)
+
+
 class TestRun:
     # Orchestration: run() chains prepare_data -> _write_config -> train and returns the job_id.
     # The three steps mocked; datetime mocked for the job_id assertion.

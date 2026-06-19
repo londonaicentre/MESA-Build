@@ -253,6 +253,11 @@ class MLXLoRATrainer(LoRATrainer):
         )
         self.train(config_path)
 
+    def cleanup(self) -> None:
+        """Delete the run's working folder, including all local checkpoints."""
+        logger.info(f"Removing working folder: {self.model_folder}")
+        shutil.rmtree(self.model_folder, ignore_errors=True)
+
     def run(self) -> str:
         """Prepare data, write the resolved config, and train.
 
