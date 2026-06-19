@@ -6,6 +6,8 @@ Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
 
 import logging
 import re
+import shutil
+import signal
 import subprocess
 from importlib.metadata import version
 from pathlib import Path
@@ -194,14 +196,42 @@ class MLXLoRATrainer(LoRATrainer):
         config["iters"] = remaining_iters
         Path(config_path).write_text(yaml.safe_dump(config, sort_keys=False))
 
-    def train(self, config_path: str) -> None:
-        """Run mlx_lm LoRA training.
+    def train(self, config_path: str, max_retries: int = 3) -> None:
+        """Run mlx_lm LoRA training, retrying transient GPU aborts.
+
         Args:
             config_path: Path to the resolved mlx_lm YAML config.
+            max_retries: Maximum number of attempts. Defaults to 3.
+
+        Raises:
+            subprocess.CalledProcessError: If training fails non-transiently or
+                retries are exhausted.
         """
         logger.info("Launching mlx_lm.lora training")
-        subprocess.run(["mlx_lm.lora", "--config", config_path], check=True)
-        logger.info("mlx_lm.lora training complete")
+        original_iters = yaml.safe_load(Path(config_path).read_text())["iters"]
+        completed = 0
+        for attempt in range(1, max_retries + 1):
+            command = ["mlx_lm.lora", "--config", config_path]
+            returncode = subprocess.run(command).returncode
+            if returncode == 0:
+                logger.info("mlx_lm.lora training complete")
+                return
+            checkpoint = self._latest_checkpoint()
+            if (
+                returncode != -signal.SIGABRT
+                or checkpoint is None
+                or attempt == max_retries
+            ):
+                raise subprocess.CalledProcessError(returncode, command)
+            checkpoint_path, segment = checkpoint
+            completed += segment
+            logger.warning(
+                f"GPU abort (attempt {attempt}/{max_retries}); "
+                f"resuming from {checkpoint_path.name}"
+            )
+            self._inject_resume(
+                config_path, checkpoint_path, original_iters - completed
+            )
 
     def run(self) -> str:
         """Prepare data, write the resolved config, and train.

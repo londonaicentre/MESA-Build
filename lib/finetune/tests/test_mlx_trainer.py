@@ -1,4 +1,6 @@
 import os
+import signal
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -47,6 +49,14 @@ class PostProcessMocks:
     convert: MagicMock
     upload_model_folder: MagicMock
     archive_and_upload: MagicMock
+
+
+@dataclass
+class TrainMocks:
+    subprocess_run: MagicMock
+    latest_checkpoint: MagicMock
+    inject_resume: MagicMock
+    logger: MagicMock
 
 
 @pytest.fixture
@@ -103,6 +113,16 @@ def post_process_mocks(mocker: MockerFixture) -> PostProcessMocks:
         mocker.patch.object(MLXLoRATrainer, "convert"),
         mocker.patch.object(LoRATrainer, "_upload_model_folder"),
         mocker.patch.object(LoRATrainer, "_archive_and_upload"),
+    )
+
+
+@pytest.fixture
+def train_mocks(mocker: MockerFixture) -> TrainMocks:
+    return TrainMocks(
+        mocker.patch("finetune.mlx_trainer.subprocess.run"),
+        mocker.patch.object(MLXLoRATrainer, "_latest_checkpoint"),
+        mocker.patch.object(MLXLoRATrainer, "_inject_resume"),
+        mocker.patch("finetune.mlx_trainer.logger"),
     )
 
 
@@ -260,15 +280,88 @@ def _write_resolved_config(
 
 
 class TestTrain:
-    # train() shells out to `mlx_lm.lora --config <path>`. subprocess.run mocked.
-    def test_calls_subprocess_run(
-        self, subprocess_run: MagicMock, make_mlx_trainer: MLXTrainerFactory
+    # train() shells out to `mlx_lm.lora --config <path>`, retrying only a SIGABRT (GPU victim) from the latest checkpoint. subprocess.run / checkpoint / inject mocked.
+    def test_success_calls_subprocess_once(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
     ) -> None:
-        make_mlx_trainer().train("resolved.yaml")
-        subprocess_run.assert_called_once_with(
-            ["mlx_lm.lora", "--config", "resolved.yaml"], check=True
+        config = _write_resolved_config(tmp_path)
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=0)
+        make_mlx_trainer().train(config)
+        train_mocks.subprocess_run.assert_called_once_with(
+            ["mlx_lm.lora", "--config", config]
         )
-        
+        train_mocks.inject_resume.assert_not_called()
+
+    @staticmethod
+    def _returncodes(*codes: int) -> list[MagicMock]:
+        return [MagicMock(returncode=code) for code in codes]
+
+    def test_sigabrt_retries_from_checkpoint(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000)
+        train_mocks.latest_checkpoint.return_value = (
+            Path("0000100_adapters.safetensors"),
+            100,
+        )
+        train_mocks.subprocess_run.side_effect = TestTrain._returncodes(
+            -signal.SIGABRT, 0
+        )
+        make_mlx_trainer().train(config)
+        # remaining iters = original (1000) - completed (100)
+        train_mocks.inject_resume.assert_called_once_with(
+            config, Path("0000100_adapters.safetensors"), 900
+        )
+        assert train_mocks.subprocess_run.call_count == 2
+
+    def test_non_sigabrt_does_not_retry(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        train_mocks.latest_checkpoint.return_value = (
+            Path("0000100_adapters.safetensors"),
+            100,
+        )
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=1)
+        with pytest.raises(subprocess.CalledProcessError):
+            make_mlx_trainer().train(_write_resolved_config(tmp_path))
+        train_mocks.inject_resume.assert_not_called()
+
+    def test_sigabrt_without_checkpoint_raises(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        train_mocks.latest_checkpoint.return_value = None
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=-signal.SIGABRT)
+        with pytest.raises(subprocess.CalledProcessError):
+            make_mlx_trainer().train(_write_resolved_config(tmp_path))
+
+    def test_exhausts_retries_and_raises(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        train_mocks.latest_checkpoint.return_value = (
+            Path("0000100_adapters.safetensors"),
+            100,
+        )
+        train_mocks.subprocess_run.return_value = MagicMock(returncode=-signal.SIGABRT)
+        with pytest.raises(subprocess.CalledProcessError):
+            make_mlx_trainer().train(_write_resolved_config(tmp_path), max_retries=2)
+        assert train_mocks.subprocess_run.call_count == 2
+
+
 class TestLatestCheckpoint:
     @pytest.fixture
     def trainer(
