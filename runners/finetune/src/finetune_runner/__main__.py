@@ -143,11 +143,18 @@ class FinetuneMLXRunner(FinetuneRunner):
             quantize=None,
         )
 
-    def _train(self) -> MLXLoRATrainer:
-        trainer: MLXLoRATrainer = self._make_trainer()
+    def _write_spec(self, trainer: MLXLoRATrainer) -> None:
+        Path(self.spec_out).write_text(trainer.to_json())
+        logging.info(f"Wrote trainer spec to {self.spec_out}")
+
+    def _train(self, trainer: MLXLoRATrainer) -> None:
+        logging.info(f"Starting training job: {trainer.job_id}")
         self._build_validated_model_card(trainer)
-        trainer.run()
-        return trainer
+        config_path: str = trainer.setup()
+        if self.spec_out:
+            self._write_spec(trainer)
+        trainer.train(config_path)
+        logging.info(f"Job complete: {trainer.job_id}")
 
     def _post_process(self, trainer: MLXLoRATrainer) -> None:
         trainer.post_process(
