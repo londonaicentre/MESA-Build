@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+import yaml
 from pytest_mock import MockerFixture
 
 from conftest import MLXTrainerFactory
@@ -238,6 +239,17 @@ class TestWriteConfig:
         )
 
 
+def _write_resolved_config(
+    tmp_path: Path, iters: int = 1000, lr_schedule: dict[str, str] | None = None
+) -> str:
+    config: dict[str, object] = {"iters": iters}
+    if lr_schedule is not None:
+        config["lr_schedule"] = lr_schedule
+    path = tmp_path / "resolved.yaml"
+    path.write_text(yaml.safe_dump(config))
+    return str(path)
+
+
 class TestTrain:
     # train() shells out to `mlx_lm.lora --config <path>`. subprocess.run mocked.
     def test_calls_subprocess_run(
@@ -272,6 +284,55 @@ class TestLatestCheckpoint:
     def test_ignores_unnumbered_final_adapter(self, trainer: MLXLoRATrainer) -> None:
         (Path(trainer.adapter_dir) / "adapters.safetensors").write_text("x")
         assert trainer._latest_checkpoint() is None
+
+
+class TestInjectResume:
+    @pytest.fixture
+    def version_mock(self, mocker: MockerFixture) -> MagicMock:
+        return mocker.patch(
+            "finetune.mlx_trainer.version",
+            return_value=MLXLoRATrainer.MLX_LM_VALIDATED_VERSION,
+        )
+
+    def test_writes_resume_file_and_iters(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000)
+        make_mlx_trainer()._inject_resume(
+            config, Path("0000100_adapters.safetensors"), 900
+        )
+        written = yaml.safe_load(Path(config).read_text())
+        assert written["resume_adapter_file"] == "0000100_adapters.safetensors"
+        assert written["iters"] == 900
+
+    def test_version_mismatch_raises(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        version_mock.return_value = "0.99.0"
+        with pytest.raises(RuntimeError, match="resume validated for mlx-lm"):
+            make_mlx_trainer()._inject_resume(
+                _write_resolved_config(tmp_path),
+                Path("0000100_adapters.safetensors"),
+                900,
+            )
+
+    def test_lr_schedule_raises(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000, {"name": "cosine"})
+        with pytest.raises(ValueError, match="non-constant lr_schedule"):
+            make_mlx_trainer()._inject_resume(
+                config, Path("0000100_adapters.safetensors"), 900
+            )
 
 
 class TestRun:

@@ -7,6 +7,7 @@ Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
 import logging
 import re
 import subprocess
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
@@ -174,9 +175,26 @@ class MLXLoRATrainer(LoRATrainer):
         ]
         return max(checkpoints, key=lambda item: item[0].stat().st_mtime, default=None)
 
+    def _inject_resume(
+        self, config_path: str, checkpoint: Path, remaining_iters: int
+    ) -> None:
+        if version("mlx-lm") != self.MLX_LM_VALIDATED_VERSION:
+            raise RuntimeError(
+                f"resume validated for mlx-lm {self.MLX_LM_VALIDATED_VERSION}, found "
+                f"{version('mlx-lm')}; re-verify resume semantics before bumping"
+            )
+        config = yaml.safe_load(Path(config_path).read_text())
+        if config.get("lr_schedule"):
+            raise ValueError(
+                "resume unsupported with a non-constant lr_schedule "
+                "(mlx_lm restarts the step counter, replaying the schedule from zero)"
+            )
+        config["resume_adapter_file"] = str(checkpoint)
+        config["iters"] = remaining_iters
+        Path(config_path).write_text(yaml.safe_dump(config, sort_keys=False))
+
     def train(self, config_path: str) -> None:
         """Run mlx_lm LoRA training.
-        
         Args:
             config_path: Path to the resolved mlx_lm YAML config.
         """
