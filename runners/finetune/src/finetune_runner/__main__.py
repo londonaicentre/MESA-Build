@@ -1,9 +1,12 @@
 import logging
 import os
+import signal
 from abc import abstractmethod
+from collections.abc import Callable
 from enum import Enum
 from importlib import import_module
 from pathlib import Path
+from types import FrameType
 from typing import Self
 
 from mesa_types.model_card import ModelCard
@@ -13,6 +16,11 @@ from pydantic_settings import BaseSettings, CliApp, CliSuppress, SettingsConfigD
 from finetune.mlx_trainer import MLXLoRATrainer
 from finetune.trainer import LoRATrainer
 from utils.prompt import BasePromptBuilder
+
+
+def _cancel_to_interrupt(_signum: int, _frame: FrameType | None) -> None:
+    # workflow cancellation -> ctrl + c
+    raise KeyboardInterrupt
 
 
 class Schema(str, Enum):
@@ -156,6 +164,10 @@ class FinetuneMLXRunner(FinetuneRunner):
         trainer.train(config_path)
         logging.info(f"Job complete: {trainer.job_id}")
 
+    def _train_and_post_process(self, trainer: MLXLoRATrainer) -> None:
+        self._train(trainer)
+        self._post_process(trainer)
+
     def _post_process(self, trainer: MLXLoRATrainer) -> None:
         trainer.post_process(
             trainer.build_model_card(self.major, self.minor, self.patch),
@@ -165,21 +177,36 @@ class FinetuneMLXRunner(FinetuneRunner):
             "Post-processing complete - merged model uploaded to the build bucket."
         )
 
+    def _guarded(
+        self,
+        trainer: MLXLoRATrainer,
+        action: Callable[[MLXLoRATrainer], None],
+        delete_on_success: bool,
+    ) -> None:
+        try:
+            action(trainer)
+        except KeyboardInterrupt:
+            trainer.cleanup()
+            raise
+        else:
+            if delete_on_success:
+                trainer.cleanup()
+
     def cli_cmd(self) -> None:
         logging.info("== mesa-build (finetune) ==")
         logging.info("Collecting configuration")
         logging.info(f"  Using config at {self.config}")
 
         if self.post_process:
-            self._post_process(MLXLoRATrainer.from_json(self.spec))
+            self._guarded(MLXLoRATrainer.from_json(self.spec), self._post_process, True)
         elif self.train:
-            Path(self.spec_out).write_text(self._train().to_json())
-            logging.info(f"Wrote trainer spec to {self.spec_out}")
+            self._guarded(self._make_trainer(), self._train, False)
         else:
-            self._post_process(self._train())
+            self._guarded(self._make_trainer(), self._train_and_post_process, True)
 
 
 def mlx() -> None:
+    signal.signal(signal.SIGTERM, _cancel_to_interrupt)
     log_level = getattr(
         logging, os.environ.get("LOG_LEVEL", "INFO").upper(), logging.INFO
     )
