@@ -64,6 +64,10 @@ class FinetuneRunner(BaseSettings):
         description="Train only; write the serialised trainer spec to --spec-out",
     )
     post_process: bool = Field(False, description="Post-process only; requires --spec")
+    resume: bool = Field(
+        False,
+        description="Resume a crashed job from its latest checkpoint; requires --spec (and --spec-out when resuming a --train step)",
+    )
     spec_out: str = Field(
         "", description="File to write the serialised trainer spec to (with --train)"
     )
@@ -101,7 +105,11 @@ class FinetuneRunner(BaseSettings):
         assert not (self.train and self.post_process), (
             "pass at most one of --train / --post-process"
         )
+        assert not (self.post_process and self.resume), (
+            "pass at most one of --post-process / --resume"
+        )
         assert self.spec or not self.post_process, "--post-process requires --spec"
+        assert self.spec or not self.resume, "--resume requires --spec"
         assert self.spec_out or not self.train, "--train requires --spec-out"
         return self
 
@@ -168,6 +176,16 @@ class FinetuneMLXRunner(FinetuneRunner):
         self._train(trainer)
         self._post_process(trainer)
 
+    def _resume(self, trainer: MLXLoRATrainer) -> None:
+        logging.info(f"Resuming training job: {trainer.job_id}")
+        config_path: str = trainer.setup()
+        if self.spec_out:
+            self._write_spec(trainer)
+        trainer.resume_train(config_path)
+        logging.info(f"Job complete: {trainer.job_id}")
+        if not self.train:
+            self._post_process(trainer)
+
     def _post_process(self, trainer: MLXLoRATrainer) -> None:
         trainer.post_process(
             trainer.build_model_card(self.major, self.minor, self.patch),
@@ -197,7 +215,11 @@ class FinetuneMLXRunner(FinetuneRunner):
         logging.info("Collecting configuration")
         logging.info(f"  Using config at {self.config}")
 
-        if self.post_process:
+        if self.resume:
+            self._guarded(
+                MLXLoRATrainer.from_json(self.spec), self._resume, not self.train
+            )
+        elif self.post_process:
             self._guarded(MLXLoRATrainer.from_json(self.spec), self._post_process, True)
         elif self.train:
             self._guarded(self._make_trainer(), self._train, False)
