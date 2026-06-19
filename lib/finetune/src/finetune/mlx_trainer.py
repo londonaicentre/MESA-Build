@@ -169,6 +169,14 @@ class MLXLoRATrainer(LoRATrainer):
         logger.info(f"Wrote resolved config to: {self.resolved_config_path}")
         return self.resolved_config_path
 
+    def setup(self) -> str:
+        """Prepare data and write the resolved config, ready for training.
+
+        Returns:
+            Path to the resolved mlx_lm YAML config.
+        """
+        return self._write_config(self.prepare_data())
+
     def _latest_checkpoint(self) -> tuple[Path, int] | None:
         # get most recently modified checkpoint file, and extract iteration number from it
         checkpoints = [
@@ -264,17 +272,9 @@ class MLXLoRATrainer(LoRATrainer):
         Returns:
             The job ID.
         """
-        print(f"Starting training job: {self.job_id}")
-        print("Preparing training data...")
-        data_dir = self.prepare_data()
-
-        print("Writing resolved mlx config...")
-        config_path = self._write_config(data_dir)
-
-        print("Launching mlx_lm.lora training...")
-        self.train(config_path)
-
-        print(f"Job complete: {self.job_id}")
+        logger.info(f"Starting training job: {self.job_id}")
+        self.train(self.setup())
+        logger.info(f"Job complete: {self.job_id}")
         return self.job_id
 
     def fuse(self, target_folder: str) -> bool:
