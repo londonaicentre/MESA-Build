@@ -1,10 +1,6 @@
 # Paedacuteschema
 
-Schema package for extracting acute triage signs ("red flags") from paediatric triage notes.
-
-Lightweight by design: a single flat `AcuteSignType` enum whose members are the canonical
-feature tokens consumed by downstream ML pipelines. Synonym/lay-phrasing guidance for
-matching lives in the prompt templates rather than the enum itself.
+Schema package for extracting acute triage signs ("red flags") from paediatric triage notes. Lightweight by design: a single flat `AcuteSignType` enum whose members are the canonical feature tokens consumed by downstream ML pipelines. Synonym/lay-phrasing guidance for matching lives in the prompt templates rather than the enum itself.
 
 ## Structure
 
@@ -34,6 +30,8 @@ main_prompt = builder.build_main_prompt()
 ```
 
 ## Schema
+
+![Schema overview](https://londonaicentre.github.io/MESA-Build/schemas/paedacuteschema.png)
 
 | Type | Values |
 | ---- | ------ |

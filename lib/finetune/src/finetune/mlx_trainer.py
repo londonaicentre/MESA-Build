@@ -5,7 +5,11 @@ Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
 """
 
 import logging
+import re
+import shutil
+import signal
 import subprocess
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
@@ -36,7 +40,19 @@ class MLXLoRATrainer(LoRATrainer):
         quantize: Optional MLX quantisation for ``convert`` (``None`` | ``"q4"`` | ``"q8"``).
         config: Pre-loaded config, bypassing ``config_path``. Used when rebuilding a
             trainer from a serialised spec; defaults to loading ``config_path``.
+
+    Attributes:
+        MLX_LM_VALIDATED_VERSION (str): The mlx_lm version whose checkpoint/iters
+            semantics the resume logic is validated against. ``_inject_resume``
+            fails fast on a mismatch, since another version could invalidate the
+            iters arithmetic.
+        CHECKPOINT_PATTERN (re.Pattern[str]): Matches mlx_lm's periodic checkpoint
+            filenames ``{it:07d}_adapters.safetensors`` and captures the iteration
+            count; the unnumbered final ``adapters.safetensors`` is excluded.
     """
+
+    MLX_LM_VALIDATED_VERSION = "0.31.3"
+    CHECKPOINT_PATTERN = re.compile(r"^(\d+)_adapters\.safetensors$")
 
     def __init__(
         self,
@@ -63,18 +79,20 @@ class MLXLoRATrainer(LoRATrainer):
         )
         self.work_dir = work_dir
         self.quantize = quantize
+        self._resolve_paths()
 
-        # local working paths under {work_dir}/{description}/
-        self.model_folder = f"{work_dir}/{description}"
+        # neutral config (loaded by the base) drives training; iters derives from
+        # num_samples at _write_config time
+        self.num_samples: int | None = None
+
+    def _resolve_paths(self) -> None:
+        # local working paths under {work_dir}/{model_name}/{job_id}/
+        self.model_folder = f"{self.work_dir}/{self.model_name}/{self.job_id}"
         self.data_dir = f"{self.model_folder}/data"
         self.adapter_dir = f"{self.model_folder}/adapter"
         self.target_dir = f"{self.model_folder}/target"
         self.mlx_dir = f"{self.model_folder}/mlx"
         self.resolved_config_path = f"{self.model_folder}/mlx_lora_config.resolved.yaml"
-
-        # neutral config (loaded by the base) drives training; iters derives from
-        # num_samples at _write_config time
-        self.num_samples: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Serialise the trainer's state, extending the base with MLX fields.
@@ -101,6 +119,7 @@ class MLXLoRATrainer(LoRATrainer):
     def _restore_runtime(self, data: dict[str, Any]) -> None:
         super()._restore_runtime(data)
         self.num_samples = data["num_samples"]
+        self._resolve_paths()
 
     def prepare_data(self) -> str:
         """Prepare training data into a local directory for mlx_lm.
@@ -114,7 +133,8 @@ class MLXLoRATrainer(LoRATrainer):
         data_path.mkdir(parents=True, exist_ok=True)
 
         train_jsonl = data_path / "train.jsonl"
-        self._prepare_training_data(str(train_jsonl))
+        if not train_jsonl.exists():
+            self._prepare_training_data(str(train_jsonl))
 
         # mlx trains by iters (derived from sample count); count non-empty lines
         self.num_samples = sum(
@@ -149,15 +169,102 @@ class MLXLoRATrainer(LoRATrainer):
         logger.info(f"Wrote resolved config to: {self.resolved_config_path}")
         return self.resolved_config_path
 
-    def train(self, config_path: str) -> None:
-        """Run mlx_lm LoRA training.
+    def setup(self) -> str:
+        """Prepare data and write the resolved config, ready for training.
+
+        Returns:
+            Path to the resolved mlx_lm YAML config.
+        """
+        return self._write_config(self.prepare_data())
+
+    def _latest_checkpoint(self) -> tuple[Path, int] | None:
+        # get most recently modified checkpoint file, and extract iteration number from it
+        checkpoints = [
+            (path, int(match.group(1)))
+            for path in Path(self.adapter_dir).glob("*_adapters.safetensors")
+            if (match := MLXLoRATrainer.CHECKPOINT_PATTERN.match(path.name))
+        ]
+        return max(checkpoints, key=lambda item: item[0].stat().st_mtime, default=None)
+
+    def _inject_resume(
+        self, config_path: str, checkpoint: Path, remaining_iters: int
+    ) -> None:
+        if version("mlx-lm") != self.MLX_LM_VALIDATED_VERSION:
+            raise RuntimeError(
+                f"resume validated for mlx-lm {self.MLX_LM_VALIDATED_VERSION}, found "
+                f"{version('mlx-lm')}; re-verify resume semantics before bumping"
+            )
+        config = yaml.safe_load(Path(config_path).read_text())
+        if config.get("lr_schedule"):
+            raise ValueError(
+                "resume unsupported with a non-constant lr_schedule "
+                "(mlx_lm restarts the step counter, replaying the schedule from zero)"
+            )
+        config["resume_adapter_file"] = str(checkpoint)
+        config["iters"] = remaining_iters
+        Path(config_path).write_text(yaml.safe_dump(config, sort_keys=False))
+
+    def train(self, config_path: str, max_retries: int = 3) -> None:
+        """Run mlx_lm LoRA training, retrying transient GPU aborts.
 
         Args:
             config_path: Path to the resolved mlx_lm YAML config.
+            max_retries: Maximum number of attempts. Defaults to 3.
+
+        Raises:
+            subprocess.CalledProcessError: If training fails non-transiently or
+                retries are exhausted.
         """
         logger.info("Launching mlx_lm.lora training")
-        subprocess.run(["mlx_lm.lora", "--config", config_path], check=True)
-        logger.info("mlx_lm.lora training complete")
+        original_iters = yaml.safe_load(Path(config_path).read_text())["iters"]
+        completed = 0
+        for attempt in range(1, max_retries + 1):
+            command = ["mlx_lm.lora", "--config", config_path]
+            returncode = subprocess.run(command).returncode
+            if returncode == 0:
+                logger.info("mlx_lm.lora training complete")
+                return
+            checkpoint = self._latest_checkpoint()
+            if (
+                returncode != -signal.SIGABRT
+                or checkpoint is None
+                or attempt == max_retries
+            ):
+                raise subprocess.CalledProcessError(returncode, command)
+            checkpoint_path, segment = checkpoint
+            completed += segment
+            logger.warning(
+                f"GPU abort (attempt {attempt}/{max_retries}); "
+                f"resuming from {checkpoint_path.name}"
+            )
+            self._inject_resume(
+                config_path, checkpoint_path, original_iters - completed
+            )
+
+    def resume_train(self, config_path: str) -> None:
+        """Continue training a crashed run from its latest checkpoint.
+
+        Args:
+            config_path: Path to the resolved mlx_lm YAML config.
+
+        Raises:
+            ValueError: If no checkpoint exists to resume from.
+        """
+        checkpoint = self._latest_checkpoint()
+        if checkpoint is None:
+            raise ValueError(f"no checkpoint to resume from in {self.adapter_dir}")
+        checkpoint_path, completed = checkpoint
+        self._inject_resume(
+            config_path,
+            checkpoint_path,
+            yaml.safe_load(Path(config_path).read_text())["iters"] - completed,
+        )
+        self.train(config_path)
+
+    def cleanup(self) -> None:
+        """Delete the run's working folder, including all local checkpoints."""
+        logger.info(f"Removing working folder: {self.model_folder}")
+        shutil.rmtree(self.model_folder, ignore_errors=True)
 
     def run(self) -> str:
         """Prepare data, write the resolved config, and train.
@@ -165,17 +272,9 @@ class MLXLoRATrainer(LoRATrainer):
         Returns:
             The job ID.
         """
-        print(f"Starting training job: {self.job_id}")
-        print("Preparing training data...")
-        data_dir = self.prepare_data()
-
-        print("Writing resolved mlx config...")
-        config_path = self._write_config(data_dir)
-
-        print("Launching mlx_lm.lora training...")
-        self.train(config_path)
-
-        print(f"Job complete: {self.job_id}")
+        logger.info(f"Starting training job: {self.job_id}")
+        self.train(self.setup())
+        logger.info(f"Job complete: {self.job_id}")
         return self.job_id
 
     def fuse(self, target_folder: str) -> bool:

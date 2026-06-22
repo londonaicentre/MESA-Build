@@ -64,7 +64,7 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
      s3://aicentre-nlpteam-mesa-build/jobs/train/<job_id>/output/...     # adapter from SageMaker
      ```
 
-   - MLX (`MLXLoRATrainer`) trains and fuses locally and does not stage any files to S3
+   - MLX (`MLXLoRATrainer`) trains and fuses locally and does not stage any files to S3. Each run works under `data/models/<model_name>/<job_id>/`. A transient GPU abort (Metal "innocent victim") is retried automatically from the latest local checkpoint; after retries are exhausted the folder is kept so the job can be continued with `--resume --spec <spec>` once the machine is fixed. On success or cancellation the folder is removed. Resume reads checkpoints from local disk, so it assumes the same runner; mlx-lm is pinned because resume depends on its checkpoint/iters semantics.
 
 3. **Publish** (`post_process` on either trainer) — the primary target is the build bucket:
 
