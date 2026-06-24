@@ -1,0 +1,14 @@
+[project]
+name = "paedawen"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "ipykernel>=7.3.0",
+    "mesa-runtime",
+]
+
+[tool.uv.sources]
+mesa-runtime = { git = "https://github.com/londonaicentre/mesa-runtime.git", subdirectory = "lib", rev = "feat/build/add-lib" }
