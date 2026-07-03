@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock, patch
 
+from botocore.exceptions import ClientError
 from litellm import RateLimitError
 import pytest
 
@@ -88,3 +89,17 @@ def test_create_model_invocation_job_valid_input_succeeds(
     mock_client.return_value = mock_bedrock_client
     AWS.create_model_invocation_job("foo", "bar", "baz", "qux", "quux", "foobar")
     mock_bedrock_client.create_model_invocation_job.assert_called_once()
+
+
+@patch("utils.aws.boto3.client")
+def test_create_model_invocation_job_rejected_raises_client_error(
+    mock_client: MagicMock,
+) -> None:
+    mock_bedrock_client = MagicMock()
+    mock_bedrock_client.create_model_invocation_job.side_effect = ClientError(
+        {"Error": {"Code": "ValidationException", "Message": "bad"}},
+        "CreateModelInvocationJob",
+    )
+    mock_client.return_value = mock_bedrock_client
+    with pytest.raises(ClientError):
+        AWS.create_model_invocation_job("foo", "bar", "baz", "qux", "quux", "foobar")

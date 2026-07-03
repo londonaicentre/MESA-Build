@@ -283,35 +283,27 @@ class AWS:
             model_region (str): The region in which to run the job
 
         Returns:
-            bool: Whether the batch inference run started successfully
+            bool: True, if the batch inference run started successfully
+
+        Raises:
+            ClientError: If AWS rejects the job submission
 
         """
-        try:
-            boto3.client(
-                "bedrock", region_name=model_region
-            ).create_model_invocation_job(
-                jobName="schemallama-" + job_id.replace("/", "-"),
-                modelId=model_id,
-                roleArn=bedrock_execution_role,
-                inputDataConfig={
-                    "s3InputDataConfig": {
-                        "s3Uri": "s3://"
-                        + bucket
-                        + "/"
-                        + job_id
-                        + "/input/"
-                        + batch_file
-                    }
-                },
-                outputDataConfig={
-                    "s3OutputDataConfig": {
-                        "s3Uri": "s3://" + bucket + "/" + job_id + "/output/"
-                    }
-                },
-            )
-        except ClientError as e:
-            print(e)
-            return False
+        boto3.client("bedrock", region_name=model_region).create_model_invocation_job(
+            jobName="mesa-" + job_id.replace("/", "-"),
+            modelId=model_id,
+            roleArn=bedrock_execution_role,
+            inputDataConfig={
+                "s3InputDataConfig": {
+                    "s3Uri": "s3://" + bucket + "/" + job_id + "/input/" + batch_file
+                }
+            },
+            outputDataConfig={
+                "s3OutputDataConfig": {
+                    "s3Uri": "s3://" + bucket + "/" + job_id + "/output/"
+                }
+            },
+        )
         return True
 
     @staticmethod
