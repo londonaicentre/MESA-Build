@@ -157,3 +157,16 @@ def test_parse_batch_output_valid_file_returns_batch_outputs(tmp_path: Path) -> 
     assert len(batch_outputs.outputs) == 1
     assert batch_outputs.outputs[0].recordId == "0"
     assert batch_outputs.outputs[0].modelOutput.content[0].text == "bar"
+
+
+@patch("utils.aws.AWS.parse_batch_output")
+@patch("utils.aws.AWS.download_batch_output")
+def test_get_batch_inference_outputs_downloads_then_parses(
+    mock_download_batch_output: MagicMock,
+    mock_parse_batch_output: MagicMock,
+) -> None:
+    mock_parse_batch_output.return_value = "parsed"
+    result = AWS.get_batch_inference_outputs("foo", "bar", "baz", "qux")
+    mock_download_batch_output.assert_called_once_with("foo", "bar", "baz", "qux")
+    mock_parse_batch_output.assert_called_once_with("qux")
+    assert result == "parsed"

@@ -393,3 +393,24 @@ class AWS:
                 {"outputs": [json.loads(line) for line in batch_output_file]}
             )
 
+    @staticmethod
+    def get_batch_inference_outputs(
+        model_region: str,
+        bucket: str,
+        job_id: str,
+        local_file_name: str,
+    ) -> BatchOutputs:
+        """Download and parse the output of a completed Bedrock batch job
+
+        Args:
+            model_region (str): The region in which the batch job ran
+            bucket (str): The name of the bucket containing the job output
+            job_id (str): The id given to the batch job
+            local_file_name (str): The name to use for the downloaded file
+
+        Returns:
+            BatchOutputs: The parsed batch output records
+
+        """
+        AWS.download_batch_output(model_region, bucket, job_id, local_file_name)
+        return AWS.parse_batch_output(local_file_name)
