@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from pathlib import Path
@@ -10,7 +11,7 @@ from botocore.exceptions import ClientError
 from litellm import RateLimitError, ModelResponse
 from pydantic import BaseModel
 
-from utils.llm import LLM, Message, TextContent
+from utils.llm import LLM, BatchOutputs, Message, TextContent
 
 logger = logging.getLogger(__name__)
 
@@ -375,3 +376,20 @@ class AWS:
                 f"Error downloading file {local_file_name} from {bucket} "
                 f"at path {job_id}/output/*."
             )
+
+    @staticmethod
+    def parse_batch_output(file_path: str) -> BatchOutputs:
+        """Parse a downloaded Bedrock batch output file
+
+        Args:
+            file_path (str): The path to the local batch output file
+
+        Returns:
+            BatchOutputs: The parsed batch output records
+
+        """
+        with open(file_path) as batch_output_file:
+            return BatchOutputs.model_validate(
+                {"outputs": [json.loads(line) for line in batch_output_file]}
+            )
+

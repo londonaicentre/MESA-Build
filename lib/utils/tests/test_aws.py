@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from botocore.exceptions import ClientError
@@ -123,3 +125,35 @@ def test_download_batch_output_file_missing_raises_value_error(
     mock_download_file_with_wildcard.return_value = False
     with pytest.raises(ValueError, match="Error downloading file"):
         AWS.download_batch_output("foo", "bar", "baz", "qux")
+
+
+def test_parse_batch_output_valid_file_returns_batch_outputs(tmp_path: Path) -> None:
+    batch_output_file: Path = tmp_path / "batch.jsonl.out"
+    batch_output_file.write_text(
+        json.dumps(
+            {
+                "recordId": "0",
+                "modelInput": {
+                    "anthropic_version": "bedrock-2023-05-31",
+                    "max_tokens": 10,
+                    "messages": [
+                        {"role": "user", "content": [{"type": "text", "text": "foo"}]}
+                    ],
+                },
+                "modelOutput": {
+                    "model": "foo",
+                    "id": "bar",
+                    "type": "message",
+                    "role": "assistant",
+                    "content": [{"type": "text", "text": "bar"}],
+                    "stop_reason": "end_turn",
+                    "usage": {},
+                },
+            }
+        )
+        + "\n"
+    )
+    batch_outputs = AWS.parse_batch_output(str(batch_output_file))
+    assert len(batch_outputs.outputs) == 1
+    assert batch_outputs.outputs[0].recordId == "0"
+    assert batch_outputs.outputs[0].modelOutput.content[0].text == "bar"
