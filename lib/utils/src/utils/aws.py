@@ -344,3 +344,34 @@ class AWS:
         AWS.create_model_invocation_job(
             job_id, model_id, batch_file, bucket, bedrock_execution_role, model_region
         )
+
+    @staticmethod
+    def download_batch_output(
+        model_region: str,
+        bucket: str,
+        job_id: str,
+        local_file_name: str,
+    ) -> None:
+        """Download the output file of a completed Bedrock batch job
+
+        Args:
+            model_region (str): The region in which the batch job ran
+            bucket (str): The name of the bucket containing the job output
+            job_id (str): The id given to the batch job
+            local_file_name (str): The name to use for the downloaded file
+
+        Raises:
+            ValueError: If the output file could not be found/downloaded
+
+        """
+        if not AWS.download_file_with_wildcard(
+            model_region,
+            bucket,
+            local_file_name,
+            local_file_name,
+            job_id + "/output/*",
+        ):
+            raise ValueError(
+                f"Error downloading file {local_file_name} from {bucket} "
+                f"at path {job_id}/output/*."
+            )

@@ -103,3 +103,23 @@ def test_create_model_invocation_job_rejected_raises_client_error(
     mock_client.return_value = mock_bedrock_client
     with pytest.raises(ClientError):
         AWS.create_model_invocation_job("foo", "bar", "baz", "qux", "quux", "foobar")
+
+
+@patch("utils.aws.AWS.download_file_with_wildcard")
+def test_download_batch_output_file_found_downloads_file(
+    mock_download_file_with_wildcard: MagicMock,
+) -> None:
+    mock_download_file_with_wildcard.return_value = True
+    AWS.download_batch_output("foo", "bar", "baz", "qux")
+    mock_download_file_with_wildcard.assert_called_once_with(
+        "foo", "bar", "qux", "qux", "baz/output/*"
+    )
+
+
+@patch("utils.aws.AWS.download_file_with_wildcard")
+def test_download_batch_output_file_missing_raises_value_error(
+    mock_download_file_with_wildcard: MagicMock,
+) -> None:
+    mock_download_file_with_wildcard.return_value = False
+    with pytest.raises(ValueError, match="Error downloading file"):
+        AWS.download_batch_output("foo", "bar", "baz", "qux")
