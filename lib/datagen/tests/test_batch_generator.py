@@ -43,10 +43,10 @@ class BatchDependencies:
 
 @dataclass
 class ExtractDependencies:
-    model_validate: MagicMock
+    get_batch_inference_outputs: MagicMock
+    parse_batch_output: MagicMock
     model_validate_json: MagicMock
     save_training_sample: MagicMock
-    download_file_with_wildcard: MagicMock
 
 
 @dataclass
@@ -124,11 +124,17 @@ def mock_batch_dependencies(mocker: MockerFixture) -> BatchDependencies:
 def mock_extract_dependencies(mocker: MockerFixture) -> ExtractDependencies:
     mock_output: MagicMock = MagicMock()
     mock_output.modelOutput.content = [MagicMock(text="sample_text")]
+    mock_batch_outputs: MagicMock = MagicMock(outputs=[mock_output] * 3)
     return ExtractDependencies(
-        model_validate=mocker.patch(
-            "datagen.batch_generator.BatchOutputs.model_validate",
+        get_batch_inference_outputs=mocker.patch(
+            "datagen.batch_generator.AWS.get_batch_inference_outputs",
             autospec=True,
-            return_value=MagicMock(outputs=[mock_output] * 3),
+            return_value=mock_batch_outputs,
+        ),
+        parse_batch_output=mocker.patch(
+            "datagen.batch_generator.AWS.parse_batch_output",
+            autospec=True,
+            return_value=mock_batch_outputs,
         ),
         model_validate_json=mocker.patch(
             "datagen.batch_generator.Document.model_validate_json",
@@ -137,11 +143,6 @@ def mock_extract_dependencies(mocker: MockerFixture) -> ExtractDependencies:
         ),
         save_training_sample=mocker.patch(
             "datagen.batch_generator.save_training_sample",
-            autospec=True,
-            return_value=True,
-        ),
-        download_file_with_wildcard=mocker.patch(
-            "datagen.batch_generator.AWS.download_file_with_wildcard",
             autospec=True,
             return_value=True,
         ),
@@ -259,7 +260,7 @@ def test_extract_batch_output_no_bucket_no_download(
     generator: BatchGeneratorFixture,
 ) -> None:
     generator.extract_batch_output()
-    mock_extract_dependencies.download_file_with_wildcard.assert_not_called()
+    mock_extract_dependencies.get_batch_inference_outputs.assert_not_called()
 
 
 def test_extract_batch_output_bucket_provided_downloads_file(
@@ -271,7 +272,7 @@ def test_extract_batch_output_bucket_provided_downloads_file(
 ) -> None:
     mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
     generator.extract_batch_output("test-bucket")
-    mock_extract_dependencies.download_file_with_wildcard.assert_called_once()
+    mock_extract_dependencies.get_batch_inference_outputs.assert_called_once()
 
 
 def test_extract_batch_output_download_fails_raises_value_error(
@@ -282,7 +283,7 @@ def test_extract_batch_output_download_fails_raises_value_error(
     generator: BatchGeneratorFixture,
 ) -> None:
     mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
-    mock_extract_dependencies.download_file_with_wildcard.side_effect = ValueError(
+    mock_extract_dependencies.get_batch_inference_outputs.side_effect = ValueError(
         "Error downloading file"
     )
     with pytest.raises(ValueError, match="Error downloading file"):
@@ -341,4 +342,4 @@ def test_extract_batch_output_job_id_missing_skips_download(
 ) -> None:
     mock_path_operations.exists.return_value = False
     generator.extract_batch_output("test-bucket")
-    mock_extract_dependencies.download_file_with_wildcard.assert_not_called()
+    mock_extract_dependencies.get_batch_inference_outputs.assert_not_called()

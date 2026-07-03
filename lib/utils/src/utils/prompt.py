@@ -55,12 +55,12 @@ class BasePromptBuilder(ABC):
         """
         prompt = self._load_root("prompt_datagen.txt")
 
-        # inserts full schema
+        # inserts full schema
         schema_module = inspect.getmodule(self._schema)
-        if(schema_module is not None):
+        if schema_module is not None:
             schema_source = inspect.getsource(schema_module)
         else:
-            raise ValueError('module not found')
+            raise ValueError("module not found")
 
         example_json = self._load("examples", "example.json")
 
@@ -77,10 +77,10 @@ class BasePromptBuilder(ABC):
         prompt = self._load_root("prompt_main.txt")
 
         schema_module = inspect.getmodule(self._schema)
-        if(schema_module is not None):
+        if schema_module is not None:
             schema_source = inspect.getsource(schema_module)
         else:
-            raise ValueError('module not found')
+            raise ValueError("module not found")
 
         prompt = prompt.replace("{SCHEMA}", schema_source)
         return prompt
