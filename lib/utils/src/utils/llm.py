@@ -93,18 +93,18 @@ class LLM:
                 and the extracted (or full) content
 
         """
-        pattern: str = r"<OUTPUT>(.*?)</OUTPUT>"
+        pattern: str = r"<output>(.*?)</output>"
         match: Match[str] | None = search(pattern, response_text, DOTALL)
         if match:
             content: str = match.group(1).strip()
             return (
                 True,
-                f"Successfully extracted content from <OUTPUT> tags (length={len(content)} chars)",
+                f"Successfully extracted content from <output> tags (length={len(content)} chars)",
                 content,
             )
         else:
             return (
                 False,
-                "No <OUTPUT> tags found in response, using full response text",
+                "No <output> tags found in response, using full response text",
                 response_text.strip(),
             )
