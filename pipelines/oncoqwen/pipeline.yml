@@ -1,0 +1,105 @@
+# PIPELINE CONFIGURATION FOR SYNTHETIC DOCUMENT GENERATION
+
+################
+# LLM SETTINGS #
+################
+llm:
+  # llm: whether to call LLM API
+  ## true: generate content using LLM
+  ## false: save prompts only (debugging only)
+  enabled: true
+
+  # provider: which LLM provider to use
+  ## 'anthropic': Anthropic models via AWS Bedrock
+  ## 'gemini': Google Gemini API
+  ## 'local': Local OpenAI-compatible API
+  ## note that this is ignored when enabled set to false
+  provider: anthropic
+
+  # anthropic configuration
+  anthropic:
+    model: sonnet4
+    temperature: 1.0
+    max_tokens: 8000
+
+  # gemini configuration
+  gemini:
+    model: gemini-2.5-flash
+    temperature: 1.0
+    max_tokens: 8000
+
+  # local api configuration
+  ## note: base_url and model are configured via llm__local__base_url and llm__local__model in .env
+  local:
+    model: ollama
+    temperature: 1.0
+    max_tokens: 4000
+
+######################
+# SAMPLING BEHAVIOUR #
+######################
+profile_selection:
+  # domain: which profile domain to use
+  ## e.g. cancer: cancer-related profiles
+  ## e.g. general: general medical profiles
+  domain: cancer
+
+  # mode: 'random' or 'sequential'
+  ## random: randomly sample profiles with replacement
+  ## sequential: iterate through profiles in order
+  mode: sequential
+
+  # count: number of documents to generate
+  ## int: generate exactly that many documents then stop
+  ## -1: generate documents for all profiles in selected file(s)
+  count: 1
+
+  # file: list of filenames or null
+  ## null: processes all .yml files in profiles/ directory
+  ## [file1.yml, file2.yml, ...]: processes specified files
+  file: null
+
+#####################
+# SAMPLE STRUCTURES #
+#####################
+structure_selection:
+  # enabled_structures: explicit list of structure template files, or
+  # null/omitted to generate without an example structure
+  ## note that selection method is always random
+  enabled_structures: null
+
+########################
+# PROMPT CONFIGURATION #
+########################
+prompt_config:
+  # include_style: whether to include prompts from style.yml
+  ## true: include style requirements
+  ## false: exclude style requirements
+  include_style: true
+
+  # include_content: whether to include prompts from content.yml
+  ## true: include content requirements
+  ## false: exclude content requirments
+  include_content: true
+
+#################
+# OUTPUT FOLDER #
+#################
+output:
+  # output: subdirectory in ./output/ where generated documents are saved
+  ## resulting path will be ./output/{subdirectory}/
+  subdirectory: test_batch
+
+  # skip_existing: whether to skip profiles that already have a generated
+  # document in the output subdirectory
+  ## true: filter out profiles already represented in the output directory
+  ## false: (default) generate for all selected profiles regardless
+  skip_existing: true
+
+  # upload_enabled: whether to write batch metadata and upload the output
+  # subdirectory to S3 once generation completes
+  upload_enabled: true
+
+  # description: free-text description of this batch, recorded in the
+  # batch metadata written alongside generated documents
+  description: Synthetic oncology clinical notes for pipeline testing
