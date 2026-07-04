@@ -7,8 +7,10 @@ requires-python = ">=3.13"
 dependencies = [
     "dotenv>=0.9.9",
     "ipykernel>=7.3.0",
+    "londonaicentre-docsynth",
     "mesa-runtime",
 ]
 
 [tool.uv.sources]
-mesa-runtime = { git = "https://github.com/londonaicentre/mesa-runtime.git", subdirectory = "lib", rev = "feat/build/add-lib" }
+mesa-runtime = { git = "https://github.com/londonaicentre/mesa-runtime.git", subdirectory = "lib" }
+londonaicentre-docsynth = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth", branch = "spike/mesa-build-refactor" }
