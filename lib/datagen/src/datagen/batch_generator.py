@@ -170,50 +170,39 @@ class BedrockBatchGenerator:
             Tuple of (successful_count, failed_count)
 
         """
-        if bucket is not None:
-            if Path(self.__config.job_id_file).exists():
-                with open(self.__config.job_id_file) as job_id_file:
-                    path: str = json.loads(job_id_file.read())["job_id"] + "/output/*"
-                    if not AWS.download_file_with_wildcard(
-                        self.__model_region,
-                        bucket,
-                        file_name,
-                        file_name,
-                        path,
-                    ):
-                        raise ValueError(
-                            f"Error downloading file {file_name} from {bucket} at path {path}."
-                        )
+        batch_outputs: BatchOutputs
+        if bucket is not None and Path(self.__config.job_id_file).exists():
+            with open(self.__config.job_id_file) as job_id_file:
+                job_id: str = json.loads(job_id_file.read())["job_id"]
+            batch_outputs = AWS.get_batch_inference_outputs(
+                self.__model_region, bucket, job_id, file_name
+            )
+        else:
+            batch_outputs = AWS.parse_batch_output(file_name)
+
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
         failed_generations: int = 0
-        with open(file_name) as batch_output_file:
-            for sample_id, bedrock_batch_output in enumerate(
-                BatchOutputs.model_validate(
-                    {"outputs": [json.loads(line) for line in batch_output_file]}
-                ).outputs
-            ):
-                try:
-                    doc_path = self.__document_files[sample_id]
-                    doc = Document.model_validate_json(doc_path.read_text())
+        for sample_id, bedrock_batch_output in enumerate(batch_outputs.outputs):
+            try:
+                doc_path = self.__document_files[sample_id]
+                doc = Document.model_validate_json(doc_path.read_text())
 
-                    if save_training_sample(
-                        str(bedrock_batch_output.modelOutput.content[0].text),
-                        doc.source,
-                        doc.content,
-                        self.__schema,
-                        self.__schema_name,
-                        self.__schema_version,
-                        self.__output_folder_name,
-                    ):
-                        successful_generations += 1
-                    else:
-                        failed_generations += 1
-                except Exception as e:
+                if save_training_sample(
+                    str(bedrock_batch_output.modelOutput.content[0].text),
+                    doc.source,
+                    doc.content,
+                    self.__schema,
+                    self.__schema_name,
+                    self.__schema_version,
+                    self.__output_folder_name,
+                ):
+                    successful_generations += 1
+                else:
                     failed_generations += 1
-                    self._logger.error(
-                        f"Error processing batch output {sample_id}: {e}"
-                    )
+            except Exception as e:
+                failed_generations += 1
+                self._logger.error(f"Error processing batch output {sample_id}: {e}")
         self._logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )

@@ -15,7 +15,7 @@ def test_completion_content_returned(
 
 
 def test_extract_output_content_nested_data_returned() -> None:
-    input: str = "<OUTPUT>foo</OUTPUT>"
+    input: str = "<output>foo</output>"
     result: bool
     content: str
     result, _, content = LLM.extract_output_content(input)
