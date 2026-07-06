@@ -98,7 +98,6 @@ def generator(
 ) -> BatchGeneratorFixture:
     return BatchGeneratorFixture(
         system_prompt="foo",
-        user_prompt_function=lambda x: f"bar: {x}",
         schema=MagicMock,
         schema_name="baz",
         model_name="foo_model",
@@ -194,7 +193,6 @@ def test_init_multiple_batches_downloads_all(
     ]
     BatchGeneratorFixture(
         system_prompt="foo",
-        user_prompt_function=lambda x: f"bar: {x}",
         schema=MagicMock,
         schema_name="baz",
         model_name="foo_model",
@@ -210,7 +208,7 @@ def test_generate_batch_sample_size_given_creates_correct_entries(
     generator: BatchGeneratorFixture,
 ) -> None:
     mock_batch_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"}
+        source="foo", content="bar"
     )
     generator.generate_batch(3)
     assert mock_batch_dependencies.create_anthropic_bedrock_batch_entry.call_count == 3
@@ -223,7 +221,7 @@ def test_generate_batch_sample_exceeds_docs_caps_at_available(
     generator: BatchGeneratorFixture,
 ) -> None:
     mock_batch_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"}
+        source="foo", content="bar"
     )
     generator.generate_batch(10)
     assert mock_batch_dependencies.create_anthropic_bedrock_batch_entry.call_count == 5
@@ -236,7 +234,7 @@ def test_generate_batch_custom_filename_returns_filename(
     generator: BatchGeneratorFixture,
 ) -> None:
     mock_batch_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"}
+        source="foo", content="bar"
     )
     assert generator.generate_batch(1, "custom.jsonl") == "custom.jsonl"
 

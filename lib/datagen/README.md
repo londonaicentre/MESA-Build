@@ -16,7 +16,6 @@ See [examples](examples/).
     from datagen import BedrockBatchGenerator
     gen = BedrockBatchGenerator(
         system_prompt =
-        user_prompt_function =
         schema =
         schema_name =
         model_name =

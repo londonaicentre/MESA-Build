@@ -36,7 +36,6 @@ pb = PromptBuilder()
 
 gen = LLMGenerator(
     system_prompt=pb.build_datagen_prompt(),  # schema + worked example injected
-    user_prompt_function=lambda doc: doc["content"],
     schema=OncologyModel,
     schema_name="oncoschema",  # uses the installed londonaicentre-oncoschema version
     model_name="bedrock/eu.anthropic.claude-sonnet-4-5-20250929-v1:0",

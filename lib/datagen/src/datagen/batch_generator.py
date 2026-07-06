@@ -9,7 +9,6 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable
 
 from pydantic import BaseModel
 
@@ -29,7 +28,6 @@ class BedrockBatchGenerator:
 
     Args:
         system_prompt: System prompt for sample generation
-        user_prompt_function: Function to generate user prompt from document dict
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
         model_name: Model name from config.json (e.g., 'sonnet4', 'opus4')
@@ -39,7 +37,6 @@ class BedrockBatchGenerator:
     def __init__(
         self,
         system_prompt: str,
-        user_prompt_function: Callable[[dict[str, Any]], str],
         schema: type[BaseModel],
         schema_name: str,
         model_name: str,
@@ -51,9 +48,6 @@ class BedrockBatchGenerator:
             self._logger.addHandler(logging.StreamHandler())
 
         self.__system_prompt: str = system_prompt
-        self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
-            user_prompt_function
-        )
         self.__schema: type[BaseModel] = schema
         self.__schema_name: str = schema_name
         self.__schema_version: str = get_schema_version(schema_name)
@@ -108,7 +102,7 @@ class BedrockBatchGenerator:
                         AWS.create_anthropic_bedrock_batch_entry(
                             str(idx),
                             self.__system_prompt,
-                            self.__user_prompt_function(doc.model_dump()),
+                            doc.content,
                         )
                     ),
                     file=outfile,

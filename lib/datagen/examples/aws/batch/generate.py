@@ -26,7 +26,6 @@ pb = PromptBuilder()
 
 gen = BedrockBatchGenerator(
     system_prompt=pb.build_datagen_prompt(),
-    user_prompt_function=lambda doc: doc["content"],
     schema=OncologyModel,
     schema_name="oncoschema",
     model_name="sonnet4",
