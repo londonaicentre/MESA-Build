@@ -146,6 +146,12 @@ class BedrockBatchGenerator:
             job_id_file.write(json.dumps({"job_id": job_id}))
         return job_id
 
+    def __resolve_job_id(self) -> str | None:
+        if not Path(self.__config.job_id_file).exists():
+            return None
+        with open(self.__config.job_id_file) as job_id_file:
+            return str(json.loads(job_id_file.read())["job_id"])
+
     def extract_batch_output(
         self,
         bucket: str | None = None,
@@ -165,9 +171,8 @@ class BedrockBatchGenerator:
 
         """
         batch_outputs: BatchOutputs
-        if bucket is not None and Path(self.__config.job_id_file).exists():
-            with open(self.__config.job_id_file) as job_id_file:
-                job_id: str = json.loads(job_id_file.read())["job_id"]
+        job_id: str | None = self.__resolve_job_id() if bucket is not None else None
+        if bucket is not None and job_id is not None:
             batch_outputs = AWS.get_batch_inference_outputs(
                 self.__model_region, bucket, job_id, file_name
             )
@@ -201,3 +206,30 @@ class BedrockBatchGenerator:
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
         return successful_generations, failed_generations
+
+    def check_batch_output_status(self, bucket: str) -> bool:
+        """Check whether a submitted Bedrock batch job's output exists in S3.
+
+        Args:
+            bucket: S3 bucket the Bedrock batch job writes its output to
+
+        Returns:
+            Whether an object under the job's output prefix ending in the
+            expected batch output filename exists
+
+        Raises:
+            ValueError: If no batch job has been submitted yet
+
+        """
+        job_id: str | None = self.__resolve_job_id()
+        if job_id is None:
+            raise ValueError(
+                "No batch job id found; generate_via_batch must be called first."
+            )
+
+        return any(
+            object["Key"].endswith(self.__model_batch_file + ".out")
+            for object in AWS.list_s3_objects(
+                self.__model_region, bucket, job_id + "/output/"
+            )
+        )

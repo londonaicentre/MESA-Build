@@ -56,6 +56,11 @@ class GenerateViaBatchDependencies:
     datetime: MagicMock
 
 
+@dataclass
+class CheckStatusDependencies:
+    list_s3_objects: MagicMock
+
+
 @pytest.fixture
 def mock_filesystem(mocker: MockerFixture) -> FileSystem:
     return FileSystem(
@@ -252,6 +257,15 @@ def test_generate_via_batch_valid_params_calls_generate_inference_writes_file_re
     assert result == "datagen/2026-01-01-0000"
 
 
+@pytest.fixture
+def mock_check_status_dependencies(mocker: MockerFixture) -> CheckStatusDependencies:
+    return CheckStatusDependencies(
+        list_s3_objects=mocker.patch(
+            "datagen.batch_generator.AWS.list_s3_objects", autospec=True
+        )
+    )
+
+
 def test_extract_batch_output_no_bucket_no_download(
     mock_filesystem: FileSystem,
     mock_extract_dependencies: ExtractDependencies,
@@ -330,6 +344,45 @@ def test_extract_batch_output_called_creates_output_directory(
 ) -> None:
     generator.extract_batch_output()
     mock_filesystem.makedirs.assert_called_with("./data/trainingdata/", exist_ok=True)
+
+
+def test_check_batch_output_status_output_present_returns_true(
+    mocker: MockerFixture,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_check_status_dependencies: CheckStatusDependencies,
+    generator: BatchGeneratorFixture,
+) -> None:
+    mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
+    mock_check_status_dependencies.list_s3_objects.return_value = [
+        {"Key": "foo/bar/output/batch.jsonl.out"}
+    ]
+    assert generator.check_batch_output_status("test-bucket") is True
+
+
+def test_check_batch_output_status_output_absent_returns_false(
+    mocker: MockerFixture,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_check_status_dependencies: CheckStatusDependencies,
+    generator: BatchGeneratorFixture,
+) -> None:
+    mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
+    mock_check_status_dependencies.list_s3_objects.return_value = [
+        {"Key": "foo/bar/output/other.jsonl.out"}
+    ]
+    assert generator.check_batch_output_status("test-bucket") is False
+
+
+def test_check_batch_output_status_no_job_id_raises_value_error(
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_check_status_dependencies: CheckStatusDependencies,
+    generator: BatchGeneratorFixture,
+) -> None:
+    mock_path_operations.exists.return_value = False
+    with pytest.raises(ValueError, match="No batch job id found"):
+        generator.check_batch_output_status("test-bucket")
 
 
 def test_extract_batch_output_job_id_missing_skips_download(
