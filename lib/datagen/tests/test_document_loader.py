@@ -243,3 +243,53 @@ def test_download_and_extract_custom_region_used(
         "batch-2026-01-01-001.tar.gz", Path("output"), region="us-east-1"
     )
     assert mock_dependencies.download_file.call_args[1]["region_name"] == "us-east-1"
+
+
+@pytest.fixture
+def mock_list_s3_objects(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("datagen.document_loader.AWS.list_s3_objects")
+
+
+def test_list_available_filenames_valid_keys_returns_filenames(
+    mock_list_s3_objects: MagicMock,
+) -> None:
+    mock_list_s3_objects.return_value = [
+        {"Key": "documents/batch-2026-01-01-001.tar.gz"},
+        {"Key": "documents/batch-2026-01-02-001.tar"},
+    ]
+    assert DocumentLoader.list_available_document_batches() == [
+        "batch-2026-01-01-001.tar.gz",
+        "batch-2026-01-02-001.tar",
+    ]
+
+
+def test_list_available_filenames_non_archive_key_skipped(
+    mock_list_s3_objects: MagicMock,
+) -> None:
+    mock_list_s3_objects.return_value = [
+        {"Key": "documents/"},
+        {"Key": "documents/readme.md"},
+        {"Key": "documents/batch-2026-01-01-001.tar.gz"},
+    ]
+    assert DocumentLoader.list_available_document_batches() == [
+        "batch-2026-01-01-001.tar.gz"
+    ]
+
+
+def test_list_available_filenames_empty_prefix_uses_key_directly(
+    mock_list_s3_objects: MagicMock,
+) -> None:
+    mock_list_s3_objects.return_value = [{"Key": "batch-2026-01-01-001.tar.gz"}]
+    assert DocumentLoader.list_available_document_batches(s3_prefix="") == [
+        "batch-2026-01-01-001.tar.gz"
+    ]
+
+
+def test_list_available_filenames_passes_bucket_prefix_region(
+    mock_list_s3_objects: MagicMock,
+) -> None:
+    mock_list_s3_objects.return_value = []
+    DocumentLoader.list_available_document_batches(
+        bucket="foobar", s3_prefix="custom", region="us-east-1"
+    )
+    mock_list_s3_objects.assert_called_once_with("us-east-1", "foobar", "custom/")
