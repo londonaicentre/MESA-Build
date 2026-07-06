@@ -83,3 +83,34 @@ class DocumentLoader:
                         doc_count += 1
 
         return doc_count
+
+    @staticmethod
+    def list_available_document_batches(
+        bucket: str = "aicentre-nlpteam-mesa-build",
+        s3_prefix: str = "documents",
+        region: str = "eu-west-2",
+    ) -> list[str]:
+        """
+        List document batch filenames available in S3, suitable for
+        passing as `filename` to `download_and_extract`.
+
+        Args:
+            bucket:
+                S3 bucket name (default: "aicentre-nlpteam-mesa-build")
+            s3_prefix:
+                S3 folder (default: "documents")
+            region:
+                AWS region (default: "eu-west-2")
+
+        Returns:
+            List of batch filenames (e.g., "cancer-batch-2025-12-31-001.tar.gz")
+
+        """
+        prefix = f"{s3_prefix}/" if s3_prefix else ""
+        return [
+            filename
+            for object in AWS.list_s3_objects(region, bucket, prefix)
+            if (filename := str(object["Key"]).removeprefix(prefix)).endswith(
+                (".tar", ".tar.gz")
+            )
+        ]
