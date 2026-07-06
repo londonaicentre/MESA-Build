@@ -76,6 +76,9 @@ class BedrockBatchGenerator:
             )
             self.__document_files.extend(sorted(output_folder.glob("document_*.json")))
 
+    def get_document_files_count(self) -> int:
+        return len(self.__document_files)
+
     def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
     ) -> str:
