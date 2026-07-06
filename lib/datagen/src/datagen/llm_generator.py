@@ -71,7 +71,7 @@ class LLMGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("document_*.json")))
+            self.__document_files.extend(sorted(output_folder.glob("*.json")))
 
     def _generate_sample(self, doc_path: Path) -> bool:
         """Generate structured output from a document.
