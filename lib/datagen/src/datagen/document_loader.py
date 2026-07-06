@@ -7,6 +7,7 @@ Before passing into training data generation
 
 from pathlib import Path
 import json
+import re
 import tarfile
 from typing import Literal
 from mesa_types import Document
@@ -71,9 +72,15 @@ class DocumentLoader:
 
         with tarfile.open(tar_path, mode) as tar:
             for member in tar.getmembers():
-                # we expect documents to have basename "document_*"
+                # legacy documents have basename "document_*"
                 basename = member.name.split("/")[-1]
-                if basename.startswith("document_") and basename.endswith(".json"):
+                is_legacy_document = basename.startswith(
+                    "document_"
+                ) and basename.endswith(".json")
+                is_hashed_document = bool(
+                    re.compile(r"^[0-9a-f]{32}\.json$").match(basename)
+                )
+                if is_legacy_document or is_hashed_document:
                     file = tar.extractfile(member)
                     if file:
                         doc = Document.model_validate_json(file.read())
