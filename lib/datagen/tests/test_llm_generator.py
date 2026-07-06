@@ -73,7 +73,6 @@ def generator(
 ) -> GeneratorFixture:
     return GeneratorFixture(
         system_prompt="foo",
-        user_prompt_function=lambda x: f"bar: {x}",
         schema=MagicMock,
         schema_name="baz",
         model_name="qux",
@@ -133,7 +132,6 @@ def test_init_multiple_batches_extends_document_files(
     ]
     GeneratorFixture(
         system_prompt="foo",
-        user_prompt_function=lambda x: f"bar: {x}",
         schema=MagicMock,
         schema_name="baz",
         model_name="qux",
@@ -178,7 +176,6 @@ def test_generate_sample_valid_input_returns_true(
     mock_sample_dependencies: SampleDependencies, generator: GeneratorFixture
 ) -> None:
     mock_sample_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"},
         source="foo",
         content="bar",
     )
@@ -194,7 +191,6 @@ def test_generate_sample_passes_default_sampling_params_to_completion(
     mock_sample_dependencies: SampleDependencies, generator: GeneratorFixture
 ) -> None:
     mock_sample_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"},
         source="foo",
         content="bar",
     )
@@ -216,7 +212,6 @@ def test_generate_sample_passes_custom_sampling_params_to_completion(
 ) -> None:
     custom_generator: GeneratorFixture = GeneratorFixture(
         system_prompt="foo",
-        user_prompt_function=lambda x: f"bar: {x}",
         schema=MagicMock,
         schema_name="baz",
         model_name="qux",
@@ -226,7 +221,6 @@ def test_generate_sample_passes_custom_sampling_params_to_completion(
         temperature=0.7,
     )
     mock_sample_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"},
         source="foo",
         content="bar",
     )
@@ -254,7 +248,7 @@ def test_generate_sample_failure_conditions_returns_false(
     completion_return: MagicMock | None,
 ) -> None:
     mock_sample_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"}
+        source="foo", content="bar"
     )
     mock_sample_dependencies.completion.return_value = completion_return
     assert generator.generate_sample(Path("foo.json")) is False
@@ -264,7 +258,6 @@ def test_generate_sample_save_failure_returns_false(
     mock_sample_dependencies: SampleDependencies, generator: GeneratorFixture
 ) -> None:
     mock_sample_dependencies.model_validate_json.return_value = MagicMock(
-        model_dump=lambda: {"source": "foo", "content": "bar"},
         source="foo",
         content="bar",
     )
@@ -345,7 +338,6 @@ def test_run_backfill_empty_document_list_logs_no_missing_samples(
 ) -> None:
     empty_generator: GeneratorFixture = GeneratorFixture(
         system_prompt="foo",
-        user_prompt_function=lambda x: f"bar: {x}",
         schema=MagicMock,
         schema_name="baz",
         model_name="qux",
