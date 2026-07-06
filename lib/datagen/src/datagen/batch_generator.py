@@ -68,7 +68,7 @@ class BedrockBatchGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("document_*.json")))
+            self.__document_files.extend(sorted(output_folder.glob("*.json")))
 
     def get_document_files_count(self) -> int:
         return len(self.__document_files)
