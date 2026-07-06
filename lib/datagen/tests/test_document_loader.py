@@ -136,6 +136,21 @@ def test_download_and_extract_valid_document_returns_count(
     )
 
 
+def test_download_and_extract_hashed_document_writes_to_output(
+    mock_path_operations: PathMocks,
+    mock_dependencies: DocumentLoaderDependencies,
+    mock_tar_member: MagicMock,
+) -> None:
+    mock_tar_member.name = "batch/1a79a4d60de6718e8e5b326e338ae533.json"
+    assert (
+        DocumentLoader.download_and_extract(
+            "batch-2026-01-01-001.tar.gz", Path("output")
+        )
+        == 1
+    )
+    mock_path_operations.write_text.assert_called_once()
+
+
 def test_download_and_extract_non_document_member_skipped(
     mock_path_operations: PathMocks,
     mock_dependencies: DocumentLoaderDependencies,
@@ -157,6 +172,10 @@ def test_download_and_extract_non_document_member_skipped(
         "batch-2026-01-01-001/other_001.json",
         "batch-2026-01-01-001/document_001.txt",
         "document_001",
+        "metadata.json",
+        "documentbatch.txt",
+        "1a79a4d60de6718e8e5b326e338ae53.json",
+        "1a79a4d60de6718e8e5b326e338ae533g.json",
     ],
 )
 def test_download_and_extract_invalid_member_pattern_skipped(
