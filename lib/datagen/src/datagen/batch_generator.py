@@ -9,7 +9,6 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable
 
 from pydantic import BaseModel
 
@@ -29,7 +28,6 @@ class BedrockBatchGenerator:
 
     Args:
         system_prompt: System prompt for sample generation
-        user_prompt_function: Function to generate user prompt from document dict
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
         model_name: Model name from config.json (e.g., 'sonnet4', 'opus4')
@@ -39,7 +37,6 @@ class BedrockBatchGenerator:
     def __init__(
         self,
         system_prompt: str,
-        user_prompt_function: Callable[[dict[str, Any]], str],
         schema: type[BaseModel],
         schema_name: str,
         model_name: str,
@@ -51,9 +48,6 @@ class BedrockBatchGenerator:
             self._logger.addHandler(logging.StreamHandler())
 
         self.__system_prompt: str = system_prompt
-        self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
-            user_prompt_function
-        )
         self.__schema: type[BaseModel] = schema
         self.__schema_name: str = schema_name
         self.__schema_version: str = get_schema_version(schema_name)
@@ -74,7 +68,10 @@ class BedrockBatchGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("document_*.json")))
+            self.__document_files.extend(sorted(output_folder.glob("*.json")))
+
+    def get_document_files_count(self) -> int:
+        return len(self.__document_files)
 
     def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
@@ -105,7 +102,7 @@ class BedrockBatchGenerator:
                         AWS.create_anthropic_bedrock_batch_entry(
                             str(idx),
                             self.__system_prompt,
-                            self.__user_prompt_function(doc.model_dump()),
+                            doc.content,
                         )
                     ),
                     file=outfile,
@@ -149,6 +146,12 @@ class BedrockBatchGenerator:
             job_id_file.write(json.dumps({"job_id": job_id}))
         return job_id
 
+    def __resolve_job_id(self) -> str | None:
+        if not Path(self.__config.job_id_file).exists():
+            return None
+        with open(self.__config.job_id_file) as job_id_file:
+            return str(json.loads(job_id_file.read())["job_id"])
+
     def extract_batch_output(
         self,
         bucket: str | None = None,
@@ -168,9 +171,8 @@ class BedrockBatchGenerator:
 
         """
         batch_outputs: BatchOutputs
-        if bucket is not None and Path(self.__config.job_id_file).exists():
-            with open(self.__config.job_id_file) as job_id_file:
-                job_id: str = json.loads(job_id_file.read())["job_id"]
+        job_id: str | None = self.__resolve_job_id() if bucket is not None else None
+        if bucket is not None and job_id is not None:
             batch_outputs = AWS.get_batch_inference_outputs(
                 self.__model_region, bucket, job_id, file_name
             )
@@ -204,3 +206,30 @@ class BedrockBatchGenerator:
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
         return successful_generations, failed_generations
+
+    def check_batch_output_status(self, bucket: str) -> bool:
+        """Check whether a submitted Bedrock batch job's output exists in S3.
+
+        Args:
+            bucket: S3 bucket the Bedrock batch job writes its output to
+
+        Returns:
+            Whether an object under the job's output prefix ending in the
+            expected batch output filename exists
+
+        Raises:
+            ValueError: If no batch job has been submitted yet
+
+        """
+        job_id: str | None = self.__resolve_job_id()
+        if job_id is None:
+            raise ValueError(
+                "No batch job id found; generate_via_batch must be called first."
+            )
+
+        return any(
+            object["Key"].endswith(self.__model_batch_file + ".out")
+            for object in AWS.list_s3_objects(
+                self.__model_region, bucket, job_id + "/output/"
+            )
+        )

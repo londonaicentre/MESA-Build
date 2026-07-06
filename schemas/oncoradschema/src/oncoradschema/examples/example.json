@@ -1,192 +1,147 @@
 {
-  "content": "RADIOLOGY REPORT\n\nPatient: Jane Doe, MRN 778421, DOB 04/12/1958\nStudy: CT Chest, Abdomen and Pelvis with IV contrast (arterial, portal venous and delayed phases)\nDate: 2026-04-18\n\nCLINICAL INDICATION\nNewly diagnosed pancreatic adenocarcinoma on EUS-guided biopsy. Staging study. No prior imaging available for comparison.\n\nTECHNIQUE\nMultiphase contrast-enhanced CT of the chest, abdomen and pelvis following 100 mL of intravenous Omnipaque 350. Arterial, portal venous and 5-minute delayed phases through the abdomen. Multiplanar reformats reviewed.\n\nFINDINGS\n\nPancreas:\nThere is an ill-defined hypoenhancing mass centred on the pancreatic head and uncinate process measuring 38 x 32 x 30 mm (longest axial diameter 38 mm). The mass demonstrates an irregular, spiculated margin with infiltration of the surrounding peripancreatic fat. The lesion abuts the superior mesenteric artery over approximately 160 degrees of its circumference and encases the superior mesenteric vein with a short-segment narrowing. Findings consistent with locally advanced disease and vascular involvement.\n\nBiliary system:\nMarked intra- and extrahepatic biliary ductal dilatation secondary to obstruction at the level of the pancreatic head mass. The common bile duct measures 18 mm. No biliary stent in situ.\n\nLiver:\nMultiple hypoenhancing lesions are scattered throughout both lobes, in keeping with hepatic metastases. The largest, in segment VII, measures 28 mm in longest diameter and is designated a RECIST target lesion. A further metastasis in segment IV measures 15 mm. Additional sub-centimetre lesions are present but not separately measured. The lesions are solid with central low attenuation suggesting early necrosis. Margins are circumscribed.\n\nLymph nodes:\nEnlarged retroperitoneal lymph node in the aortocaval station measures 14 mm in short axis, considered pathological and metastatic in this context.\n\nBones:\nA lytic lesion is present in the L3 vertebral body measuring 22 mm, with no associated soft tissue component or cortical breach. In keeping with skeletal metastasis.\n\nKidneys:\nSimple cortical cyst in the lower pole of the right kidney measuring 16 mm, of fluid attenuation, with no enhancing component. Benign.\n\nChest:\nSmall left-sided pleural effusion. No pulmonary nodules. No mediastinal or hilar lymphadenopathy.\n\nOther:\nNo ascites. Spleen, adrenal glands and remainder of bowel unremarkable.\n\nIMPRESSION\n1. Locally advanced pancreatic head adenocarcinoma with SMA abutment and SMV encasement (cT4).\n2. Multiple hepatic metastases and a single retroperitoneal nodal metastasis (cM1, cN1).\n3. Lytic L3 vertebral metastasis.\n4. Malignant biliary obstruction.\n5. Incidental simple right renal cyst. Small left pleural effusion.\n\nOverall stage: cT4 N1 M1 — AJCC Stage IV.",
+  "content": "CT Chest, Abdomen and Pelvis with contrast\n\nPatient: [redacted], MRN [redacted], DOB [redacted]\nStudy date: [redacted]\n\nAN ADDENDUM HAS BEEN ENTERED AT THE END OF THIS REPORT\n\nClinical details: Known sigmoid colon adenocarcinoma. Completed neoadjuvant chemotherapy. Restaging study, ?response. Previous DVT on apixaban.\n\nComparison: previous CT [redacted].\n\nTechnique: Portal venous phase contrast-enhanced CT of the chest, abdomen and pelvis.\n\nFindings:\n\nPrimary: The known sigmoid colon primary remains, now measuring 42 mm in longest diameter (previously 58 mm). It shows an irregular, spiculated margin with infiltration of the pericolic fat and abuts the left iliac vessels. Appearances are those of the treated primary tumour, reduced in size.\n\nLiver: A solid metastatic deposit in segment VII measures 24 mm in longest diameter and is designated a target lesion. It is smaller than on the prior study. Central low attenuation is in keeping with necrosis. Margins are circumscribed.\n\nLymph nodes: A pathological left pelvic lymph node measures 13 mm in short axis, considered metastatic in this context.\n\nLungs: A 6 mm right lower lobe nodule is unlikely to represent metastasis and is favoured to be a benign perifissural node. A small left pleural effusion is noted.\n\nBones: A sclerotic focus in the L4 vertebral body is of indeterminate significance.\n\nOther: Simple cortical cyst in the left kidney, of fluid attenuation, benign. The colon is dilated proximal to the sigmoid primary with associated obstruction. No free air. Previous cholecystectomy noted.\n\nImpression:\n1. Sigmoid colon primary, reduced in size, with pericolic infiltration and iliac vessel abutment.\n2. Segment VII hepatic metastasis, smaller. Pathological left pelvic node.\n3. Overall appearances consistent with a partial response to neoadjuvant treatment.\n4. Indeterminate sclerotic L4 focus.\n5. Malignant large bowel obstruction proximal to the primary.\n\nOverall stage: ypT3 N1 M1.\n\nADDENDUM START\nOn review with the bone radiologist, the L4 sclerotic focus is more likely to represent a sclerotic skeletal metastasis.",
   "output": {
     "is_radiology_report": true,
     "is_oncology_related": true,
+    "is_malignancy_identified": true,
     "scan_metadata": {
       "modality": "ct",
-      "is_interventional": false,
-      "contrast": "triple_phase",
+      "contrast": "with_contrast",
       "regions": ["chest", "abdomen", "pelvis"]
     },
-    "image_rationale": "diagnosis_staging",
-    "indication_desc": "Newly diagnosed pancreatic adenocarcinoma on EUS-guided biopsy. No prior imaging available for comparison.",
+    "scan_rationale": "post_diagnosis_follow_up",
     "cancer_status": {
-      "overall_status": null,
-      "recist_response": "not_applicable",
-      "progression_desc": null,
+      "overall_status": "improving",
+      "recist_response": null,
+      "progression_desc": "Overall appearances consistent with a partial response to neoadjuvant treatment.",
       "disease_specific_scores": [
         {
           "scoring_system": "tnm",
-          "scoring_system_desc": "TNM",
-          "score_or_stage": "cT4N1M1",
+          "scoring_system_name_desc": "TNM",
+          "score_or_stage": "ypT3N1M1",
           "laterality": null,
-          "score_desc": "cT4 N1 M1"
-        },
-        {
-          "scoring_system": "ajcc_stage",
-          "scoring_system_desc": "AJCC Stage",
-          "score_or_stage": "IV",
-          "laterality": null,
-          "score_desc": "AJCC Stage IV"
+          "score_desc": "ypT3 N1 M1"
         }
       ]
     },
     "cancer_lesions": [
       {
-        "anatomical_site": "pancreas",
-        "anatomical_site_desc": "pancreatic head and uncinate process",
-        "cancer_certainty": "certain",
-        "lesion_desc": "Ill-defined hypoenhancing mass centred on the pancreatic head and uncinate process measuring 38 x 32 x 30 mm with irregular spiculated margin and infiltration of peripancreatic fat. Abuts SMA over ~160 degrees and encases SMV with short-segment narrowing.",
-        "change": null,
+        "anatomical_site": "colon",
+        "anatomical_site_desc": "sigmoid colon",
+        "lesion_status": "cancerous",
+        "change": "improving",
         "laterality": "not_applicable",
         "size": {
-          "longest_diameter_mm": 38,
-          "x_mm": 38,
-          "y_mm": 32,
-          "z_mm": 30,
+          "longest_diameter_mm": 42,
+          "short_axis_mm": null,
+          "x_mm": null,
+          "y_mm": null,
+          "z_mm": null,
           "volume_ml": null
         },
         "is_recist_target": false,
-        "is_largest": false,
         "is_infiltrative": true,
-        "is_vascular_invasion": true,
+        "is_vascular_involvement": true,
         "is_miliary": false,
         "nature": "primary",
         "morphology": "solid",
         "internal_features": [],
         "margin": "spiculated",
         "shape": "irregular",
-        "density": "hypoenhancing on contrast-enhanced CT"
+        "uptake": null
       },
       {
         "anatomical_site": "liver",
         "anatomical_site_desc": "segment VII",
-        "cancer_certainty": "certain",
-        "lesion_desc": "Hypoenhancing lesion in segment VII measuring 28 mm in longest diameter, solid with central low attenuation suggesting early necrosis, circumscribed margin. Designated RECIST target lesion.",
-        "change": null,
+        "lesion_status": "cancerous",
+        "change": "improving",
         "laterality": null,
         "size": {
-          "longest_diameter_mm": 28,
+          "longest_diameter_mm": 24,
+          "short_axis_mm": null,
           "x_mm": null,
           "y_mm": null,
           "z_mm": null,
           "volume_ml": null
         },
         "is_recist_target": true,
-        "is_largest": true,
         "is_infiltrative": false,
-        "is_vascular_invasion": false,
+        "is_vascular_involvement": false,
         "is_miliary": false,
         "nature": "metastasis",
         "morphology": "solid",
         "internal_features": ["necrotic"],
         "margin": "circumscribed_welldefined",
-        "shape": "not_described",
-        "density": "hypoenhancing with central low attenuation"
+        "shape": null,
+        "uptake": null
       },
       {
-        "anatomical_site": "liver",
-        "anatomical_site_desc": "segment IV",
-        "cancer_certainty": "certain",
-        "lesion_desc": "Hypoenhancing metastasis in segment IV measuring 15 mm. Additional sub-centimetre lesions are present but not separately measured.",
+        "anatomical_site": "lymph_node_pelvic",
+        "anatomical_site_desc": "left pelvic lymph node",
+        "lesion_status": "cancerous",
         "change": null,
-        "laterality": null,
+        "laterality": "left",
         "size": {
-          "longest_diameter_mm": 15,
+          "longest_diameter_mm": null,
+          "short_axis_mm": 13,
           "x_mm": null,
           "y_mm": null,
           "z_mm": null,
           "volume_ml": null
         },
         "is_recist_target": false,
-        "is_largest": false,
         "is_infiltrative": false,
-        "is_vascular_invasion": false,
+        "is_vascular_involvement": false,
         "is_miliary": false,
         "nature": "metastasis",
-        "morphology": "solid",
+        "morphology": null,
         "internal_features": [],
-        "margin": "circumscribed_welldefined",
-        "shape": "not_described",
-        "density": "hypoenhancing"
-      },
-      {
-        "anatomical_site": "lymph_node_retroperitoneal",
-        "anatomical_site_desc": "aortocaval station",
-        "cancer_certainty": "certain",
-        "lesion_desc": "Enlarged retroperitoneal lymph node in the aortocaval station measures 14 mm in short axis, considered pathological and metastatic in this context.",
-        "change": null,
-        "laterality": null,
-        "size": {
-          "longest_diameter_mm": 14,
-          "x_mm": null,
-          "y_mm": null,
-          "z_mm": null,
-          "volume_ml": null
-        },
-        "is_recist_target": false,
-        "is_largest": false,
-        "is_infiltrative": false,
-        "is_vascular_invasion": false,
-        "is_miliary": false,
-        "nature": "metastasis",
-        "morphology": "solid",
-        "internal_features": [],
-        "margin": "not_described",
-        "shape": "not_described",
-        "density": null
+        "margin": null,
+        "shape": null,
+        "uptake": null
       },
       {
         "anatomical_site": "bone_spine",
-        "anatomical_site_desc": "L3 vertebral body",
-        "cancer_certainty": "certain",
-        "lesion_desc": "Lytic lesion in the L3 vertebral body measuring 22 mm, with no associated soft tissue component or cortical breach. In keeping with skeletal metastasis.",
+        "anatomical_site_desc": "L4 vertebral body",
+        "lesion_status": "cancerous",
         "change": null,
         "laterality": null,
-        "size": {
-          "longest_diameter_mm": 22,
-          "x_mm": null,
-          "y_mm": null,
-          "z_mm": null,
-          "volume_ml": null
-        },
+        "size": null,
         "is_recist_target": false,
-        "is_largest": false,
         "is_infiltrative": false,
-        "is_vascular_invasion": false,
+        "is_vascular_involvement": false,
         "is_miliary": false,
         "nature": "metastasis",
-        "morphology": "not_described",
-        "internal_features": ["lytic"],
-        "margin": "not_described",
-        "shape": "not_described",
-        "density": "lytic"
+        "morphology": null,
+        "internal_features": ["sclerotic"],
+        "margin": null,
+        "shape": null,
+        "uptake": null
       }
     ],
     "non_cancer_findings": [
       {
-        "finding_type": "obstruction_dilatation",
-        "anatomical_site": "bile_duct",
-        "anatomical_site_desc": "intra- and extrahepatic biliary tree; common bile duct",
-        "finding_desc": "Marked intra- and extrahepatic biliary ductal dilatation secondary to obstruction at the level of the pancreatic head mass. Common bile duct measures 18 mm. No biliary stent in situ.",
+        "finding": "obstruction_dilatation",
+        "finding_desc": "The colon is dilated proximal to the sigmoid primary with associated obstruction. Malignant large bowel obstruction proximal to the primary.",
+        "anatomical_site": "colon",
+        "anatomical_site_desc": "colon proximal to the sigmoid primary",
         "is_cancer_lesion_related": true
       },
       {
-        "finding_type": "cyst_benign_collection",
-        "anatomical_site": "kidney",
-        "anatomical_site_desc": "lower pole of the right kidney",
-        "finding_desc": "Simple cortical cyst in the lower pole of the right kidney measuring 16 mm, of fluid attenuation, with no enhancing component. Benign.",
+        "finding": "effusion",
+        "finding_desc": "A small left pleural effusion is noted.",
+        "anatomical_site": "pleura",
+        "anatomical_site_desc": "left pleural space",
         "is_cancer_lesion_related": false
       },
       {
-        "finding_type": "effusion",
-        "anatomical_site": "pleura",
-        "anatomical_site_desc": "left pleural space",
-        "finding_desc": "Small left-sided pleural effusion.",
+        "finding": "cyst_benign_collection",
+        "finding_desc": "Simple cortical cyst in the left kidney, of fluid attenuation, benign.",
+        "anatomical_site": "kidney",
+        "anatomical_site_desc": "left kidney",
         "is_cancer_lesion_related": false
       }
     ],
-    "report_summary": "Staging CT for newly diagnosed pancreatic head adenocarcinoma demonstrates locally advanced primary with SMA abutment and SMV encasement, multiple hepatic metastases, retroperitoneal nodal metastasis and a lytic L3 vertebral metastasis (cT4 N1 M1, AJCC Stage IV). Malignant biliary obstruction. Incidental simple right renal cyst and small left pleural effusion."
+    "report_summary": "Restaging contrast CT for treated sigmoid colon adenocarcinoma shows the primary reduced in size with pericolic infiltration and iliac vessel abutment, a smaller segment VII hepatic metastasis (target lesion), a pathological left pelvic node, and (per addendum) a sclerotic L4 metastasis. Overall partial response (ypT3 N1 M1). Malignant large bowel obstruction proximal to the primary. Background of previous cholecystectomy. A 6 mm right lower lobe nodule was favoured benign and excluded."
   }
 }

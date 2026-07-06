@@ -7,7 +7,6 @@ Class to handle real-time APIs via LiteLLM
 import logging
 import os
 from pathlib import Path
-from typing import Any, Callable
 
 from litellm import ModelResponse
 from pydantic import BaseModel
@@ -26,7 +25,6 @@ class LLMGenerator:
 
     Args:
         system_prompt: System prompt for sample generation
-        user_prompt_function: Function to generate user prompt from document dict
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
         model_name: LiteLLM model string (e.g., 'gpt-4', 'claude-3-opus', 'bedrock/...')
@@ -41,7 +39,6 @@ class LLMGenerator:
     def __init__(
         self,
         system_prompt: str,
-        user_prompt_function: Callable[[dict[str, Any]], str],
         schema: type[BaseModel],
         schema_name: str,
         model_name: str,
@@ -55,9 +52,6 @@ class LLMGenerator:
             self._logger.addHandler(logging.StreamHandler())
 
         self.__system_prompt: str = system_prompt
-        self.__user_prompt_function: Callable[[dict[str, Any]], str] = (
-            user_prompt_function
-        )
         self.__schema: type[BaseModel] = schema
         self.__schema_name: str = schema_name
         self.__model_name: str = model_name
@@ -77,7 +71,7 @@ class LLMGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("document_*.json")))
+            self.__document_files.extend(sorted(output_folder.glob("*.json")))
 
     def _generate_sample(self, doc_path: Path) -> bool:
         """Generate structured output from a document.
@@ -91,12 +85,11 @@ class LLMGenerator:
         """
         try:
             doc = Document.model_validate_json(doc_path.read_text())
-            user_prompt: str = self.__user_prompt_function(doc.model_dump())
 
             message: ModelResponse | None = LLM.completion(
                 self.__model_name,
                 self.__system_prompt,
-                user_prompt,
+                doc.content,
                 self.__api_key,
                 max_tokens=self.__max_tokens,
                 temperature=self.__temperature,
