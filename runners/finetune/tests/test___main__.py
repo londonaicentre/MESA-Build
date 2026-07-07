@@ -136,12 +136,13 @@ class TestResume:
 
 
 class TestPostProcess:
-    def test_builds_card_and_post_processes(self, runner: FinetuneMLXRunner) -> None:
+    @pytest.mark.parametrize("push_public", [False, True])
+    def test_builds_card_and_post_processes(self, push_public: bool) -> None:
         trainer: MagicMock = MagicMock()
-        runner._post_process(trainer)
+        _runner(push_public=push_public)._post_process(trainer)
         trainer.build_model_card.assert_called_once_with(1, 2, 3)
         trainer.post_process.assert_called_once_with(
-            trainer.build_model_card.return_value, push_public=False
+            trainer.build_model_card.return_value, push_public=push_public
         )
 
 

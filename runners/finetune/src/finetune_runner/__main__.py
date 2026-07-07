@@ -75,6 +75,10 @@ class FinetuneRunner(BaseSettings):
         "",
         description="Serialised trainer spec: inline JSON, or a path to the --spec-out file from a prior --train run",
     )
+    push_public: bool = Field(
+        False,
+        description="Also push the merged model to the public model registry during post-processing",
+    )
     major: CliSuppress[int] = 0
     minor: CliSuppress[int] = 0
     patch: CliSuppress[int] = 0
@@ -189,7 +193,7 @@ class FinetuneMLXRunner(FinetuneRunner):
     def _post_process(self, trainer: MLXLoRATrainer) -> None:
         trainer.post_process(
             trainer.build_model_card(self.major, self.minor, self.patch),
-            push_public=False,
+            push_public=self.push_public,
         )
         logging.info(
             "Post-processing complete - merged model uploaded to the build bucket."
