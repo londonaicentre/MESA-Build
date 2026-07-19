@@ -32,6 +32,8 @@ class ModelCard(BaseModel):
 
     @model_validator(mode="after")
     def _derive_schema_info(self) -> "ModelCard":
+        if self.output_schema is None and self.schema_name is None:
+            raise ValueError("either output_schema or schema_name must be provided")
         if self.output_schema is not None and self.schema_name is None:
             module_name: str = self.output_schema.__module__.split(".")[0]
             self.schema_name = next(
