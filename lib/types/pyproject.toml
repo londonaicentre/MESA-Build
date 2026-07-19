@@ -6,11 +6,12 @@ authors = [
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
 ]
-version = "2.3.0"
+version = "2.4.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "pydantic>=2.12.5",
+    "pyyaml>=6.0.2",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
