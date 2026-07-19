@@ -1,7 +1,7 @@
 import importlib.metadata
 from datetime import date
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
@@ -44,6 +44,19 @@ class ModelCard(BaseModel):
         if self.schema_name is None and self.schema_version is not None:
             raise ValueError("schema_version requires schema_name to also be set")
         return self
+
+    @model_validator(mode="before")
+    @classmethod
+    def _split_model_version(cls, data: Any) -> Any:
+        if (
+            isinstance(data, dict)
+            and "model_version" in data
+            and not {"major", "minor", "patch"} & data.keys()
+        ):
+            data["major"], data["minor"], data["patch"] = (
+                int(part) for part in str(data["model_version"]).split(".")
+            )
+        return data
 
     @computed_field  # type: ignore
     @property
