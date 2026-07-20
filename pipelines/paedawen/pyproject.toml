@@ -8,10 +8,9 @@ dependencies = [
     "ipykernel>=7.3.0",
     "londonaicentre-docsynth",
     "londonaicentre-mesa-datagen",
-    "londonaicentre-paedacuteschema>=1.0.1",
+    "londonaicentre-paedacuteschema>=1.2.0",
 ]
 
 [tool.uv.sources]
-londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
 londonaicentre-docsynth = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth", branch = "spike/mesa-build-refactor" }
-
+londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
