@@ -1,0 +1,114 @@
+# PIPELINE CONFIGURATION FOR SYNTHETIC DOCUMENT GENERATION
+
+################
+# LLM SETTINGS #
+################
+llm:
+  # llm: whether to call LLM API
+  ## true: generate content using LLM
+  ## false: save prompts only (debugging only)
+  enabled: true
+
+  # provider: which LLM provider to use
+  ## 'anthropic': Anthropic models via AWS Bedrock
+  ## 'gemini': Google Gemini API
+  ## 'local': Local OpenAI-compatible API
+  ## note that this is ignored when enabled set to false
+  provider: anthropic
+
+  # anthropic configuration
+  anthropic:
+    model: sonnet4
+    temperature: 1.0
+    max_tokens: 8000
+
+  # gemini configuration
+  gemini:
+    model: gemini-2.5-flash
+    temperature: 1.0
+    max_tokens: 8000
+
+  # local api configuration
+  ## note: base_url and model are configured via llm__local__base_url and llm__local__model in .env
+  local:
+    model: ollama
+    temperature: 1.0
+    max_tokens: 4000
+
+######################
+# SAMPLING BEHAVIOUR #
+######################
+profile_selection:
+  # domain: which profile domain to use
+  ## e.g. cancer: cancer-related profiles
+  ## e.g. general: general medical profiles
+  ## e.g. paedacute: paediatric ED triage profiles
+  domain: paedacute
+
+  # mode: 'random' or 'sequential'
+  ## random: randomly sample profiles with replacement
+  ## sequential: iterate through profiles in order
+  mode: random
+
+  # count: number of documents to generate
+  ## int: generate exactly that many documents then stop
+  ## -1: generate documents for all profiles in selected file(s)
+  count: 1000
+
+  # file: list of filenames or null
+  ## null: processes all .yml files in profiles/{domain}/ directory
+  ## [file1.yml, file2.yml, ...]: processes specified files in profiles/{domain}/ directory
+  file: null
+    # - head_neck.yml
+    # - skin.yml
+    # - haem.yml
+    # - brain.yml
+    # - tissue.yml
+    # - liver.yml
+
+#####################
+# SAMPLE STRUCTURES #
+#####################
+structure_selection:
+  # enabled_structures: explicit list of structure template files
+  ## note that selection method is always random
+  enabled_structures:
+    - paed_triage_short.txt
+    - paed_triage_medium.txt
+    - paed_triage_long.txt
+    - paed_triage_narrative.txt
+
+########################
+# PROMPT CONFIGURATION #
+########################
+prompt_config:
+  # include_style: whether to include prompts from selected style config
+  ## true: include style requirements
+  ## false: exclude style requirements
+  include_style: true
+
+  # include_content: whether to include prompts from selected content config
+  ## true: include content requirements
+  ## false: exclude content requirements
+  include_content: true
+
+#################
+# OUTPUT FOLDER #
+#################
+output:
+  # subdirectory: subdirectory in ./output/ where generated documents are saved
+  ## resulting path will be ./output/{subdirectory}/
+  subdirectory: paedacute-batch
+
+  # skip_existing: whether to skip profiles that already have generated documents
+  ## true: skip generating documents for profiles that already exist in output folder
+  ## false: always generate documents (may create duplicates with different timestamps)
+  skip_existing: false
+
+  # upload_enabled: whether to write batch metadata and upload the output
+  # subdirectory to S3 once generation completes
+  upload_enabled: true
+
+  # description: free-text description of this batch, recorded in the
+  # batch metadata written alongside generated documents
+  description: Synthetic paediatric clinical notes

@@ -8,3 +8,5 @@ train.jsonl
 *.csv
 *.env
 *job.jsonl*
+*.log
+output/
