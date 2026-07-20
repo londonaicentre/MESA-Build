@@ -203,6 +203,24 @@ class TestToMlxConfig:
         out = FinetuneConfig.load(path).to_mlx_config(10)
         assert out["grad_checkpoint"] is True
 
+    def test_optimizer_config_omitted_when_weight_decay_none(
+        self, full_config: FinetuneConfig
+    ) -> None:
+        assert "optimizer_config" not in full_config.to_mlx_config(10)
+
+    def test_optimizer_config_included_when_weight_decay_set(
+        self, tmp_path: Path
+    ) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    weight_decay: 0.01\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["optimizer_config"] == {"weight_decay": 0.01}
+
     def test_lr_schedule_omitted_when_none(self, full_config: FinetuneConfig) -> None:
         assert "lr_schedule" not in full_config.to_mlx_config(10)
 

@@ -79,6 +79,7 @@ class MLXOverrides(StrictModel):
     val_batches: int = 25
     grad_accumulation_steps: int = 1
     grad_checkpoint: bool = False
+    weight_decay: float | None = None
     lr_schedule: dict[str, Any] | None = (
         None  # passthrough mlx_lm block; omitted if None
     )
@@ -207,6 +208,8 @@ class FinetuneConfig(StrictModel):
                 "dropout": training.lora.dropout,
             },
         }
+        if training.mlx.weight_decay is not None:
+            out["optimizer_config"] = {"weight_decay": training.mlx.weight_decay}
         if training.mlx.lr_schedule is not None:
             out["lr_schedule"] = training.mlx.lr_schedule
         return out

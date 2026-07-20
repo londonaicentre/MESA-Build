@@ -32,4 +32,5 @@ training:
     val_batches: 0                # 0 = no validation (TrainingDataHandler writes train.jsonl only)
     grad_accumulation_steps: 4    # micro-steps accumulated before each optimizer update
     grad_checkpoint: true         # trade compute for memory by recomputing activations
+    weight_decay: 0.01            # AdamW weight decay; null uses the mlx default
     lr_schedule: null              # optional advanced learning-rate schedule; leave null for a constant rate
