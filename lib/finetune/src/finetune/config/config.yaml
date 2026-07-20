@@ -31,4 +31,5 @@ training:
     steps_per_eval: 200            # check performance on held-out data every N steps
     val_batches: 0                # 0 = no validation (TrainingDataHandler writes train.jsonl only)
     grad_accumulation_steps: 4    # micro-steps accumulated before each optimizer update
+    grad_checkpoint: true         # trade compute for memory by recomputing activations
     lr_schedule: null              # optional advanced learning-rate schedule; leave null for a constant rate
