@@ -1219,15 +1219,15 @@ dev = [
 
 [[package]]
 name = "londonaicentre-paedacuteschema"
-version = "1.0.1"
+version = "1.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fa/d9/637109e2495c233fa0423f41e9ad1a3e373f1509d0cc0534143190dd8c37/londonaicentre_paedacuteschema-1.0.1.tar.gz", hash = "sha256:72bd3585f43b7cb48dcc602a59d5637eda3dbcc3e44b5d29a9c1c2a9f292b9c6", size = 20380, upload-time = "2026-06-18T13:42:12.87Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1f/67/a0926b6aadc8f30ef655092a60732dd814e06ed39052fe9275fc0447c388/londonaicentre_paedacuteschema-1.2.0.tar.gz", hash = "sha256:e904734fc5e427a7a86b91c2554ffefee1ad2e9474a303a4fe6df5fb5e7ab2db", size = 20580, upload-time = "2026-07-20T15:35:47.465Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/f9/a9b03ca9ad60171e451287e9b52f97d9ebdc91c8cf288c589318fc7c337a/londonaicentre_paedacuteschema-1.0.1-py3-none-any.whl", hash = "sha256:3fccb1130cfa157aebe87396a14b8c8dafefd852e8e1db7b96a07c15c995199a", size = 22963, upload-time = "2026-06-18T13:42:11.967Z" },
+    { url = "https://files.pythonhosted.org/packages/74/5f/f447ed3002d16f8d0e2f0cd84318524910e6a2ae8504db7543339a4a34bf/londonaicentre_paedacuteschema-1.2.0-py3-none-any.whl", hash = "sha256:adc135560d963b871ab15e6cc75129916c429a2f1303313dd393b7a9122c255c", size = 23166, upload-time = "2026-07-20T15:35:46.484Z" },
 ]
 
 [[package]]
@@ -1460,7 +1460,7 @@ requires-dist = [
     { name = "ipykernel", specifier = ">=7.3.0" },
     { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth?branch=spike%2Fmesa-build-refactor" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
-    { name = "londonaicentre-paedacuteschema", specifier = ">=1.0.1" },
+    { name = "londonaicentre-paedacuteschema", specifier = ">=1.2.0" },
 ]
 
 [[package]]
