@@ -14,10 +14,10 @@ E.g. instance type, AWS config, work_dir, quantization etc
 import math
 from importlib.resources import files
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 import yaml
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class StrictModel(BaseModel):
@@ -29,10 +29,40 @@ class StrictModel(BaseModel):
 class LoRAConfig(StrictModel):
     """LoRA hyperparameters meaningful to both trainers."""
 
+    MODULE_PARENTS: ClassVar[dict[str, str]] = {
+        "q_proj": "self_attn",
+        "k_proj": "self_attn",
+        "v_proj": "self_attn",
+        "o_proj": "self_attn",
+        "gate_proj": "mlp",
+        "up_proj": "mlp",
+        "down_proj": "mlp",
+    }
+
     rank: int
     alpha: int
     dropout: float
     target_modules: list[str]
+
+    @field_validator("target_modules")
+    @classmethod
+    def _validate_target_modules(cls, target_modules: list[str]) -> list[str]:
+        unknown = set(target_modules) - LoRAConfig.MODULE_PARENTS.keys()
+        if unknown:
+            raise ValueError(f"unknown LoRA target modules: {sorted(unknown)}")
+        return target_modules
+
+    def to_mlx_keys(self) -> list[str]:
+        """Prefix each target module with its parent block for mlx_lm.
+
+        Returns:
+            list[str]: Fully qualified module paths, e.g. ``self_attn.q_proj``.
+
+        """
+        return [
+            f"{LoRAConfig.MODULE_PARENTS[module]}.{module}"
+            for module in self.target_modules
+        ]
 
 
 class MLXOverrides(StrictModel):
@@ -135,7 +165,8 @@ class FinetuneConfig(StrictModel):
         Specific args:
         - iters are derived from samples / batch size if not specified
         - scale is alpha / rank
-        - keys are the target modules prefixed with self_attn
+        - keys are the target modules prefixed with their parent block
+          (self_attn for q/k/v/o_proj, mlp for gate/up/down_proj)
 
         Args:
             num_samples (int): Number of training samples, used to derive iters.
@@ -166,9 +197,7 @@ class FinetuneConfig(StrictModel):
             "steps_per_eval": training.mlx.steps_per_eval,
             "val_batches": training.mlx.val_batches,
             "lora_parameters": {
-                "keys": [
-                    f"self_attn.{module}" for module in training.lora.target_modules
-                ],
+                "keys": training.lora.to_mlx_keys(),
                 "rank": training.lora.rank,
                 "scale": training.lora.alpha / training.lora.rank,
                 "dropout": training.lora.dropout,

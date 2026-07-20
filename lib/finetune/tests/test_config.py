@@ -137,6 +137,32 @@ class TestToMlxConfig:
         assert out["lora_parameters"]["scale"] == 16 / 8
         assert out["lora_parameters"]["rank"] == 8
 
+    def test_lora_keys_prefixed_mlp_modules(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "target_modules: [q_proj, k_proj]",
+                "target_modules: [q_proj, gate_proj, up_proj, down_proj]",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lora_parameters"]["keys"] == [
+            "self_attn.q_proj",
+            "mlp.gate_proj",
+            "mlp.up_proj",
+            "mlp.down_proj",
+        ]
+
+    def test_lora_target_modules_unknown_module_raises(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "target_modules: [q_proj, k_proj]", "target_modules: [bar_proj]"
+            )
+        )
+        with pytest.raises(ValidationError, match="unknown LoRA target modules"):
+            FinetuneConfig.load(path)
+
     def test_constants_and_passthrough(self, full_config: FinetuneConfig) -> None:
         out = full_config.to_mlx_config(10)
         assert out["model"] == "baz"

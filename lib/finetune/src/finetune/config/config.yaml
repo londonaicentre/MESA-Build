@@ -20,7 +20,7 @@ training:
     rank: 16                        # size of the small trainable add-on; higher = more capacity to learn but more memory
     alpha: 32                       # how strongly the add-on influences the model (mlx scale = alpha / rank = 2.0)
     dropout: 0.05                   # randomly ignores 5% of connections while training to reduce overfitting
-    target_modules: [q_proj, k_proj, v_proj, o_proj]   # which parts of each layer get the trainable add-on
+    target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]   # which parts of each layer get the trainable add-on
 
   mlx:                              # optional; consumed ONLY by the MLX translation
     iters: null                    # total training steps; left null to auto-derive from epochs, set a number to override
