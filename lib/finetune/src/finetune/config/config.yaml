@@ -33,4 +33,5 @@ training:
     grad_accumulation_steps: 4    # micro-steps accumulated before each optimizer update
     grad_checkpoint: true         # trade compute for memory by recomputing activations
     weight_decay: 0.01            # AdamW weight decay; null uses the mlx default
-    lr_schedule: null              # optional advanced learning-rate schedule; leave null for a constant rate
+    lr_scheduler_type: cosine     # decay the learning rate to 0 over training; null keeps it constant
+    lr_schedule: null              # raw mlx_lm passthrough for a custom schedule; overrides lr_scheduler_type

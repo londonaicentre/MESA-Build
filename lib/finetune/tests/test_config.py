@@ -234,3 +234,32 @@ class TestToMlxConfig:
         )
         out = FinetuneConfig.load(path).to_mlx_config(10)
         assert out["lr_schedule"] == {"name": "cosine_decay"}
+
+    def test_lr_scheduler_type_builds_cosine_decay(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    lr_scheduler_type: cosine\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lr_schedule"] == {
+            "name": "cosine_decay",
+            "arguments": [0.0002, out["iters"]],
+        }
+
+    def test_lr_schedule_passthrough_wins_over_scheduler_type(
+        self, tmp_path: Path
+    ) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n"
+                "    lr_scheduler_type: cosine\n"
+                "    lr_schedule:\n      name: exponential_decay\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lr_schedule"] == {"name": "exponential_decay"}

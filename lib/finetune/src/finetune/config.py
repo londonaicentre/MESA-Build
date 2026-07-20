@@ -14,7 +14,7 @@ E.g. instance type, AWS config, work_dir, quantization etc
 import math
 from importlib.resources import files
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, field_validator
@@ -80,8 +80,9 @@ class MLXOverrides(StrictModel):
     grad_accumulation_steps: int = 1
     grad_checkpoint: bool = False
     weight_decay: float | None = None
+    lr_scheduler_type: Literal["cosine"] | None = None
     lr_schedule: dict[str, Any] | None = (
-        None  # passthrough mlx_lm block; omitted if None
+        None  # raw passthrough mlx_lm block; takes priority over lr_scheduler_type
     )
 
 
@@ -170,6 +171,8 @@ class FinetuneConfig(StrictModel):
         - scale is alpha / rank
         - keys are the target modules prefixed with their parent block
           (self_attn for q/k/v/o_proj, mlp for gate/up/down_proj)
+        - lr_scheduler_type builds a cosine_decay schedule over the derived
+          iters, unless a raw lr_schedule passthrough is also given
 
         Args:
             num_samples (int): Number of training samples, used to derive iters.
@@ -212,4 +215,9 @@ class FinetuneConfig(StrictModel):
             out["optimizer_config"] = {"weight_decay": training.mlx.weight_decay}
         if training.mlx.lr_schedule is not None:
             out["lr_schedule"] = training.mlx.lr_schedule
+        elif training.mlx.lr_scheduler_type is not None:
+            out["lr_schedule"] = {
+                "name": "cosine_decay",
+                "arguments": [training.learning_rate, iters],
+            }
         return out
