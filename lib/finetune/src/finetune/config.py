@@ -77,6 +77,7 @@ class MLXOverrides(StrictModel):
     steps_per_report: int = 10
     steps_per_eval: int = 200
     val_batches: int = 25
+    grad_accumulation_steps: int = 1
     lr_schedule: dict[str, Any] | None = (
         None  # passthrough mlx_lm block; omitted if None
     )
@@ -196,6 +197,7 @@ class FinetuneConfig(StrictModel):
             "steps_per_report": training.mlx.steps_per_report,
             "steps_per_eval": training.mlx.steps_per_eval,
             "val_batches": training.mlx.val_batches,
+            "grad_accumulation_steps": training.mlx.grad_accumulation_steps,
             "lora_parameters": {
                 "keys": training.lora.to_mlx_keys(),
                 "rank": training.lora.rank,

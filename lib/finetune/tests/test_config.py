@@ -171,6 +171,22 @@ class TestToMlxConfig:
         assert out["optimizer"] == "adamw"
         assert out["seed"] == 7
 
+    def test_grad_accumulation_steps_defaults_to_one(
+        self, full_config: FinetuneConfig
+    ) -> None:
+        assert full_config.to_mlx_config(10)["grad_accumulation_steps"] == 1
+
+    def test_grad_accumulation_steps_override(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    grad_accumulation_steps: 4\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["grad_accumulation_steps"] == 4
+
     def test_lr_schedule_omitted_when_none(self, full_config: FinetuneConfig) -> None:
         assert "lr_schedule" not in full_config.to_mlx_config(10)
 
