@@ -34,4 +34,5 @@ training:
     grad_checkpoint: true         # trade compute for memory by recomputing activations
     weight_decay: 0.01            # AdamW weight decay; null uses the mlx default
     lr_scheduler_type: cosine     # decay the learning rate to 0 over training; null keeps it constant
+    warmup_ratio: 0.05            # fraction of iters spent warming up to learning_rate
     lr_schedule: null              # raw mlx_lm passthrough for a custom schedule; overrides lr_scheduler_type

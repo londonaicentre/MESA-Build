@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, ClassVar, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class StrictModel(BaseModel):
@@ -81,6 +81,7 @@ class MLXOverrides(StrictModel):
     grad_checkpoint: bool = False
     weight_decay: float | None = None
     lr_scheduler_type: Literal["cosine"] | None = None
+    warmup_ratio: float = Field(default=0.0, ge=0.0, le=1.0)
     lr_schedule: dict[str, Any] | None = (
         None  # raw passthrough mlx_lm block; takes priority over lr_scheduler_type
     )
@@ -173,6 +174,7 @@ class FinetuneConfig(StrictModel):
           (self_attn for q/k/v/o_proj, mlp for gate/up/down_proj)
         - lr_scheduler_type builds a cosine_decay schedule over the derived
           iters, unless a raw lr_schedule passthrough is also given
+        - warmup_ratio * iters gives the schedule's warmup step count
 
         Args:
             num_samples (int): Number of training samples, used to derive iters.
@@ -219,5 +221,6 @@ class FinetuneConfig(StrictModel):
             out["lr_schedule"] = {
                 "name": "cosine_decay",
                 "arguments": [training.learning_rate, iters],
+                "warmup": round(training.mlx.warmup_ratio * iters),
             }
         return out
