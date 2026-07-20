@@ -6,7 +6,7 @@
 #
 # Cross-library translation reference:
 #   lora.alpha + lora.rank  ->  mlx scale = alpha / rank   (e.g. 32 / 16 = 2.0)
-#   lora.target_modules     ->  mlx keys  = ["self_attn.<mod>", ...]
+#   lora.target_modules     ->  mlx keys  = ["self_attn.<mod>" / "mlp.<mod>", ...]
 #   epochs                  ->  mlx iters = ceil(num_samples / batch_size) * epochs
 #                               (only set mlx.iters for override of derived value)
 
