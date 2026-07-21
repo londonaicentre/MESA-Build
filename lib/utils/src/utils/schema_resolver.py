@@ -52,7 +52,7 @@ class SchemaResolver:
         """
         if use_latest:
             log_message = f"Installing latest schema package '{schema_name}'"
-            pip_args = ["--upgrade", schema_name]
+            pip_args = ["--upgrade-package", schema_name, schema_name]
         else:
             try:
                 installed_version = version(schema_name)
