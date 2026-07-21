@@ -21,6 +21,11 @@ mesa-build-mlx-finetune = "finetune_runner.__main__:mlx"
 requires = ["uv_build>=0.11.19,<0.12.0"]
 build-backend = "uv_build"
 
+[tool.uv]
+constraint-dependencies = [
+    "tokenizers<=0.23.0",
+]
+
 [tool.uv.sources]
 londonaicentre-mesa-finetune = { path = "../../lib/finetune", editable = true }
 londonaicentre-oncoschema = { path = "../../schemas/oncoschema", editable = true }
