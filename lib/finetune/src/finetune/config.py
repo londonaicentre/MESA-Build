@@ -174,7 +174,10 @@ class FinetuneConfig(StrictModel):
           (self_attn for q/k/v/o_proj, mlp for gate/up/down_proj)
         - lr_scheduler_type builds a cosine_decay schedule over the derived
           iters, unless a raw lr_schedule passthrough is also given
-        - warmup_ratio * iters gives the schedule's warmup step count
+        - the schedule's own step counts (decay_steps, warmup) are expressed
+          in optimizer updates, i.e. iters / grad_accumulation_steps, since
+          mlx_lm only advances the schedule once per accumulated update
+        - warmup_ratio * schedule_steps gives the schedule's warmup step count
 
         Args:
             num_samples (int): Number of training samples, used to derive iters.
@@ -218,9 +221,10 @@ class FinetuneConfig(StrictModel):
         if training.mlx.lr_schedule is not None:
             out["lr_schedule"] = training.mlx.lr_schedule
         elif training.mlx.lr_scheduler_type is not None:
+            schedule_steps = iters // training.mlx.grad_accumulation_steps
             out["lr_schedule"] = {
                 "name": "cosine_decay",
-                "arguments": [training.learning_rate, iters],
-                "warmup": round(training.mlx.warmup_ratio * iters),
+                "arguments": [training.learning_rate, schedule_steps],
+                "warmup": round(training.mlx.warmup_ratio * schedule_steps),
             }
         return out

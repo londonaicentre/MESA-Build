@@ -263,6 +263,27 @@ class TestToMlxConfig:
         out = FinetuneConfig.load(path).to_mlx_config(10)
         assert out["lr_schedule"]["warmup"] == round(0.1 * out["iters"])
 
+    def test_lr_scheduler_type_divides_steps_by_accumulation(
+        self, tmp_path: Path
+    ) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace("iters: null", "iters: 100").replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n"
+                "    grad_accumulation_steps: 4\n"
+                "    lr_scheduler_type: cosine\n"
+                "    warmup_ratio: 0.2\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["iters"] == 100
+        assert out["lr_schedule"] == {
+            "name": "cosine_decay",
+            "arguments": [0.0002, 25],
+            "warmup": 5,
+        }
+
     def test_warmup_ratio_out_of_range_raises(self, tmp_path: Path) -> None:
         path = tmp_path / "config.yaml"
         path.write_text(
