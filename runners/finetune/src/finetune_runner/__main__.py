@@ -3,8 +3,6 @@ import os
 import signal
 from abc import abstractmethod
 from collections.abc import Callable
-from enum import Enum
-from importlib import import_module
 from pathlib import Path
 from types import FrameType
 from typing import Self
@@ -16,16 +14,12 @@ from pydantic_settings import BaseSettings, CliApp, CliSuppress, SettingsConfigD
 from finetune.mlx_trainer import MLXLoRATrainer
 from finetune.trainer import LoRATrainer
 from utils.prompt import BasePromptBuilder
+from utils.schema_resolver import SchemaResolver
 
 
 def _cancel_to_interrupt(_signum: int, _frame: FrameType | None) -> None:
     # workflow cancellation -> ctrl + c
     raise KeyboardInterrupt
-
-
-class Schema(str, Enum):
-    onco = "onco"
-    geno = "geno"
 
 
 class FinetuneRunner(BaseSettings):
@@ -44,10 +38,10 @@ class FinetuneRunner(BaseSettings):
         validation_alias=AliasChoices("model_name", "m"),
         description="Key identifier for the model family, that also becomes the top-level folder in S3 (models/<model_name>/...)",
     )
-    schema_name: Schema = Field(
-        Schema.onco,
+    schema_name: str = Field(
+        "oncoschema",
         validation_alias=AliasChoices("schema", "s"),
-        description="Extraction schema to finetune for",
+        description="Extraction schema package to finetune for, e.g. 'oncoschema', 'genoschema'",
     )
     description: str = Field(
         "",
@@ -118,14 +112,12 @@ class FinetuneRunner(BaseSettings):
         return self
 
     def _load_schema(self) -> tuple[type[BaseModel], BasePromptBuilder]:
-        package, model_name = {
-            Schema.onco: ("oncoschema", "OncologyModel"),
-            Schema.geno: ("genoschema", "GenomicTestReport"),
-        }[self.schema_name]
-        return (
-            getattr(import_module(f"{package}.schema"), model_name),
-            import_module(f"{package}.prompt_builder").PromptBuilder(),
+        schema_module, prompt_builder_module = SchemaResolver.import_schema_modules(
+            SchemaResolver.install_schema_package(
+                f"londonaicentre-{self.schema_name}", "", True
+            )
         )
+        return schema_module.Schema, prompt_builder_module.PromptBuilder()
 
     def _build_validated_model_card(self, trainer: LoRATrainer) -> ModelCard:
         model_card: ModelCard = trainer.build_model_card(
