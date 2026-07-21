@@ -150,7 +150,14 @@ class TestInstallSchemaPackage:
 
         assert result == "londonaicentre-oncoschema"
         install_schema_package_mocks.subprocess_run.assert_called_once_with(
-            ["uv", "pip", "install", "--upgrade", "londonaicentre-oncoschema"],
+            [
+                "uv",
+                "pip",
+                "install",
+                "--upgrade-package",
+                "londonaicentre-oncoschema",
+                "londonaicentre-oncoschema",
+            ],
             check=True,
         )
         install_schema_package_mocks.version.assert_not_called()
