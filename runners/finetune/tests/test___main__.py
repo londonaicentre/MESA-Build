@@ -26,6 +26,37 @@ def runner() -> FinetuneMLXRunner:
     return _runner()
 
 
+class TestLoadSchema:
+    def test_installs_latest_and_returns_schema_and_prompt_builder(
+        self, mocker: MockerFixture
+    ) -> None:
+        schema_module: MagicMock = MagicMock()
+        prompt_builder_module: MagicMock = MagicMock()
+        install_schema_package: MagicMock = mocker.patch(
+            "finetune_runner.__main__.SchemaResolver.install_schema_package",
+            return_value="londonaicentre-genoschema",
+        )
+        import_schema_modules: MagicMock = mocker.patch(
+            "finetune_runner.__main__.SchemaResolver.import_schema_modules",
+            return_value=(schema_module, prompt_builder_module),
+        )
+        schema, prompt_builder = _runner(schema="genoschema")._load_schema()
+        install_schema_package.assert_called_once_with(
+            "londonaicentre-genoschema", "", True
+        )
+        import_schema_modules.assert_called_once_with("londonaicentre-genoschema")
+        assert schema is schema_module.Schema
+        assert prompt_builder is prompt_builder_module.PromptBuilder.return_value
+
+    def test_install_failure_propagates(self, mocker: MockerFixture) -> None:
+        mocker.patch(
+            "finetune_runner.__main__.SchemaResolver.install_schema_package",
+            side_effect=RuntimeError("boom"),
+        )
+        with pytest.raises(RuntimeError):
+            _runner(schema="genoschema")._load_schema()
+
+
 class TestBuildValidatedModelCard:
     def test_valid_version_returns_model_card(self, runner: FinetuneMLXRunner) -> None:
         mock_trainer: MagicMock = MagicMock()
