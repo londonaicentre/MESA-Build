@@ -27,24 +27,29 @@ def runner() -> FinetuneMLXRunner:
 
 
 class TestLoadSchema:
+    @pytest.mark.parametrize(
+        "schema_name, expected_package",
+        [
+            ("genoschema", "londonaicentre-genoschema"),
+            ("geno", "londonaicentre-genoschema"),
+        ],
+    )
     def test_installs_latest_and_returns_schema_and_prompt_builder(
-        self, mocker: MockerFixture
+        self, schema_name: str, expected_package: str, mocker: MockerFixture
     ) -> None:
         schema_module: MagicMock = MagicMock()
         prompt_builder_module: MagicMock = MagicMock()
         install_schema_package: MagicMock = mocker.patch(
             "finetune_runner.__main__.SchemaResolver.install_schema_package",
-            return_value="londonaicentre-genoschema",
+            return_value=expected_package,
         )
         import_schema_modules: MagicMock = mocker.patch(
             "finetune_runner.__main__.SchemaResolver.import_schema_modules",
             return_value=(schema_module, prompt_builder_module),
         )
-        schema, prompt_builder = _runner(schema="genoschema")._load_schema()
-        install_schema_package.assert_called_once_with(
-            "londonaicentre-genoschema", "", True
-        )
-        import_schema_modules.assert_called_once_with("londonaicentre-genoschema")
+        schema, prompt_builder = _runner(schema=schema_name)._load_schema()
+        install_schema_package.assert_called_once_with(expected_package, "", True)
+        import_schema_modules.assert_called_once_with(expected_package)
         assert schema is schema_module.Schema
         assert prompt_builder is prompt_builder_module.PromptBuilder.return_value
 

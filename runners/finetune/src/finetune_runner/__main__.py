@@ -41,7 +41,8 @@ class FinetuneRunner(BaseSettings):
     schema_name: str = Field(
         "oncoschema",
         validation_alias=AliasChoices("schema", "s"),
-        description="Extraction schema package to finetune for, e.g. 'oncoschema', 'genoschema'",
+        description="Extraction schema package to finetune for, e.g. 'oncoschema', 'genoschema' "
+        "(the legacy short form, e.g. 'onco', 'geno', is also accepted)",
     )
     description: str = Field(
         "",
@@ -112,9 +113,14 @@ class FinetuneRunner(BaseSettings):
         return self
 
     def _load_schema(self) -> tuple[type[BaseModel], BasePromptBuilder]:
+        schema_name: str = (
+            self.schema_name
+            if self.schema_name.endswith("schema")
+            else self.schema_name + "schema"
+        )
         schema_module, prompt_builder_module = SchemaResolver.import_schema_modules(
             SchemaResolver.install_schema_package(
-                f"londonaicentre-{self.schema_name}", "", True
+                f"londonaicentre-{schema_name}", "", True
             )
         )
         return schema_module.Schema, prompt_builder_module.PromptBuilder()
