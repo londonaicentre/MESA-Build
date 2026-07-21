@@ -977,14 +977,18 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.3.0"
+version = "2.4.1"
 source = { editable = "../types" }
 dependencies = [
     { name = "pydantic" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pydantic", specifier = ">=2.12.5" }]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.12.5" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -995,7 +999,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.1.1"
+version = "1.2.0"
 source = { editable = "../utils" }
 dependencies = [
     { name = "boto3" },
@@ -1123,7 +1127,7 @@ name = "mlx"
 version = "0.31.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "mlx-metal", marker = "sys_platform == 'darwin'" },
+    { name = "mlx-metal" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c3/47/5f33906cb03d6a378a697cd2d2641a26b37dea17ee3d9124d7e39e8eca01/mlx-0.31.2-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:e5067aaf2be1f3d7bba5be52348775804f111173c1ed04639618fd713b1a530f", size = 584863, upload-time = "2026-04-22T03:14:38.211Z" },
@@ -1143,7 +1147,7 @@ version = "0.31.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
-    { name = "mlx", marker = "sys_platform == 'darwin'" },
+    { name = "mlx" },
     { name = "numpy" },
     { name = "protobuf" },
     { name = "pyyaml" },
