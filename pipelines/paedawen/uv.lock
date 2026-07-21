@@ -1187,11 +1187,12 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.2.0"
+version = "1.3.0"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
     { name = "bs4" },
+    { name = "httpx" },
     { name = "litellm" },
     { name = "londonaicentre-mesa-types" },
     { name = "markdown" },
@@ -1202,6 +1203,7 @@ dependencies = [
 requires-dist = [
     { name = "boto3", specifier = ">=1.41.1" },
     { name = "bs4", specifier = ">=0.0.2" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "litellm", specifier = ">=1.80.0" },
     { name = "londonaicentre-mesa-types", editable = "../../lib/types" },
     { name = "markdown", specifier = ">=3.10" },
@@ -1213,6 +1215,7 @@ dev = [
     { name = "boto3-stubs", specifier = ">=1.41.4" },
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "pytest", specifier = ">=9.0.2" },
+    { name = "pytest-mock", specifier = ">=3.15.1" },
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-markdown", specifier = ">=3.10.0.20251106" },
 ]
@@ -1322,6 +1325,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729, upload-time = "2022-08-14T12:40:10.846Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979, upload-time = "2022-08-14T12:40:09.779Z" },
+]
+
+[[package]]
+name = "mesa-runtime"
+version = "0.1.0"
+source = { git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib#d9b2c9b1bd75ed493c7cb59a34e37efdec92b3a5" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
 ]
 
 [[package]]
@@ -1452,6 +1464,7 @@ dependencies = [
     { name = "londonaicentre-docsynth" },
     { name = "londonaicentre-mesa-datagen" },
     { name = "londonaicentre-paedacuteschema" },
+    { name = "mesa-runtime" },
 ]
 
 [package.metadata]
@@ -1461,6 +1474,7 @@ requires-dist = [
     { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth?branch=spike%2Fmesa-build-refactor" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
     { name = "londonaicentre-paedacuteschema", specifier = ">=1.2.0" },
+    { name = "mesa-runtime", git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib" },
 ]
 
 [[package]]
