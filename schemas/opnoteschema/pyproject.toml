@@ -7,6 +7,7 @@ authors = [
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" }
 ]
 requires-python = ">=3.13"
+license = "LicenseRef-Proprietary"
 dependencies = [
     "londonaicentre-mesa-utils",
     "pydantic>=2.13.4",
