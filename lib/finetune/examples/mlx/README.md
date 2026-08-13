@@ -38,3 +38,8 @@ uv run python run_example.py
 ```
 
 This prepares the data, trains a LoRA adapter locally, fuses it into the base model, and uploads the unpacked merged model to the build bucket under `models/qwen-onco-mlx-example/qwen-onco-mlx-example_1_0_0/`. The fused model is left locally at `data/models/qwen-onco-mlx-example/target/*.safetensors`.
+
+## License
+
+finetune-mlx-example © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
+To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>

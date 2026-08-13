@@ -42,3 +42,8 @@ This downloads the adapter, merges it with the base model, and uploads the unpac
 ## Notes
 
 - Running `run_example.py` is billable - it starts a `ml.g5.xlarge` training job.
+
+## License
+
+finetune-aws-example © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
+To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>

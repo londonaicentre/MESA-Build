@@ -113,7 +113,3 @@ Most folders are self-contained python packages, allowing for the selective rele
 - Create a tag for the merge commit referencing the version increment
 
 - Build and push the package to pypi (`python -m build` and `uv run twine upload -r pypi dist/*`), or rely on CI/CD for this
-
-## License
-
-This project uses a proprietary license issued by Guy's and St Thomas' NHS Foundation Trust, enabling free (non-commercial) use by NHS organisations. See LICENSE files for details.

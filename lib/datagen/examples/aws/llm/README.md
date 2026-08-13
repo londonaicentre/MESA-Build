@@ -31,3 +31,8 @@ uv run python upload.py
 
 - Running `generate.py` is billable — it makes one real-time Bedrock inference call per document.
 - `generate()` is resumable: documents whose deterministic output file already exists are skipped, so re-running only fills in missing samples.
+
+## License
+
+docgen-aws-example © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
+To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>
