@@ -36,3 +36,8 @@ uv run python upload.py
 
 - Batch inference is substantially cheaper than real-time inference for large volumes, but jobs can take several hours to complete.
 - The job ID is persisted in `.job_id.json` so `extract.py` knows where to find the output in S3.
+
+## License
+
+docgen-aws-batch-example © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
+To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>
