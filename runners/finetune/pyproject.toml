@@ -2,6 +2,7 @@
 name = "finetune-runner"
 version = "0.1.0"
 requires-python = ">=3.13"
+license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "londonaicentre-mesa-finetune>=1.0.0",
     "londonaicentre-oncoschema>=2.0.2",
