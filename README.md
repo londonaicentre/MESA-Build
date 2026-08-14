@@ -4,6 +4,15 @@ End-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtract
 
 <img src="_assets/repo.png" alt="repo" width="500"/>
 
+Other parts of the MESA family include:
+- [**MESA**](https://github.com/londonaicentre/MESA) - tutorials and example notebooks showing end-to-end model development and inference
+- **MESA-DocSynth** - configuration driven synthetic document generation
+- **MESA-Deploy** - deployment of inference endpoint to local or cloud infrastructure
+- **MESA-Runner** - stateless runtime for deploying models to live infrastructure
+- **MESA-Ansible** - ansible projects for provisioning entire MESA infrastructure
+- **MESA-Validate** - simple Python application for HITL validation of MESA model outputs vs source documents
+
+
 ## Overview
 
 MESA-Build is an internal team monorepo for generating training data and fine-tuning LLMs, supporting:
@@ -12,6 +21,8 @@ MESA-Build is an internal team monorepo for generating training data and fine-tu
 - Training data generation and registration
 - Model fine-tuning and registration
 - Bedrock integration by default
+
+MESA has an open license for the NHS through Guy's and St. Thomas' Hospitals, permitting use of software framework and developed models without restriction.
 
 ## Repository Structure
 
