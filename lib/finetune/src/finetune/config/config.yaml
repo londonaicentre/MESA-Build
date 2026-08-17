@@ -5,8 +5,8 @@
 # they stay per-trainer constructor inputs because they differ between HF and MLX.
 #
 # Cross-library translation reference:
-#   lora.alpha + lora.rank  ->  mlx scale = alpha / rank   (e.g. 32 / 16 = 2.0)
-#   lora.target_modules     ->  mlx keys  = ["self_attn.<mod>", ...]
+#   lora.alpha + lora.rank  ->  mlx scale = alpha / rank   (e.g. 64 / 32 = 2.0)
+#   lora.target_modules     ->  mlx keys  = ["self_attn.<mod>" / "mlp.<mod>", ...]
 #   epochs                  ->  mlx iters = ceil(num_samples / batch_size) * epochs
 #                               (only set mlx.iters for override of derived value)
 
@@ -15,19 +15,24 @@ training:
   epochs: 3                         # how many full passes over the training data
   learning_rate: 2e-4               # how big a step the model takes each update (too high = unstable, too low = slow)
   batch_size: 1                     # samples processed at once; keep at 1 for long (16k-32k) samples to avoid running out of memory
-  max_seq_length: 16384             # longest sample (in tokens) the model will read - anything longer is cut off
+  max_seq_length: 12288             # longest sample (in tokens) the model will read - anything longer is cut off
   lora:
-    rank: 16                        # size of the small trainable add-on; higher = more capacity to learn but more memory
-    alpha: 32                       # how strongly the add-on influences the model (mlx scale = alpha / rank = 2.0)
+    rank: 32                        # size of the small trainable add-on; higher = more capacity to learn but more memory
+    alpha: 64                       # how strongly the add-on influences the model (mlx scale = alpha / rank = 2.0)
     dropout: 0.05                   # randomly ignores 5% of connections while training to reduce overfitting
-    target_modules: [q_proj, k_proj, v_proj, o_proj]   # which parts of each layer get the trainable add-on
+    target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]   # which parts of each layer get the trainable add-on
 
   mlx:                              # optional; consumed ONLY by the MLX translation
     iters: null                    # total training steps; left null to auto-derive from epochs, set a number to override
     num_layers: 16                 # how many of the model's top layers to fine-tune - 16 is good balance, -1 means all layers
-    seed: 0                        # fixed random seed so runs are reproducible
-    save_every: 100                # save a checkpoint every N steps
+    seed: 42                       # fixed random seed so runs are reproducible
+    save_every: 1000                # save a checkpoint every N steps
     steps_per_report: 10           # print training progress every N steps
     steps_per_eval: 200            # check performance on held-out data every N steps
     val_batches: 0                # 0 = no validation (TrainingDataHandler writes train.jsonl only)
-    lr_schedule: null              # optional advanced learning-rate schedule; leave null for a constant rate
+    grad_accumulation_steps: 4    # micro-steps accumulated before each optimizer update
+    grad_checkpoint: true         # trade compute for memory by recomputing activations
+    weight_decay: 0.01            # AdamW weight decay; null uses the mlx default
+    lr_scheduler_type: cosine     # decay the learning rate to 0 over training; null keeps it constant
+    warmup_ratio: 0.05            # fraction of iters spent warming up to learning_rate
+    lr_schedule: null              # raw mlx_lm passthrough for a custom schedule; overrides lr_scheduler_type

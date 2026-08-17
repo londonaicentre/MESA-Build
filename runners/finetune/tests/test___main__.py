@@ -26,6 +26,42 @@ def runner() -> FinetuneMLXRunner:
     return _runner()
 
 
+class TestLoadSchema:
+    @pytest.mark.parametrize(
+        "schema_name, expected_package",
+        [
+            ("genoschema", "londonaicentre-genoschema"),
+            ("geno", "londonaicentre-genoschema"),
+        ],
+    )
+    def test_installs_latest_and_returns_schema_and_prompt_builder(
+        self, schema_name: str, expected_package: str, mocker: MockerFixture
+    ) -> None:
+        schema_module: MagicMock = MagicMock()
+        prompt_builder_module: MagicMock = MagicMock()
+        install_schema_package: MagicMock = mocker.patch(
+            "finetune_runner.__main__.SchemaResolver.install_schema_package",
+            return_value=expected_package,
+        )
+        import_schema_modules: MagicMock = mocker.patch(
+            "finetune_runner.__main__.SchemaResolver.import_schema_modules",
+            return_value=(schema_module, prompt_builder_module),
+        )
+        schema, prompt_builder = _runner(schema=schema_name)._load_schema()
+        install_schema_package.assert_called_once_with(expected_package, "", True)
+        import_schema_modules.assert_called_once_with(expected_package)
+        assert schema is schema_module.Schema
+        assert prompt_builder is prompt_builder_module.PromptBuilder.return_value
+
+    def test_install_failure_propagates(self, mocker: MockerFixture) -> None:
+        mocker.patch(
+            "finetune_runner.__main__.SchemaResolver.install_schema_package",
+            side_effect=RuntimeError("boom"),
+        )
+        with pytest.raises(RuntimeError):
+            _runner(schema="genoschema")._load_schema()
+
+
 class TestBuildValidatedModelCard:
     def test_valid_version_returns_model_card(self, runner: FinetuneMLXRunner) -> None:
         mock_trainer: MagicMock = MagicMock()
@@ -136,12 +172,13 @@ class TestResume:
 
 
 class TestPostProcess:
-    def test_builds_card_and_post_processes(self, runner: FinetuneMLXRunner) -> None:
+    @pytest.mark.parametrize("push_public", [False, True])
+    def test_builds_card_and_post_processes(self, push_public: bool) -> None:
         trainer: MagicMock = MagicMock()
-        runner._post_process(trainer)
+        _runner(push_public=push_public)._post_process(trainer)
         trainer.build_model_card.assert_called_once_with(1, 2, 3)
         trainer.post_process.assert_called_once_with(
-            trainer.build_model_card.return_value, push_public=False
+            trainer.build_model_card.return_value, push_public=push_public
         )
 
 

@@ -137,6 +137,32 @@ class TestToMlxConfig:
         assert out["lora_parameters"]["scale"] == 16 / 8
         assert out["lora_parameters"]["rank"] == 8
 
+    def test_lora_keys_prefixed_mlp_modules(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "target_modules: [q_proj, k_proj]",
+                "target_modules: [q_proj, gate_proj, up_proj, down_proj]",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lora_parameters"]["keys"] == [
+            "self_attn.q_proj",
+            "mlp.gate_proj",
+            "mlp.up_proj",
+            "mlp.down_proj",
+        ]
+
+    def test_lora_target_modules_unknown_module_raises(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "target_modules: [q_proj, k_proj]", "target_modules: [bar_proj]"
+            )
+        )
+        with pytest.raises(ValidationError, match="unknown LoRA target modules"):
+            FinetuneConfig.load(path)
+
     def test_constants_and_passthrough(self, full_config: FinetuneConfig) -> None:
         out = full_config.to_mlx_config(10)
         assert out["model"] == "baz"
@@ -144,6 +170,56 @@ class TestToMlxConfig:
         assert out["fine_tune_type"] == "lora"
         assert out["optimizer"] == "adamw"
         assert out["seed"] == 7
+
+    def test_grad_accumulation_steps_defaults_to_one(
+        self, full_config: FinetuneConfig
+    ) -> None:
+        assert full_config.to_mlx_config(10)["grad_accumulation_steps"] == 1
+
+    def test_grad_accumulation_steps_override(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    grad_accumulation_steps: 4\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["grad_accumulation_steps"] == 4
+
+    def test_grad_checkpoint_defaults_to_false(
+        self, full_config: FinetuneConfig
+    ) -> None:
+        assert full_config.to_mlx_config(10)["grad_checkpoint"] is False
+
+    def test_grad_checkpoint_override(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    grad_checkpoint: true\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["grad_checkpoint"] is True
+
+    def test_optimizer_config_omitted_when_weight_decay_none(
+        self, full_config: FinetuneConfig
+    ) -> None:
+        assert "optimizer_config" not in full_config.to_mlx_config(10)
+
+    def test_optimizer_config_included_when_weight_decay_set(
+        self, tmp_path: Path
+    ) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    weight_decay: 0.01\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["optimizer_config"] == {"weight_decay": 0.01}
 
     def test_lr_schedule_omitted_when_none(self, full_config: FinetuneConfig) -> None:
         assert "lr_schedule" not in full_config.to_mlx_config(10)
@@ -158,3 +234,78 @@ class TestToMlxConfig:
         )
         out = FinetuneConfig.load(path).to_mlx_config(10)
         assert out["lr_schedule"] == {"name": "cosine_decay"}
+
+    def test_lr_scheduler_type_builds_cosine_decay(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    lr_scheduler_type: cosine\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lr_schedule"] == {
+            "name": "cosine_decay",
+            "arguments": [0.0002, out["iters"]],
+            "warmup": 0,
+        }
+
+    def test_lr_scheduler_type_applies_warmup_ratio(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n"
+                "    lr_scheduler_type: cosine\n"
+                "    warmup_ratio: 0.1\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lr_schedule"]["warmup"] == round(0.1 * out["iters"])
+
+    def test_lr_scheduler_type_divides_steps_by_accumulation(
+        self, tmp_path: Path
+    ) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace("iters: null", "iters: 100").replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n"
+                "    grad_accumulation_steps: 4\n"
+                "    lr_scheduler_type: cosine\n"
+                "    warmup_ratio: 0.2\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["iters"] == 100
+        assert out["lr_schedule"] == {
+            "name": "cosine_decay",
+            "arguments": [0.0002, 25],
+            "warmup": 5,
+        }
+
+    def test_warmup_ratio_out_of_range_raises(self, tmp_path: Path) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n    warmup_ratio: 1.5\n",
+            )
+        )
+        with pytest.raises(ValidationError):
+            FinetuneConfig.load(path)
+
+    def test_lr_schedule_passthrough_wins_over_scheduler_type(
+        self, tmp_path: Path
+    ) -> None:
+        path = tmp_path / "config.yaml"
+        path.write_text(
+            FULL_CONFIG_YAML.replace(
+                "    val_batches: 25\n",
+                "    val_batches: 25\n"
+                "    lr_scheduler_type: cosine\n"
+                "    lr_schedule:\n      name: exponential_decay\n",
+            )
+        )
+        out = FinetuneConfig.load(path).to_mlx_config(10)
+        assert out["lr_schedule"] == {"name": "exponential_decay"}

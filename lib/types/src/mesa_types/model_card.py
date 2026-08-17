@@ -1,10 +1,10 @@
 import importlib.metadata
 from datetime import date
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, computed_field
+from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
 
 
 class ModelCard(BaseModel):
@@ -26,21 +26,39 @@ class ModelCard(BaseModel):
     model_description: str
     model_train_date: date = Field(default_factory=date.today)
     training_data: List[str]
-    output_schema: type[BaseModel]
+    output_schema: type[BaseModel] | None = None
+    schema_name: str | None = None
+    schema_version: str | None = None
 
-    @computed_field  # type: ignore
-    @property
-    def schema_name(self) -> str:
-        module_name: str = self.output_schema.__module__.split(".")[0]
-        return next(
-            iter(importlib.metadata.packages_distributions().get(module_name, [])),
-            module_name,
-        )
+    @model_validator(mode="after")
+    def _derive_schema_info(self) -> "ModelCard":
+        if self.output_schema is None and self.schema_name is None:
+            raise ValueError("either output_schema or schema_name must be provided")
+        if self.output_schema is not None and self.schema_name is None:
+            module_name: str = self.output_schema.__module__.split(".")[0]
+            self.schema_name = next(
+                iter(importlib.metadata.packages_distributions().get(module_name, [])),
+                module_name,
+            )
 
-    @computed_field  # type: ignore
-    @property
-    def schema_version(self) -> str:
-        return importlib.metadata.version(self.schema_name)
+        if self.schema_name is not None and self.schema_version is None:
+            self.schema_version = importlib.metadata.version(self.schema_name)
+        if self.schema_name is None and self.schema_version is not None:
+            raise ValueError("schema_version requires schema_name to also be set")
+        return self
+
+    @model_validator(mode="before")
+    @classmethod
+    def _split_model_version(cls, data: Any) -> Any:
+        if (
+            isinstance(data, dict)
+            and "model_version" in data
+            and not {"major", "minor", "patch"} & data.keys()
+        ):
+            data["major"], data["minor"], data["patch"] = (
+                int(part) for part in str(data["model_version"]).split(".")
+            )
+        return data
 
     @computed_field  # type: ignore
     @property

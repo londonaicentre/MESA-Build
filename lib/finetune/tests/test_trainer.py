@@ -44,9 +44,25 @@ class TestMakeJobId:
         assert make_base_trainer().make_job_id(description) == expected
 
 
+@dataclass
+class SchemaMetadataMocks:
+    packages_distributions: MagicMock
+    version: MagicMock
+
+
+@pytest.fixture
+def schema_metadata_mocks(mocker: MockerFixture) -> SchemaMetadataMocks:
+    return SchemaMetadataMocks(
+        mocker.patch("importlib.metadata.packages_distributions", return_value={}),
+        mocker.patch("importlib.metadata.version", return_value="1.0.0"),
+    )
+
+
 class TestBuildModelCard:
     def test_build_model_card_reads_state(
-        self, make_base_trainer: BaseTrainerFactory
+        self,
+        make_base_trainer: BaseTrainerFactory,
+        schema_metadata_mocks: SchemaMetadataMocks,
     ) -> None:
         card = make_base_trainer(
             model_name="foo", training_batch_names=["batch-a", "batch-b"]
@@ -61,7 +77,9 @@ class TestBuildModelCard:
         assert card.output_schema is SchemaFixture
 
     def test_build_model_card_description_override(
-        self, make_base_trainer: BaseTrainerFactory
+        self,
+        make_base_trainer: BaseTrainerFactory,
+        schema_metadata_mocks: SchemaMetadataMocks,
     ) -> None:
         assert (
             make_base_trainer(description="foo")

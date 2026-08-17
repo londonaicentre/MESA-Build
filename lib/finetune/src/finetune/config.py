@@ -14,10 +14,10 @@ E.g. instance type, AWS config, work_dir, quantization etc
 import math
 from importlib.resources import files
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class StrictModel(BaseModel):
@@ -29,10 +29,40 @@ class StrictModel(BaseModel):
 class LoRAConfig(StrictModel):
     """LoRA hyperparameters meaningful to both trainers."""
 
+    MODULE_PARENTS: ClassVar[dict[str, str]] = {
+        "q_proj": "self_attn",
+        "k_proj": "self_attn",
+        "v_proj": "self_attn",
+        "o_proj": "self_attn",
+        "gate_proj": "mlp",
+        "up_proj": "mlp",
+        "down_proj": "mlp",
+    }
+
     rank: int
     alpha: int
     dropout: float
     target_modules: list[str]
+
+    @field_validator("target_modules")
+    @classmethod
+    def _validate_target_modules(cls, target_modules: list[str]) -> list[str]:
+        unknown = set(target_modules) - LoRAConfig.MODULE_PARENTS.keys()
+        if unknown:
+            raise ValueError(f"unknown LoRA target modules: {sorted(unknown)}")
+        return target_modules
+
+    def to_mlx_keys(self) -> list[str]:
+        """Prefix each target module with its parent block for mlx_lm.
+
+        Returns:
+            list[str]: Fully qualified module paths, e.g. ``self_attn.q_proj``.
+
+        """
+        return [
+            f"{LoRAConfig.MODULE_PARENTS[module]}.{module}"
+            for module in self.target_modules
+        ]
 
 
 class MLXOverrides(StrictModel):
@@ -47,8 +77,13 @@ class MLXOverrides(StrictModel):
     steps_per_report: int = 10
     steps_per_eval: int = 200
     val_batches: int = 25
+    grad_accumulation_steps: int = 1
+    grad_checkpoint: bool = False
+    weight_decay: float | None = None
+    lr_scheduler_type: Literal["cosine"] | None = None
+    warmup_ratio: float = Field(default=0.0, ge=0.0, le=1.0)
     lr_schedule: dict[str, Any] | None = (
-        None  # passthrough mlx_lm block; omitted if None
+        None  # raw passthrough mlx_lm block; takes priority over lr_scheduler_type
     )
 
 
@@ -135,7 +170,14 @@ class FinetuneConfig(StrictModel):
         Specific args:
         - iters are derived from samples / batch size if not specified
         - scale is alpha / rank
-        - keys are the target modules prefixed with self_attn
+        - keys are the target modules prefixed with their parent block
+          (self_attn for q/k/v/o_proj, mlp for gate/up/down_proj)
+        - lr_scheduler_type builds a cosine_decay schedule over the derived
+          iters, unless a raw lr_schedule passthrough is also given
+        - the schedule's own step counts (decay_steps, warmup) are expressed
+          in optimizer updates, i.e. iters / grad_accumulation_steps, since
+          mlx_lm only advances the schedule once per accumulated update
+        - warmup_ratio * schedule_steps gives the schedule's warmup step count
 
         Args:
             num_samples (int): Number of training samples, used to derive iters.
@@ -165,15 +207,24 @@ class FinetuneConfig(StrictModel):
             "steps_per_report": training.mlx.steps_per_report,
             "steps_per_eval": training.mlx.steps_per_eval,
             "val_batches": training.mlx.val_batches,
+            "grad_accumulation_steps": training.mlx.grad_accumulation_steps,
+            "grad_checkpoint": training.mlx.grad_checkpoint,
             "lora_parameters": {
-                "keys": [
-                    f"self_attn.{module}" for module in training.lora.target_modules
-                ],
+                "keys": training.lora.to_mlx_keys(),
                 "rank": training.lora.rank,
                 "scale": training.lora.alpha / training.lora.rank,
                 "dropout": training.lora.dropout,
             },
         }
+        if training.mlx.weight_decay is not None:
+            out["optimizer_config"] = {"weight_decay": training.mlx.weight_decay}
         if training.mlx.lr_schedule is not None:
             out["lr_schedule"] = training.mlx.lr_schedule
+        elif training.mlx.lr_scheduler_type is not None:
+            schedule_steps = iters // training.mlx.grad_accumulation_steps
+            out["lr_schedule"] = {
+                "name": "cosine_decay",
+                "arguments": [training.learning_rate, schedule_steps],
+                "warmup": round(training.mlx.warmup_ratio * schedule_steps),
+            }
         return out

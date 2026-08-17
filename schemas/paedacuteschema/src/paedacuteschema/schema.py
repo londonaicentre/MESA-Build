@@ -16,10 +16,11 @@ class AcuteSignType(str, Enum):
     NASAL_FLARING = "nasal_flaring"
     GRUNTING = "grunting"
     HEAD_BOBBING = "head_bobbing"
-    PARADOXICAL_BREATHING = "paradoxical_breathing"
     APNOEA = "apnoea"
     AUDIBLE_WHEEZE = "audible_wheeze"
     STRIDOR = "stridor"
+    WORK_OF_BREATHING = "work_of_breathing"
+    SHORTNESS_OF_BREATH = "shortness_of_breath"
 
     # PERFUSION & SKIN
     PALLOR = "pallor"
@@ -36,15 +37,9 @@ class AcuteSignType(str, Enum):
 
     # NEUROLOGICAL & MOTOR
     SEIZURE = "seizure"
-    DECORTICATE_POSTURING = "decorticate_posturing"
-    DECEREBRATE_POSTURING = "decerebrate_posturing"
-    OPISTHOTONOS = "opisthotonos"
     BULGING_FONTANELLE = "bulging_fontanelle"
     NECK_STIFFNESS = "neck_stiffness"
-    KERNIGS_SIGN = "kernigs_sign"
-    BRUDZINSKIS_SIGN = "brudzinskis_sign"
     PHOTOPHOBIA = "photophobia"
-    PHONOPHOBIA = "phonophobia"
     DROWSINESS = "drowsiness"
     REDUCED_CONSCIOUSNESS = "reduced_consciousness"
     CONFUSION = "confusion"
@@ -61,6 +56,7 @@ class AcuteSignType(str, Enum):
     ABSENT_SOCIAL_INTERACTION = "absent_social_interaction"
     ABSENT_SOCIAL_SMILE = "absent_social_smile"
     REDUCED_PLAY = "reduced_play"
+    IRRITABILITY = "irritability"
 
     # FEEDING, HYDRATION & OUTPUT
     POOR_FEEDING = "poor_feeding"
@@ -76,6 +72,24 @@ class AcuteSignType(str, Enum):
     # CARER & CLINICIAN CONCERN
     PARENT_REPORTS_NOT_THEMSELVES = "parent_reports_not_themselves"
     CLINICIAN_DOCUMENTS_UNWELL = "clinician_documents_unwell"
+
+    # INFECTION RISK
+    HISTORY_OF_FEVER = "history_of_fever"
+    RIGORS = "rigors"
+    NIGHT_SWEATS = "night_sweats"
+    RUNNY_NOSE = "runny_nose"
+    COUGH = "cough"
+    SORE_THROAT = "sore_throat"
+    EARACHE = "earache"
+    RASH = "rash"
+    WOUND_INFECTION = "wound_infection"
+    ABDOMINAL_PAIN = "abdominal_pain"
+    ABDOMINAL_DISTENSION = "abdominal_distension"
+    DYSURIA = "dysuria"
+    VOMITING = "vomiting"
+    ALTERED_BOWEL_HABIT = "altered_bowel_habit"
+    LYMPH_NODE_SWELLING = "lymph_node_swelling"
+    
 
 
 class Assertion(str, Enum):

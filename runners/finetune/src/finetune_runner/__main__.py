@@ -3,8 +3,6 @@ import os
 import signal
 from abc import abstractmethod
 from collections.abc import Callable
-from enum import Enum
-from importlib import import_module
 from pathlib import Path
 from types import FrameType
 from typing import Self
@@ -16,16 +14,12 @@ from pydantic_settings import BaseSettings, CliApp, CliSuppress, SettingsConfigD
 from finetune.mlx_trainer import MLXLoRATrainer
 from finetune.trainer import LoRATrainer
 from utils.prompt import BasePromptBuilder
+from utils.schema_resolver import SchemaResolver
 
 
 def _cancel_to_interrupt(_signum: int, _frame: FrameType | None) -> None:
     # workflow cancellation -> ctrl + c
     raise KeyboardInterrupt
-
-
-class Schema(str, Enum):
-    onco = "onco"
-    geno = "geno"
 
 
 class FinetuneRunner(BaseSettings):
@@ -44,10 +38,11 @@ class FinetuneRunner(BaseSettings):
         validation_alias=AliasChoices("model_name", "m"),
         description="Key identifier for the model family, that also becomes the top-level folder in S3 (models/<model_name>/...)",
     )
-    schema_name: Schema = Field(
-        Schema.onco,
+    schema_name: str = Field(
+        "oncoschema",
         validation_alias=AliasChoices("schema", "s"),
-        description="Extraction schema to finetune for",
+        description="Extraction schema package to finetune for, e.g. 'oncoschema', 'genoschema' "
+        "(the legacy short form, e.g. 'onco', 'geno', is also accepted)",
     )
     description: str = Field(
         "",
@@ -74,6 +69,10 @@ class FinetuneRunner(BaseSettings):
     spec: str = Field(
         "",
         description="Serialised trainer spec: inline JSON, or a path to the --spec-out file from a prior --train run",
+    )
+    push_public: bool = Field(
+        False,
+        description="Also push the merged model to the public model registry during post-processing",
     )
     major: CliSuppress[int] = 0
     minor: CliSuppress[int] = 0
@@ -114,14 +113,17 @@ class FinetuneRunner(BaseSettings):
         return self
 
     def _load_schema(self) -> tuple[type[BaseModel], BasePromptBuilder]:
-        package, model_name = {
-            Schema.onco: ("oncoschema", "OncologyModel"),
-            Schema.geno: ("genoschema", "GenomicTestReport"),
-        }[self.schema_name]
-        return (
-            getattr(import_module(f"{package}.schema"), model_name),
-            import_module(f"{package}.prompt_builder").PromptBuilder(),
+        schema_name: str = (
+            self.schema_name
+            if self.schema_name.endswith("schema")
+            else self.schema_name + "schema"
         )
+        schema_module, prompt_builder_module = SchemaResolver.import_schema_modules(
+            SchemaResolver.install_schema_package(
+                f"londonaicentre-{schema_name}", "", True
+            )
+        )
+        return schema_module.Schema, prompt_builder_module.PromptBuilder()
 
     def _build_validated_model_card(self, trainer: LoRATrainer) -> ModelCard:
         model_card: ModelCard = trainer.build_model_card(
@@ -189,7 +191,7 @@ class FinetuneMLXRunner(FinetuneRunner):
     def _post_process(self, trainer: MLXLoRATrainer) -> None:
         trainer.post_process(
             trainer.build_model_card(self.major, self.minor, self.patch),
-            push_public=False,
+            push_public=self.push_public,
         )
         logging.info(
             "Post-processing complete - merged model uploaded to the build bucket."

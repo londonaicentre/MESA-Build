@@ -6,7 +6,7 @@ See [examples](examples/).
 
 ## Quickstart (AWS batch generation)
 
-1. Follow the instructions [here](https://github.com/londonaicentre/sde_aic_internal_docs/blob/main/nlp/using_amazon_sagemaker.md#sso-authentication-for-use-of-the-aws-cli) to set up SSO authentication for use of the AWS CLI.
+1. Obtain access to AWS from your account manager and follow the instructions [here](https://docs.commonfate.io/granted/getting-started) to set up SSO authentication for use of the AWS CLI.
 
 2. Obtain information on a Bedrock Execution IAM Role with S3 and model access and information on the name of an S3 bucket to upload a batch specification to.
 
@@ -16,7 +16,6 @@ See [examples](examples/).
     from datagen import BedrockBatchGenerator
     gen = BedrockBatchGenerator(
         system_prompt =
-        user_prompt_function =
         schema =
         schema_name =
         model_name =
@@ -56,3 +55,8 @@ See [examples](examples/).
         input_folder =
     )
     ```
+
+## License
+
+londonaicentre-mesa-datagen © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
+To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>

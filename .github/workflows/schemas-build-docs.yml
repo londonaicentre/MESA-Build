@@ -1,4 +1,4 @@
-name: assets build docs
+name: schemas build docs
 
 on:
   workflow_call:

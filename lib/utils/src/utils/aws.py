@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from pathlib import Path
@@ -10,7 +11,7 @@ from botocore.exceptions import ClientError
 from litellm import RateLimitError, ModelResponse
 from pydantic import BaseModel
 
-from utils.llm import LLM, Message, TextContent
+from utils.llm import LLM, BatchOutputs, Message, TextContent
 
 logger = logging.getLogger(__name__)
 
@@ -283,35 +284,27 @@ class AWS:
             model_region (str): The region in which to run the job
 
         Returns:
-            bool: Whether the batch inference run started successfully
+            bool: True, if the batch inference run started successfully
+
+        Raises:
+            ClientError: If AWS rejects the job submission
 
         """
-        try:
-            boto3.client(
-                "bedrock", region_name=model_region
-            ).create_model_invocation_job(
-                jobName="schemallama-" + job_id.replace("/", "-"),
-                modelId=model_id,
-                roleArn=bedrock_execution_role,
-                inputDataConfig={
-                    "s3InputDataConfig": {
-                        "s3Uri": "s3://"
-                        + bucket
-                        + "/"
-                        + job_id
-                        + "/input/"
-                        + batch_file
-                    }
-                },
-                outputDataConfig={
-                    "s3OutputDataConfig": {
-                        "s3Uri": "s3://" + bucket + "/" + job_id + "/output/"
-                    }
-                },
-            )
-        except ClientError as e:
-            print(e)
-            return False
+        boto3.client("bedrock", region_name=model_region).create_model_invocation_job(
+            jobName="mesa-" + job_id.replace("/", "-"),
+            modelId=model_id,
+            roleArn=bedrock_execution_role,
+            inputDataConfig={
+                "s3InputDataConfig": {
+                    "s3Uri": "s3://" + bucket + "/" + job_id + "/input/" + batch_file
+                }
+            },
+            outputDataConfig={
+                "s3OutputDataConfig": {
+                    "s3Uri": "s3://" + bucket + "/" + job_id + "/output/"
+                }
+            },
+        )
         return True
 
     @staticmethod
@@ -352,3 +345,72 @@ class AWS:
         AWS.create_model_invocation_job(
             job_id, model_id, batch_file, bucket, bedrock_execution_role, model_region
         )
+
+    @staticmethod
+    def download_batch_output(
+        model_region: str,
+        bucket: str,
+        job_id: str,
+        local_file_name: str,
+    ) -> None:
+        """Download the output file of a completed Bedrock batch job
+
+        Args:
+            model_region (str): The region in which the batch job ran
+            bucket (str): The name of the bucket containing the job output
+            job_id (str): The id given to the batch job
+            local_file_name (str): The name to use for the downloaded file
+
+        Raises:
+            ValueError: If the output file could not be found/downloaded
+
+        """
+        if not AWS.download_file_with_wildcard(
+            model_region,
+            bucket,
+            local_file_name,
+            local_file_name,
+            job_id + "/output/*",
+        ):
+            raise ValueError(
+                f"Error downloading file {local_file_name} from {bucket} "
+                f"at path {job_id}/output/*."
+            )
+
+    @staticmethod
+    def parse_batch_output(file_path: str) -> BatchOutputs:
+        """Parse a downloaded Bedrock batch output file
+
+        Args:
+            file_path (str): The path to the local batch output file
+
+        Returns:
+            BatchOutputs: The parsed batch output records
+
+        """
+        with open(file_path) as batch_output_file:
+            return BatchOutputs.model_validate(
+                {"outputs": [json.loads(line) for line in batch_output_file]}
+            )
+
+    @staticmethod
+    def get_batch_inference_outputs(
+        model_region: str,
+        bucket: str,
+        job_id: str,
+        local_file_name: str,
+    ) -> BatchOutputs:
+        """Download and parse the output of a completed Bedrock batch job
+
+        Args:
+            model_region (str): The region in which the batch job ran
+            bucket (str): The name of the bucket containing the job output
+            job_id (str): The id given to the batch job
+            local_file_name (str): The name to use for the downloaded file
+
+        Returns:
+            BatchOutputs: The parsed batch output records
+
+        """
+        AWS.download_batch_output(model_region, bucket, job_id, local_file_name)
+        return AWS.parse_batch_output(local_file_name)

@@ -1,0 +1,12 @@
+data/
+/_scratch
+__pycache__
+.DS_Store
+train.jsonl
+*.json*
+.env
+*.csv
+*.env
+*job.jsonl*
+output/
+debug.log
