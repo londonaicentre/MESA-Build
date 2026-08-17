@@ -1,0 +1,51 @@
+{
+  "content": "SYNNOVIS ANALYTICS\nCELLULAR PATHOLOGY\nHistopathology\n\n[redacted] x2 Stained Slides received from [redacted]\nReview for bladder MDM.\nOriginal diagnosis is concurred.\n\nUrinary bladder, right lateral wall, tumour, TURBT:\n- Papillary urothelial carcinoma, grade 3/high-grade, pT1\n- Muscularis propria clear of tumour",
+  "output": {
+    "is_pathology_report": true,
+    "is_oncology_related": true,
+    "is_malignancy_identified_on_specimen": true,
+    "clinical_indication": "Bladder MDM review of a prior TURBT diagnosis.",
+    "specimens": [
+      {
+        "anatomical_site": "bladder",
+        "anatomical_site_name_desc": "Urinary bladder, right lateral wall, tumour, TURBT",
+        "anatomical_subsite": "right lateral wall",
+        "laterality": "right",
+        "procedure_desc": "TURBT",
+        "nodes_examined": null,
+        "nodes_positive": null,
+        "findings": [
+          {
+            "is_lymph_node": false,
+            "finding_status": "cancerous",
+            "finding_summary": "High-grade papillary urothelial carcinoma invading into the lamina propria (pT1).",
+            "features": [],
+            "morphology": "urothelial_carcinoma",
+            "invasion_status": "invasive",
+            "tumour_nature": "primary",
+            "differentiation": null,
+            "dimensions_desc": null,
+            "biomarkers": [],
+            "scores": [
+              {
+                "score_name": "tnm_pathological",
+                "score_name_desc": null,
+                "score_value": "pT1"
+              }
+            ]
+          }
+        ],
+        "general_features": [],
+        "general_features_summary": null,
+        "margins": [
+          {
+            "margin_status": "clear",
+            "distance_mm": null,
+            "margin_desc": "Muscularis propria clear of tumour"
+          }
+        ]
+      }
+    ],
+    "report_summary": "TURBT of the right lateral bladder wall shows high-grade (grade 3) papillary urothelial carcinoma, pT1, with muscularis propria clear of tumour. Reviewed and original diagnosis concurred at bladder MDM."
+  }
+}
