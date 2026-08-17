@@ -20,7 +20,9 @@ def test_build_datagen_prompt() -> None:
 
     # Schema source present
     assert "OncoRadModel" in prompt, "Schema should contain the root model"
-    assert "is_malignancy_identified" in prompt, "Schema should contain key field"
+    assert "is_malignancy_identified_on_scan" in prompt, (
+        "Schema should contain key field"
+    )
 
     # Example should be present
     assert '"content"' in prompt or "'content'" in prompt, (
@@ -42,4 +44,6 @@ def test_build_main_prompt() -> None:
 
     # Schema source present
     assert "OncoRadModel" in prompt, "Schema should contain the root model"
-    assert "is_malignancy_identified" in prompt, "Schema should contain key field"
+    assert "is_malignancy_identified_on_scan" in prompt, (
+        "Schema should contain key field"
+    )

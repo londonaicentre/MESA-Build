@@ -20,6 +20,7 @@ class ScanModality(str, Enum):
     XRAY = "xray"
     FLUOROSCOPY = "fluoroscopy"
     MAMMOGRAPHY = "mammography"
+    TOMOSYNTHESIS = "tomosynthesis"  # 3D mammography
     OTHER = "other"
 
 
@@ -31,6 +32,8 @@ class ScanContrast(str, Enum):
 
 
 class ScanRegion(str, Enum):
+    """What the scanner explicitly targeted. Multi-valued."""
+
     HEAD = "head"
     NECK = "neck"
     CHEST = "chest"
@@ -42,6 +45,7 @@ class ScanRegion(str, Enum):
     WHOLE_BODY = "whole_body"
     HEART = "heart"
     BREAST = "breast"
+    AXILLA = "axilla"
     VESSEL = "vessel"
     OTHER = "other"
 
@@ -77,9 +81,12 @@ class FormalRECISTResponse(str, Enum):
 
 
 class ScanRationale(str, Enum):
-    DIAGNOSIS_OR_SCREENING = "diagnosis_or_screening"  # screening, initial workup, staging of known/suspected cancer
-    TREATMENT_PLANNING = "treatment_planning"  # imaging to plan a treatment (e.g. pre-operative/surgical planning, radiotherapy planning)
-    POST_DIAGNOSIS_FOLLOW_UP = "post_diagnosis_follow_up"  # any post-diagnosis scan: response assessment, surveillance, routine follow-up
+    """Point in the care pathway."""
+
+    ROUTINE_SCREENING = "routine_screening"  # asymptomatic protocol screening / high-risk surveillance, cancer not known
+    DIAGNOSTIC_PRE_TREATMENT = "diagnostic_pre_treatment"  # symptomatic or recall workup, characterisation, staging
+    TREATMENT_PLANNING = "treatment_planning"  # imaging to plan a treatment (radiotherapy, surgical)
+    FOLLOW_UP = "follow_up"  # tracks an established diagnosis, treated or not
     INTERVENTIONAL = "interventional"  # image-guided procedure / biopsy
     NOT_DETERMINABLE = "not_determinable"  # rationale not determinable from report
 
@@ -88,7 +95,9 @@ class ScoringSystem(str, Enum):
     OTHER = "other"
     TNM = "tnm"
     AJCC_STAGE = "ajcc_stage"
+    RCR = "rcr"  # UK RCR 1-5, modality-prefixed (M/U/MRI); NHS default
     BI_RADS = "bi_rads"
+    ACR_BREAST_DENSITY = "acr_breast_density"  # background density A-D
     PI_RADS = "pi_rads"
     BOSNIAK = "bosniak"
     LI_RADS = "li_rads"
@@ -100,9 +109,7 @@ class ScoringSystem(str, Enum):
 
 
 class LesionStatus(str, Enum):
-    CANCEROUS = (
-        "cancerous"  # report asserts or positively assumes the lesion as cancerous
-    )
+    CANCEROUS = "cancerous"  # report asserts or positively assumes the lesion as cancerous
     UNCERTAIN = "uncertain"  # described as possible, probable, query, indeterminate cancer lesion
 
 
@@ -132,16 +139,15 @@ class LesionShape(str, Enum):
 
 
 class LesionMorphology(str, Enum):
-    """Tissue composition of a soft-tissue / parenchymal lesion.
+    """Composition or enhancement pattern of a soft-tissue / parenchymal lesion.
     For bone lesions use internal_features (lytic / sclerotic) instead."""
 
     SOLID = "solid"
     CYSTIC = "cystic"
     MIXED_SOLID_CYSTIC = "mixed_solid_cystic"
     GROUND_GLASS_NODULE = "ground_glass_nodule"  # Fleischner description
-    PART_SOLID_GROUND_GLASS = (
-        "part_solid_ground_glass"  # Fleischner description (solid + ground-glass)
-    )
+    PART_SOLID_GROUND_GLASS = "part_solid_ground_glass"  # Fleischner description
+    NON_MASS_ENHANCEMENT = "non_mass_enhancement"  # enhancement without a discrete mass
 
 
 class LesionInternalFeature(str, Enum):
@@ -246,6 +252,7 @@ class AnatomicalSite(str, Enum):
     LYMPH_NODE_CERVICAL = "lymph_node_cervical"
     LYMPH_NODE_SUPRACLAVICULAR = "lymph_node_supraclavicular"
     LYMPH_NODE_AXILLARY = "lymph_node_axillary"
+    LYMPH_NODE_INTERNAL_MAMMARY = "lymph_node_internal_mammary"
     LYMPH_NODE_MEDIASTINAL = "lymph_node_mediastinal"
     LYMPH_NODE_HILAR = "lymph_node_hilar"
     LYMPH_NODE_ABDOMINAL = "lymph_node_abdominal"
@@ -315,9 +322,16 @@ class ScanMetadata(BaseModel):
     regions: Optional[List[ScanRegion]] = Field(
         None, description="Anatomical regions captured by the scan"
     )
+    image_quality_desc: Optional[str] = Field(
+        None,
+        description="Direct extract describing image quality or artefact affecting interpretation",
+    )
 
 
-class DiseaseSpecificScore(BaseModel):
+class SpecialtySpecificScore(BaseModel):
+    """Standardised graded assessment used by a specialty: staging, grading,
+    response, or background-tissue scores."""
+
     scoring_system: ScoringSystem = Field(
         description="Structured scoring system. Use OTHER if not in enum."
     )
@@ -337,6 +351,8 @@ class DiseaseSpecificScore(BaseModel):
 
 
 class CancerStatus(BaseModel):
+    """Progression/response vs prior. None if the report has no prior comparator."""
+
     overall_status: Optional[ComparativeChange] = Field(
         None,
         description="Radiologist's gestalt progression/response vs prior scan",
@@ -347,10 +363,6 @@ class CancerStatus(BaseModel):
     )
     progression_desc: Optional[str] = Field(
         None, description="Direct extract of descriptive text for overall progression"
-    )
-    disease_specific_scores: Optional[List[DiseaseSpecificScore]] = Field(
-        None,
-        description="Structured scoring/staging systems reported (e.g. TNM, BI-RADS, PI-RADS, Bosniak)",
     )
 
 
@@ -371,16 +383,27 @@ class LesionSize(BaseModel):
     volume_ml: Optional[float] = Field(
         None, ge=0, description="Volume in mL or cc if explicitly reported"
     )
+    lesion_depth_mm: Optional[float] = Field(
+        None,
+        ge=0,
+        description="Depth in mm from the reference landmark stated in the report (e.g. nipple, skin, capsule)",
+    )
 
 
 class CancerLesion(BaseModel):
     """A single non-benign lesion (or a miliary presentation) at a given anatomical site.
-    Only malignant or uncertain-malignancy lesions belong here. Unlikely lesions are excluded."""
+    Masses, non-mass enhancement, and infiltrative disease belong here. Unlikely lesions are excluded.
+    One entry per discrete lesion: its extensions, margins and local invasion belong to
+    the parent entry."""
 
     anatomical_site: AnatomicalSite = Field(description="Anatomical site of the lesion")
     anatomical_site_desc: Optional[str] = Field(
         None,
-        description="Direct extract of descriptive text for the lesion's anatomical site",
+        description="Direct extract naming the lesion's anatomical site",
+    )
+    anatomical_subsite: Optional[str] = Field(
+        None,
+        description="Location detail within the site (e.g. 'upper outer quadrant', 'segment VII', 'level 1')",
     )
     lesion_status: LesionStatus = Field(
         description="Whether the report asserts the lesion as cancerous or uncertain"
@@ -394,6 +417,10 @@ class CancerLesion(BaseModel):
     size: Optional[LesionSize] = Field(None, description="Reported lesion dimensions")
     is_recist_target: bool = Field(
         False, description="True if designated a RECIST target lesion"
+    )
+    is_index_lesion: bool = Field(
+        False,
+        description="True if the report designates this the index/primary lesion of interest; false if the choice would rest only on comparing sizes",
     )
     is_infiltrative: bool = Field(
         False,
@@ -411,6 +438,10 @@ class CancerLesion(BaseModel):
     )
     nature: LesionNature = Field(
         description="Whether the lesion is a primary, metastasis, or not stated"
+    )
+    associated_primary_cancer: Optional[str] = Field(
+        None,
+        description="The primary cancer this lesion arises from, as named in the report (e.g. 'breast', 'DLBCL')",
     )
     morphology: Optional[LesionMorphology] = Field(
         None,
@@ -435,6 +466,10 @@ class CancerLesion(BaseModel):
         None,
         description="Functional tracer uptake",
     )
+    characterisation_desc: Optional[str] = Field(
+        None,
+        description="Direct extract of the report's wording for how the lesion looks; appearance only, not its size or site",
+    )
 
 
 class NonCancerFinding(BaseModel):
@@ -449,11 +484,15 @@ class NonCancerFinding(BaseModel):
     )
     anatomical_site_desc: Optional[str] = Field(
         None,
-        description="Direct extract of descriptive text for the finding's anatomical site",
+        description="Direct extract naming the finding's anatomical site",
     )
-    is_cancer_lesion_related: bool = Field(
+    anatomical_subsite: Optional[str] = Field(
+        None,
+        description="Location detail within the site (e.g. 'upper outer quadrant', 'segment VII', 'level 1')",
+    )
+    is_cancer_related: bool = Field(
         False,
-        description="True if the finding is explicitly described as being related to a cancer lesion in the report (e.g. malignant biliary obstruction, tumour-related lobar collapse, pathological fracture, malignant effusion)",
+        description="True if the report describes the finding as caused by the cancer or its treatment (e.g. malignant obstruction, post-surgical seroma, radiotherapy skin thickening)",
     )
 
 
@@ -467,10 +506,11 @@ class OncoRadModel(BaseModel):
     is_oncology_related: bool = Field(
         description="True only if the report concerns a patient being investigated for cancer"
     )
-    is_malignancy_identified: bool = Field(
-        description=(
-            "True only if this scan identifies any malignant or uncertain-malignancy lesion"
-        ),
+    is_malignancy_identified_on_scan: bool = Field(
+        description="True if this scan's findings assert malignancy (a 'cancerous' lesion), not known history",
+    )
+    is_malignancy_suspected_on_scan: bool = Field(
+        description="True if this scan raises unresolved suspicion (an 'uncertain' lesion); independent of the above",
     )
     scan_metadata: Optional[ScanMetadata] = Field(
         None,
@@ -478,11 +518,15 @@ class OncoRadModel(BaseModel):
     )
     scan_rationale: Optional[ScanRationale] = Field(
         None,
-        description="Rationale for the scan (diagnosis/screening, post-diagnosis follow-up, interventional)",
+        description="Rationale for the scan, by point in the care pathway",
     )
     cancer_status: Optional[CancerStatus] = Field(
         None,
-        description="Patient-level cancer status summary; None if not oncology related",
+        description="Progression/response vs prior; None if no prior comparator or not oncology related",
+    )
+    specialty_specific_scores: Optional[List[SpecialtySpecificScore]] = Field(
+        None,
+        description="Standardised scores/stages reported (e.g. RCR, TNM, ACR breast density, PI-RADS)",
     )
     cancer_lesions: Optional[List[CancerLesion]] = Field(
         None,

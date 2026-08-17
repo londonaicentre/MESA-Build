@@ -1,6 +1,6 @@
 [project]
 name = "oncoradschema"
-version = "0.1.0"
+version = "0.5.0"
 description = "Radiology"
 readme = "README.md"
 authors = [
@@ -28,7 +28,7 @@ dev = [
 ]
 [tool.setuptools.package-data]
 oncoradschema = [
-    "*.txt", 
-    "examples/*.json", 
+    "*.txt",
+    "examples/*.json",
     "py.typed"
 ]
