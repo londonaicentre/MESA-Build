@@ -1,81 +1,44 @@
 # Changelog
 
+## [0.5.0] - 2026-08-05 [EJ/JZ]
+
+Arising from the PharosAI imaging schema review and the prompt-output discrepancy review.
+
+### Guiding decisions
+
+- **`DiseaseSpecificScore` → `SpecialtySpecificScore`.** May not have confirmed disease. Rename is a precondition for admitting ACR density.
+- **`disease_specific_scores` lifted from `CancerStatus` to `OncoRadModel.specialty_specific_scores`.** Nesting forced cancer-status block open on patients with no cancer
+- **`is_malignancy_identified` split into `is_malignancy_identified_on_scan` + `is_malignancy_suspected_on_scan`.** One boolean was being asked two questions (did this scan find cancer / did it find something not yet excluded)
+- **`NonCancerFinding.is_cancer_lesion_related` → `is_cancer_related`.** Description broadened from findings caused by a lesion to caused by the cancer or its treatment, therefore including consequences such as radiotherapy skin thickening.
+
+### Enum members added
+
+- **`ScoringSystem.RCR`**: UK RCR 1–5, the NHS default scoring system, usually in place of BI-RADS. Highest-priority review item.
+- **`ScoringSystem.ACR_BREAST_DENSITY`**: density is a property of background tissue, assigned on entirely normal breasts. Reuses the scores list.
+- **`LesionMorphology.NON_MASS_ENHANCEMENT`**: a 28mm NME counted in the malignant footprint was landing in `non_cancer_findings.other`. Enum extended to non mass-shaped findings.
+- **`ScanModality.TOMOSYNTHESIS`**: Now added. Previously collapsed to `MAMMOGRAPHY`/`OTHER`, making PharosAI ImagingType 005 unrecoverable.
+- **`ScanRegion.AXILLA`**: axillary studies were extracting as `upper_limb`. Docstring records that the field answers what the scanner covered, not the requesting specialty: a standalone axillary study is `axilla` alone. Note - contrary to Pharos review expectation of `["breast"]` for reports 11/13. Breast should be raised from context, LLM inference has to be objective to content. 
+  - `ScanRegion` states which anatomy the scanner covered — an observable fact of the study. The specialty context is also now carried per lesion by `associated_primary_cancer`.
+- **`AnatomicalSite.LYMPH_NODE_INTERNAL_MAMMARY`**: previously missing nodal station.
+
+### Fields added
+
+- **`anatomical_subsite`** on `CancerLesion` and `NonCancerFinding`: no quadrant granularity existed and subsites were being smuggled into `anatomical_site_desc`.
+- **`LesionSize.lesion_depth_mm`**: a mm measurement, so it belongs with the numerics. Kept organ-neutral.
+- **`CancerLesion.is_index_lesion`**: index lesion was inferred downstream from `is_recist_target` or largest diameter, which may not match the report's own designation.
+- **`ScanMetadata.image_quality_desc`** : quality had no home, referenced only indirectly via `RECIST NOT_EVALUABLE`. Free text only to avoid excessive schema extension.
+- **`CancerLesion.associated_primary_cancer`**: `AnatomicalSite` records where a lesion is, never what it arose from. This inputs free text to carry varied disease (including those with no anatomical primary) without distortion.
+- **`CancerLesion.characterisation_desc`** — `morphology`/`margin`/`shape`/`internal_features`/`uptake` collapse a descriptive sentence into five enums. Free text field scoped to appearance only.
+
+### `ScanRationale`
+
+- Split by **point in the care pathway**
+- `DIAGNOSIS_OR_SCREENING` → `ROUTINE_SCREENING` + `DIAGNOSTIC_PRE_TREATMENT`;
+- `POST_DIAGNOSIS_FOLLOW_UP` → `FOLLOW_UP`;
+- `TREATMENT_PLANNING`, `INTERVENTIONAL`, `NOT_DETERMINABLE` retained.
+- Screening/diagnostic collapse was unrecoverable: high-risk surveillance in a never-diagnosed patient was extracting as post-diagnosis follow-up.
+- Have rejected proposed `ON_TREATMENT`/`POST_TREATMENT` split as one surveillance mammogram can be follow-up, on-treatment and post-treatment simultaneously, so a single-valued enum forces an arbitrary pick. Also frequently determinable only from clinical history.
+
 ## [0.1.0] - 2026-05-26
 
-## General
-
-- Naming of enum values normalised to snake_case to match the house style used in `oncoschema` and `entityschema`.
-- Adopted paired-field pattern `<field>` (enum) + `<field>_desc` (Optional[str], verbatim text) wherever a structured value has a corresponding free-text extract(e.g. in `oncoschema` -> `topography` + `topography_name_desc`).
-- Every Field carries a `description=`. Numeric fields (`*_mm`, `volume_ml`) carry `ge=0`.
-- Top-level gate booleans (`is_radiology_report`, `is_oncology_related`) to filter out-of-scope documents
-- Simplified finding hierarchy to two independent siblings: `CancerLesion` and `NonCancerFinding`, each as a flat top-level list.
-- Enums: some free-text enums replaced with closed enums, others consolidated to avoid ambiguity / overlap
-- Types of lesions split across lesion nature and lesion anatomy
-- Patient-level data lifted off per-lesion records (RECIST response, disease scores) onto a new `CancerStatus` block.
-- Now is report finding centric, avoid patient-centric definition cancer diagnosis recording
-
-## Other
-
-### removed Laterality.MIDLINE
-Risk of conflating "no laterality applies" with "the lesion straddles the midline.". Is either lateral or not.
-
-### Topography -> AnatomicalSite
-Old enum mixed primary-cancer site (patient centric, i.e. `oncoschema`) with lesion site on the scan (radiology 'coordinates'). We are mainly ineterested in latter. So `AnatomicalSite` adds specific lymph node stations, named vessels, peritoneal compartments, and bone/soft-tissue body-region subdivisions etc etc. Topography removed.
-
-### LesionMargin into BI-RADS lexicon
-Published lexicon is more defensible. Potentially overlapping terms reconciled:
-
-    - `WELL_DEFINED` collapsed into `CIRCUMSCRIBED`
-    - `ILL_DEFINED` and `INDISTINCT` collapsed into `INDISTINCT_ILLDEFINED` (synonyms).
-    - `MICROLOBULATED` added (BI-RADS standard)
-    - `SPICULATED` moved here from `LesionCharacter` (BI-RADS considers margin)
-    - `UNKNOWN` is removed as handled by `Optional[...] = None`
-
-### LesionCharacter replaced by LesionShape + is_infiltrative
-Old enum contained different types of concepts that could overlap. Now `LesionShape` as BI-RADS contour. Infiltration has become `is_infiltrative` boolean.
-
-### LesionMorphology updated, split LesionInternalFeature
-More distinct subdivisions, categorised into two groups that are distinct dimensions
-
-### Density enum replaced by `density: Optional[str]`
-This is tricky due to multiple modalities + ways density is described. Have made decision to capture as free text for now, and consider a modality split in future that gates types of density description.
-
-### RecommendationType removed
-We'll pick up the key actions in MDM and clinical notes etc
-
-### PrevStudy removed
-Prior-imaging not consitently extractable, so we extract progression information, and rely on previous imaging reports.
-
-### Lesion.is_node + Lesion.is_metastasis back to enums
-Because of broader capture of nature of lesion (also capturing uncertainty) and anatomy, now moved back to Enums
-
-### LesionCertainty added (CERTAIN / UNCERTAIN / UNSPECIFIED)
-This captures lesions which may or may not be cancerous
-
-### is_recist_target, is_miliary, is_infiltrative, is_vascular_invasion booleans added on CancerLesion
-These are specific radiological assertions that don't fit any enum that serves broader purpose. `is_vascular_invasion` prev. had no first-class home.
-
-### LesionSize axes renamed
-`perpendicular_diameter_mm` / `third_dimension_mm` -> `x_mm` / `y_mm` / `z_mm`. `longest_diameter_mm` kept as a separate RECIST-relevant axis. `ge=0` constraint added to all numeric fields.
-
-### DiseaseSpecificScore overhauled
-Added `scoring_system: ScoringSystem` (enum) + `scoring_system_desc: Optional[str]` for verbatim
-
-### CancerStatus block added (patient report-level summary)
-RECIST response and disease scores moved here from per-`TumourFinding`.
-These are patient whole report-level facts, not per-lesion
-
-### NonTumourFinding -> NonCancerFinding with NonCancerFindingType
-Have added enum for non cancer findings
-
-### is_cancer_lesion_related boolean added on NonCancerFinding
-Distinguishes incidental non-cancer findings from those caused by a cancer lesion
-We're stopping short atm of needing to index every finding and refer to a lesion id. Maybe for next version.
-
-### BaseFinding fields removed or relocated
-- `number_of_lesions`, `lesion_distribution` removed -> too vague, what should the LLM be counting? Can calculate this afterwards based on per lesion inclusion.
-- `vascular_changes` split into enums and vascular invasion flag
-- `laterality` moved to per-lesion / per-finding level
-
-### NOT_DESCRIBED added to LesionMargin, LesionShape, LesionMorphology + fields made required
-Previously these were `Optional[...] = None`, which conflated "report does not characterise" with "model skipped the field". Now required with explicit `NOT_DESCRIBED` so the LLM has to commit to a positive assertion.
+Initial schema design. Two-sibling finding hierarchy (`CancerLesion` / `NonCancerFinding`) as flat top-level lists; paired `<field>` + `<field>_desc` pattern throughout; top-level gate booleans; patient-level facts (RECIST response, disease scores) lifted off per-lesion records onto `CancerStatus`; `Topography` replaced by `AnatomicalSite` (radiology coordinates rather than patient-centric primary site);`LesionMargin` / `LesionShape` aligned to the BI-RADS lexicon; enum values normalised to snake_case.
