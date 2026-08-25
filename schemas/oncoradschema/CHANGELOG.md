@@ -4,7 +4,7 @@
 
 Arising from the PharosAI imaging schema review and the prompt-output discrepancy review.
 
-### Guiding decisions
+### General structure changes
 
 - **`DiseaseSpecificScore` → `SpecialtySpecificScore`.** May not have confirmed disease. Rename is a precondition for admitting ACR density.
 - **`disease_specific_scores` lifted from `CancerStatus` to `OncoRadModel.specialty_specific_scores`.** Nesting forced cancer-status block open on patients with no cancer
