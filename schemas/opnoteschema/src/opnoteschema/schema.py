@@ -24,16 +24,22 @@ class ProcedureType(str, Enum):
     EVACUATION_OF_INTRACEREBRAL_HAEMATOMA = "evacuation_of_intracerebral_haematoma"
     DECOMPRESSIVE_CRANIECTOMY = "decompressive_craniectomy"
     CLIPPING_OF_CEREBRAL_ANEURYSM = "clipping_of_cerebral_aneurysm"
-    ENDOVASCULAR_COILING_OF_CEREBRAL_ANEURYSM = "endovascular_coiling_of_cerebral_aneurysm"
+    ENDOVASCULAR_COILING_OF_CEREBRAL_ANEURYSM = (
+        "endovascular_coiling_of_cerebral_aneurysm"
+    )
     INSERTION_OF_VENTRICULOPERITONEAL_SHUNT = "insertion_of_ventriculoperitoneal_shunt"
     REVISION_OF_VENTRICULOPERITONEAL_SHUNT = "revision_of_ventriculoperitoneal_shunt"
     REMOVAL_OF_VENTRICULOPERITONEAL_SHUNT = "removal_of_ventriculoperitoneal_shunt"
     EXTERNAL_VENTRICULAR_DRAIN_INSERTION = "external_ventricular_drain_insertion"
-    INSERTION_OF_INTRACRANIAL_PRESSURE_MONITOR = "insertion_of_intracranial_pressure_monitor"
+    INSERTION_OF_INTRACRANIAL_PRESSURE_MONITOR = (
+        "insertion_of_intracranial_pressure_monitor"
+    )
     ENDOSCOPIC_THIRD_VENTRICULOSTOMY = "endoscopic_third_ventriculostomy"
     INSERTION_OF_DEEP_BRAIN_STIMULATOR = "insertion_of_deep_brain_stimulator"
     VAGAL_NERVE_STIMULATOR_INSERTION = "vagal_nerve_stimulator_insertion"
-    MICROVASCULAR_DECOMPRESSION_OF_CRANIAL_NERVE = "microvascular_decompression_of_cranial_nerve"
+    MICROVASCULAR_DECOMPRESSION_OF_CRANIAL_NERVE = (
+        "microvascular_decompression_of_cranial_nerve"
+    )
     TRIGEMINAL_NERVE_RHIZOTOMY = "trigeminal_nerve_rhizotomy"
     REPAIR_OF_DURAL_TEAR = "repair_of_dural_tear"
     REPAIR_OF_SPINA_BIFIDA = "repair_of_spina_bifida"
@@ -218,7 +224,9 @@ class ProcedureType(str, Enum):
     OPEN_INGUINAL_HERNIA_REPAIR = "open_inguinal_hernia_repair"
     LAPAROSCOPIC_INGUINAL_HERNIA_REPAIR = "laparoscopic_inguinal_hernia_repair"
     TOTALLY_EXTRAPERITONEAL_HERNIA_REPAIR = "totally_extraperitoneal_hernia_repair"
-    TRANSABDOMINAL_PREPERITONEAL_HERNIA_REPAIR = "transabdominal_preperitoneal_hernia_repair"
+    TRANSABDOMINAL_PREPERITONEAL_HERNIA_REPAIR = (
+        "transabdominal_preperitoneal_hernia_repair"
+    )
     FEMORAL_HERNIA_REPAIR = "femoral_hernia_repair"
     UMBILICAL_HERNIA_REPAIR = "umbilical_hernia_repair"
     INCISIONAL_HERNIA_REPAIR = "incisional_hernia_repair"
@@ -234,7 +242,9 @@ class ProcedureType(str, Enum):
     BILE_DUCT_EXPLORATION = "bile_duct_exploration"
     CHOLEDOCHOTOMY = "choledochotomy"
     HEPATICOJEJUNOSTOMY = "hepaticojejunostomy"
-    ENDOSCOPIC_RETROGRADE_CHOLANGIOPANCREATOGRAPHY = "endoscopic_retrograde_cholangiopancreatography"
+    ENDOSCOPIC_RETROGRADE_CHOLANGIOPANCREATOGRAPHY = (
+        "endoscopic_retrograde_cholangiopancreatography"
+    )
     ERCP_WITH_SPHINCTEROTOMY = "ercp_with_sphincterotomy"
     ERCP_WITH_STENT_INSERTION = "ercp_with_stent_insertion"
     ERCP_WITH_STONE_EXTRACTION = "ercp_with_stone_extraction"
@@ -273,8 +283,12 @@ class ProcedureType(str, Enum):
     DOUBLE_VALVE_REPLACEMENT = "double_valve_replacement"
     PERMANENT_PACEMAKER_INSERTION = "permanent_pacemaker_insertion"
     PACEMAKER_BOX_CHANGE = "pacemaker_box_change"
-    IMPLANTABLE_CARDIOVERTER_DEFIBRILLATOR_INSERTION = "implantable_cardioverter_defibrillator_insertion"
-    CARDIAC_RESYNCHRONISATION_THERAPY_DEVICE_INSERTION = "cardiac_resynchronisation_therapy_device_insertion"
+    IMPLANTABLE_CARDIOVERTER_DEFIBRILLATOR_INSERTION = (
+        "implantable_cardioverter_defibrillator_insertion"
+    )
+    CARDIAC_RESYNCHRONISATION_THERAPY_DEVICE_INSERTION = (
+        "cardiac_resynchronisation_therapy_device_insertion"
+    )
     LEAD_EXTRACTION = "lead_extraction"
     ELECTROPHYSIOLOGICAL_STUDY = "electrophysiological_study"
     CATHETER_ABLATION_FOR_ARRHYTHMIA = "catheter_ablation_for_arrhythmia"
@@ -284,12 +298,18 @@ class ProcedureType(str, Enum):
     PERICARDIOCENTESIS = "pericardiocentesis"
     PERICARDIAL_WINDOW = "pericardial_window"
     CARDIAC_TRANSPLANTATION = "cardiac_transplantation"
-    LEFT_VENTRICULAR_ASSIST_DEVICE_INSERTION = "left_ventricular_assist_device_insertion"
+    LEFT_VENTRICULAR_ASSIST_DEVICE_INSERTION = (
+        "left_ventricular_assist_device_insertion"
+    )
     INTRA_AORTIC_BALLOON_PUMP_INSERTION = "intra_aortic_balloon_pump_insertion"
-    EXTRACORPOREAL_MEMBRANE_OXYGENATION_CANNULATION = "extracorporeal_membrane_oxygenation_cannulation"
+    EXTRACORPOREAL_MEMBRANE_OXYGENATION_CANNULATION = (
+        "extracorporeal_membrane_oxygenation_cannulation"
+    )
     ATRIAL_SEPTAL_DEFECT_REPAIR = "atrial_septal_defect_repair"
     VENTRICULAR_SEPTAL_DEFECT_REPAIR = "ventricular_septal_defect_repair"
-    SURGICAL_CLOSURE_OF_PATENT_DUCTUS_ARTERIOSUS = "surgical_closure_of_patent_ductus_arteriosus"
+    SURGICAL_CLOSURE_OF_PATENT_DUCTUS_ARTERIOSUS = (
+        "surgical_closure_of_patent_ductus_arteriosus"
+    )
 
     # L Arteries and Veins
     OPEN_ABDOMINAL_AORTIC_ANEURYSM_REPAIR = "open_abdominal_aortic_aneurysm_repair"
@@ -311,8 +331,12 @@ class ProcedureType(str, Enum):
     CREATION_OF_ARTERIOVENOUS_FISTULA = "creation_of_arteriovenous_fistula"
     INSERTION_OF_ARTERIOVENOUS_GRAFT = "insertion_of_arteriovenous_graft"
     VARICOSE_VEIN_STRIPPING = "varicose_vein_stripping"
-    ENDOVENOUS_LASER_ABLATION_OF_VARICOSE_VEINS = "endovenous_laser_ablation_of_varicose_veins"
-    RADIOFREQUENCY_ABLATION_OF_VARICOSE_VEINS = "radiofrequency_ablation_of_varicose_veins"
+    ENDOVENOUS_LASER_ABLATION_OF_VARICOSE_VEINS = (
+        "endovenous_laser_ablation_of_varicose_veins"
+    )
+    RADIOFREQUENCY_ABLATION_OF_VARICOSE_VEINS = (
+        "radiofrequency_ablation_of_varicose_veins"
+    )
     FOAM_SCLEROTHERAPY_OF_VARICOSE_VEINS = "foam_sclerotherapy_of_varicose_veins"
     PHLEBECTOMY = "phlebectomy"
     LIGATION_OF_VARICOSE_VEINS = "ligation_of_varicose_veins"
@@ -339,7 +363,9 @@ class ProcedureType(str, Enum):
     RADICAL_CYSTECTOMY = "radical_cystectomy"
     PARTIAL_CYSTECTOMY = "partial_cystectomy"
     ILEAL_CONDUIT_FORMATION = "ileal_conduit_formation"
-    TRANSURETHRAL_RESECTION_OF_BLADDER_TUMOUR = "transurethral_resection_of_bladder_tumour"
+    TRANSURETHRAL_RESECTION_OF_BLADDER_TUMOUR = (
+        "transurethral_resection_of_bladder_tumour"
+    )
     CYSTOSCOPY = "cystoscopy"
     CYSTODIATHERMY = "cystodiathermy"
     INSERTION_OF_SUPRAPUBIC_CATHETER = "insertion_of_suprapubic_catheter"
@@ -347,12 +373,16 @@ class ProcedureType(str, Enum):
     LASER_ENUCLEATION_OF_PROSTATE = "laser_enucleation_of_prostate"
     RADICAL_PROSTATECTOMY = "radical_prostatectomy"
     ROBOTIC_ASSISTED_RADICAL_PROSTATECTOMY = "robotic_assisted_radical_prostatectomy"
-    TRANSRECTAL_ULTRASOUND_GUIDED_PROSTATE_BIOPSY = "transrectal_ultrasound_guided_prostate_biopsy"
+    TRANSRECTAL_ULTRASOUND_GUIDED_PROSTATE_BIOPSY = (
+        "transrectal_ultrasound_guided_prostate_biopsy"
+    )
     TRANSPERINEAL_PROSTATE_BIOPSY = "transperineal_prostate_biopsy"
     URETHROPLASTY = "urethroplasty"
     OPTICAL_URETHROTOMY = "optical_urethrotomy"
     URETHRAL_DILATATION = "urethral_dilatation"
-    INSERTION_OF_ARTIFICIAL_URINARY_SPHINCTER = "insertion_of_artificial_urinary_sphincter"
+    INSERTION_OF_ARTIFICIAL_URINARY_SPHINCTER = (
+        "insertion_of_artificial_urinary_sphincter"
+    )
     MID_URETHRAL_SLING_PROCEDURE = "mid_urethral_sling_procedure"
     COLPOSUSPENSION = "colposuspension"
 
@@ -411,7 +441,9 @@ class ProcedureType(str, Enum):
     EPISIOTOMY = "episiotomy"
     REPAIR_OF_OBSTETRIC_PERINEAL_TEAR = "repair_of_obstetric_perineal_tear"
     MANUAL_REMOVAL_OF_PLACENTA = "manual_removal_of_placenta"
-    EVACUATION_OF_RETAINED_PRODUCTS_OF_CONCEPTION = "evacuation_of_retained_products_of_conception"
+    EVACUATION_OF_RETAINED_PRODUCTS_OF_CONCEPTION = (
+        "evacuation_of_retained_products_of_conception"
+    )
     CERVICAL_CERCLAGE = "cervical_cerclage"
     EXTERNAL_CEPHALIC_VERSION = "external_cephalic_version"
     FETAL_BLOOD_SAMPLING = "fetal_blood_sampling"
@@ -422,7 +454,9 @@ class ProcedureType(str, Enum):
     EXCISION_OF_MALIGNANT_MELANOMA = "excision_of_malignant_melanoma"
     SHAVE_EXCISION_OF_SKIN_LESION = "shave_excision_of_skin_lesion"
     CURETTAGE_AND_CAUTERY_OF_SKIN_LESION = "curettage_and_cautery_of_skin_lesion"
-    SURGICAL_DEBRIDEMENT_OF_SKIN_AND_SUBCUTANEOUS_TISSUE = "surgical_debridement_of_skin_and_subcutaneous_tissue"
+    SURGICAL_DEBRIDEMENT_OF_SKIN_AND_SUBCUTANEOUS_TISSUE = (
+        "surgical_debridement_of_skin_and_subcutaneous_tissue"
+    )
     SPLIT_SKIN_GRAFT = "split_skin_graft"
     FULL_THICKNESS_SKIN_GRAFT = "full_thickness_skin_graft"
     LOCAL_SKIN_FLAP_RECONSTRUCTION = "local_skin_flap_reconstruction"
@@ -490,12 +524,16 @@ class ProcedureType(str, Enum):
     POSTERIOR_LUMBAR_INTERBODY_FUSION = "posterior_lumbar_interbody_fusion"
     REVISION_SPINAL_FUSION = "revision_spinal_fusion"
     POSTERIOR_INSTRUMENTED_FUSION_SPINE = "posterior_instrumented_fusion_spine"
-    INSTRUMENTED_CORRECTION_SPINAL_DEFORMITY = "instrumented_correction_spinal_deformity"
+    INSTRUMENTED_CORRECTION_SPINAL_DEFORMITY = (
+        "instrumented_correction_spinal_deformity"
+    )
     SCOLIOSIS_CORRECTION_SURGERY = "scoliosis_correction_surgery"
     EXCISION_OF_SPINAL_LESION = "excision_of_spinal_lesion"
     VERTEBROPLASTY = "vertebroplasty"
     KYPHOPLASTY = "kyphoplasty"
-    REDUCTION_AND_FIXATION_OF_SPINAL_FRACTURE = "reduction_and_fixation_of_spinal_fracture"
+    REDUCTION_AND_FIXATION_OF_SPINAL_FRACTURE = (
+        "reduction_and_fixation_of_spinal_fracture"
+    )
     SPINAL_CORD_STIMULATOR_INSERTION = "spinal_cord_stimulator_insertion"
     BIOPSY_OF_SPINE = "biopsy_of_spine"
     FACET_JOINT_DENERVATION = "facet_joint_denervation"
@@ -522,10 +560,18 @@ class ProcedureType(str, Enum):
     BONE_GRAFTING = "bone_grafting"
     BONE_MARROW_ASPIRATION_OR_BIOPSY = "bone_marrow_aspiration_or_biopsy"
     DRAINAGE_OF_BONE_ABSCESS = "drainage_of_bone_abscess"
-    OPEN_REDUCTION_INTERNAL_FIXATION_LONG_BONE_FRACTURE = "open_reduction_internal_fixation_long_bone_fracture"
-    OPEN_REDUCTION_INTERNAL_FIXATION_INTRAARTICULAR_FRACTURE = "open_reduction_internal_fixation_intraarticular_fracture"
-    CLOSED_REDUCTION_INTERNAL_FIXATION_FRACTURE = "closed_reduction_internal_fixation_fracture"
-    CLOSED_REDUCTION_EXTERNAL_FIXATION_FRACTURE = "closed_reduction_external_fixation_fracture"
+    OPEN_REDUCTION_INTERNAL_FIXATION_LONG_BONE_FRACTURE = (
+        "open_reduction_internal_fixation_long_bone_fracture"
+    )
+    OPEN_REDUCTION_INTERNAL_FIXATION_INTRAARTICULAR_FRACTURE = (
+        "open_reduction_internal_fixation_intraarticular_fracture"
+    )
+    CLOSED_REDUCTION_INTERNAL_FIXATION_FRACTURE = (
+        "closed_reduction_internal_fixation_fracture"
+    )
+    CLOSED_REDUCTION_EXTERNAL_FIXATION_FRACTURE = (
+        "closed_reduction_external_fixation_fracture"
+    )
     CLOSED_REDUCTION_OF_FRACTURE = "closed_reduction_of_fracture"
     DYNAMIC_HIP_SCREW_FIXATION = "dynamic_hip_screw_fixation"
     INTRAMEDULLARY_NAILING_FEMUR = "intramedullary_nailing_femur"
@@ -583,8 +629,12 @@ class ProcedureType(str, Enum):
     KNEE_ARTHROSCOPY_CARTILAGE_PROCEDURE = "knee_arthroscopy_cartilage_procedure"
     DIAGNOSTIC_KNEE_ARTHROSCOPY = "diagnostic_knee_arthroscopy"
     HIP_ARTHROSCOPY = "hip_arthroscopy"
-    SHOULDER_ARTHROSCOPY_SUBACROMIAL_DECOMPRESSION = "shoulder_arthroscopy_subacromial_decompression"
-    SHOULDER_ARTHROSCOPY_ROTATOR_CUFF_REPAIR = "shoulder_arthroscopy_rotator_cuff_repair"
+    SHOULDER_ARTHROSCOPY_SUBACROMIAL_DECOMPRESSION = (
+        "shoulder_arthroscopy_subacromial_decompression"
+    )
+    SHOULDER_ARTHROSCOPY_ROTATOR_CUFF_REPAIR = (
+        "shoulder_arthroscopy_rotator_cuff_repair"
+    )
     SHOULDER_ARTHROSCOPY_LABRAL_REPAIR = "shoulder_arthroscopy_labral_repair"
     ANKLE_ARTHROSCOPY = "ankle_arthroscopy"
     WRIST_ARTHROSCOPY = "wrist_arthroscopy"
@@ -616,7 +666,9 @@ class ProcedureType(str, Enum):
     INCISION_AND_DRAINAGE_OF_ABSCESS = "incision_and_drainage_of_abscess"
     INSERTION_OF_CENTRAL_VENOUS_CATHETER = "insertion_of_central_venous_catheter"
     REMOVAL_OF_CENTRAL_VENOUS_CATHETER = "removal_of_central_venous_catheter"
-    INSERTION_OF_PERIPHERALLY_INSERTED_CENTRAL_CATHETER = "insertion_of_peripherally_inserted_central_catheter"
+    INSERTION_OF_PERIPHERALLY_INSERTED_CENTRAL_CATHETER = (
+        "insertion_of_peripherally_inserted_central_catheter"
+    )
     REMOVAL_OF_FOREIGN_BODY = "removal_of_foreign_body"
     EXAMINATION_UNDER_ANAESTHESIA = "examination_under_anaesthesia"
 
@@ -663,7 +715,9 @@ class ComplicationType(str, Enum):
     PERIPROSTHETIC_FRACTURE = "periprosthetic_fracture"
     IMPLANT_MALPOSITION_OR_MALALIGNMENT = "implant_malposition_or_malalignment"
     LEG_LENGTH_DISCREPANCY = "leg_length_discrepancy"
-    INTRAOPERATIVE_DISLOCATION_OR_INSTABILITY = "intraoperative_dislocation_or_instability"
+    INTRAOPERATIVE_DISLOCATION_OR_INSTABILITY = (
+        "intraoperative_dislocation_or_instability"
+    )
     SCREW_OR_GUIDEWIRE_MALPOSITION = "screw_or_guidewire_malposition"
     IMPLANT_MALFUNCTION_OR_BREAKAGE = "implant_malfunction_or_breakage"
 
@@ -674,7 +728,9 @@ class ComplicationType(str, Enum):
     BONE_CEMENT_IMPLANTATION_SYNDROME = "bone_cement_implantation_syndrome"
     FAT_EMBOLISM_SYNDROME = "fat_embolism_syndrome"
     TOURNIQUET_RELATED_COMPLICATION = "tourniquet_related_complication"
-    EXCESSIVE_BLOOD_LOSS_REQUIRING_TRANSFUSION = "excessive_blood_loss_requiring_transfusion"
+    EXCESSIVE_BLOOD_LOSS_REQUIRING_TRANSFUSION = (
+        "excessive_blood_loss_requiring_transfusion"
+    )
 
     # Orthopaedic / MSK - other
     COMPARTMENT_SYNDROME = "compartment_syndrome"
@@ -725,7 +781,8 @@ class Implant(BaseModel):
         None, description="Manufacturer of the implant, if stated"
     )
     size_or_specification: str | None = Field(
-        None, description="Size, offset, or other specification of the implant, if stated"
+        None,
+        description="Size, offset, or other specification of the implant, if stated",
     )
     serial_or_lot_number: str | None = Field(
         None, description="Serial or batch/lot number of the implant, if stated"
@@ -742,7 +799,8 @@ class ProcedureComplication(BaseModel):
         description="Direct extract or close paraphrase describing the complication as documented"
     )
     management: str | None = Field(
-        None, description="Direct extract of how the complication was managed, if stated"
+        None,
+        description="Direct extract of how the complication was managed, if stated",
     )
 
 
@@ -770,7 +828,8 @@ class ProcedureMetadata(BaseModel):
     do not infer or estimate."""
 
     urgency: ProcedureUrgency | None = Field(
-        None, description="Elective, urgent, or emergency, if stated or clearly inferable from context (e.g. 'trauma list')"
+        None,
+        description="Elective, urgent, or emergency, if stated or clearly inferable from context (e.g. 'trauma list')",
     )
     anaesthetic_type: AnaestheticType | None = Field(
         None, description="Type of anaesthetic used, if stated"
@@ -789,7 +848,7 @@ class ProcedureMetadata(BaseModel):
     )
     surgeon_grade: str | None = Field(
         None,
-        description="Grade or seniority of the operating surgeon as documented (e.g. 'consultant', 'registrar'), with names/identifiers redacted",
+        description="Grade of the most senior operating surgeon as documented (e.g. 'consultant', 'registrar'), with names/identifiers redacted",
     )
 
 
@@ -815,7 +874,8 @@ class OperationNote(BaseModel):
         description="Complications occurring during, or noted in immediate relation to, the procedure; empty if none reported",
     )
     metadata: ProcedureMetadata | None = Field(
-        None, description="Operative metadata reported for the case; None if nothing stated"
+        None,
+        description="Operative metadata reported for the case; None if nothing stated",
     )
     operation_summary: str | None = Field(
         None,
