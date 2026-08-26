@@ -1,1 +1,76 @@
-{}
+{
+  "content": "OPERATION NOTE\n\nPatient's Name: [redacted]\nDate of birth: [redacted]\nGender: female\nHospital number: [redacted]\nNHS number: [redacted]\n\nDate of Surgery: [redacted]\n\nPost-op Diagnosis: Displaced intracapsular fracture neck of femur, right\n\nProcedure(s): Right Hip Hemiarthroplasty; Cerclage wiring of intraoperative periprosthetic femoral fracture - Right\n\nPatient Class: Inpatient (trauma list)\n\nConsultant on Case: [redacted]\n\nSurgeons:\n* [redacted] - Consultant\n* [redacted] - Primary Operator (Registrar)\n* [redacted] - Assisting\n\nAnaesthetist: [redacted]\nResponsible Anaesthetist: [redacted]\nAnaesthetic Type: spinal, peripheral nerve block\nASA Grade: III\n\nIndication: 82 year old admitted after a fall at home with a displaced intracapsular fracture of the right neck of femur, confirmed on plain film and CT. Booked on the trauma list for hemiarthroplasty.\n\nDescription of Procedure\n\nWHO checklist completed. IV teicoplanin and gentamicin given at induction. Lateral position with front and back bolsters. Skin prepped with betadine and chlorhexidine, iodine-impregnated incise drape.\n\nAnterolateral approach to proximal right femur. Dissection through fat and fascia lata. Gluteus medius and minimus incised from the greater trochanter. T-shaped capsulotomy. Femoral neck cut 1cm above the lesser trochanter. Femoral head removed, measured 44mm.\n\nFemur prepared with box chisel, pencil reamers and raspers sequential to size 2. During broaching of the femoral canal a longitudinal crack was noted extending from the calcar down the medial cortex of the proximal femoral shaft, approximately 4cm in length, with no displacement. This was considered an intraoperative periprosthetic fracture. Two cerclage wires (18-gauge) were passed around the proximal femur proximal and distal to the crack and tensioned to secure the fracture prior to proceeding with stem insertion. No further propagation was seen on trialling.\n\nCanal prepared with pulsed lavage (1L) and dried with ribbon gauze and suction catheter. Canal cemented. Cemented stem with centraliser inserted, taking care to avoid further distraction of the cerclage-wired fracture. Trialled with standard +4mm head; equal leg lengths and a stable hip on internal and external rotation. 44mm bipolar head +4 inserted. Stable hip reduction confirmed, equal leg lengths, stable on internal and external rotation. Image intensifier check confirmed satisfactory wire position and no further fracture propagation. Saline wash.\n\nEstimated blood loss 450ml, no transfusion required intraoperatively.\n\nClosure\nCapsule - 5 Ethibond\nGluteus medius and minimus - 5 Ethibond inter-osseous followed by continuous suture in tendon\nFascia lata - 1 Vicryl\nFat - 1 Vicryl interrupted\nSubdermal - 2-0 Vicryl\nSkin - 3-0 Monocryl, skin glue, steristrips\n\nTotal operative time 105 minutes.\n\nPost op Plan\nToe-touch weight bearing on the right for 6 weeks given the periprosthetic fracture and cerclage wiring, then progress as tolerated with physiotherapy input.\nRepeat plain film in recovery to confirm implant and wire position.\nFBC, U+E tomorrow.\nNo further antibiotics needed beyond the two post-op doses.\nVTE prophylaxis as per protocol for NOF fractures.\nOrthopaedic follow up at 2 and 6 weeks with weight-bearing progression reviewed at 6 week appointment.\n\nImplant(s):\nImplant Name | Type | Manufacturer | Site | No. Used | Action\nPALACOS R+G 2x40g bone cement | Cement / Putty | Movianto UK Ltd | Right Hip | 1 | Implanted\nStryker Orthopaedics Exeter V40 Cemented Hip Stem, size 2 | Orthopaedic Prosthesis | Stryker UK Ltd | Right Hip | 1 | Implanted\nStryker Orthopaedics UHR Universal Head Bipolar Component, OD 44mm | Orthopaedic Prosthesis | Stryker UK Ltd | Right Hip | 1 | Implanted\nStryker Orthopaedics V40 Femoral Head, OD 28mm, OFFST +4 | Orthopaedic Prosthesis | Stryker UK Ltd | Right Hip | 1 | Implanted\n18-gauge cerclage wire | Fixation wire | DePuy Synthes | Right femur | 2 | Implanted",
+  "output": {
+    "is_operation_note": true,
+    "indication": "Displaced intracapsular fracture of the right neck of femur following a fall at home, confirmed on plain film and CT.",
+    "procedures": [
+      {
+        "procedure_type": "hip_hemiarthroplasty_cemented",
+        "procedure_desc": "Right Hip Hemiarthroplasty via anterolateral approach",
+        "laterality": "right",
+        "implants": [
+          {
+            "implant_desc": "PALACOS R+G 2x40g bone cement",
+            "device_type": "bone cement",
+            "manufacturer": "Movianto UK Ltd",
+            "size_or_specification": "2x40g",
+            "serial_or_lot_number": null
+          },
+          {
+            "implant_desc": "Stryker Orthopaedics Exeter V40 Cemented Hip Stem, size 2",
+            "device_type": "femoral stem",
+            "manufacturer": "Stryker UK Ltd",
+            "size_or_specification": "size 2",
+            "serial_or_lot_number": null
+          },
+          {
+            "implant_desc": "Stryker Orthopaedics UHR Universal Head Bipolar Component, OD 44mm",
+            "device_type": "bipolar head",
+            "manufacturer": "Stryker UK Ltd",
+            "size_or_specification": "OD 44mm",
+            "serial_or_lot_number": null
+          },
+          {
+            "implant_desc": "Stryker Orthopaedics V40 Femoral Head, OD 28mm, OFFST +4",
+            "device_type": "femoral head",
+            "manufacturer": "Stryker UK Ltd",
+            "size_or_specification": "OD 28mm, OFFST +4",
+            "serial_or_lot_number": null
+          }
+        ]
+      },
+      {
+        "procedure_type": "other",
+        "procedure_desc": "Cerclage wiring of intraoperative periprosthetic femoral fracture, right",
+        "laterality": "right",
+        "implants": [
+          {
+            "implant_desc": "18-gauge cerclage wire",
+            "device_type": "fixation wire",
+            "manufacturer": "DePuy Synthes",
+            "size_or_specification": "18-gauge",
+            "serial_or_lot_number": null
+          }
+        ]
+      }
+    ],
+    "findings": "During broaching of the femoral canal a longitudinal crack was noted extending from the calcar down the medial cortex of the proximal femoral shaft, approximately 4cm in length, with no displacement. Image intensifier check after cerclage wiring and stem insertion confirmed satisfactory wire position and no further fracture propagation.",
+    "complications": [
+      {
+        "complication_type": "iatrogenic_fracture",
+        "complication_desc": "Longitudinal crack noted extending from the calcar down the medial cortex of the proximal femoral shaft, approximately 4cm in length, with no displacement, during broaching of the femoral canal - an intraoperative periprosthetic fracture.",
+        "management": "Two 18-gauge cerclage wires passed around the proximal femur proximal and distal to the crack and tensioned to secure the fracture prior to stem insertion; no further propagation seen on trialling or on image intensifier check."
+      }
+    ],
+    "metadata": {
+      "urgency": "urgent",
+      "anaesthetic_type": "regional",
+      "operative_time_minutes": 105,
+      "estimated_blood_loss_ml": 450,
+      "tourniquet_time_minutes": null,
+      "asa_grade": 3,
+      "surgeon_grade": "registrar"
+    },
+    "operation_summary": "Right hip hemiarthroplasty for a displaced intracapsular neck of femur fracture, complicated intraoperatively by a periprosthetic crack of the proximal femoral shaft during canal broaching. This was secured with two cerclage wires before proceeding with cemented stem and bipolar head insertion, with no further fracture propagation on trialling or image intensifier check. Toe-touch weight bearing advised for 6 weeks given the fracture and wiring."
+  }
+}
