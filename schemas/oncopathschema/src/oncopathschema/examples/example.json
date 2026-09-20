@@ -12,6 +12,10 @@
         "anatomical_subsite": "right lateral wall",
         "laterality": "right",
         "procedure_desc": "TURBT",
+        "is_sentinel": false,
+        "is_multifocal": false,
+        "is_multicentric": false,
+        "treatment_response": "not_stated",
         "nodes_examined": null,
         "nodes_positive": null,
         "findings": [
@@ -35,8 +39,6 @@
             ]
           }
         ],
-        "general_features": [],
-        "general_features_summary": null,
         "margins": [
           {
             "margin_status": "clear",

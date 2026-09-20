@@ -97,7 +97,9 @@ class AnatomicalSite(str, Enum):
     LYMPH_NODE_RETROPERITONEAL = "lymph_node_retroperitoneal"
     LYMPH_NODE_PELVIC = "lymph_node_pelvic"
     LYMPH_NODE_INGUINAL = "lymph_node_inguinal"
-    LYMPH_NODE_OTHER = "lymph_node_other"  # station not listed; use anatomical_site_name_desc
+    LYMPH_NODE_OTHER = (
+        "lymph_node_other"  # station not listed; use anatomical_site_name_desc
+    )
 
 
 class MorphologyType(str, Enum):
@@ -182,11 +184,12 @@ class MorphologyType(str, Enum):
 
 
 class InvasionStatus(str, Enum):
-    """Whether the tumour finding is invasive, in-situ, or both."""
+    """Whether the tumour finding is invasive or in-situ. A report describing both an
+    invasive and an in-situ component is recorded as two separate findings, one per
+    component, so there is no combined value."""
 
     INVASIVE = "invasive"
     IN_SITU_ONLY = "in_situ_only"  # e.g. pure DCIS, non-invasive papillary carcinoma
-    INVASIVE_AND_IN_SITU = "invasive_and_in_situ"
     NOT_ASSESSABLE = "not_assessable"  # e.g. cytology, superficial biopsy
     NOT_STATED = "not_stated"
 
@@ -211,31 +214,49 @@ class Differentiation(str, Enum):
 
 
 class FindingFeature(str, Enum):
-    """Histological features positively identified in a finding.
-    Recorded as a list of what IS present."""
+    """Histological features explicitly stated for a finding, whether the finding is
+    cancerous or not. Each is paired with a FeatureStatus recording what the report
+    said about it. Features the report does not mention are omitted."""
 
-    LYMPHOVASCULAR_INVASION = "lymphovascular_invasion"
+    OTHER = "other"  # use finding_summary for detail
+
+    # Prognostic / behavioural features
+    LYMPHOVASCULAR_INVASION = "lymphovascular_invasion"  # small-calibre blood or lymphatic vessel invasion"
+    MACROVASCULAR_INVASION = "macrovascular_invasion"  # large-calibre vessel invasion
     PERINEURAL_INVASION = "perineural_invasion"
     NECROSIS = "necrosis"
     EXTRANODAL_EXTENSION = "extranodal_extension"  # extracapsular spread in a node
     TREATMENT_EFFECT = "treatment_effect"  # chemo/radiotherapy change, tumour bed
-    MULTIFOCAL = "multifocal"  # two or more discrete foci in the same quadrant/region
-    MULTICENTRIC = "multicentric"  # two or more discrete foci in different quadrants/regions
-    MICROINVASION = "microinvasion"  # invasive focus <1mm, usually in otherwise pure DCIS
-    INFLAMMATORY_INFILTRATE = "inflammatory_infiltrate"  # inflammatory cell infiltrate present
+    MICROINVASION = (
+        "microinvasion"  # invasive focus <1mm, usually in otherwise pure DCIS
+    )
+    INFLAMMATORY_INFILTRATE = (
+        "inflammatory_infiltrate"  # inflammatory cell infiltrate present
+    )
 
-
-class GeneralSpecimenFeature(str, Enum):
-    """Non-cancerous histological findings reported for a specimen."""
-
+    # Non-cancerous histological findings
     DYSPLASIA = "dysplasia"
     ATYPIA = "atypia"
     METAPLASIA = "metaplasia"
     INFLAMMATION = "inflammation"
     FIBROSIS = "fibrosis"
     BENIGN_NEOPLASM = "benign_neoplasm"
-    NORMAL_UNREMARKABLE = "normal_unremarkable"  # explicitly reported as normal/no abnormality
-    OTHER = "other"  # use general_features_summary for detail
+
+    # Architectural patterns, typically of an in-situ or papillary finding
+    COMEDO_NECROSIS = "comedo_necrosis"
+    CRIBRIFORM_ARCHITECTURE = "cribriform_architecture"
+    SOLID_ARCHITECTURE = "solid_architecture"
+    MICROPAPILLARY_ARCHITECTURE = "micropapillary_architecture"
+    PAPILLARY_ARCHITECTURE = "papillary_architecture"
+
+
+class FeatureStatus(str, Enum):
+    """Whether the report stated a feature to be present, absent, or possible.
+    A feature the report does not address at all is omitted entirely."""
+
+    PRESENT = "present"
+    ABSENT = "absent"  # explicitly stated not identified / not seen
+    POSSIBLE = "possible"  # described as possible, probable, suspicious or equivocal
 
 
 class MarginStatus(str, Enum):
@@ -247,10 +268,28 @@ class MarginStatus(str, Enum):
 
 
 class FindingStatus(str, Enum):
-    """Certainty with which a finding is asserted."""
+    """What the finding is, and the certainty with which the report asserts it."""
 
     CANCEROUS = "cancerous"  # report asserts or positively assumes malignancy
-    UNCERTAIN = "uncertain"  # described as possible, probable, query, indeterminate
+    UNCERTAIN = "uncertain"
+    # diagnosis and/or malignant potential is unresolved: possible, probable, query,
+    # indeterminate, suspicious for, or a diagnostically-named but behaviourally
+    # uncertain entity (e.g. B3 lesion, phyllodes tumour, atypical ductal hyperplasia)
+    NOT_CANCEROUS = "not_cancerous"
+    # a named benign/reactive finding, an explicitly normal/unremarkable result, or a
+    # confirmed-negative result (negative node, complete pathological response)
+
+
+class TreatmentResponseStatus(str, Enum):
+    """Response of the specimen to prior neoadjuvant therapy, where assessed.
+    NOT_STATED covers both a specimen with no prior therapy and one where therapy
+    was given but no response was recorded."""
+
+    COMPLETE = "complete"  # no residual tumour (e.g. ypT0 ypN0)
+    PARTIAL = "partial"
+    STABLE = "stable"
+    PROGRESSION = "progression"
+    NOT_STATED = "not_stated"
 
 
 class ScoreName(str, Enum):
@@ -365,8 +404,10 @@ class BiomarkerStatus(str, Enum):
 
     ALTERED = "altered"  # any alteration or positive expression
     NEGATIVE = "negative"  # explicit recording of negativity or normality
-    EQUIVOCAL = "equivocal"  # borderline/indeterminate by the assay's own criteria
-    HYPOTHETICAL = "hypothetical"  # test postulated or pending, no result yet
+    EQUIVOCAL = "equivocal"
+    # borderline/indeterminate by the assay's own criteria (e.g. HER2 IHC 2+). A result
+    # unambiguously positive but only in a subset of cells, or weak/focal, is ALTERED -
+    # capture the extent in result_value (e.g. "focal", "1-50% of cells")
     NOT_ASSESSABLE = "not_assessable"  # e.g. insufficient tumour cells / failed stain
 
 
@@ -397,7 +438,8 @@ class PathologyScore(BaseModel):
 
 
 class Biomarker(BaseModel):
-    """A single biomarker result, whether immunohistochemical or molecular."""
+    """A single biomarker result, whether immunohistochemical or molecular, in the cells
+    relevant to the finding (not background results mentioned separately by the report)"""
 
     biomarker: BiomarkerType = Field(
         description="Gene or protein biomarker. Use OTHER if not in enum."
@@ -405,13 +447,30 @@ class Biomarker(BaseModel):
     biomarker_name_desc: str | None = Field(
         None, description="Name of the biomarker as described in the report"
     )
-    biomarker_status: BiomarkerStatus = Field(description="Crude status of the marker")
+    biomarker_status: BiomarkerStatus = Field(
+        description="Crude status of the marker in this finding's own cells, not in any other (e.g. background/reactive/non-neoplastic) cells"
+    )
     method: BiomarkerMethod | None = Field(
         None, description="Test method used, if stated"
     )
     result_value: str | None = Field(
         None,
         description="Direct extract of the result as reported, including any alteration, expression level, score, percentage, assay or clone (e.g. 'Allred score = 7', 'score = 1+ (Negative)', '100% of tumour cells, Dako pharmDx 22C3')",
+    )
+
+
+class FeatureFinding(BaseModel):
+    """A histological feature explicitly stated for a finding, and what the report
+    said about it."""
+
+    feature: FindingFeature = Field(
+        description="Histological feature. Use OTHER if not in enum."
+    )
+    feature_desc: str | None = Field(
+        None, description="Name of the feature as described in the report"
+    )
+    feature_status: FeatureStatus = Field(
+        description="Whether the report stated this feature to be present, absent, or possible"
     )
 
 
@@ -427,36 +486,39 @@ class MarginFinding(BaseModel):
     )
 
 
-class CancerSpecimenFinding(BaseModel):
-    """A single malignant or in-situ neoplastic finding described within a specimen
-    (a tumour deposit, or a lymph node group with or without tumour)."""
+class SpecimenFinding(BaseModel):
+    """A single noteworthy pathological observation described within a specimen"""
 
     is_lymph_node: bool = Field(
-        description="True if this finding is a lymph node group (with or without tumour deposit) or tumour invading a lymph node; false for a tumour deposit elsewhere"
+        description="True if this finding is a lymph node group (with or without tumour deposit) or tumour invading a lymph node; false for a finding elsewhere"
     )
     finding_status: FindingStatus = Field(
-        description="Certainty with which this finding is asserted"
+        description="What this finding is, and the certainty with which it is asserted"
     )
     finding_summary: str = Field(
         description="Short summary of this finding in your own words"
     )
-    features: list[FindingFeature] = Field(
+    features: list[FeatureFinding] = Field(
         default_factory=list,
-        description="Histological features positively identified in this finding; empty if none reported",
+        description="Histological features explicitly stated for this finding, each with its reported status; empty if none stated",
     )
 
-    # describing any tumour present
+    # describing any tumour present; None throughout for a benign or normal finding
     morphology: MorphologyType | None = Field(
         None,
-        description="Histological classification of the tumour. Use OTHER if not in enum.",
+        description="Histological classification of the tumour. Use OTHER if not in enum. None where the finding is not a tumour.",
     )
     invasion_status: InvasionStatus | None = Field(
         None,
-        description="Whether the tumour is invasive, in-situ only, or both",
+        description="Whether the tumour is invasive or in-situ only. Record an invasive and an in-situ component as two separate findings.",
     )
     tumour_nature: TumourNature | None = Field(
         None,
         description="Whether the tumour is primary at this site, a metastasis, or a recurrence",
+    )
+    tumour_source: AnatomicalSite | None = Field(
+        None,
+        description="For a metastasis, the primary site the report states it originates from (e.g. a named primary)",
     )
     differentiation: Differentiation | None = Field(
         None,
@@ -470,7 +532,7 @@ class CancerSpecimenFinding(BaseModel):
     # results specific to this finding
     biomarkers: list[Biomarker] = Field(
         default_factory=list,
-        description="Biomarker results reported for this tumour or nodal deposit; empty if none",
+        description="Biomarker results reported for this finding; empty if none",
     )
     scores: list[PathologyScore] = Field(
         default_factory=list,
@@ -500,6 +562,22 @@ class Specimen(BaseModel):
         None,
         description="Direct extract naming how the specimen was obtained (e.g. 'radical nephrectomy', 'TURBT', '4mm punch biopsy', 'slide review')",
     )
+    is_sentinel: bool = Field(
+        False,
+        description="True if any node in this specimen was taken as a sentinel node (e.g. 'sentinel node x3')",
+    )
+    is_multifocal: bool = Field(
+        False,
+        description="True if two or more discrete tumour foci are described in the same quadrant/region of this specimen",
+    )
+    is_multicentric: bool = Field(
+        False,
+        description="True if two or more discrete tumour foci are described in different quadrants/regions of this specimen",
+    )
+    treatment_response: TreatmentResponseStatus = Field(
+        TreatmentResponseStatus.NOT_STATED,
+        description="Response of this specimen to prior neoadjuvant therapy, where the report assesses it",
+    )
     nodes_examined: int | None = Field(
         None,
         ge=0,
@@ -510,17 +588,9 @@ class Specimen(BaseModel):
         ge=0,
         description="Total number of lymph nodes involved in this specimen, if stated",
     )
-    findings: list[CancerSpecimenFinding] = Field(
+    findings: list[SpecimenFinding] = Field(
         default_factory=list,
-        description="Cancer findings (tumour or lymph node) described in this specimen; empty if none reported",
-    )
-    general_features: list[GeneralSpecimenFeature] = Field(
-        default_factory=list,
-        description="Non-cancerous histological findings reported for this specimen (e.g. dysplasia, atypia); empty if none reported",
-    )
-    general_features_summary: str | None = Field(
-        None,
-        description="Free-text summary, in your own words, of non-cancerous histological findings; None if none reported",
+        description="Noteworthy pathological observations described in this specimen, whatever their status; empty only if the report says nothing reportable about it",
     )
     margins: list[MarginFinding] = Field(
         default_factory=list,
@@ -543,7 +613,7 @@ class OncoPathModel(BaseModel):
     )
     clinical_indication: str | None = Field(
         None,
-        description="Concise summary of the clinical details or indication given for the specimen, in your own words",
+        description="Concise summary of the clinical details or indication given for the specimen",
     )
     specimens: list[Specimen] = Field(
         default_factory=list,
