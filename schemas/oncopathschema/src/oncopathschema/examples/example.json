@@ -15,18 +15,25 @@
         "is_sentinel": false,
         "is_multifocal": false,
         "is_multicentric": false,
-        "treatment_response": "not_stated",
+        "treatment_response": null,
         "nodes_examined": null,
         "nodes_positive": null,
         "findings": [
           {
             "is_lymph_node": false,
             "finding_status": "cancerous",
-            "finding_summary": "High-grade papillary urothelial carcinoma invading into the lamina propria (pT1).",
-            "features": [],
+            "finding_summary": "High-grade papillary urothelial carcinoma invading into the lamina propria (pT1). Muscularis propria sampled and clear of tumour.",
+            "features": [
+              {
+                "feature": "papillary_architecture",
+                "feature_desc": null,
+                "feature_status": "present"
+              }
+            ],
             "morphology": "urothelial_carcinoma",
             "invasion_status": "invasive",
-            "tumour_nature": "primary",
+            "tumour_nature": "not_stated_unclear",
+            "tumour_source": null,
             "differentiation": null,
             "dimensions_desc": null,
             "biomarkers": [],
@@ -35,19 +42,18 @@
                 "score_name": "tnm_pathological",
                 "score_name_desc": null,
                 "score_value": "pT1"
+              },
+              {
+                "score_name": "pathological_grade",
+                "score_name_desc": null,
+                "score_value": "grade 3/high-grade"
               }
             ]
           }
         ],
-        "margins": [
-          {
-            "margin_status": "clear",
-            "distance_mm": null,
-            "margin_desc": "Muscularis propria clear of tumour"
-          }
-        ]
+        "margins": []
       }
     ],
-    "report_summary": "TURBT of the right lateral bladder wall shows high-grade (grade 3) papillary urothelial carcinoma, pT1, with muscularis propria clear of tumour. Reviewed and original diagnosis concurred at bladder MDM."
+    "report_summary": "TURBT of the right lateral bladder wall shows high-grade (grade 3) papillary urothelial carcinoma, pT1, with muscularis propria sampled and clear of tumour. Reviewed and original diagnosis concurred at bladder MDM."
   }
 }

@@ -186,7 +186,8 @@ class MorphologyType(str, Enum):
 class InvasionStatus(str, Enum):
     """Whether the tumour finding is invasive or in-situ. A report describing both an
     invasive and an in-situ component is recorded as two separate findings, one per
-    component, so there is no combined value."""
+    component, so there is no combined value. NOT_STATED where the finding is a tumour
+    but invasion is uncharacterised; None where the finding is not a tumour."""
 
     INVASIVE = "invasive"
     IN_SITU_ONLY = "in_situ_only"  # e.g. pure DCIS, non-invasive papillary carcinoma
@@ -195,33 +196,34 @@ class InvasionStatus(str, Enum):
 
 
 class TumourNature(str, Enum):
-    """Origin of the tumour at this specimen site."""
+    """Origin of the tumour at this specimen site.
+    None where the finding is not a tumour."""
 
     PRIMARY = "primary"  # arising at this site
-    METASTASIS = "metastasis"  # confirmed or strongly implied secondary deposit
+    METASTASIS = "metastasis"  # secondary deposit
     LOCAL_RECURRENCE = "local_recurrence"  # recurrence at or adjacent to a treated site
     NOT_STATED_UNCLEAR = "not_stated_unclear"
 
 
 class Differentiation(str, Enum):
-    """Degree of differentiation where reported in words rather than as a graded score."""
+    """Degree of differentiation where reported in words rather than as a graded score.
+    None where not stated."""
 
     WELL = "well"
     MODERATE = "moderate"
     POOR = "poor"
     UNDIFFERENTIATED = "undifferentiated"
-    NOT_STATED = "not_stated"
 
 
-class FindingFeature(str, Enum):
+class Feature(str, Enum):
     """Histological features explicitly stated for a finding, whether the finding is
     cancerous or not. Each is paired with a FeatureStatus recording what the report
     said about it. Features the report does not mention are omitted."""
 
-    OTHER = "other"  # use finding_summary for detail
+    OTHER = "other"
 
     # Prognostic / behavioural features
-    LYMPHOVASCULAR_INVASION = "lymphovascular_invasion"  # small-calibre blood or lymphatic vessel invasion"
+    LYMPHOVASCULAR_INVASION = "lymphovascular_invasion"  # small vessel invasion
     MACROVASCULAR_INVASION = "macrovascular_invasion"  # large-calibre vessel invasion
     PERINEURAL_INVASION = "perineural_invasion"
     NECROSIS = "necrosis"
@@ -257,6 +259,7 @@ class FeatureStatus(str, Enum):
     PRESENT = "present"
     ABSENT = "absent"  # explicitly stated not identified / not seen
     POSSIBLE = "possible"  # described as possible, probable, suspicious or equivocal
+    NOT_ASSESSABLE = "not_assessable"  # explicitly stated as not sampled/assessed
 
 
 class MarginStatus(str, Enum):
@@ -282,14 +285,12 @@ class FindingStatus(str, Enum):
 
 class TreatmentResponseStatus(str, Enum):
     """Response of the specimen to prior neoadjuvant therapy, where assessed.
-    NOT_STATED covers both a specimen with no prior therapy and one where therapy
-    was given but no response was recorded."""
+    None where no prior therapy, or none assessed."""
 
     COMPLETE = "complete"  # no residual tumour (e.g. ypT0 ypN0)
     PARTIAL = "partial"
     STABLE = "stable"
     PROGRESSION = "progression"
-    NOT_STATED = "not_stated"
 
 
 class ScoreName(str, Enum):
@@ -412,8 +413,9 @@ class BiomarkerStatus(str, Enum):
 
 
 class BiomarkerMethod(str, Enum):
+    """None where not stated."""
+
     OTHER = "other"
-    NOT_STATED = "not_stated"
     IMMUNOHISTOCHEMISTRY = "immunohistochemistry"
     FISH_ISH = "fish_ish"
     PCR = "pcr"
@@ -463,7 +465,7 @@ class FeatureFinding(BaseModel):
     """A histological feature explicitly stated for a finding, and what the report
     said about it."""
 
-    feature: FindingFeature = Field(
+    feature: Feature = Field(
         description="Histological feature. Use OTHER if not in enum."
     )
     feature_desc: str | None = Field(
@@ -574,8 +576,8 @@ class Specimen(BaseModel):
         False,
         description="True if two or more discrete tumour foci are described in different quadrants/regions of this specimen",
     )
-    treatment_response: TreatmentResponseStatus = Field(
-        TreatmentResponseStatus.NOT_STATED,
+    treatment_response: TreatmentResponseStatus | None = Field(
+        None,
         description="Response of this specimen to prior neoadjuvant therapy, where the report assesses it",
     )
     nodes_examined: int | None = Field(
