@@ -21,6 +21,7 @@ Arising from the PharosAI pathology schema review (JB, 2026-09-02).
 - **`Specimen.treatment_response: TreatmentResponseStatus | None`**: response to prior therapy (`COMPLETE` / `PARTIAL` / `STABLE` / `PROGRESSION`), at specimen level.
 - **`FeatureFinding.feature_desc: str | None`**: name of the feature as described in the report, for use when `feature = OTHER`. Brings `FeatureFinding` in line with `Biomarker`/`PathologyScore`/`AnatomicalSite`, which already carry a `*_desc` free-text companion
 - **`SpecimenFinding.tumour_source: AnatomicalSite | None`**: the primary site the report states or concludes it originates from, useful for metastases
+- **`SpecimenFinding.tumour_source_desc: str | None`**: name of the primary site as described in the report, for use when `tumour_source = OTHER` - a stated primary that spans enum values (e.g. 'colorectal') would otherwise be unrecoverable.
 
 ### Domain rules / prompt changes
 
@@ -37,4 +38,4 @@ Arising from the PharosAI pathology schema review (JB, 2026-09-02).
 - Rejected a dedicated `BORDERLINE_MALIGNANT_POTENTIAL` status and an IHC/ISH pending-result split: both asked the model to infer, or draw a distinction in an edge case. Folded into `UNCERTAIN` / `NOT_CANCEROUS`, and into "only extract confirmed results", respectively.
 - Full neoadjuvant block not added, `ScoreName` carries `RESIDUAL_CANCER_BURDEN` / `TUMOUR_REGRESSION_GRADE`.
 - Numeric size fields, structured TNM, structured margin identity (a `margin_name` enum) - kept as free text per MESA conventions for fields that require disambiguation, but subsequently easy to parse (precision / recall trade off); resolved instead by a prompt rule against inferring status/distance not in the text.
-- Biomarker germline/somatic origin not added as considered to be an edge case, not worth additional schema surface.
+- Biomarker germline/somatic origin not added as considered to be an edge case, not worth additional schema surface; where a report does state it, the wording survives verbatim in `result_value`.

@@ -1,17 +1,17 @@
 {
-  "content": "SYNNOVIS ANALYTICS\nCELLULAR PATHOLOGY\nHistopathology\n\n[redacted] x2 Stained Slides received from [redacted]\nReview for bladder MDM.\nOriginal diagnosis is concurred.\n\nUrinary bladder, right lateral wall, tumour, TURBT:\n- Papillary urothelial carcinoma, grade 3/high-grade, pT1\n- Muscularis propria clear of tumour",
+  "content": "SYNNOVIS ANALYTICS\nCELLULAR PATHOLOGY\nHistopathology\n\nClinical details: Screen-detected left breast mass. For wide local excision and sentinel node biopsy.\n\nA. Left breast, wide local excision:\n- Invasive carcinoma of no special type, 18mm, Nottingham grade 2 (3+2+2=7)\n- Associated high-grade ductal carcinoma in situ with comedo necrosis\n- Lymphovascular invasion is not identified\n- Nearest margin is the deep margin, clear at 3mm\n- ER positive (Allred 8/8), PR positive (Allred 6/8), HER2 negative (IHC score 1+)\n\nB. Left axilla, sentinel lymph nodes x3:\n- Three lymph nodes examined, no tumour seen (0/3)\n",
   "output": {
     "is_pathology_report": true,
     "is_oncology_related": true,
     "is_malignancy_identified_on_specimen": true,
-    "clinical_indication": "Bladder MDM review of a prior TURBT diagnosis.",
+    "clinical_indication": "Screen-detected left breast mass, for wide local excision and sentinel node biopsy.",
     "specimens": [
       {
-        "anatomical_site": "bladder",
-        "anatomical_site_name_desc": "Urinary bladder, right lateral wall, tumour, TURBT",
-        "anatomical_subsite": "right lateral wall",
-        "laterality": "right",
-        "procedure_desc": "TURBT",
+        "anatomical_site": "breast",
+        "anatomical_site_name_desc": "Left breast, wide local excision",
+        "anatomical_subsite": null,
+        "laterality": "left",
+        "procedure_desc": "wide local excision",
         "is_sentinel": false,
         "is_multifocal": false,
         "is_multicentric": false,
@@ -22,38 +22,120 @@
           {
             "is_lymph_node": false,
             "finding_status": "cancerous",
-            "finding_summary": "High-grade papillary urothelial carcinoma invading into the lamina propria (pT1). Muscularis propria sampled and clear of tumour.",
+            "finding_summary": "Invasive carcinoma of no special type, 18mm, Nottingham grade 2. Lymphovascular invasion not identified. ER and PR positive, HER2 negative.",
             "features": [
               {
-                "feature": "papillary_architecture",
+                "feature": "lymphovascular_invasion",
+                "feature_desc": null,
+                "feature_status": "absent"
+              }
+            ],
+            "morphology": "invasive_carcinoma_nst",
+            "invasion_status": "invasive",
+            "tumour_nature": "not_stated_unclear",
+            "tumour_source": null,
+            "tumour_source_desc": null,
+            "differentiation": null,
+            "dimensions_desc": "18mm",
+            "biomarkers": [
+              {
+                "biomarker": "esr1_er",
+                "biomarker_name_desc": "ER",
+                "biomarker_status": "altered",
+                "method": "immunohistochemistry",
+                "result_value": "positive, Allred 8/8"
+              },
+              {
+                "biomarker": "pgr_pr",
+                "biomarker_name_desc": "PR",
+                "biomarker_status": "altered",
+                "method": "immunohistochemistry",
+                "result_value": "positive, Allred 6/8"
+              },
+              {
+                "biomarker": "erbb2_her2",
+                "biomarker_name_desc": "HER2",
+                "biomarker_status": "negative",
+                "method": "immunohistochemistry",
+                "result_value": "negative, IHC score 1+"
+              }
+            ],
+            "scores": [
+              {
+                "score_name": "nottingham",
+                "score_name_desc": "Nottingham grade",
+                "score_value": "2 (3+2+2=7)"
+              }
+            ]
+          },
+          {
+            "is_lymph_node": false,
+            "finding_status": "cancerous",
+            "finding_summary": "Associated high-grade ductal carcinoma in situ with comedo necrosis.",
+            "features": [
+              {
+                "feature": "comedo_necrosis",
                 "feature_desc": null,
                 "feature_status": "present"
               }
             ],
-            "morphology": "urothelial_carcinoma",
-            "invasion_status": "invasive",
+            "morphology": "ductal_carcinoma_in_situ",
+            "invasion_status": "in_situ_only",
             "tumour_nature": "not_stated_unclear",
             "tumour_source": null,
+            "tumour_source_desc": null,
             "differentiation": null,
             "dimensions_desc": null,
             "biomarkers": [],
             "scores": [
               {
-                "score_name": "tnm_pathological",
+                "score_name": "in_situ_grade",
                 "score_name_desc": null,
-                "score_value": "pT1"
-              },
-              {
-                "score_name": "pathological_grade",
-                "score_name_desc": null,
-                "score_value": "grade 3/high-grade"
+                "score_value": "high-grade"
               }
             ]
+          }
+        ],
+        "margins": [
+          {
+            "margin_status": "clear",
+            "distance_mm": 3.0,
+            "margin_desc": "Nearest margin is the deep margin, clear at 3mm"
+          }
+        ]
+      },
+      {
+        "anatomical_site": "lymph_node_axillary",
+        "anatomical_site_name_desc": "Left axilla, sentinel lymph nodes x3",
+        "anatomical_subsite": null,
+        "laterality": "left",
+        "procedure_desc": "sentinel lymph node biopsy",
+        "is_sentinel": true,
+        "is_multifocal": false,
+        "is_multicentric": false,
+        "treatment_response": null,
+        "nodes_examined": 3,
+        "nodes_positive": 0,
+        "findings": [
+          {
+            "is_lymph_node": true,
+            "finding_status": "not_cancerous",
+            "finding_summary": "Three sentinel lymph nodes examined, no tumour seen (0/3).",
+            "features": [],
+            "morphology": null,
+            "invasion_status": null,
+            "tumour_nature": null,
+            "tumour_source": null,
+            "tumour_source_desc": null,
+            "differentiation": null,
+            "dimensions_desc": null,
+            "biomarkers": [],
+            "scores": []
           }
         ],
         "margins": []
       }
     ],
-    "report_summary": "TURBT of the right lateral bladder wall shows high-grade (grade 3) papillary urothelial carcinoma, pT1, with muscularis propria sampled and clear of tumour. Reviewed and original diagnosis concurred at bladder MDM."
+    "report_summary": "Left breast wide local excision shows an 18mm invasive carcinoma of no special type, Nottingham grade 2, with associated high-grade DCIS showing comedo necrosis. Lymphovascular invasion not identified. Deep margin clear at 3mm. ER and PR positive, HER2 negative. Three sentinel axillary nodes are free of tumour (0/3)."
   }
 }

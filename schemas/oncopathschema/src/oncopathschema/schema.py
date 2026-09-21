@@ -520,7 +520,11 @@ class SpecimenFinding(BaseModel):
     )
     tumour_source: AnatomicalSite | None = Field(
         None,
-        description="For a metastasis, the primary site the report states it originates from (e.g. a named primary)",
+        description="For a metastasis, the primary site the report states it originates from. Use OTHER if not in enum.",
+    )
+    tumour_source_desc: str | None = Field(
+        None,
+        description="Name of the primary site as described in the report (e.g. 'colorectal', 'upper GI')",
     )
     differentiation: Differentiation | None = Field(
         None,
