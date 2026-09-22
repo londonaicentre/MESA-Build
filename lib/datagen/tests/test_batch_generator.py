@@ -1,3 +1,4 @@
+import hashlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -128,6 +129,7 @@ def mock_batch_dependencies(mocker: MockerFixture) -> BatchDependencies:
 def mock_extract_dependencies(mocker: MockerFixture) -> ExtractDependencies:
     mock_output: MagicMock = MagicMock()
     mock_output.modelOutput.content = [MagicMock(text="sample_text")]
+    mock_output.recordId = hashlib.md5(b"bar").hexdigest()
     mock_batch_outputs: MagicMock = MagicMock(outputs=[mock_output] * 3)
     return ExtractDependencies(
         get_batch_inference_outputs=mocker.patch(
@@ -322,19 +324,39 @@ def test_extract_batch_output_returns_correct_count(
     assert (successful, failed) == expected
 
 
-def test_extract_batch_output_exception_raised_increments_failed_count(
+def test_extract_batch_output_record_id_unknown_increments_failed_count(
+    mocker: MockerFixture,
     mock_filesystem: FileSystem,
     mock_extract_dependencies: ExtractDependencies,
     generator: BatchGeneratorFixture,
 ) -> None:
-    mock_extract_dependencies.model_validate_json.side_effect = [
-        MagicMock(source="foo", content="bar"),
-        Exception("error"),
-        MagicMock(source="foo", content="bar"),
+    mocker.patch.object(generator, "_logger")
+    mock_extract_dependencies.parse_batch_output.return_value = MagicMock(
+        outputs=[MagicMock(recordId="foo")]
+    )
+    assert generator.extract_batch_output() == (0, 1)
+
+
+def test_extract_batch_output_records_out_of_order_pairs_own_document(
+    mock_filesystem: FileSystem,
+    mock_extract_dependencies: ExtractDependencies,
+    generator: BatchGeneratorFixture,
+) -> None:
+    documents: list[MagicMock] = [
+        MagicMock(source="foo", content=f"bar{index}") for index in range(5)
     ]
-    successful, failed = generator.extract_batch_output()
-    assert successful == 2
-    assert failed == 1
+    mock_extract_dependencies.model_validate_json.side_effect = documents
+    mock_extract_dependencies.parse_batch_output.return_value = MagicMock(
+        outputs=[
+            MagicMock(recordId=hashlib.md5(document.content.encode()).hexdigest())
+            for document in reversed(documents)
+        ]
+    )
+    generator.extract_batch_output()
+    assert [
+        call.args[2]
+        for call in mock_extract_dependencies.save_training_sample.call_args_list
+    ] == [document.content for document in reversed(documents)]
 
 
 def test_extract_batch_output_called_creates_output_directory(
