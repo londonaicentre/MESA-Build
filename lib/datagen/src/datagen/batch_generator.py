@@ -4,6 +4,7 @@ batch_generator.py
 Class to handle use of AWS batch inference API
 """
 
+import hashlib
 import json
 import logging
 import os
@@ -73,6 +74,10 @@ class BedrockBatchGenerator:
     def get_document_files_count(self) -> int:
         return len(self.__document_files)
 
+    @staticmethod
+    def _record_id(doc: Document) -> str:
+        return hashlib.md5(doc.content.encode()).hexdigest()
+
     def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
     ) -> str:
@@ -95,12 +100,12 @@ class BedrockBatchGenerator:
             sample_size = max_samples
 
         with open(file_name, "w") as outfile:
-            for idx, doc_path in enumerate(self.__document_files[:sample_size]):
+            for doc_path in self.__document_files[:sample_size]:
                 doc = Document.model_validate_json(doc_path.read_text())
                 print(
                     json.dumps(
                         AWS.create_anthropic_bedrock_batch_entry(
-                            str(idx),
+                            BedrockBatchGenerator._record_id(doc),
                             self.__system_prompt,
                             doc.content,
                         )
@@ -179,13 +184,23 @@ class BedrockBatchGenerator:
         else:
             batch_outputs = AWS.parse_batch_output(file_name)
 
+        docs: dict[str, Document] = {
+            BedrockBatchGenerator._record_id(doc): doc
+            for doc in (
+                Document.model_validate_json(doc_path.read_text())
+                for doc_path in self.__document_files
+            )
+        }
+
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
         failed_generations: int = 0
-        for sample_id, bedrock_batch_output in enumerate(batch_outputs.outputs):
+        for bedrock_batch_output in batch_outputs.outputs:
             try:
-                doc_path = self.__document_files[sample_id]
-                doc = Document.model_validate_json(doc_path.read_text())
+                if (doc := docs.get(bedrock_batch_output.recordId)) is None:
+                    raise ValueError(
+                        f"no document matches record {bedrock_batch_output.recordId}"
+                    )
 
                 if save_training_sample(
                     str(bedrock_batch_output.modelOutput.content[0].text),
@@ -201,7 +216,9 @@ class BedrockBatchGenerator:
                     failed_generations += 1
             except Exception as e:
                 failed_generations += 1
-                self._logger.error(f"Error processing batch output {sample_id}: {e}")
+                self._logger.error(
+                    f"Error processing batch output {bedrock_batch_output.recordId}: {e}"
+                )
         self._logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
