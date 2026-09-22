@@ -20,7 +20,7 @@ def test_build_datagen_prompt() -> None:
 
     # Schema source present
     assert "OncoPathModel" in prompt, "Schema should contain the root model"
-    assert "is_malignancy_identified_on_specimen" in prompt, (
+    assert "is_neoplastic_disease_identified" in prompt, (
         "Schema should contain key field"
     )
 
@@ -44,6 +44,6 @@ def test_build_main_prompt() -> None:
 
     # Schema source present
     assert "OncoPathModel" in prompt, "Schema should contain the root model"
-    assert "is_malignancy_identified_on_specimen" in prompt, (
+    assert "is_neoplastic_disease_identified" in prompt, (
         "Schema should contain key field"
     )

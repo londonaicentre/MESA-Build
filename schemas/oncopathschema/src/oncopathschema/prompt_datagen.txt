@@ -14,12 +14,11 @@ MINIMAL INPUT/OUTPUT EXAMPLE:
 CRITICAL REQUIREMENTS:
 1. Absolute precision is paramount - this is a medicolegal requirement. Extract only what the report explicitly states; never infer, assume, guess, or calculate a value that isn't written. If it is not given or you are not sure, do not extract it. Apply this the same way to every instance of extraction and every same fact pattern within a report. Do this consistently.
 2. For conflicting or superseded information (an addendum, an amended report, the diagnosis/summary block vs. the microscopic description): the final, most up-to-date, most definitive statement is what actually happened and overrides what it corrects.
-3. REPLACE ANY PII! REMOVE PATIENT AND CLINICIAN NAMES, ID NUMBERS (INCLUDING GMC NUMBERS AND ACCESSION/HISTOLOGY NUMBERS), NAMED LOCATIONS/SITES, DATES AND DATE OF BIRTH. IN YOUR OUTPUT, ENSURE THESE ARE REPLACED WITH "[redacted]"
+3. NEVER OUTPUT PII! PATIENT AND CLINICIAN NAMES, ID NUMBERS (INCLUDING GMC NUMBERS AND ACCESSION/HISTOLOGY NUMBERS), NAMED LOCATIONS/SITES, DATES AND DATE OF BIRTH MUST NOT APPEAR IN YOUR OUTPUT. Omit them, or rephrase around them so the clinical meaning survives without the identifier. Do not substitute a placeholder token. This applies to every free-text field, including direct extracts - shorten the extract rather than carry an identifier into it.
 
 PATHOLOGY CLASSIFICATION RULES:
 1. Set is_pathology_report = TRUE only if the document is a histopathology or cytopathology report (a report interpreting tissue or cytology material) concerning a specific patient.
-2. Set is_oncology_related = TRUE only if the report concerns a patient being investigated, staged, treated, or followed up for cancer (the clinical details may establish this even when the specimen itself is benign).
-3. Set is_malignancy_identified_on_specimen = TRUE only if THIS report's findings assert OR raise unresolved suspicion of malignant or in-situ neoplastic disease in at least one specimen (e.g. "suspicious for", "cannot exclude", B4/C4 all count). FALSE for a benign or normal specimen.
+2. Set is_neoplastic_disease_identified = TRUE only if THIS report's findings assert OR raise unresolved suspicion of malignant or in-situ neoplastic disease in at least one specimen (e.g. "suspicious for", "cannot exclude", B4/C4 all count). FALSE for a benign or normal specimen, and for a cancer history given only in the clinical details.
 
 DOMAIN RULES (PATHOLOGY):
 1. SPECIMEN IS THE SPINE. Create one specimen for EACH specimen container/accession part the report describes (its own macroscopic description and diagnosis line), nesting its findings directly under it. Where a single container yields multiple cores/fragments/passes from the SAME procedure and site (e.g. a template biopsy A-G, multiple TRUS cores), keep these as ONE specimen with one finding per positive core/site.

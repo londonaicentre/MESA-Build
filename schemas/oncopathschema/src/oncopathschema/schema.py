@@ -150,8 +150,8 @@ class MorphologyType(str, Enum):
     MELANOMA = "melanoma"
 
     # Neuroendocrine
-    NEUROENDOCRINE_TUMOUR = "neuroendocrine_tumour"  # well-differentiated, Ki-67-graded
-    NEUROENDOCRINE_CARCINOMA = "neuroendocrine_carcinoma"  # poorly-differentiated
+    NEUROENDOCRINE_TUMOUR = "neuroendocrine_tumour"
+    NEUROENDOCRINE_CARCINOMA = "neuroendocrine_carcinoma"
     LARGE_CELL_NEUROENDOCRINE_CARCINOMA = "large_cell_neuroendocrine_carcinoma"
 
     # Sarcoma
@@ -185,9 +185,8 @@ class MorphologyType(str, Enum):
 
 class InvasionStatus(str, Enum):
     """Whether the tumour finding is invasive or in-situ. A report describing both an
-    invasive and an in-situ component is recorded as two separate findings, one per
-    component, so there is no combined value. NOT_STATED where the finding is a tumour
-    but invasion is uncharacterised; None where the finding is not a tumour."""
+    invasive and an in-situ component is recorded as two separate findings;
+    None where the finding is not a tumour."""
 
     INVASIVE = "invasive"
     IN_SITU_ONLY = "in_situ_only"  # e.g. pure DCIS, non-invasive papillary carcinoma
@@ -199,7 +198,7 @@ class TumourNature(str, Enum):
     """Origin of the tumour at this specimen site.
     None where the finding is not a tumour."""
 
-    PRIMARY = "primary"  # arising at this site
+    PRIMARY = "primary"  # report states or concludes the tumour arose at this site
     METASTASIS = "metastasis"  # secondary deposit
     LOCAL_RECURRENCE = "local_recurrence"  # recurrence at or adjacent to a treated site
     NOT_STATED_UNCLEAR = "not_stated_unclear"
@@ -215,10 +214,9 @@ class Differentiation(str, Enum):
     UNDIFFERENTIATED = "undifferentiated"
 
 
-class Feature(str, Enum):
+class FeatureType(str, Enum):
     """Histological features explicitly stated for a finding, whether the finding is
-    cancerous or not. Each is paired with a FeatureStatus recording what the report
-    said about it. Features the report does not mention are omitted."""
+    cancerous or not. Features the report does not mention are omitted."""
 
     OTHER = "other"
 
@@ -244,7 +242,7 @@ class Feature(str, Enum):
     FIBROSIS = "fibrosis"
     BENIGN_NEOPLASM = "benign_neoplasm"
 
-    # Architectural patterns, typically of an in-situ or papillary finding
+    # Architectural patterns
     COMEDO_NECROSIS = "comedo_necrosis"
     CRIBRIFORM_ARCHITECTURE = "cribriform_architecture"
     SOLID_ARCHITECTURE = "solid_architecture"
@@ -253,8 +251,8 @@ class Feature(str, Enum):
 
 
 class FeatureStatus(str, Enum):
-    """Whether the report stated a feature to be present, absent, or possible.
-    A feature the report does not address at all is omitted entirely."""
+    """Whether the report explicitly states a feature to be
+    present, absent, or possible."""
 
     PRESENT = "present"
     ABSENT = "absent"  # explicitly stated not identified / not seen
@@ -264,7 +262,7 @@ class FeatureStatus(str, Enum):
 
 class MarginStatus(str, Enum):
     CLEAR = "clear"  # tumour does not reach the margin
-    INVOLVED = "involved"  # tumour present at the margin (R1 / R2)
+    INVOLVED = "involved"  # tumour present at the margin
     CLOSE = "close"  # explicitly described as close but not involved
     NOT_ASSESSABLE = "not_assessable"
     NOT_STATED = "not_stated"
@@ -276,11 +274,8 @@ class FindingStatus(str, Enum):
     CANCEROUS = "cancerous"  # report asserts or positively assumes malignancy
     UNCERTAIN = "uncertain"
     # diagnosis and/or malignant potential is unresolved: possible, probable, query,
-    # indeterminate, suspicious for, or a diagnostically-named but behaviourally
-    # uncertain entity (e.g. B3 lesion, phyllodes tumour, atypical ductal hyperplasia)
     NOT_CANCEROUS = "not_cancerous"
-    # a named benign/reactive finding, an explicitly normal/unremarkable result, or a
-    # confirmed-negative result (negative node, complete pathological response)
+    # explicitly normal, confirmed negative finding, named benign/reactive finding
 
 
 class TreatmentResponseStatus(str, Enum):
@@ -327,13 +322,9 @@ class ScoreName(str, Enum):
     RESIDUAL_CANCER_BURDEN = "residual_cancer_burden"  # RCB 0/I/II/III
     TUMOUR_REGRESSION_GRADE = "tumour_regression_grade"
 
-    # Receptor scoring
-    ALLRED = "allred"
-
 
 class BiomarkerType(str, Enum):
-    """Gene or protein or other biomarker with therapeutic or prognostic significance.
-    Use OTHER with biomarker_name_desc for a marker not listed here."""
+    """Gene or protein or other biomarker with therapeutic or prognostic significance."""
 
     OTHER = "other"
 
@@ -406,9 +397,7 @@ class BiomarkerStatus(str, Enum):
     ALTERED = "altered"  # any alteration or positive expression
     NEGATIVE = "negative"  # explicit recording of negativity or normality
     EQUIVOCAL = "equivocal"
-    # borderline/indeterminate by the assay's own criteria (e.g. HER2 IHC 2+). A result
-    # unambiguously positive but only in a subset of cells, or weak/focal, is ALTERED -
-    # capture the extent in result_value (e.g. "focal", "1-50% of cells")
+    # where explicitly stated borderline/indeterminate
     NOT_ASSESSABLE = "not_assessable"  # e.g. insufficient tumour cells / failed stain
 
 
@@ -419,7 +408,7 @@ class BiomarkerMethod(str, Enum):
     IMMUNOHISTOCHEMISTRY = "immunohistochemistry"
     FISH_ISH = "fish_ish"
     PCR = "pcr"
-    SEQUENCING = "sequencing"  # NGS or Sanger
+    SEQUENCING = "sequencing"
 
 
 # BLOCKS
@@ -461,14 +450,14 @@ class Biomarker(BaseModel):
     )
 
 
-class FeatureFinding(BaseModel):
+class Feature(BaseModel):
     """A histological feature explicitly stated for a finding, and what the report
     said about it."""
 
-    feature: Feature = Field(
+    feature: FeatureType = Field(
         description="Histological feature. Use OTHER if not in enum."
     )
-    feature_desc: str | None = Field(
+    feature_name_desc: str | None = Field(
         None, description="Name of the feature as described in the report"
     )
     feature_status: FeatureStatus = Field(
@@ -476,10 +465,12 @@ class FeatureFinding(BaseModel):
     )
 
 
-class MarginFinding(BaseModel):
+class Margin(BaseModel):
     """Status of surgical margin of a specimen as reported."""
 
-    margin_status: MarginStatus = Field(description="Status of this margin")
+    margin_status: MarginStatus = Field(
+        description="Status of this margin. Record a margin only where the report characterises it."
+    )
     distance_mm: float | None = Field(
         None, ge=0, description="Distance from tumour to this margin in mm, if stated"
     )
@@ -500,7 +491,7 @@ class SpecimenFinding(BaseModel):
     finding_summary: str = Field(
         description="Short summary of this finding in your own words"
     )
-    features: list[FeatureFinding] = Field(
+    features: list[Feature] = Field(
         default_factory=list,
         description="Histological features explicitly stated for this finding, each with its reported status; empty if none stated",
     )
@@ -516,7 +507,7 @@ class SpecimenFinding(BaseModel):
     )
     tumour_nature: TumourNature | None = Field(
         None,
-        description="Whether the tumour is primary at this site, a metastasis, or a recurrence",
+        description="Whether the tumour is primary at this site, a metastasis, or a recurrence, or if not stated or unclear.",
     )
     tumour_source: AnatomicalSite | None = Field(
         None,
@@ -532,7 +523,7 @@ class SpecimenFinding(BaseModel):
     )
     dimensions_desc: str | None = Field(
         None,
-        description="Direct extract of reported sizes only (e.g. '40x30x35mm', '2mm focus in a 14mm core'). Count or ratio of nodes belong on Specimen.nodes_examined/nodes_positive.",
+        description="Direct extract of the TUMOUR's own reported size only (e.g. '40x30x35mm', '2mm focus in a 14mm core'). Not the size of the specimen, container or cores received, and not a distance of spread. Count or ratio of nodes belong on Specimen.nodes_examined/nodes_positive.",
     )
 
     # results specific to this finding
@@ -598,7 +589,7 @@ class Specimen(BaseModel):
         default_factory=list,
         description="Noteworthy pathological observations described in this specimen, whatever their status; empty only if the report says nothing reportable about it",
     )
-    margins: list[MarginFinding] = Field(
+    margins: list[Margin] = Field(
         default_factory=list,
         description="Surgical margin statuses reported for this specimen; empty if none reported",
     )
@@ -611,11 +602,8 @@ class OncoPathModel(BaseModel):
     is_pathology_report: bool = Field(
         description="True only if the document is a histopathology or cytopathology report"
     )
-    is_oncology_related: bool = Field(
-        description="True only if the report concerns a patient being investigated, staged, or followed up for cancer"
-    )
-    is_malignancy_identified_on_specimen: bool = Field(
-        description="True if this report's findings assert malignant or in-situ neoplastic disease in any specimen."
+    is_neoplastic_disease_identified: bool = Field(
+        description="True if this report's findings assert, or raise unresolved suspicion of, malignant or in-situ neoplastic disease in any specimen. False for a benign or normal specimen."
     )
     clinical_indication: str | None = Field(
         None,
