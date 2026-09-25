@@ -104,13 +104,17 @@
     "operation_outcome_desc": "Hartmann's reversed as planned but converted to open; additional unplanned defunctioning loop ileostomy formed.",
     "metadata": {
       "urgency": "elective",
+      "ncepod_category": null,
       "anaesthetic_types": [
         "general",
         "peripheral_nerve_block"
       ],
       "operative_time_minutes": 262,
-      "estimated_blood_loss_ml": 350,
+      "estimated_blood_loss_gross_ml": 350,
+      "estimated_blood_loss_net_ml": null,
       "estimated_blood_loss_desc": "approx 350ml",
+      "blood_units_transfused": null,
+      "blood_units_transfused_desc": null,
       "tourniquet_time_minutes": null,
       "asa_grade": 3,
       "asa_grade_desc": "ASA: III",

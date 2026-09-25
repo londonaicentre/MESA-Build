@@ -16,10 +16,7 @@ class ProcedureType(str, Enum):
     """Operation performed, named by what was done and where, not by the pathology
     treated. Grouped by body system, loosely following OPCS-4 chapter order.
     One entry per distinct procedure performed. The access route (e.g. laparotomy,
-    laparoscopy, craniotomy, arthroscopy, endoscopy) is recorded in approach, not
-    as a procedure. Scope values (upper_gi_endoscopy, lower_gi_endoscopy,
-    bronchoscopy, laryngoscopy, cystoscopy, ureteroscopy, hysteroscopy) are coded
-    only when no other listed procedure was performed through the scope."""
+    laparoscopy, craniotomy, arthroscopy, endoscopy) is recorded in approach."""
 
     OTHER = "other"
 
@@ -62,7 +59,9 @@ class ProcedureType(str, Enum):
     MASTECTOMY = "mastectomy"  # simple, skin sparing or nipple sparing
     WIDE_LOCAL_EXCISION_OF_BREAST = "wide_local_excision_of_breast"
     EXCISION_OF_BREAST_LESION = "excision_of_breast_lesion"
-    BREAST_RECONSTRUCTION = "breast_reconstruction"  # implant or flap based
+    BREAST_RECONSTRUCTION = (
+        "breast_reconstruction"  # implant or flap based, incl. free flap (e.g. DIEP)
+    )
     BREAST_AUGMENTATION = "breast_augmentation"
     BREAST_REDUCTION = "breast_reduction"
     MICRODOCHECTOMY = "microdochectomy"
@@ -149,7 +148,9 @@ class ProcedureType(str, Enum):
     PANPROCTOCOLECTOMY = "panproctocolectomy"
     HARTMANNS_PROCEDURE = "hartmanns_procedure"
     REVERSAL_OF_HARTMANNS_PROCEDURE = "reversal_of_hartmanns_procedure"
-    ANTERIOR_RESECTION_OF_RECTUM = "anterior_resection_of_rectum"
+    ANTERIOR_RESECTION_OF_RECTUM = (
+        "anterior_resection_of_rectum"  # high, low or ultralow, incl. rectosigmoid
+    )
     ABDOMINOPERINEAL_RESECTION_OF_RECTUM = "abdominoperineal_resection_of_rectum"
     TRANSANAL_EXCISION_OF_RECTAL_LESION = "transanal_excision_of_rectal_lesion"
     ILEOCAECAL_RESECTION = "ileocaecal_resection"
@@ -279,8 +280,8 @@ class ProcedureType(str, Enum):
     SALPINGOTOMY = "salpingotomy"
     MYOMECTOMY = "myomectomy"
     OMENTECTOMY = "omentectomy"
-    CYTOREDUCTIVE_SURGERY = "cytoreductive_surgery"  # peritoneal debulking
-    PELVIC_EXENTERATION = "pelvic_exenteration"
+    CYTOREDUCTIVE_SURGERY = "cytoreductive_surgery"  # peritonectomy or peritoneal stripping, incl. ablation of peritoneal deposits; organ resections coded separately
+    PELVIC_EXENTERATION = "pelvic_exenteration"  # removal of bladder and/or vagina with other pelvic organs
     HYSTEROSCOPY = "hysteroscopy"  # diagnostic or operative
     ENDOMETRIAL_ABLATION = "endometrial_ablation"
     UTERINE_CURETTAGE_OR_EVACUATION = (
@@ -304,7 +305,7 @@ class ProcedureType(str, Enum):
     CURETTAGE_AND_CAUTERY_OF_SKIN_LESION = "curettage_and_cautery_of_skin_lesion"
     SKIN_GRAFT = "skin_graft"  # split or full thickness
     LOCAL_OR_REGIONAL_FLAP = "local_or_regional_flap"  # incl. pedicled flaps
-    FREE_FLAP = "free_flap"  # microvascular free tissue transfer
+    FREE_FLAP = "free_flap"  # microvascular free tissue transfer, other than for breast reconstruction
     EXCISION_OF_SOFT_TISSUE_LESION = "excision_of_soft_tissue_lesion"  # deep to subcutaneous fat, e.g. ganglion, bursa, soft tissue tumour
     WOUND_WASHOUT_OR_DEBRIDEMENT = "wound_washout_or_debridement"
     NEGATIVE_PRESSURE_WOUND_THERAPY = "negative_pressure_wound_therapy"
@@ -318,7 +319,7 @@ class ProcedureType(str, Enum):
     MUSCLE_REPAIR = "muscle_repair"
 
     # Lymph nodes
-    LYMPH_NODE_DISSECTION = "lymph_node_dissection"  # clearance of any nodal basin other than neck dissection
+    LYMPH_NODE_DISSECTION = "lymph_node_dissection"  # clearance or bulky node debulking of any nodal basin other than neck dissection
     SENTINEL_LYMPH_NODE_BIOPSY = "sentinel_lymph_node_biopsy"
     EXCISION_BIOPSY_OF_LYMPH_NODE = "excision_biopsy_of_lymph_node"
 
@@ -402,6 +403,11 @@ class ProcedureType(str, Enum):
     ORGAN_RETRIEVAL = "organ_retrieval"  # live or deceased donor
 
     # General / cross-specialty
+    PERITONEAL_LAVAGE = "peritoneal_lavage"  # washout of the peritoneal cavity, e.g. for peritonitis or relook
+    LAPAROSTOMY = "laparostomy"  # abdomen deliberately left open, incl. temporary abdominal closure or open abdomen NPWT
+    DELAYED_CLOSURE_OF_ABDOMEN = (
+        "delayed_closure_of_abdomen"  # closure of a laparostomy
+    )
     DIAGNOSTIC_OR_EXPLORATORY_PROCEDURE = "diagnostic_or_exploratory_procedure"  # access and inspection only, with or without biopsy or washings, e.g. staging laparoscopy, EUA, diagnostic arthroscopy, open and close
     INCISION_AND_DRAINAGE_OF_ABSCESS = "incision_and_drainage_of_abscess"  # any site
     REMOVAL_OF_FOREIGN_BODY = "removal_of_foreign_body"
@@ -417,7 +423,8 @@ class ComplicationType(str, Enum):
     OTHER = "other"
 
     # Intraoperative - injury
-    HAEMORRHAGE = "haemorrhage"  # major or unexpected bleeding, incl. requiring transfusion or post-operative bleeding
+    HAEMORRHAGE = "haemorrhage"  # major or unexpected bleeding, incl. post-operative bleeding, only where documented as a complication
+    BLOOD_PRODUCTS_REQUIRED = "blood_products_required"  # transfusion of allogeneic blood products (e.g. RBC, FFP, platelets, cryoprecipitate) explicitly documented; not cell salvage return
     VASCULAR_INJURY = "vascular_injury"
     NERVE_INJURY = "nerve_injury"
     BOWEL_INJURY_OR_ENTEROTOMY = "bowel_injury_or_enterotomy"
@@ -425,7 +432,7 @@ class ComplicationType(str, Enum):
     BILE_DUCT_INJURY = "bile_duct_injury"
     VISCERAL_ORGAN_INJURY = "visceral_organ_injury"
     DURAL_TEAR_OR_CSF_LEAK = "dural_tear_or_csf_leak"
-    PNEUMOTHORAX = "pneumothorax"
+    PNEUMOTHORAX = "pneumothorax"  # incl. pleural breach
     TENDON_OR_LIGAMENT_INJURY = "tendon_or_ligament_injury"
     IATROGENIC_FRACTURE = "iatrogenic_fracture"
     PERIPROSTHETIC_FRACTURE = "periprosthetic_fracture"
@@ -444,6 +451,7 @@ class ComplicationType(str, Enum):
         "respiratory_failure"  # e.g. severe hypoxia, unplanned ventilation
     )
     CARDIAC_ARREST = "cardiac_arrest"
+    SEIZURE = "seizure"
     FAT_EMBOLISM_SYNDROME = "fat_embolism_syndrome"
     TOURNIQUET_RELATED_COMPLICATION = "tourniquet_related_complication"
     COMPARTMENT_SYNDROME = "compartment_syndrome"
@@ -461,11 +469,16 @@ class ComplicationType(str, Enum):
     DISLOCATION_OR_INSTABILITY = "dislocation_or_instability"
     LEG_LENGTH_DISCREPANCY = "leg_length_discrepancy"
 
+    # Reconstruction and vascular
+    ANASTOMOTIC_OR_GRAFT_THROMBOSIS = "anastomotic_or_graft_thrombosis"  # vascular or microvascular, incl. bypass graft or AV access thrombosis
+    FLAP_COMPROMISE_OR_FAILURE = "flap_compromise_or_failure"  # e.g. venous congestion, partial or total flap loss
+
     # Postoperative (mainly for previous operations)
     ANASTOMOTIC_LEAK = "anastomotic_leak"
     SURGICAL_SITE_INFECTION = "surgical_site_infection"  # superficial, deep or organ space, incl. implant infection
     POSTOPERATIVE_COLLECTION = "postoperative_collection"  # abscess, haematoma, seroma
     WOUND_DEHISCENCE = "wound_dehiscence"
+    VENOUS_THROMBOEMBOLISM = "venous_thromboembolism"  # DVT or PE
 
 
 # ENUMS - SUPPORTING
@@ -518,9 +531,17 @@ class OperationOutcome(str, Enum):
 
 
 class ProcedureUrgency(str, Enum):
-    ELECTIVE = "elective"
-    URGENT = "urgent"
-    EMERGENCY = "emergency"
+    ELECTIVE = "elective"  # planned
+    EMERGENCY = "emergency"  # unplanned urgent
+
+
+class NcepodCategory(str, Enum):
+    """NCEPOD Classification of Intervention."""
+
+    IMMEDIATE = "immediate"  # NCEPOD 1
+    URGENT = "urgent"  # NCEPOD 2, incl. local subdivisions (e.g. 2A/2B)
+    EXPEDITED = "expedited"  # NCEPOD 3
+    ELECTIVE = "elective"  # NCEPOD 4
 
 
 class AnaestheticType(str, Enum):
@@ -561,9 +582,12 @@ class PreviousOperationRelation(str, Enum):
 
 
 class Implant(BaseModel):
-    """A permanent device or material left implanted at the end of the procedure
-    (e.g. prosthesis, cement, mesh, plate, screw, stent, pacemaker). Excludes sutures,
-    clips, staples, dressings, drains, catheters and temporary devices."""
+    """A device or material of note to a regulator that persists in the patient at
+    the end of the operation (e.g. prosthesis, cement, mesh, plate, screw, stent,
+    pacemaker, resorbable material, biological graft, haemostatic or sealant material,
+    device left for later removal). Excludes sutures, clips, staples, dressings,
+    drains, catheters, other equipment removed before the end of the operation. If in
+    doubt, include."""
 
     implant_desc: str = Field(
         description="Direct extract naming the implant/device (e.g. 'Exeter V40 cemented stem', 'DePuy Pinnacle acetabular shell', 'size 5 mesh')"
@@ -635,7 +659,11 @@ class ProcedureMetadata(BaseModel):
     do not infer or estimate."""
 
     urgency: Optional[ProcedureUrgency] = Field(
-        None, description="Elective, urgent, or emergency, if stated"
+        None, description="Elective or emergency, if stated"
+    )
+    ncepod_category: Optional[NcepodCategory] = Field(
+        None,
+        description="NCEPOD category, only if explicitly stated (e.g. 'NCEPOD 2A'). Do not derive from urgency",
     )
     anaesthetic_types: Optional[List[AnaestheticType]] = Field(
         None,
@@ -644,14 +672,28 @@ class ProcedureMetadata(BaseModel):
     operative_time_minutes: Optional[int] = Field(
         None, ge=0, description="Total operative/procedure time in minutes, if stated"
     )
-    estimated_blood_loss_ml: Optional[int] = Field(
+    estimated_blood_loss_gross_ml: Optional[int] = Field(
         None,
         ge=0,
-        description="Estimated blood loss in millilitres, only if a single numeric value is stated",
+        description="Estimated total blood loss in millilitres before any cell salvage return, only if a single numeric value is stated. Unit conversion is fine (e.g. '1.4L' = 1400)",
+    )
+    estimated_blood_loss_net_ml: Optional[int] = Field(
+        None,
+        ge=0,
+        description="Estimated blood loss in millilitres net of cell salvage return, only if stated or calculable from a stated gross loss and returned volume. Unit conversion is fine",
     )
     estimated_blood_loss_desc: Optional[str] = Field(
         None,
         description="Direct extract of estimated blood loss as documented (e.g. 'minimal', '<50ml', '500-700ml')",
+    )
+    blood_units_transfused: Optional[int] = Field(
+        None,
+        ge=0,
+        description="Total units of allogeneic blood products transfused during the operation (e.g. '4 RBC, 4 FFP, 1 plt' = 9), if stated. Excludes cell salvage return",
+    )
+    blood_units_transfused_desc: Optional[str] = Field(
+        None,
+        description="Direct extract of blood products transfused as documented (e.g. '2u RBC', '4 RBC, 4 FFP, 1 plt')",
     )
     tourniquet_time_minutes: Optional[int] = Field(
         None, ge=0, description="Tourniquet time in minutes, if stated"
