@@ -20,20 +20,22 @@ CRITICAL REQUIREMENTS:
 
 WHAT NOT TO DO:
 1. Do not infer procedures, findings, complications, or any other information that is not explicitly stated
-2. Do not record a complication unless the note documents one. If none are reported, leave complications as None
+2. Do not record a complication unless the note documents one. If there are no complications documented, whether stated as none or not mentioned, leave complications as None
 3. Do not create information to fill fields - use None/null for absent information
 4. Do not guess at times, blood loss, ASA grade, or implant details
 5. Do not infer dates from context
 IF IT IS NOT GIVEN OR YOU ARE NOT SURE, DO NOT EXTRACT!
 
 CLASSIFICATION RULES:
-1. Set is_operation_note = TRUE only if the document records a surgical, endoscopic or interventional procedure performed on a specific patient (e.g. operation notes, endoscopy reports, interventional radiology and catheter lab reports).
+1. Set is_operation_note = TRUE only if the document is an operation note for a procedure performed on a specific patient. Set FALSE for documents that only mention an operation (e.g. discharge summaries, clinic letters, consent forms, listing letters).
 2. If is_operation_note = FALSE, you MUST leave all other fields as None.
 
 DOMAIN RULES (OPERATION NOTES):
-1. PROCEDURE CODING. Choose the most specific procedure_type; general values are for variants not listed elsewhere. Add one entry per distinct procedure performed (e.g. anterior resection + loop ileostomy = two entries), unless a single value names the combined operation (e.g. adenotonsillectomy). Do not add access steps (laparotomy, craniotomy, thoracotomy) as separate entries when a listed procedure was performed through them. Use OTHER with procedure_desc where nothing fits.
-2. APPROACH AND LATERALITY. Record these in their own fields. Use converted_to_open where a minimal access or robotic approach was converted.
+1. PROCEDURE CODING. Add one entry per distinct procedure performed, choosing the most specific procedure (e.g. anterior resection + loop ileostomy = anterior_resection_of_rectum + formation_of_ileostomy). The access route is recorded in approach (e.g. laparoscopic cholecystectomy = cholecystectomy with approach laparoscopic; TURBT = transurethral_resection_of_bladder_tumour with approach endoscopic). Do not add routine closure, wound drain insertion or local infiltration as procedures. Use OTHER with procedure_name_desc where nothing fits.
+2. APPROACH AND LATERALITY. Record these in their own fields. Use converted_to_open where a minimal access or robotic approach was converted. Use laterality not_applicable where a procedure spans multiple foci or sites.
 3. INDICATION vs FINDINGS. The indication is why the operation was done; findings are what was found at operation. Do not copy one into the other.
 4. PREVIOUS RELATED OPERATIONS. Only add a previous operation where the note explicitly links it to this operation (e.g. return to theatre, reversal, revision, completion). Do not list unrelated past surgical history. Complications of a previous operation belong in that block, not in the current operation's complications.
+5. EHR TEMPLATE SECTIONS. The surgeon's narrative is authoritative. Ignore post-operative flowsheet entries, urinary catheters, specimen orders and medication orders appended to the note. Take operation_year/operation_month from the date of surgery only, never from other timestamps. Where the note text is duplicated with conflicting values, prefer the most complete surgeon-authored version.
+6. OUTCOME vs COMPLICATIONS. Record deviation from the planned operation (more, less, different, abandoned, intraoperative death) in operation_outcome, not as a complication. Only set operation_outcome where the note makes the plan and outcome explicit.
 
 The operation note follows below:
