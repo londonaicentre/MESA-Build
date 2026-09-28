@@ -20,7 +20,7 @@ def test_build_datagen_prompt() -> None:
 
     # Schema source present
     assert "OperationNote" in prompt, "Schema should contain the root model"
-    assert "procedure_type" in prompt, "Schema should contain key field"
+    assert "procedures" in prompt, "Schema should contain key field"
 
     # Example should be present
     assert '"content"' in prompt or "'content'" in prompt, (
@@ -32,4 +32,14 @@ def test_build_datagen_prompt() -> None:
 
 
 def test_build_main_prompt() -> None:
-    pass
+    """Test building main prompt."""
+    builder = PromptBuilder()
+    prompt = builder.build_main_prompt()
+
+    # Placeholders replaced
+    assert "{SCHEMA}" not in prompt, "Schema placeholder should be replaced"
+    assert "{EXAMPLE}" not in prompt, "Main prompt should not have example placeholder"
+
+    # Schema source present
+    assert "OperationNote" in prompt, "Schema should contain the root model"
+    assert "procedures" in prompt, "Schema should contain key field"
