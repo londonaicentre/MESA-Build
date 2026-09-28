@@ -1,0 +1,14 @@
+name: opnoteschema test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/opnoteschema/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      working-directory: schemas/opnoteschema
