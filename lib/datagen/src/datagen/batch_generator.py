@@ -60,7 +60,7 @@ class BedrockBatchGenerator:
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
-        self.__document_files: list[Path] = []
+        batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
@@ -69,7 +69,8 @@ class BedrockBatchGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("*.json")))
+            batches.append(sorted(output_folder.glob("*.json")))
+        self.__document_files: list[Path] = DocumentLoader.interleave(batches)
 
     def get_document_files_count(self) -> int:
         return len(self.__document_files)

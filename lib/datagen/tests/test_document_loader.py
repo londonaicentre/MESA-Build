@@ -264,6 +264,30 @@ def test_download_and_extract_custom_region_used(
     assert mock_dependencies.download_file.call_args[1]["region_name"] == "us-east-1"
 
 
+@pytest.mark.parametrize(
+    ("batches", "expected"),
+    [
+        (
+            [["foo1", "foo2", "foo3"], ["bar1", "bar2", "bar3"]],
+            ["foo1", "bar1", "foo2", "bar2", "foo3", "bar3"],
+        ),
+        (
+            [["foo1", "foo2", "foo3"], ["bar1"], ["baz1", "baz2"]],
+            ["foo1", "bar1", "baz1", "foo2", "baz2", "foo3"],
+        ),
+        ([["foo1"], []], ["foo1"]),
+        ([["foo1", "foo2"]], ["foo1", "foo2"]),
+        ([], []),
+    ],
+)
+def test_interleave_batches_given_returns_round_robin_order(
+    batches: list[list[str]], expected: list[str]
+) -> None:
+    assert DocumentLoader.interleave(
+        [[Path(name) for name in batch] for batch in batches]
+    ) == [Path(name) for name in expected]
+
+
 @pytest.fixture
 def mock_list_s3_objects(mocker: MockerFixture) -> MagicMock:
     return mocker.patch("datagen.document_loader.AWS.list_s3_objects")

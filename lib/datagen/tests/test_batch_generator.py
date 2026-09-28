@@ -208,6 +208,37 @@ def test_init_multiple_batches_downloads_all(
     assert mock_generator_dependencies.download_and_extract.call_count == 2
 
 
+def test_init_multiple_batches_interleaves_document_files(
+    mocker: MockerFixture,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+) -> None:
+    mocker.patch.object(
+        Path,
+        "glob",
+        side_effect=[
+            [Path("./data/documents/batch1/foo.json")],
+            [Path("./data/documents/batch2/bar.json")],
+        ],
+    )
+    mock_interleave: MagicMock = mocker.patch(
+        "datagen.batch_generator.DocumentLoader.interleave", autospec=True
+    )
+    BatchGeneratorFixture(
+        system_prompt="foo",
+        schema=MagicMock,
+        schema_name="baz",
+        model_name="foo_model",
+        document_batches=["batch1.tar.gz", "batch2.tar"],
+    )
+    mock_interleave.assert_called_once_with(
+        [
+            [Path("./data/documents/batch1/foo.json")],
+            [Path("./data/documents/batch2/bar.json")],
+        ]
+    )
+
+
 def test_generate_batch_sample_size_given_creates_correct_entries(
     mocker: MockerFixture,
     mock_filesystem: FileSystem,
