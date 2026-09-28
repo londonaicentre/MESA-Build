@@ -1,76 +1,127 @@
 {
-  "content": "OPERATION NOTE\n\nPatient's Name: [redacted]\nDate of birth: [redacted]\nGender: female\nHospital number: [redacted]\nNHS number: [redacted]\n\nDate of Surgery: [redacted]\n\nPost-op Diagnosis: Displaced intracapsular fracture neck of femur, right\n\nProcedure(s): Right Hip Hemiarthroplasty; Cerclage wiring of intraoperative periprosthetic femoral fracture - Right\n\nPatient Class: Inpatient (trauma list)\n\nConsultant on Case: [redacted]\n\nSurgeons:\n* [redacted] - Consultant\n* [redacted] - Primary Operator (Registrar)\n* [redacted] - Assisting\n\nAnaesthetist: [redacted]\nResponsible Anaesthetist: [redacted]\nAnaesthetic Type: spinal, peripheral nerve block\nASA Grade: III\n\nIndication: 82 year old admitted after a fall at home with a displaced intracapsular fracture of the right neck of femur, confirmed on plain film and CT. Booked on the trauma list for hemiarthroplasty.\n\nDescription of Procedure\n\nWHO checklist completed. IV teicoplanin and gentamicin given at induction. Lateral position with front and back bolsters. Skin prepped with betadine and chlorhexidine, iodine-impregnated incise drape.\n\nAnterolateral approach to proximal right femur. Dissection through fat and fascia lata. Gluteus medius and minimus incised from the greater trochanter. T-shaped capsulotomy. Femoral neck cut 1cm above the lesser trochanter. Femoral head removed, measured 44mm.\n\nFemur prepared with box chisel, pencil reamers and raspers sequential to size 2. During broaching of the femoral canal a longitudinal crack was noted extending from the calcar down the medial cortex of the proximal femoral shaft, approximately 4cm in length, with no displacement. This was considered an intraoperative periprosthetic fracture. Two cerclage wires (18-gauge) were passed around the proximal femur proximal and distal to the crack and tensioned to secure the fracture prior to proceeding with stem insertion. No further propagation was seen on trialling.\n\nCanal prepared with pulsed lavage (1L) and dried with ribbon gauze and suction catheter. Canal cemented. Cemented stem with centraliser inserted, taking care to avoid further distraction of the cerclage-wired fracture. Trialled with standard +4mm head; equal leg lengths and a stable hip on internal and external rotation. 44mm bipolar head +4 inserted. Stable hip reduction confirmed, equal leg lengths, stable on internal and external rotation. Image intensifier check confirmed satisfactory wire position and no further fracture propagation. Saline wash.\n\nEstimated blood loss 450ml, no transfusion required intraoperatively.\n\nClosure\nCapsule - 5 Ethibond\nGluteus medius and minimus - 5 Ethibond inter-osseous followed by continuous suture in tendon\nFascia lata - 1 Vicryl\nFat - 1 Vicryl interrupted\nSubdermal - 2-0 Vicryl\nSkin - 3-0 Monocryl, skin glue, steristrips\n\nTotal operative time 105 minutes.\n\nPost op Plan\nToe-touch weight bearing on the right for 6 weeks given the periprosthetic fracture and cerclage wiring, then progress as tolerated with physiotherapy input.\nRepeat plain film in recovery to confirm implant and wire position.\nFBC, U+E tomorrow.\nNo further antibiotics needed beyond the two post-op doses.\nVTE prophylaxis as per protocol for NOF fractures.\nOrthopaedic follow up at 2 and 6 weeks with weight-bearing progression reviewed at 6 week appointment.\n\nImplant(s):\nImplant Name | Type | Manufacturer | Site | No. Used | Action\nPALACOS R+G 2x40g bone cement | Cement / Putty | Movianto UK Ltd | Right Hip | 1 | Implanted\nStryker Orthopaedics Exeter V40 Cemented Hip Stem, size 2 | Orthopaedic Prosthesis | Stryker UK Ltd | Right Hip | 1 | Implanted\nStryker Orthopaedics UHR Universal Head Bipolar Component, OD 44mm | Orthopaedic Prosthesis | Stryker UK Ltd | Right Hip | 1 | Implanted\nStryker Orthopaedics V40 Femoral Head, OD 28mm, OFFST +4 | Orthopaedic Prosthesis | Stryker UK Ltd | Right Hip | 1 | Implanted\n18-gauge cerclage wire | Fixation wire | DePuy Synthes | Right femur | 2 | Implanted",
+  "content": "OPERATION NOTE\n\nPatient: [redacted]   MRN: [redacted]   DOB: [redacted]\nHospital: [redacted]   Theatre 4\nDate of operation: 14/03/2026\nSurgeon: [redacted] (Consultant Colorectal Surgeon)\nAssistant: [redacted] (ST6)\nUrology: [redacted] (Consultant Urologist)\nAnaesthetist: [redacted]\nAnaesthetic: GA + bilateral TAP blocks\nASA: III\nUrgency: Elective\n\nPlanned procedure: Laparoscopic reversal of Hartmann's procedure and repair of incisional hernia. Consented for possible open conversion and defunctioning loop ileostomy.\n\nIndication: 68M, Hartmann's procedure (emergency laparotomy) June 2025 for perforated sigmoid diverticulitis with purulent peritonitis. Post-op course complicated by midline wound infection requiring VAC therapy, with subsequent 6cm incisional hernia at the lower midline. Pre-op CT and flexible sigmoidoscopy of rectal stump satisfactory. Wishes to proceed to reversal.\n\nProcedure:\nLloyd-Davies position. Cystoscopy and bilateral 6Fr ureteric stents placed by urology team to aid identification of ureters (to be removed at end of case).\nOpen Hasson entry left upper quadrant, 2 x 5mm ports. Dense adhesions of small bowel to the anterior abdominal wall and pelvis. Laparoscopic adhesiolysis attempted for 40 mins but unable to safely progress; converted to open via previous midline scar, excising the hernia sac.\nExtensive adhesiolysis. During adhesiolysis a 1cm full-thickness enterotomy made in the distal ileum approx 60cm from the ileocaecal valve. Repaired primarily in 2 layers with 3-0 PDS; no contamination.\nEnd colostomy taken down and descending colon mobilised; splenic flexure mobilisation required for tension-free reach. Rectal stump identified with aid of rigid sigmoidoscope and mobilised. Colorectal anastomosis fashioned end-to-end with 29mm circular stapler, doughnuts complete, air leak test negative.\nGiven the enterotomy, prolonged adhesiolysis and patient comorbidity, decision made intraoperatively to defunction: loop ileostomy fashioned in the right iliac fossa (site pre-marked).\nIncisional hernia repaired with retrorectus (sublay) mesh: Ethicon Prolene mesh 15 x 30cm, LOT PM2291847, fixed with 2-0 Prolene. Posterior and anterior sheath closed with looped 1 PDS.\n20Fr Robinson drain to pelvis. Skin clips. Local anaesthetic infiltration to wounds.\nUreteric stents removed at end of case.\n\nFindings: Dense small bowel adhesions. Healthy rectal stump approx 15cm from anal verge. No residual diverticular disease in the descending colon. 6cm lower midline incisional hernia containing omentum.\n\nComplications: Enterotomy as above, repaired.\nEBL: approx 350ml\nOperative time: 262 minutes\n\nOutcome: Hartmann's reversed as planned but converted to open; additional unplanned defunctioning loop ileostomy formed.\n\nPost-op plan:\n- Enhanced recovery pathway, free fluids tonight, diet as tolerated\n- Stoma nurse review day 1\n- Remove pelvic drain when output <100ml/24h\n- Extended VTE prophylaxis 28 days\n- Gastrografin enema at 8 weeks, then list for ileostomy closure if anastomosis intact\n- Abdominal binder 6 weeks, no heavy lifting 3 months\n\n--- Theatre record (auto-populated) ---\nIntraoperative complications: [x] None\nEstimated blood loss (nursing): 300ml\nUrinary catheter: 14Fr Foley inserted in theatre\nSpecimen: Hernia sac - histology\nNote signed: 16/03/2026 08:42\n",
   "output": {
     "is_operation_note": true,
-    "indication": "Displaced intracapsular fracture of the right neck of femur following a fall at home, confirmed on plain film and CT.",
+    "operation_year": 2026,
+    "operation_month": 3,
+    "indication_summary": "Elective reversal of Hartmann's procedure (performed for perforated sigmoid diverticulitis) with repair of a 6cm lower midline incisional hernia following previous wound infection.",
+    "previous_related_operations": [
+      {
+        "relations_to_current": [
+          "reversal"
+        ],
+        "relation_desc": "Hartmann's procedure (emergency laparotomy) June 2025 for perforated sigmoid diverticulitis with purulent peritonitis",
+        "previous_operation_year": 2025,
+        "previous_operation_month": 6,
+        "procedures": [
+          {
+            "procedure": "hartmanns_procedure",
+            "procedure_name_desc": "Hartmann's procedure",
+            "approach": "laparotomy",
+            "laterality": null,
+            "site_detail": null,
+            "incision_desc": null,
+            "implants": null
+          }
+        ],
+        "complications": [
+          {
+            "complication_type": "surgical_site_infection",
+            "complication_desc": "midline wound infection",
+            "management_desc": "requiring VAC therapy"
+          },
+          {
+            "complication_type": "other",
+            "complication_desc": "subsequent 6cm incisional hernia at the lower midline",
+            "management_desc": null
+          }
+        ]
+      }
+    ],
     "procedures": [
       {
-        "procedure_type": "hip_hemiarthroplasty_cemented",
-        "procedure_desc": "Right Hip Hemiarthroplasty via anterolateral approach",
-        "laterality": "right",
-        "implants": [
-          {
-            "implant_desc": "PALACOS R+G 2x40g bone cement",
-            "device_type": "bone cement",
-            "manufacturer": "Movianto UK Ltd",
-            "size_or_specification": "2x40g",
-            "serial_or_lot_number": null
-          },
-          {
-            "implant_desc": "Stryker Orthopaedics Exeter V40 Cemented Hip Stem, size 2",
-            "device_type": "femoral stem",
-            "manufacturer": "Stryker UK Ltd",
-            "size_or_specification": "size 2",
-            "serial_or_lot_number": null
-          },
-          {
-            "implant_desc": "Stryker Orthopaedics UHR Universal Head Bipolar Component, OD 44mm",
-            "device_type": "bipolar head",
-            "manufacturer": "Stryker UK Ltd",
-            "size_or_specification": "OD 44mm",
-            "serial_or_lot_number": null
-          },
-          {
-            "implant_desc": "Stryker Orthopaedics V40 Femoral Head, OD 28mm, OFFST +4",
-            "device_type": "femoral head",
-            "manufacturer": "Stryker UK Ltd",
-            "size_or_specification": "OD 28mm, OFFST +4",
-            "serial_or_lot_number": null
-          }
-        ]
+        "procedure": "ureteric_stent_procedure",
+        "procedure_name_desc": "Cystoscopy and bilateral 6Fr ureteric stents",
+        "approach": "endoscopic",
+        "laterality": "bilateral",
+        "site_detail": null,
+        "incision_desc": null,
+        "implants": null
       },
       {
-        "procedure_type": "other",
-        "procedure_desc": "Cerclage wiring of intraoperative periprosthetic femoral fracture, right",
-        "laterality": "right",
+        "procedure": "adhesiolysis",
+        "procedure_name_desc": "Extensive adhesiolysis",
+        "approach": "converted_to_open",
+        "laterality": null,
+        "site_detail": "small bowel to anterior abdominal wall and pelvis",
+        "incision_desc": "Open Hasson entry left upper quadrant, 2 x 5mm ports; converted to open via previous midline scar",
+        "implants": null
+      },
+      {
+        "procedure": "reversal_of_hartmanns_procedure",
+        "procedure_name_desc": "reversal of Hartmann's procedure",
+        "approach": "converted_to_open",
+        "laterality": null,
+        "site_detail": "descending colon to rectal stump, with splenic flexure mobilisation",
+        "incision_desc": "converted to open via previous midline scar",
+        "implants": null
+      },
+      {
+        "procedure": "formation_of_ileostomy",
+        "procedure_name_desc": "loop ileostomy",
+        "approach": "converted_to_open",
+        "laterality": null,
+        "site_detail": "right iliac fossa",
+        "incision_desc": null,
+        "implants": null
+      },
+      {
+        "procedure": "ventral_hernia_repair",
+        "procedure_name_desc": "Incisional hernia repaired with retrorectus (sublay) mesh",
+        "approach": "converted_to_open",
+        "laterality": null,
+        "site_detail": "lower midline",
+        "incision_desc": "previous midline scar, excising the hernia sac",
         "implants": [
           {
-            "implant_desc": "18-gauge cerclage wire",
-            "device_type": "fixation wire",
-            "manufacturer": "DePuy Synthes",
-            "size_or_specification": "18-gauge",
-            "serial_or_lot_number": null
+            "implant_desc": "Ethicon Prolene mesh 15 x 30cm",
+            "device_type": "mesh",
+            "manufacturer": "Ethicon",
+            "size_or_specification": "15 x 30cm",
+            "serial_or_lot_number": "PM2291847"
           }
         ]
       }
     ],
-    "findings": "During broaching of the femoral canal a longitudinal crack was noted extending from the calcar down the medial cortex of the proximal femoral shaft, approximately 4cm in length, with no displacement. Image intensifier check after cerclage wiring and stem insertion confirmed satisfactory wire position and no further fracture propagation.",
     "complications": [
       {
-        "complication_type": "iatrogenic_fracture",
-        "complication_desc": "Longitudinal crack noted extending from the calcar down the medial cortex of the proximal femoral shaft, approximately 4cm in length, with no displacement, during broaching of the femoral canal - an intraoperative periprosthetic fracture.",
-        "management": "Two 18-gauge cerclage wires passed around the proximal femur proximal and distal to the crack and tensioned to secure the fracture prior to stem insertion; no further propagation seen on trialling or on image intensifier check."
+        "complication_type": "bowel_injury_or_enterotomy",
+        "complication_desc": "1cm full-thickness enterotomy made in the distal ileum approx 60cm from the ileocaecal valve",
+        "management_desc": "Repaired primarily in 2 layers with 3-0 PDS; no contamination"
       }
     ],
+    "operation_outcome": "more_than_planned",
+    "operation_outcome_desc": "Hartmann's reversed as planned but converted to open; additional unplanned defunctioning loop ileostomy formed.",
     "metadata": {
-      "urgency": "urgent",
-      "anaesthetic_type": "regional",
-      "operative_time_minutes": 105,
-      "estimated_blood_loss_ml": 450,
+      "urgency": "elective",
+      "ncepod_category": null,
+      "anaesthetic_types": [
+        "general",
+        "peripheral_nerve_block"
+      ],
+      "operative_time_minutes": 262,
+      "estimated_blood_loss_gross_ml": 350,
+      "estimated_blood_loss_net_ml": null,
+      "estimated_blood_loss_desc": "approx 350ml",
+      "blood_units_transfused": null,
+      "blood_units_transfused_desc": null,
       "tourniquet_time_minutes": null,
       "asa_grade": 3,
-      "surgeon_grade": "registrar"
+      "asa_grade_desc": "ASA: III",
+      "senior_surgeon_grade": "consultant"
     },
-    "operation_summary": "Right hip hemiarthroplasty for a displaced intracapsular neck of femur fracture, complicated intraoperatively by a periprosthetic crack of the proximal femoral shaft during canal broaching. This was secured with two cerclage wires before proceeding with cemented stem and bipolar head insertion, with no further fracture propagation on trialling or image intensifier check. Toe-touch weight bearing advised for 6 weeks given the fracture and wiring."
+    "findings_summary": "Dense small bowel adhesions; healthy rectal stump approx 15cm from anal verge; no residual diverticular disease in the descending colon; 6cm lower midline incisional hernia containing omentum.",
+    "operation_summary": "Laparoscopic reversal of Hartmann's converted to open for dense adhesions, with adhesiolysis, stapled colorectal anastomosis, sublay mesh incisional hernia repair and unplanned defunctioning loop ileostomy after an ileal enterotomy that was repaired primarily. Bilateral ureteric stents placed and removed.",
+    "post_op_plan_summary": "Enhanced recovery; stoma nurse review day 1; remove pelvic drain when output <100ml/24h; 28 days extended VTE prophylaxis; Gastrografin enema at 8 weeks then list for ileostomy closure; abdominal binder 6 weeks and no heavy lifting 3 months."
   }
 }

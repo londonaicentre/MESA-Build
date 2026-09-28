@@ -1,10 +1,10 @@
 [project]
 name = "opnoteschema"
-version = "0.1.0"
+version = "0.2.0"
 description = "Operation notes"
 readme = "README.md"
 authors = [
-    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" }
+    { name = "Joe Zhang", email = "jzhang@nhs.net" }
 ]
 requires-python = ">=3.13"
 license = "LicenseRef-Proprietary"
@@ -28,7 +28,7 @@ dev = [
 ]
 [tool.setuptools.package-data]
 opnoteschema = [
-    "*.txt", 
-    "examples/*.json", 
+    "*.txt",
+    "examples/*.json",
     "py.typed"
 ]

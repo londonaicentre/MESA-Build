@@ -1,854 +1,736 @@
 from enum import Enum
+from typing import Annotated, List, Optional
 
 from pydantic import BaseModel, Field
+
+# TYPES
+
+Year = Annotated[int, Field(ge=1900, le=2100)]
+Month = Annotated[int, Field(ge=1, le=12)]
 
 
 # ENUMS - PROCEDURE
 
 
 class ProcedureType(str, Enum):
-    """Specific procedure performed. Grouped by OPCS-4 chapter for readability.
-    Use OTHER with procedure_desc for a procedure not listed here."""
+    """Operation performed, named by what was done and where, not by the pathology
+    treated. Grouped by body system, loosely following OPCS-4 chapter order.
+    One entry per distinct procedure performed. The access route (e.g. laparotomy,
+    laparoscopy, craniotomy, arthroscopy, endoscopy) is recorded in approach."""
 
     OTHER = "other"
 
-    # A Nervous System
-    CRANIOTOMY = "craniotomy"
-    CRANIECTOMY = "craniectomy"
-    BURR_HOLE_DRAINAGE = "burr_hole_drainage"
-    EXCISION_OF_BRAIN_TUMOUR = "excision_of_brain_tumour"
-    STEREOTACTIC_BRAIN_BIOPSY = "stereotactic_brain_biopsy"
-    STEREOTACTIC_RADIOSURGERY = "stereotactic_radiosurgery"
-    EVACUATION_OF_EXTRADURAL_HAEMATOMA = "evacuation_of_extradural_haematoma"
-    EVACUATION_OF_SUBDURAL_HAEMATOMA = "evacuation_of_subdural_haematoma"
-    EVACUATION_OF_INTRACEREBRAL_HAEMATOMA = "evacuation_of_intracerebral_haematoma"
+    # Nervous system
     DECOMPRESSIVE_CRANIECTOMY = "decompressive_craniectomy"
-    CLIPPING_OF_CEREBRAL_ANEURYSM = "clipping_of_cerebral_aneurysm"
-    ENDOVASCULAR_COILING_OF_CEREBRAL_ANEURYSM = (
-        "endovascular_coiling_of_cerebral_aneurysm"
+    EXCISION_OF_BRAIN_LESION = "excision_of_brain_lesion"
+    BRAIN_BIOPSY = "brain_biopsy"  # stereotactic or open
+    EVACUATION_OF_INTRACRANIAL_HAEMATOMA = (
+        "evacuation_of_intracranial_haematoma"  # extradural, subdural or intracerebral
     )
-    INSERTION_OF_VENTRICULOPERITONEAL_SHUNT = "insertion_of_ventriculoperitoneal_shunt"
-    REVISION_OF_VENTRICULOPERITONEAL_SHUNT = "revision_of_ventriculoperitoneal_shunt"
-    REMOVAL_OF_VENTRICULOPERITONEAL_SHUNT = "removal_of_ventriculoperitoneal_shunt"
+    REPAIR_OF_CEREBRAL_ANEURYSM = (
+        "repair_of_cerebral_aneurysm"  # clipping, coiling or flow diversion
+    )
+    VENTRICULAR_SHUNT_PROCEDURE = (
+        "ventricular_shunt_procedure"  # insertion, revision or removal
+    )
     EXTERNAL_VENTRICULAR_DRAIN_INSERTION = "external_ventricular_drain_insertion"
     INSERTION_OF_INTRACRANIAL_PRESSURE_MONITOR = (
         "insertion_of_intracranial_pressure_monitor"
     )
     ENDOSCOPIC_THIRD_VENTRICULOSTOMY = "endoscopic_third_ventriculostomy"
-    INSERTION_OF_DEEP_BRAIN_STIMULATOR = "insertion_of_deep_brain_stimulator"
-    VAGAL_NERVE_STIMULATOR_INSERTION = "vagal_nerve_stimulator_insertion"
+    NEUROMODULATION_DEVICE_INSERTION = "neuromodulation_device_insertion"  # e.g. deep brain, vagal nerve or spinal cord stimulator, intrathecal pump
     MICROVASCULAR_DECOMPRESSION_OF_CRANIAL_NERVE = (
         "microvascular_decompression_of_cranial_nerve"
     )
-    TRIGEMINAL_NERVE_RHIZOTOMY = "trigeminal_nerve_rhizotomy"
-    REPAIR_OF_DURAL_TEAR = "repair_of_dural_tear"
-    REPAIR_OF_SPINA_BIFIDA = "repair_of_spina_bifida"
-    SPINAL_CORD_TUMOUR_EXCISION = "spinal_cord_tumour_excision"
-    LUMBAR_PUNCTURE = "lumbar_puncture"
-    INSERTION_OF_INTRATHECAL_PUMP = "insertion_of_intrathecal_pump"
-    PERIPHERAL_NERVE_GRAFT = "peripheral_nerve_graft"
-    EXCISION_OF_PERIPHERAL_NERVE_TUMOUR = "excision_of_peripheral_nerve_tumour"
+    REPAIR_OF_DURA = "repair_of_dura"
+    PERIPHERAL_NERVE_REPAIR_OR_GRAFT = "peripheral_nerve_repair_or_graft"
+    PERIPHERAL_NERVE_DECOMPRESSION = (
+        "peripheral_nerve_decompression"  # e.g. carpal or cubital tunnel
+    )
     SYMPATHECTOMY = "sympathectomy"
 
-    # B Endocrine System and Breast
+    # Endocrine and breast
     TOTAL_THYROIDECTOMY = "total_thyroidectomy"
     SUBTOTAL_THYROIDECTOMY = "subtotal_thyroidectomy"
-    THYROID_LOBECTOMY = "thyroid_lobectomy"
+    THYROID_LOBECTOMY = "thyroid_lobectomy"  # hemithyroidectomy
     COMPLETION_THYROIDECTOMY = "completion_thyroidectomy"
     PARATHYROIDECTOMY = "parathyroidectomy"
     ADRENALECTOMY = "adrenalectomy"
-    LAPAROSCOPIC_ADRENALECTOMY = "laparoscopic_adrenalectomy"
-    EXCISION_OF_THYROGLOSSAL_CYST = "excision_of_thyroglossal_cyst"
-    SIMPLE_MASTECTOMY = "simple_mastectomy"
-    SKIN_SPARING_MASTECTOMY = "skin_sparing_mastectomy"
-    NIPPLE_SPARING_MASTECTOMY = "nipple_sparing_mastectomy"
-    BILATERAL_MASTECTOMY = "bilateral_mastectomy"
-    WIDE_LOCAL_EXCISION_OF_BREAST_LESION = "wide_local_excision_of_breast_lesion"
-    BREAST_CONSERVING_SURGERY = "breast_conserving_surgery"
-    AXILLARY_LYMPH_NODE_CLEARANCE = "axillary_lymph_node_clearance"
-    SENTINEL_LYMPH_NODE_BIOPSY_BREAST = "sentinel_lymph_node_biopsy_breast"
-    EXCISION_OF_BREAST_LUMP = "excision_of_breast_lump"
-    CORE_BIOPSY_OF_BREAST = "core_biopsy_of_breast"
-    INSERTION_OF_BREAST_IMPLANT = "insertion_of_breast_implant"
-    BREAST_RECONSTRUCTION = "breast_reconstruction"
-    INCISION_AND_DRAINAGE_OF_BREAST_ABSCESS = "incision_and_drainage_of_breast_abscess"
+    MASTECTOMY = "mastectomy"  # simple, skin sparing or nipple sparing
+    WIDE_LOCAL_EXCISION_OF_BREAST = "wide_local_excision_of_breast"
+    EXCISION_OF_BREAST_LESION = "excision_of_breast_lesion"
+    BREAST_RECONSTRUCTION = (
+        "breast_reconstruction"  # implant or flap based, incl. free flap (e.g. DIEP)
+    )
+    BREAST_AUGMENTATION = "breast_augmentation"
+    BREAST_REDUCTION = "breast_reduction"
     MICRODOCHECTOMY = "microdochectomy"
 
-    # C Eye
-    PHACOEMULSIFICATION_CATARACT_EXTRACTION = "phacoemulsification_cataract_extraction"
-    EXTRACAPSULAR_CATARACT_EXTRACTION = "extracapsular_cataract_extraction"
-    INSERTION_OF_INTRAOCULAR_LENS = "insertion_of_intraocular_lens"
-    YAG_LASER_CAPSULOTOMY = "yag_laser_capsulotomy"
-    PARS_PLANA_VITRECTOMY = "pars_plana_vitrectomy"
-    REPAIR_OF_RETINAL_DETACHMENT = "repair_of_retinal_detachment"
-    SCLERAL_BUCKLE_PROCEDURE = "scleral_buckle_procedure"
-    PNEUMATIC_RETINOPEXY = "pneumatic_retinopexy"
-    LASER_PHOTOCOAGULATION_OF_RETINA = "laser_photocoagulation_of_retina"
-    INTRAVITREAL_INJECTION = "intravitreal_injection"
+    # Eye
+    CATARACT_EXTRACTION = (
+        "cataract_extraction"  # incl. lens implant at the same sitting
+    )
+    SECONDARY_INTRAOCULAR_LENS_INSERTION = "secondary_intraocular_lens_insertion"
+    VITREORETINAL_SURGERY = (
+        "vitreoretinal_surgery"  # e.g. vitrectomy, scleral buckle, retinopexy
+    )
+    OPHTHALMIC_LASER_PROCEDURE = (
+        "ophthalmic_laser_procedure"  # e.g. YAG capsulotomy, retinal photocoagulation
+    )
     TRABECULECTOMY = "trabeculectomy"
     INSERTION_OF_GLAUCOMA_DRAINAGE_DEVICE = "insertion_of_glaucoma_drainage_device"
-    CORNEAL_TRANSPLANT = "corneal_transplant"
-    CORNEAL_GRAFT_LAMELLAR = "corneal_graft_lamellar"
-    EXCISION_OF_PTERYGIUM = "excision_of_pterygium"
-    STRABISMUS_CORRECTION_SURGERY = "strabismus_correction_surgery"
-    EVISCERATION_OF_EYE = "evisceration_of_eye"
-    ENUCLEATION_OF_EYE = "enucleation_of_eye"
-    REPAIR_OF_PTOSIS = "repair_of_ptosis"
-    CORRECTION_OF_ENTROPION_OR_ECTROPION = "correction_of_entropion_or_ectropion"
+    CORNEAL_GRAFT = "corneal_graft"  # penetrating or lamellar
+    STRABISMUS_SURGERY = "strabismus_surgery"
+    EYELID_SURGERY = (
+        "eyelid_surgery"  # e.g. ptosis, entropion, ectropion, blepharoplasty
+    )
+    ENUCLEATION_OR_EVISCERATION_OF_EYE = "enucleation_or_evisceration_of_eye"
 
-    # D Ear
+    # Ear, nose and throat
     MYRINGOTOMY_WITH_GROMMET_INSERTION = "myringotomy_with_grommet_insertion"
-    REMOVAL_OF_GROMMET = "removal_of_grommet"
-    MYRINGOPLASTY = "myringoplasty"
-    TYMPANOPLASTY = "tympanoplasty"
+    TYMPANOPLASTY = "tympanoplasty"  # incl. myringoplasty
     MASTOIDECTOMY = "mastoidectomy"
+    STAPEDECTOMY = "stapedectomy"
     COCHLEAR_IMPLANT_INSERTION = "cochlear_implant_insertion"
     BONE_ANCHORED_HEARING_AID_INSERTION = "bone_anchored_hearing_aid_insertion"
-    STAPEDECTOMY = "stapedectomy"
-    EXCISION_OF_EXTERNAL_EAR_LESION = "excision_of_external_ear_lesion"
-    MICROSUCTION_OF_EAR = "microsuction_of_ear"
     PINNAPLASTY = "pinnaplasty"
+    SEPTOPLASTY = "septoplasty"
+    FUNCTIONAL_ENDOSCOPIC_SINUS_SURGERY = "functional_endoscopic_sinus_surgery"
+    TONSILLECTOMY = "tonsillectomy"
+    ADENOIDECTOMY = "adenoidectomy"
+    LARYNGOSCOPY = "laryngoscopy"  # diagnostic or operative, incl. microlaryngoscopy
+    LARYNGECTOMY = "laryngectomy"
+    TRACHEOSTOMY = "tracheostomy"  # surgical or percutaneous
+    PAROTIDECTOMY = "parotidectomy"
+    EXCISION_OF_SUBMANDIBULAR_GLAND = "excision_of_submandibular_gland"
+    NECK_DISSECTION = "neck_dissection"
 
-    # E Respiratory Tract
+    # Mouth
+    DENTAL_EXTRACTION = "dental_extraction"
+    EXCISION_OF_ORAL_LESION = "excision_of_oral_lesion"
+    GLOSSECTOMY = "glossectomy"
+    FRENULOPLASTY = "frenuloplasty"
+
+    # Thorax
     LOBECTOMY_OF_LUNG = "lobectomy_of_lung"
     PNEUMONECTOMY = "pneumonectomy"
     SEGMENTECTOMY_OF_LUNG = "segmentectomy_of_lung"
     WEDGE_RESECTION_OF_LUNG = "wedge_resection_of_lung"
-    VIDEO_ASSISTED_THORACOSCOPIC_SURGERY = "video_assisted_thoracoscopic_surgery"
-    THORACOTOMY = "thoracotomy"
     PLEURODESIS = "pleurodesis"
     PLEURECTOMY = "pleurectomy"
     DECORTICATION_OF_LUNG = "decortication_of_lung"
     INSERTION_OF_CHEST_DRAIN = "insertion_of_chest_drain"
-    TRACHEOSTOMY = "tracheostomy"
-    PERCUTANEOUS_TRACHEOSTOMY = "percutaneous_tracheostomy"
-    RIGID_BRONCHOSCOPY = "rigid_bronchoscopy"
-    FLEXIBLE_BRONCHOSCOPY = "flexible_bronchoscopy"
-    ENDOBRONCHIAL_STENT_INSERTION = "endobronchial_stent_insertion"
+    BRONCHOSCOPY = "bronchoscopy"  # diagnostic or therapeutic, incl. EBUS
     MEDIASTINOSCOPY = "mediastinoscopy"
-    LARYNGECTOMY = "laryngectomy"
-    SEPTOPLASTY = "septoplasty"
-    FUNCTIONAL_ENDOSCOPIC_SINUS_SURGERY = "functional_endoscopic_sinus_surgery"
 
-    # F Mouth
-    DENTAL_EXTRACTION = "dental_extraction"
-    TONSILLECTOMY = "tonsillectomy"
-    ADENOIDECTOMY = "adenoidectomy"
-    ADENOTONSILLECTOMY = "adenotonsillectomy"
-    REPAIR_OF_CLEFT_LIP = "repair_of_cleft_lip"
-    REPAIR_OF_CLEFT_PALATE = "repair_of_cleft_palate"
-    EXCISION_OF_ORAL_LESION = "excision_of_oral_lesion"
-    GLOSSECTOMY = "glossectomy"
-    EXCISION_OF_SALIVARY_GLAND = "excision_of_salivary_gland"
-    PAROTIDECTOMY = "parotidectomy"
-    DRAINAGE_OF_PERITONSILLAR_ABSCESS = "drainage_of_peritonsillar_abscess"
-    FRENULOPLASTY = "frenuloplasty"
-
-    # G Upper Digestive System
-    OESOPHAGECTOMY = "oesophagectomy"
-    IVOR_LEWIS_OESOPHAGECTOMY = "ivor_lewis_oesophagectomy"
-    TRANSHIATAL_OESOPHAGECTOMY = "transhiatal_oesophagectomy"
-    OESOPHAGOGASTRECTOMY = "oesophagogastrectomy"
-    OESOPHAGEAL_STENT_INSERTION = "oesophageal_stent_insertion"
-    OESOPHAGEAL_DILATATION = "oesophageal_dilatation"
-    HELLER_MYOTOMY = "heller_myotomy"
-    NISSEN_FUNDOPLICATION = "nissen_fundoplication"
-    LAPAROSCOPIC_FUNDOPLICATION = "laparoscopic_fundoplication"
+    # Upper digestive system
+    OESOPHAGECTOMY = "oesophagectomy"  # incl. oesophagogastrectomy
+    OESOPHAGEAL_MYOTOMY = "oesophageal_myotomy"  # e.g. Heller, POEM
+    FUNDOPLICATION = "fundoplication"
     HIATUS_HERNIA_REPAIR = "hiatus_hernia_repair"
-    REPAIR_OF_PERFORATED_PEPTIC_ULCER = "repair_of_perforated_peptic_ulcer"
-    OVERSEW_OF_BLEEDING_PEPTIC_ULCER = "oversew_of_bleeding_peptic_ulcer"
+    REPAIR_OF_STOMACH_OR_DUODENUM = (
+        "repair_of_stomach_or_duodenum"  # e.g. oversew or patch repair of an ulcer
+    )
     TOTAL_GASTRECTOMY = "total_gastrectomy"
-    SUBTOTAL_GASTRECTOMY = "subtotal_gastrectomy"
-    PARTIAL_GASTRECTOMY = "partial_gastrectomy"
-    DISTAL_GASTRECTOMY = "distal_gastrectomy"
+    PARTIAL_GASTRECTOMY = "partial_gastrectomy"  # distal, subtotal or wedge
     GASTROJEJUNOSTOMY = "gastrojejunostomy"
-    PYLOROPLASTY = "pyloroplasty"
-    PYLOROMYOTOMY = "pyloromyotomy"
-    WEDGE_RESECTION_OF_STOMACH = "wedge_resection_of_stomach"
-    OESOPHAGOGASTRODUODENOSCOPY = "oesophagogastroduodenoscopy"
-    UPPER_GI_ENDOSCOPY_WITH_BIOPSY = "upper_gi_endoscopy_with_biopsy"
-    ENDOSCOPIC_HAEMOSTASIS_UPPER_GI_BLEED = "endoscopic_haemostasis_upper_gi_bleed"
-    ENDOSCOPIC_VARICEAL_BAND_LIGATION = "endoscopic_variceal_band_ligation"
-    ENDOSCOPIC_SUBMUCOSAL_DISSECTION = "endoscopic_submucosal_dissection"
-    ENDOSCOPIC_MUCOSAL_RESECTION = "endoscopic_mucosal_resection"
-    LAPAROSCOPIC_SLEEVE_GASTRECTOMY = "laparoscopic_sleeve_gastrectomy"
-    LAPAROSCOPIC_ROUX_EN_Y_GASTRIC_BYPASS = "laparoscopic_roux_en_y_gastric_bypass"
-    LAPAROSCOPIC_ADJUSTABLE_GASTRIC_BANDING = "laparoscopic_adjustable_gastric_banding"
-    REMOVAL_OF_GASTRIC_BAND = "removal_of_gastric_band"
-    INSERTION_OF_GASTROSTOMY_TUBE = "insertion_of_gastrostomy_tube"
-    PERCUTANEOUS_ENDOSCOPIC_GASTROSTOMY = "percutaneous_endoscopic_gastrostomy"
-    DUODENAL_STENT_INSERTION = "duodenal_stent_insertion"
-    OVERSEW_OF_DUODENAL_PERFORATION = "oversew_of_duodenal_perforation"
-    PANCREATICODUODENECTOMY = "pancreaticoduodenectomy"
+    PYLOROPLASTY_OR_PYLOROMYOTOMY = "pyloroplasty_or_pyloromyotomy"
+    BARIATRIC_SURGERY = "bariatric_surgery"  # e.g. sleeve gastrectomy, gastric bypass, band insertion or removal
+    GASTROSTOMY_INSERTION = "gastrostomy_insertion"  # PEG, RIG or surgical
+    UPPER_GI_ENDOSCOPY = "upper_gi_endoscopy"  # diagnostic or therapeutic
 
-    # H Lower Digestive System
-    RIGHT_HEMICOLECTOMY = "right_hemicolectomy"
-    EXTENDED_RIGHT_HEMICOLECTOMY = "extended_right_hemicolectomy"
+    # Lower digestive system
+    RIGHT_HEMICOLECTOMY = "right_hemicolectomy"  # incl. extended
+    TRANSVERSE_COLECTOMY = "transverse_colectomy"
     LEFT_HEMICOLECTOMY = "left_hemicolectomy"
     SIGMOID_COLECTOMY = "sigmoid_colectomy"
-    TOTAL_COLECTOMY = "total_colectomy"
-    SUBTOTAL_COLECTOMY = "subtotal_colectomy"
+    SUBTOTAL_OR_TOTAL_COLECTOMY = "subtotal_or_total_colectomy"
     PANPROCTOCOLECTOMY = "panproctocolectomy"
     HARTMANNS_PROCEDURE = "hartmanns_procedure"
     REVERSAL_OF_HARTMANNS_PROCEDURE = "reversal_of_hartmanns_procedure"
-    ANTERIOR_RESECTION_OF_RECTUM = "anterior_resection_of_rectum"
+    ANTERIOR_RESECTION_OF_RECTUM = (
+        "anterior_resection_of_rectum"  # high, low or ultralow, incl. rectosigmoid
+    )
     ABDOMINOPERINEAL_RESECTION_OF_RECTUM = "abdominoperineal_resection_of_rectum"
-    TOTAL_MESORECTAL_EXCISION = "total_mesorectal_excision"
+    TRANSANAL_EXCISION_OF_RECTAL_LESION = "transanal_excision_of_rectal_lesion"
     ILEOCAECAL_RESECTION = "ileocaecal_resection"
     SMALL_BOWEL_RESECTION = "small_bowel_resection"
-    FORMATION_OF_LOOP_ILEOSTOMY = "formation_of_loop_ileostomy"
-    FORMATION_OF_END_ILEOSTOMY = "formation_of_end_ileostomy"
-    FORMATION_OF_LOOP_COLOSTOMY = "formation_of_loop_colostomy"
-    FORMATION_OF_END_COLOSTOMY = "formation_of_end_colostomy"
-    CLOSURE_OF_ILEOSTOMY = "closure_of_ileostomy"
-    CLOSURE_OF_COLOSTOMY = "closure_of_colostomy"
+    STRICTUROPLASTY = "stricturoplasty"
+    FORMATION_OF_ILEOSTOMY = "formation_of_ileostomy"  # loop or end
+    FORMATION_OF_COLOSTOMY = "formation_of_colostomy"  # loop or end
+    CLOSURE_OF_STOMA = "closure_of_stoma"
     ILEOANAL_POUCH_FORMATION = "ileoanal_pouch_formation"
     APPENDICECTOMY = "appendicectomy"
-    LAPAROSCOPIC_APPENDICECTOMY = "laparoscopic_appendicectomy"
     ADHESIOLYSIS = "adhesiolysis"
-    LAPAROSCOPIC_ADHESIOLYSIS = "laparoscopic_adhesiolysis"
-    SMALL_BOWEL_STRICTUROPLASTY = "small_bowel_stricturoplasty"
-    COLONOSCOPY = "colonoscopy"
-    FLEXIBLE_SIGMOIDOSCOPY = "flexible_sigmoidoscopy"
-    ENDOSCOPIC_POLYPECTOMY = "endoscopic_polypectomy"
-    COLONIC_STENT_INSERTION = "colonic_stent_insertion"
-    HAEMORRHOIDECTOMY = "haemorrhoidectomy"
-    STAPLED_HAEMORRHOIDOPEXY = "stapled_haemorrhoidopexy"
-    RUBBER_BAND_LIGATION_OF_HAEMORRHOIDS = "rubber_band_ligation_of_haemorrhoids"
+    LOWER_GI_ENDOSCOPY = (
+        "lower_gi_endoscopy"  # colonoscopy or sigmoidoscopy, diagnostic or therapeutic
+    )
+    HAEMORRHOID_PROCEDURE = "haemorrhoid_procedure"  # e.g. haemorrhoidectomy, stapled haemorrhoidopexy, banding
     LATERAL_SPHINCTEROTOMY = "lateral_sphincterotomy"
-    EXAMINATION_UNDER_ANAESTHESIA_OF_ANUS = "examination_under_anaesthesia_of_anus"
-    DRAINAGE_OF_PERIANAL_ABSCESS = "drainage_of_perianal_abscess"
     FISTULOTOMY = "fistulotomy"
     INSERTION_OF_SETON = "insertion_of_seton"
-    EXCISION_OF_PILONIDAL_SINUS = "excision_of_pilonidal_sinus"
-    OPEN_INGUINAL_HERNIA_REPAIR = "open_inguinal_hernia_repair"
-    LAPAROSCOPIC_INGUINAL_HERNIA_REPAIR = "laparoscopic_inguinal_hernia_repair"
-    TOTALLY_EXTRAPERITONEAL_HERNIA_REPAIR = "totally_extraperitoneal_hernia_repair"
-    TRANSABDOMINAL_PREPERITONEAL_HERNIA_REPAIR = (
-        "transabdominal_preperitoneal_hernia_repair"
-    )
+    INGUINAL_HERNIA_REPAIR = "inguinal_hernia_repair"
     FEMORAL_HERNIA_REPAIR = "femoral_hernia_repair"
-    UMBILICAL_HERNIA_REPAIR = "umbilical_hernia_repair"
-    INCISIONAL_HERNIA_REPAIR = "incisional_hernia_repair"
-    VENTRAL_HERNIA_REPAIR = "ventral_hernia_repair"
-    EPIGASTRIC_HERNIA_REPAIR = "epigastric_hernia_repair"
-    PARASTOMAL_HERNIA_REPAIR = "parastomal_hernia_repair"
+    VENTRAL_HERNIA_REPAIR = "ventral_hernia_repair"  # any abdominal wall hernia, e.g. umbilical, epigastric, incisional, parastomal
 
-    # J Other Abdominal Organs, Principally Digestive
-    LAPAROSCOPIC_CHOLECYSTECTOMY = "laparoscopic_cholecystectomy"
-    OPEN_CHOLECYSTECTOMY = "open_cholecystectomy"
-    SUBTOTAL_CHOLECYSTECTOMY = "subtotal_cholecystectomy"
+    # Hepatobiliary, pancreas and spleen
+    CHOLECYSTECTOMY = "cholecystectomy"  # incl. subtotal
     CHOLECYSTOSTOMY = "cholecystostomy"
     BILE_DUCT_EXPLORATION = "bile_duct_exploration"
-    CHOLEDOCHOTOMY = "choledochotomy"
     HEPATICOJEJUNOSTOMY = "hepaticojejunostomy"
-    ENDOSCOPIC_RETROGRADE_CHOLANGIOPANCREATOGRAPHY = (
-        "endoscopic_retrograde_cholangiopancreatography"
+    ERCP = "ercp"  # diagnostic or therapeutic
+    PERCUTANEOUS_TRANSHEPATIC_BILIARY_PROCEDURE = (
+        "percutaneous_transhepatic_biliary_procedure"  # PTC, biliary drain or stent
     )
-    ERCP_WITH_SPHINCTEROTOMY = "ercp_with_sphincterotomy"
-    ERCP_WITH_STENT_INSERTION = "ercp_with_stent_insertion"
-    ERCP_WITH_STONE_EXTRACTION = "ercp_with_stone_extraction"
-    PERCUTANEOUS_TRANSHEPATIC_CHOLANGIOGRAM = "percutaneous_transhepatic_cholangiogram"
-    LIVER_RESECTION = "liver_resection"
-    LEFT_HEPATECTOMY = "left_hepatectomy"
-    RIGHT_HEPATECTOMY = "right_hepatectomy"
-    LIVER_SEGMENTECTOMY = "liver_segmentectomy"
-    LIVER_WEDGE_RESECTION = "liver_wedge_resection"
-    RADIOFREQUENCY_ABLATION_OF_LIVER_LESION = "radiofrequency_ablation_of_liver_lesion"
+    MAJOR_HEPATECTOMY = "major_hepatectomy"  # e.g. right or left hepatectomy
+    MINOR_LIVER_RESECTION = "minor_liver_resection"  # e.g. segmentectomy, wedge
     LIVER_TRANSPLANTATION = "liver_transplantation"
-    DRAINAGE_OF_LIVER_ABSCESS = "drainage_of_liver_abscess"
-    LIVER_BIOPSY = "liver_biopsy"
+    PANCREATICODUODENECTOMY = "pancreaticoduodenectomy"
     DISTAL_PANCREATECTOMY = "distal_pancreatectomy"
     TOTAL_PANCREATECTOMY = "total_pancreatectomy"
-    WHIPPLES_PROCEDURE = "whipples_procedure"
     PANCREATIC_NECROSECTOMY = "pancreatic_necrosectomy"
-    DRAINAGE_OF_PANCREATIC_PSEUDOCYST = "drainage_of_pancreatic_pseudocyst"
-    SPLENECTOMY = "splenectomy"
-    LAPAROSCOPIC_SPLENECTOMY = "laparoscopic_splenectomy"
-    PARTIAL_SPLENECTOMY = "partial_splenectomy"
+    SPLENECTOMY = "splenectomy"  # total or partial
 
-    # K Heart
+    # Heart
     CORONARY_ARTERY_BYPASS_GRAFT = "coronary_artery_bypass_graft"
-    OFF_PUMP_CORONARY_ARTERY_BYPASS = "off_pump_coronary_artery_bypass"
-    PERCUTANEOUS_CORONARY_INTERVENTION = "percutaneous_coronary_intervention"
-    CORONARY_ANGIOPLASTY_WITH_STENT = "coronary_angioplasty_with_stent"
     CORONARY_ANGIOGRAPHY = "coronary_angiography"
-    AORTIC_VALVE_REPLACEMENT = "aortic_valve_replacement"
-    TRANSCATHETER_AORTIC_VALVE_IMPLANTATION = "transcatheter_aortic_valve_implantation"
-    MITRAL_VALVE_REPLACEMENT = "mitral_valve_replacement"
-    MITRAL_VALVE_REPAIR = "mitral_valve_repair"
-    TRICUSPID_VALVE_REPAIR = "tricuspid_valve_repair"
-    TRICUSPID_VALVE_REPLACEMENT = "tricuspid_valve_replacement"
-    PULMONARY_VALVE_REPLACEMENT = "pulmonary_valve_replacement"
-    DOUBLE_VALVE_REPLACEMENT = "double_valve_replacement"
-    PERMANENT_PACEMAKER_INSERTION = "permanent_pacemaker_insertion"
-    PACEMAKER_BOX_CHANGE = "pacemaker_box_change"
-    IMPLANTABLE_CARDIOVERTER_DEFIBRILLATOR_INSERTION = (
-        "implantable_cardioverter_defibrillator_insertion"
+    PERCUTANEOUS_CORONARY_INTERVENTION = "percutaneous_coronary_intervention"
+    AORTIC_VALVE_REPLACEMENT = "aortic_valve_replacement"  # surgical or transcatheter
+    MITRAL_VALVE_REPAIR_OR_REPLACEMENT = "mitral_valve_repair_or_replacement"
+    TRICUSPID_OR_PULMONARY_VALVE_REPAIR_OR_REPLACEMENT = (
+        "tricuspid_or_pulmonary_valve_repair_or_replacement"
     )
-    CARDIAC_RESYNCHRONISATION_THERAPY_DEVICE_INSERTION = (
-        "cardiac_resynchronisation_therapy_device_insertion"
+    CARDIAC_DEVICE_PROCEDURE = "cardiac_device_procedure"  # pacemaker, ICD or CRT insertion, generator change or lead extraction
+    CARDIAC_ABLATION_OR_ELECTROPHYSIOLOGY_STUDY = (
+        "cardiac_ablation_or_electrophysiology_study"  # catheter or surgical
     )
-    LEAD_EXTRACTION = "lead_extraction"
-    ELECTROPHYSIOLOGICAL_STUDY = "electrophysiological_study"
-    CATHETER_ABLATION_FOR_ARRHYTHMIA = "catheter_ablation_for_arrhythmia"
-    PULMONARY_VEIN_ISOLATION = "pulmonary_vein_isolation"
-    DC_CARDIOVERSION = "dc_cardioversion"
-    MAZE_PROCEDURE = "maze_procedure"
-    PERICARDIOCENTESIS = "pericardiocentesis"
-    PERICARDIAL_WINDOW = "pericardial_window"
+    REPAIR_OF_SEPTAL_DEFECT = "repair_of_septal_defect"  # surgical or device closure
+    PERICARDIAL_PROCEDURE = (
+        "pericardial_procedure"  # pericardiocentesis, window or pericardiectomy
+    )
     CARDIAC_TRANSPLANTATION = "cardiac_transplantation"
-    LEFT_VENTRICULAR_ASSIST_DEVICE_INSERTION = (
-        "left_ventricular_assist_device_insertion"
-    )
-    INTRA_AORTIC_BALLOON_PUMP_INSERTION = "intra_aortic_balloon_pump_insertion"
-    EXTRACORPOREAL_MEMBRANE_OXYGENATION_CANNULATION = (
-        "extracorporeal_membrane_oxygenation_cannulation"
-    )
-    ATRIAL_SEPTAL_DEFECT_REPAIR = "atrial_septal_defect_repair"
-    VENTRICULAR_SEPTAL_DEFECT_REPAIR = "ventricular_septal_defect_repair"
-    SURGICAL_CLOSURE_OF_PATENT_DUCTUS_ARTERIOSUS = (
-        "surgical_closure_of_patent_ductus_arteriosus"
+    MECHANICAL_CIRCULATORY_SUPPORT_INSERTION = (
+        "mechanical_circulatory_support_insertion"  # e.g. VAD, IABP, ECMO cannulation
     )
 
-    # L Arteries and Veins
-    OPEN_ABDOMINAL_AORTIC_ANEURYSM_REPAIR = "open_abdominal_aortic_aneurysm_repair"
-    ENDOVASCULAR_ANEURYSM_REPAIR = "endovascular_aneurysm_repair"
-    THORACIC_ENDOVASCULAR_AORTIC_REPAIR = "thoracic_endovascular_aortic_repair"
-    AORTIC_DISSECTION_REPAIR = "aortic_dissection_repair"
+    # Arteries and veins
+    AORTIC_REPAIR = "aortic_repair"  # open or endovascular, any segment
     CAROTID_ENDARTERECTOMY = "carotid_endarterectomy"
-    CAROTID_ARTERY_STENTING = "carotid_artery_stenting"
-    FEMOROPOPLITEAL_BYPASS = "femoropopliteal_bypass"
-    FEMOROTIBIAL_BYPASS = "femorotibial_bypass"
-    FEMOROFEMORAL_CROSSOVER_BYPASS = "femorofemoral_crossover_bypass"
-    AXILLOFEMORAL_BYPASS = "axillofemoral_bypass"
-    AORTOBIFEMORAL_BYPASS = "aortobifemoral_bypass"
-    AORTOFEMORAL_BYPASS = "aortofemoral_bypass"
-    LOWER_LIMB_ANGIOPLASTY = "lower_limb_angioplasty"
-    LOWER_LIMB_ANGIOPLASTY_WITH_STENTING = "lower_limb_angioplasty_with_stenting"
-    SURGICAL_EMBOLECTOMY = "surgical_embolectomy"
-    THROMBECTOMY_OF_ARTERY = "thrombectomy_of_artery"
-    CREATION_OF_ARTERIOVENOUS_FISTULA = "creation_of_arteriovenous_fistula"
-    INSERTION_OF_ARTERIOVENOUS_GRAFT = "insertion_of_arteriovenous_graft"
-    VARICOSE_VEIN_STRIPPING = "varicose_vein_stripping"
-    ENDOVENOUS_LASER_ABLATION_OF_VARICOSE_VEINS = (
-        "endovenous_laser_ablation_of_varicose_veins"
+    ARTERIAL_BYPASS = "arterial_bypass"
+    ANGIOPLASTY_OR_STENTING = "angioplasty_or_stenting"  # non-coronary
+    EMBOLECTOMY_OR_THROMBECTOMY = "embolectomy_or_thrombectomy"  # arterial or venous
+    ARTERIOVENOUS_ACCESS_FORMATION = (
+        "arteriovenous_access_formation"  # fistula or graft
     )
-    RADIOFREQUENCY_ABLATION_OF_VARICOSE_VEINS = (
-        "radiofrequency_ablation_of_varicose_veins"
-    )
-    FOAM_SCLEROTHERAPY_OF_VARICOSE_VEINS = "foam_sclerotherapy_of_varicose_veins"
-    PHLEBECTOMY = "phlebectomy"
-    LIGATION_OF_VARICOSE_VEINS = "ligation_of_varicose_veins"
+    VARICOSE_VEIN_PROCEDURE = "varicose_vein_procedure"  # any technique
     INSERTION_OF_INFERIOR_VENA_CAVA_FILTER = "insertion_of_inferior_vena_cava_filter"
-    VENOUS_THROMBECTOMY = "venous_thrombectomy"
+    VASCULAR_ACCESS_DEVICE_INSERTION = (
+        "vascular_access_device_insertion"  # CVC, PICC, tunnelled line, port
+    )
+    VASCULAR_ACCESS_DEVICE_REMOVAL = "vascular_access_device_removal"
 
-    # M Urinary
+    # Urinary
     RADICAL_NEPHRECTOMY = "radical_nephrectomy"
     PARTIAL_NEPHRECTOMY = "partial_nephrectomy"
     SIMPLE_NEPHRECTOMY = "simple_nephrectomy"
-    LAPAROSCOPIC_NEPHRECTOMY = "laparoscopic_nephrectomy"
     NEPHROURETERECTOMY = "nephroureterectomy"
-    LIVE_DONOR_NEPHRECTOMY = "live_donor_nephrectomy"
     RENAL_TRANSPLANTATION = "renal_transplantation"
     PYELOPLASTY = "pyeloplasty"
     NEPHROSTOMY_INSERTION = "nephrostomy_insertion"
     PERCUTANEOUS_NEPHROLITHOTOMY = "percutaneous_nephrolithotomy"
-    EXTRACORPOREAL_SHOCK_WAVE_LITHOTRIPSY = "extracorporeal_shock_wave_lithotripsy"
-    URETEROSCOPY = "ureteroscopy"
-    URETEROSCOPIC_LASER_LITHOTRIPSY = "ureteroscopic_laser_lithotripsy"
-    INSERTION_OF_URETERIC_STENT = "insertion_of_ureteric_stent"
-    REMOVAL_OF_URETERIC_STENT = "removal_of_ureteric_stent"
+    URETEROSCOPY = "ureteroscopy"  # diagnostic or therapeutic
+    URETERIC_STENT_PROCEDURE = (
+        "ureteric_stent_procedure"  # insertion, exchange or removal
+    )
     URETERIC_REIMPLANTATION = "ureteric_reimplantation"
     RADICAL_CYSTECTOMY = "radical_cystectomy"
     PARTIAL_CYSTECTOMY = "partial_cystectomy"
-    ILEAL_CONDUIT_FORMATION = "ileal_conduit_formation"
+    URINARY_DIVERSION = "urinary_diversion"  # e.g. ileal conduit, neobladder
     TRANSURETHRAL_RESECTION_OF_BLADDER_TUMOUR = (
         "transurethral_resection_of_bladder_tumour"
     )
-    CYSTOSCOPY = "cystoscopy"
-    CYSTODIATHERMY = "cystodiathermy"
+    CYSTOSCOPY = "cystoscopy"  # diagnostic or therapeutic, flexible or rigid
     INSERTION_OF_SUPRAPUBIC_CATHETER = "insertion_of_suprapubic_catheter"
-    TRANSURETHRAL_RESECTION_OF_PROSTATE = "transurethral_resection_of_prostate"
-    LASER_ENUCLEATION_OF_PROSTATE = "laser_enucleation_of_prostate"
+    TRANSURETHRAL_PROSTATE_PROCEDURE = "transurethral_prostate_procedure"  # e.g. TURP, laser enucleation or vaporisation
     RADICAL_PROSTATECTOMY = "radical_prostatectomy"
-    ROBOTIC_ASSISTED_RADICAL_PROSTATECTOMY = "robotic_assisted_radical_prostatectomy"
-    TRANSRECTAL_ULTRASOUND_GUIDED_PROSTATE_BIOPSY = (
-        "transrectal_ultrasound_guided_prostate_biopsy"
+    PROSTATE_BIOPSY = "prostate_biopsy"  # transrectal or transperineal
+    URETHRAL_PROCEDURE = (
+        "urethral_procedure"  # e.g. urethroplasty, urethrotomy, dilatation
     )
-    TRANSPERINEAL_PROSTATE_BIOPSY = "transperineal_prostate_biopsy"
-    URETHROPLASTY = "urethroplasty"
-    OPTICAL_URETHROTOMY = "optical_urethrotomy"
-    URETHRAL_DILATATION = "urethral_dilatation"
-    INSERTION_OF_ARTIFICIAL_URINARY_SPHINCTER = (
-        "insertion_of_artificial_urinary_sphincter"
-    )
-    MID_URETHRAL_SLING_PROCEDURE = "mid_urethral_sling_procedure"
-    COLPOSUSPENSION = "colposuspension"
+    INCONTINENCE_PROCEDURE = "incontinence_procedure"  # e.g. mid-urethral sling, colposuspension, artificial sphincter, bulking
 
-    # N Male Genital Organs
+    # Male genital organs
     ORCHIDECTOMY = "orchidectomy"
-    BILATERAL_ORCHIDECTOMY = "bilateral_orchidectomy"
     ORCHIDOPEXY = "orchidopexy"
-    ORCHIDECTOMY_FOR_TESTICULAR_TORSION = "orchidectomy_for_testicular_torsion"
-    DETORSION_OF_TESTIS = "detorsion_of_testis"
+    SCROTAL_PROCEDURE = (
+        "scrotal_procedure"  # e.g. exploration, hydrocele, epididymal cyst, varicocele
+    )
     VASECTOMY = "vasectomy"
     VASECTOMY_REVERSAL = "vasectomy_reversal"
-    HYDROCELE_REPAIR = "hydrocele_repair"
-    EPIDIDYMAL_CYST_EXCISION = "epididymal_cyst_excision"
-    VARICOCELECTOMY = "varicocelectomy"
     CIRCUMCISION = "circumcision"
-    PENILE_PROSTHESIS_INSERTION = "penile_prosthesis_insertion"
-    NESBIT_PROCEDURE_FOR_PEYRONIES_DISEASE = "nesbit_procedure_for_peyronies_disease"
-    DRAINAGE_OF_SCROTAL_ABSCESS = "drainage_of_scrotal_abscess"
+    PENILE_PROCEDURE = "penile_procedure"  # e.g. prosthesis, curvature correction
 
-    # P/Q Female Genital Tract
-    TOTAL_ABDOMINAL_HYSTERECTOMY = "total_abdominal_hysterectomy"
-    TOTAL_LAPAROSCOPIC_HYSTERECTOMY = "total_laparoscopic_hysterectomy"
-    VAGINAL_HYSTERECTOMY = "vaginal_hysterectomy"
+    # Female genital tract
+    TOTAL_HYSTERECTOMY = "total_hysterectomy"  # abdominal, laparoscopic or vaginal
     SUBTOTAL_HYSTERECTOMY = "subtotal_hysterectomy"
     RADICAL_HYSTERECTOMY = "radical_hysterectomy"
-    BILATERAL_SALPINGO_OOPHORECTOMY = "bilateral_salpingo_oophorectomy"
-    UNILATERAL_SALPINGO_OOPHORECTOMY = "unilateral_salpingo_oophorectomy"
+    SALPINGO_OOPHORECTOMY = "salpingo_oophorectomy"  # unilateral or bilateral
     OVARIAN_CYSTECTOMY = "ovarian_cystectomy"
-    LAPAROSCOPIC_OVARIAN_CYSTECTOMY = "laparoscopic_ovarian_cystectomy"
     SALPINGECTOMY = "salpingectomy"
-    SALPINGOSTOMY_FOR_ECTOPIC_PREGNANCY = "salpingostomy_for_ectopic_pregnancy"
+    SALPINGOTOMY = "salpingotomy"
     MYOMECTOMY = "myomectomy"
-    LAPAROSCOPIC_MYOMECTOMY = "laparoscopic_myomectomy"
+    OMENTECTOMY = "omentectomy"
+    CYTOREDUCTIVE_SURGERY = "cytoreductive_surgery"  # peritonectomy or peritoneal stripping, incl. ablation of peritoneal deposits; organ resections coded separately
+    PELVIC_EXENTERATION = "pelvic_exenteration"  # removal of bladder and/or vagina with other pelvic organs
+    HYSTEROSCOPY = "hysteroscopy"  # diagnostic or operative
     ENDOMETRIAL_ABLATION = "endometrial_ablation"
-    DILATATION_AND_CURETTAGE = "dilatation_and_curettage"
-    HYSTEROSCOPY = "hysteroscopy"
-    HYSTEROSCOPIC_POLYPECTOMY = "hysteroscopic_polypectomy"
-    LAPAROSCOPIC_STERILISATION = "laparoscopic_sterilisation"
-    CONE_BIOPSY_OF_CERVIX = "cone_biopsy_of_cervix"
-    LOOP_EXCISION_OF_TRANSFORMATION_ZONE = "loop_excision_of_transformation_zone"
-    COLPOSCOPY = "colposcopy"
-    VAGINAL_REPAIR_ANTERIOR = "vaginal_repair_anterior"
-    VAGINAL_REPAIR_POSTERIOR = "vaginal_repair_posterior"
+    UTERINE_CURETTAGE_OR_EVACUATION = (
+        "uterine_curettage_or_evacuation"  # incl. D&C, evacuation of retained products
+    )
+    TUBAL_STERILISATION = "tubal_sterilisation"
+    EXCISION_OF_CERVIX = "excision_of_cervix"  # cone biopsy or LLETZ
+    VAGINAL_WALL_REPAIR = "vaginal_wall_repair"  # anterior or posterior
     SACROCOLPOPEXY = "sacrocolpopexy"
     VULVECTOMY = "vulvectomy"
 
-    # R Female Genital Tract Associated with Pregnancy, Childbirth and Puerperium
-    LOWER_SEGMENT_CAESAREAN_SECTION = "lower_segment_caesarean_section"
-    CLASSICAL_CAESAREAN_SECTION = "classical_caesarean_section"
-    CAESAREAN_HYSTERECTOMY = "caesarean_hysterectomy"
-    FORCEPS_DELIVERY = "forceps_delivery"
-    VENTOUSE_DELIVERY = "ventouse_delivery"
-    NORMAL_VAGINAL_DELIVERY = "normal_vaginal_delivery"
-    BREECH_DELIVERY = "breech_delivery"
-    INDUCTION_OF_LABOUR = "induction_of_labour"
-    EPISIOTOMY = "episiotomy"
+    # Obstetric
+    CAESAREAN_SECTION = "caesarean_section"
+    INSTRUMENTAL_DELIVERY = "instrumental_delivery"  # forceps or ventouse
     REPAIR_OF_OBSTETRIC_PERINEAL_TEAR = "repair_of_obstetric_perineal_tear"
     MANUAL_REMOVAL_OF_PLACENTA = "manual_removal_of_placenta"
-    EVACUATION_OF_RETAINED_PRODUCTS_OF_CONCEPTION = (
-        "evacuation_of_retained_products_of_conception"
-    )
     CERVICAL_CERCLAGE = "cervical_cerclage"
-    EXTERNAL_CEPHALIC_VERSION = "external_cephalic_version"
-    FETAL_BLOOD_SAMPLING = "fetal_blood_sampling"
 
-    # S Skin
-    EXCISION_OF_SKIN_LESION = "excision_of_skin_lesion"
-    WIDE_LOCAL_EXCISION_OF_SKIN_LESION = "wide_local_excision_of_skin_lesion"
-    EXCISION_OF_MALIGNANT_MELANOMA = "excision_of_malignant_melanoma"
-    SHAVE_EXCISION_OF_SKIN_LESION = "shave_excision_of_skin_lesion"
+    # Skin and soft tissue
+    EXCISION_OF_SKIN_OR_SUBCUTANEOUS_LESION = "excision_of_skin_or_subcutaneous_lesion"  # incl. wide local excision, lipoma, cyst
     CURETTAGE_AND_CAUTERY_OF_SKIN_LESION = "curettage_and_cautery_of_skin_lesion"
-    SURGICAL_DEBRIDEMENT_OF_SKIN_AND_SUBCUTANEOUS_TISSUE = (
-        "surgical_debridement_of_skin_and_subcutaneous_tissue"
-    )
-    SPLIT_SKIN_GRAFT = "split_skin_graft"
-    FULL_THICKNESS_SKIN_GRAFT = "full_thickness_skin_graft"
-    LOCAL_SKIN_FLAP_RECONSTRUCTION = "local_skin_flap_reconstruction"
-    EXCISION_OF_PILONIDAL_ABSCESS = "excision_of_pilonidal_abscess"
-    EXCISION_OF_LIPOMA = "excision_of_lipoma"
-    EXCISION_OF_SEBACEOUS_CYST = "excision_of_sebaceous_cyst"
+    SKIN_GRAFT = "skin_graft"  # split or full thickness
+    LOCAL_OR_REGIONAL_FLAP = "local_or_regional_flap"  # incl. pedicled flaps
+    FREE_FLAP = "free_flap"  # microvascular free tissue transfer, other than for breast reconstruction
+    EXCISION_OF_SOFT_TISSUE_LESION = "excision_of_soft_tissue_lesion"  # deep to subcutaneous fat, e.g. ganglion, bursa, soft tissue tumour
+    WOUND_WASHOUT_OR_DEBRIDEMENT = "wound_washout_or_debridement"
     NEGATIVE_PRESSURE_WOUND_THERAPY = "negative_pressure_wound_therapy"
-
-    # T Soft Tissue
     FASCIOTOMY = "fasciotomy"
-    PLANTAR_FASCIA_RELEASE = "plantar_fascia_release"
-    DUPUYTRENS_FASCIECTOMY = "dupuytrens_fasciectomy"
-    EXCISION_OF_GANGLION = "excision_of_ganglion"
-    BURSECTOMY = "bursectomy"
+    FASCIECTOMY = "fasciectomy"  # e.g. Dupuytren's
+    SOFT_TISSUE_RELEASE = "soft_tissue_release"  # e.g. trigger finger, plantar fascia, tenolysis, joint contracture
+    TENDON_REPAIR = "tendon_repair"  # any tendon, incl. Achilles and rotator cuff
     TENDON_TRANSFER = "tendon_transfer"
-    EXCISION_OF_TENDON_LESION = "excision_of_tendon_lesion"
-    PRIMARY_TENDON_REPAIR = "primary_tendon_repair"
-    SECONDARY_TENDON_REPAIR = "secondary_tendon_repair"
-    ACHILLES_TENDON_REPAIR = "achilles_tendon_repair"
-    ROTATOR_CUFF_REPAIR_OPEN = "rotator_cuff_repair_open"
-    TENOLYSIS = "tenolysis"
-    TENDON_LENGTHENING = "tendon_lengthening"
-    PERCUTANEOUS_ACHILLES_TENOTOMY = "percutaneous_achilles_tenotomy"
-    TRIGGER_FINGER_RELEASE = "trigger_finger_release"
-    EXCISION_OF_TENDON_SHEATH = "excision_of_tendon_sheath"
+    TENDON_LENGTHENING_OR_TENOTOMY = "tendon_lengthening_or_tenotomy"
     MUSCLE_BIOPSY = "muscle_biopsy"
     MUSCLE_REPAIR = "muscle_repair"
-    CARPAL_TUNNEL_DECOMPRESSION = "carpal_tunnel_decompression"
-    CUBITAL_TUNNEL_DECOMPRESSION = "cubital_tunnel_decompression"
-    PERIPHERAL_NERVE_REPAIR = "peripheral_nerve_repair"
-    PERIPHERAL_NERVE_DECOMPRESSION_OTHER = "peripheral_nerve_decompression_other"
-    BLOCK_DISSECTION_OF_LYMPH_NODES = "block_dissection_of_lymph_nodes"
-    EXCISION_OR_BIOPSY_OF_LYMPH_NODE = "excision_or_biopsy_of_lymph_node"
 
-    # U Diagnostic Imaging, Testing and Rehabilitation (interventional radiology)
-    IMAGE_GUIDED_BIOPSY = "image_guided_biopsy"
+    # Lymph nodes
+    LYMPH_NODE_DISSECTION = "lymph_node_dissection"  # clearance or bulky node debulking of any nodal basin other than neck dissection
+    SENTINEL_LYMPH_NODE_BIOPSY = "sentinel_lymph_node_biopsy"
+    EXCISION_BIOPSY_OF_LYMPH_NODE = "excision_biopsy_of_lymph_node"
+
+    # Interventional radiology (general)
+    PERCUTANEOUS_BIOPSY = "percutaneous_biopsy"  # core or needle biopsy of any site without its own biopsy value
     IMAGE_GUIDED_DRAINAGE_OF_COLLECTION = "image_guided_drainage_of_collection"
-    IMAGE_GUIDED_TUMOUR_ABLATION = "image_guided_tumour_ablation"
-    THERAPEUTIC_EMBOLISATION = "therapeutic_embolisation"
-    IMAGE_GUIDED_NERVE_BLOCK = "image_guided_nerve_block"
+    TUMOUR_ABLATION = (
+        "tumour_ablation"  # any site or energy, percutaneous or intraoperative
+    )
+    THERAPEUTIC_EMBOLISATION = "therapeutic_embolisation"  # incl. chemoembolisation
+    NERVE_BLOCK_OR_SPINAL_INJECTION = "nerve_block_or_spinal_injection"  # standalone pain procedure; not a block given as the anaesthetic
 
-    # V Bones and Joints of Skull and Spine
-    CRANIOTOMY_BONE_FLAP = "craniotomy_bone_flap"
+    # Skull, face and spine
     CRANIOPLASTY = "cranioplasty"
-    LE_FORT_OSTEOTOMY = "le_fort_osteotomy"
-    MANDIBULAR_OSTEOTOMY = "mandibular_osteotomy"
-    ORIF_MANDIBLE_FRACTURE = "orif_mandible_fracture"
-    ORIF_ZYGOMATIC_MAXILLARY_FRACTURE = "orif_zygomatic_maxillary_fracture"
-    TEMPOROMANDIBULAR_JOINT_REPLACEMENT = "temporomandibular_joint_replacement"
-    TEMPOROMANDIBULAR_JOINT_ARTHROSCOPY = "temporomandibular_joint_arthroscopy"
-    CERVICAL_LAMINECTOMY_DECOMPRESSION = "cervical_laminectomy_decompression"
-    LUMBAR_LAMINECTOMY_DECOMPRESSION = "lumbar_laminectomy_decompression"
-    REVISION_LUMBAR_DECOMPRESSION = "revision_lumbar_decompression"
-    LUMBAR_MICRODISCECTOMY = "lumbar_microdiscectomy"
-    CERVICAL_MICRODISCECTOMY = "cervical_microdiscectomy"
-    REVISION_LUMBAR_DISCECTOMY = "revision_lumbar_discectomy"
-    LUMBAR_INTERSPINOUS_SPACER_INSERTION = "lumbar_interspinous_spacer_insertion"
-    CERVICAL_DISC_REPLACEMENT = "cervical_disc_replacement"
-    LUMBAR_DISC_REPLACEMENT = "lumbar_disc_replacement"
-    ANTERIOR_CERVICAL_DISCECTOMY_AND_FUSION = "anterior_cervical_discectomy_and_fusion"
-    POSTERIOR_CERVICAL_FUSION = "posterior_cervical_fusion"
-    POSTERIOR_LUMBAR_FUSION = "posterior_lumbar_fusion"
-    TRANSFORAMINAL_LUMBAR_INTERBODY_FUSION = "transforaminal_lumbar_interbody_fusion"
-    ANTERIOR_LUMBAR_INTERBODY_FUSION = "anterior_lumbar_interbody_fusion"
-    POSTERIOR_LUMBAR_INTERBODY_FUSION = "posterior_lumbar_interbody_fusion"
-    REVISION_SPINAL_FUSION = "revision_spinal_fusion"
-    POSTERIOR_INSTRUMENTED_FUSION_SPINE = "posterior_instrumented_fusion_spine"
-    INSTRUMENTED_CORRECTION_SPINAL_DEFORMITY = (
-        "instrumented_correction_spinal_deformity"
+    ORTHOGNATHIC_SURGERY = "orthognathic_surgery"
+    TEMPOROMANDIBULAR_JOINT_PROCEDURE = "temporomandibular_joint_procedure"
+    SPINAL_DECOMPRESSION = (
+        "spinal_decompression"  # laminectomy, laminotomy or foraminotomy
     )
-    SCOLIOSIS_CORRECTION_SURGERY = "scoliosis_correction_surgery"
-    EXCISION_OF_SPINAL_LESION = "excision_of_spinal_lesion"
-    VERTEBROPLASTY = "vertebroplasty"
-    KYPHOPLASTY = "kyphoplasty"
-    REDUCTION_AND_FIXATION_OF_SPINAL_FRACTURE = (
-        "reduction_and_fixation_of_spinal_fracture"
-    )
-    SPINAL_CORD_STIMULATOR_INSERTION = "spinal_cord_stimulator_insertion"
-    BIOPSY_OF_SPINE = "biopsy_of_spine"
-    FACET_JOINT_DENERVATION = "facet_joint_denervation"
-    FACET_JOINT_INJECTION = "facet_joint_injection"
-    EXPLORATION_OF_SPINE = "exploration_of_spine"
-    MANIPULATION_OF_SPINE_UNDER_ANAESTHESIA = "manipulation_of_spine_under_anaesthesia"
-    SPINAL_FORAMINOPLASTY = "spinal_foraminoplasty"
-    PERCUTANEOUS_DISC_DECOMPRESSION = "percutaneous_disc_decompression"
+    DISCECTOMY = "discectomy"  # any level or approach
+    SPINAL_FUSION = "spinal_fusion"  # any level or approach, instrumented or not, incl. ACDF, interbody, deformity correction
+    DISC_REPLACEMENT = "disc_replacement"
+    VERTEBRAL_AUGMENTATION = "vertebral_augmentation"  # vertebroplasty or kyphoplasty
+    EXCISION_OF_SPINAL_LESION = "excision_of_spinal_lesion"  # vertebral or intradural
 
-    # W Other Bones and Joints
-    COMPLEX_RECONSTRUCTION_OF_HAND = "complex_reconstruction_of_hand"
-    COMPLEX_RECONSTRUCTION_OF_FOOT = "complex_reconstruction_of_foot"
-    PROSTHETIC_REPLACEMENT_OF_BONE_SEGMENT = "prosthetic_replacement_of_bone_segment"
-    EXCISION_OF_BONE_TUMOUR = "excision_of_bone_tumour"
-    CURETTAGE_OF_BONE_LESION = "curettage_of_bone_lesion"
-    EXCISION_OF_ECTOPIC_BONE = "excision_of_ectopic_bone"
-    OSTEOTOMY = "osteotomy"
-    HIGH_TIBIAL_OSTEOTOMY = "high_tibial_osteotomy"
-    FEMORAL_OSTEOTOMY = "femoral_osteotomy"
-    PELVIC_OSTEOTOMY = "pelvic_osteotomy"
-    CALCANEAL_OSTEOTOMY = "calcaneal_osteotomy"
-    FIRST_METATARSAL_OSTEOTOMY = "first_metatarsal_osteotomy"
-    CORRECTIVE_OSTEOTOMY_OF_LONG_BONE = "corrective_osteotomy_of_long_bone"
-    BONE_GRAFTING = "bone_grafting"
-    BONE_MARROW_ASPIRATION_OR_BIOPSY = "bone_marrow_aspiration_or_biopsy"
-    DRAINAGE_OF_BONE_ABSCESS = "drainage_of_bone_abscess"
-    OPEN_REDUCTION_INTERNAL_FIXATION_LONG_BONE_FRACTURE = (
-        "open_reduction_internal_fixation_long_bone_fracture"
+    # Bones and joints - fracture
+    OPEN_REDUCTION_INTERNAL_FIXATION = "open_reduction_internal_fixation"  # any bone, e.g. plate, screw, sliding hip screw
+    CLOSED_REDUCTION_INTERNAL_FIXATION = "closed_reduction_internal_fixation"  # e.g. K-wires, percutaneous or cannulated screws
+    INTRAMEDULLARY_NAILING = "intramedullary_nailing"
+    EXTERNAL_FIXATION = "external_fixation"  # incl. circular frames
+    CLOSED_REDUCTION_OF_FRACTURE = (
+        "closed_reduction_of_fracture"  # manipulation without fixation
     )
-    OPEN_REDUCTION_INTERNAL_FIXATION_INTRAARTICULAR_FRACTURE = (
-        "open_reduction_internal_fixation_intraarticular_fracture"
-    )
-    CLOSED_REDUCTION_INTERNAL_FIXATION_FRACTURE = (
-        "closed_reduction_internal_fixation_fracture"
-    )
-    CLOSED_REDUCTION_EXTERNAL_FIXATION_FRACTURE = (
-        "closed_reduction_external_fixation_fracture"
-    )
-    CLOSED_REDUCTION_OF_FRACTURE = "closed_reduction_of_fracture"
-    DYNAMIC_HIP_SCREW_FIXATION = "dynamic_hip_screw_fixation"
-    INTRAMEDULLARY_NAILING_FEMUR = "intramedullary_nailing_femur"
-    INTRAMEDULLARY_NAILING_TIBIA = "intramedullary_nailing_tibia"
-    INTRAMEDULLARY_NAILING_HUMERUS = "intramedullary_nailing_humerus"
-    CANNULATED_SCREW_FIXATION_NECK_OF_FEMUR = "cannulated_screw_fixation_neck_of_femur"
-    PLATE_FIXATION_OF_FRACTURE = "plate_fixation_of_fracture"
-    EXTERNAL_FIXATION_OF_FRACTURE = "external_fixation_of_fracture"
     SKELETAL_TRACTION = "skeletal_traction"
     REMOVAL_OF_METALWORK = "removal_of_metalwork"
-    TOTAL_HIP_REPLACEMENT_CEMENTED = "total_hip_replacement_cemented"
-    TOTAL_HIP_REPLACEMENT_UNCEMENTED = "total_hip_replacement_uncemented"
-    TOTAL_HIP_REPLACEMENT_HYBRID = "total_hip_replacement_hybrid"
-    REVISION_TOTAL_HIP_REPLACEMENT = "revision_total_hip_replacement"
-    HIP_HEMIARTHROPLASTY_CEMENTED = "hip_hemiarthroplasty_cemented"
-    HIP_HEMIARTHROPLASTY_UNCEMENTED = "hip_hemiarthroplasty_uncemented"
+
+    # Bones and joints - arthroplasty
+    TOTAL_HIP_REPLACEMENT = "total_hip_replacement"
+    HIP_HEMIARTHROPLASTY = "hip_hemiarthroplasty"
     HIP_RESURFACING = "hip_resurfacing"
-    TOTAL_KNEE_REPLACEMENT_CEMENTED = "total_knee_replacement_cemented"
-    TOTAL_KNEE_REPLACEMENT_UNCEMENTED = "total_knee_replacement_uncemented"
-    REVISION_TOTAL_KNEE_REPLACEMENT = "revision_total_knee_replacement"
-    UNICOMPARTMENTAL_KNEE_REPLACEMENT = "unicompartmental_knee_replacement"
-    PATELLOFEMORAL_JOINT_REPLACEMENT = "patellofemoral_joint_replacement"
-    TOTAL_SHOULDER_REPLACEMENT = "total_shoulder_replacement"
-    REVERSE_TOTAL_SHOULDER_REPLACEMENT = "reverse_total_shoulder_replacement"
-    SHOULDER_HEMIARTHROPLASTY = "shoulder_hemiarthroplasty"
-    TOTAL_ELBOW_REPLACEMENT = "total_elbow_replacement"
-    TOTAL_ANKLE_REPLACEMENT = "total_ankle_replacement"
-    RADIAL_HEAD_REPLACEMENT = "radial_head_replacement"
-    EXCISION_ARTHROPLASTY = "excision_arthroplasty"
-    INTERPOSITION_ARTHROPLASTY = "interposition_arthroplasty"
-    ANKLE_ARTHRODESIS = "ankle_arthrodesis"
-    SUBTALAR_ARTHRODESIS = "subtalar_arthrodesis"
-    TRIPLE_ARTHRODESIS = "triple_arthrodesis"
-    FIRST_MTP_JOINT_FUSION = "first_mtp_joint_fusion"
-    WRIST_ARTHRODESIS = "wrist_arthrodesis"
-    SHOULDER_ARTHRODESIS = "shoulder_arthrodesis"
-    FUSION_OF_TOE_JOINT = "fusion_of_toe_joint"
-    OPEN_REDUCTION_OF_JOINT_DISLOCATION = "open_reduction_of_joint_dislocation"
-    CLOSED_REDUCTION_OF_JOINT_DISLOCATION = "closed_reduction_of_joint_dislocation"
-    SYNOVECTOMY_OPEN = "synovectomy_open"
-    OPEN_MENISCECTOMY = "open_meniscectomy"
-    LIGAMENT_RECONSTRUCTION = "ligament_reconstruction"
-    ACL_RECONSTRUCTION = "acl_reconstruction"
-    PCL_RECONSTRUCTION = "pcl_reconstruction"
-    MULTI_LIGAMENT_KNEE_RECONSTRUCTION = "multi_ligament_knee_reconstruction"
-    LATERAL_LIGAMENT_RECONSTRUCTION_ANKLE = "lateral_ligament_reconstruction_ankle"
-    LIGAMENT_REPAIR = "ligament_repair"
-    JOINT_STABILISATION_PROCEDURE = "joint_stabilisation_procedure"
-    SHOULDER_STABILISATION_PROCEDURE = "shoulder_stabilisation_procedure"
-    RELEASE_OF_JOINT_CONTRACTURE = "release_of_joint_contracture"
-    ARTHROSCOPIC_WASHOUT_OF_JOINT = "arthroscopic_washout_of_joint"
-    OPEN_WASHOUT_OF_JOINT = "open_washout_of_joint"
-    KNEE_ARTHROSCOPY_MENISCECTOMY = "knee_arthroscopy_meniscectomy"
-    KNEE_ARTHROSCOPY_MENISCAL_REPAIR = "knee_arthroscopy_meniscal_repair"
-    KNEE_ARTHROSCOPY_CARTILAGE_PROCEDURE = "knee_arthroscopy_cartilage_procedure"
-    DIAGNOSTIC_KNEE_ARTHROSCOPY = "diagnostic_knee_arthroscopy"
-    HIP_ARTHROSCOPY = "hip_arthroscopy"
-    SHOULDER_ARTHROSCOPY_SUBACROMIAL_DECOMPRESSION = (
-        "shoulder_arthroscopy_subacromial_decompression"
+    TOTAL_KNEE_REPLACEMENT = "total_knee_replacement"
+    PARTIAL_KNEE_REPLACEMENT = (
+        "partial_knee_replacement"  # unicompartmental or patellofemoral
     )
-    SHOULDER_ARTHROSCOPY_ROTATOR_CUFF_REPAIR = (
-        "shoulder_arthroscopy_rotator_cuff_repair"
+    SHOULDER_REPLACEMENT = (
+        "shoulder_replacement"  # anatomic, reverse or hemiarthroplasty
     )
-    SHOULDER_ARTHROSCOPY_LABRAL_REPAIR = "shoulder_arthroscopy_labral_repair"
-    ANKLE_ARTHROSCOPY = "ankle_arthroscopy"
-    WRIST_ARTHROSCOPY = "wrist_arthroscopy"
-    ELBOW_ARTHROSCOPY = "elbow_arthroscopy"
-    DIAGNOSTIC_JOINT_ARTHROSCOPY_OTHER = "diagnostic_joint_arthroscopy_other"
-    JOINT_ASPIRATION = "joint_aspiration"
-    JOINT_INJECTION = "joint_injection"
+    REVISION_ARTHROPLASTY = "revision_arthroplasty"  # any joint
+    EXCISION_OR_INTERPOSITION_ARTHROPLASTY = "excision_or_interposition_arthroplasty"
+    ENDOPROSTHETIC_REPLACEMENT = (
+        "endoprosthetic_replacement"  # bone segment replacement
+    )
+
+    # Bones and joints - other
+    EXCISION_OR_CURETTAGE_OF_BONE_LESION = "excision_or_curettage_of_bone_lesion"
+    OSTEOTOMY = "osteotomy"  # any site
+    BONE_GRAFTING = "bone_grafting"
+    ARTHRODESIS = "arthrodesis"  # any joint
+    REDUCTION_OF_JOINT_DISLOCATION = "reduction_of_joint_dislocation"  # open or closed
+    SYNOVECTOMY = "synovectomy"
+    MENISCAL_PROCEDURE = "meniscal_procedure"  # meniscectomy or repair
+    CARTILAGE_PROCEDURE = "cartilage_procedure"
+    LIGAMENT_RECONSTRUCTION_OR_REPAIR = (
+        "ligament_reconstruction_or_repair"  # any ligament, incl. ACL
+    )
+    SHOULDER_STABILISATION = "shoulder_stabilisation"  # incl. labral repair, Latarjet
+    SUBACROMIAL_DECOMPRESSION = "subacromial_decompression"
+    JOINT_WASHOUT = "joint_washout"  # joint opened or scoped and irrigated
+    JOINT_ASPIRATION_OR_INJECTION = "joint_aspiration_or_injection"
     MANIPULATION_UNDER_ANAESTHESIA_OF_JOINT = "manipulation_under_anaesthesia_of_joint"
 
-    # X Miscellaneous Operations
-    REPLANTATION_OF_LIMB = "replantation_of_limb"
-    AMPUTATION_ABOVE_KNEE = "amputation_above_knee"
-    AMPUTATION_BELOW_KNEE = "amputation_below_knee"
-    AMPUTATION_THROUGH_KNEE = "amputation_through_knee"
-    AMPUTATION_OF_ARM = "amputation_of_arm"
-    AMPUTATION_OF_HAND = "amputation_of_hand"
-    AMPUTATION_OF_FOOT = "amputation_of_foot"
-    AMPUTATION_OF_TOE = "amputation_of_toe"
-    AMPUTATION_OF_FINGER = "amputation_of_finger"
-    REVISION_OF_AMPUTATION_STUMP = "revision_of_amputation_stump"
-    CORRECTION_OF_CONGENITAL_LIMB_DEFORMITY = "correction_of_congenital_limb_deformity"
-    APPLICATION_OF_PLASTER_CAST = "application_of_plaster_cast"
-    APPLICATION_OF_EXTERNAL_SPLINT = "application_of_external_splint"
-
-    # General / cross-specialty (not chapter-specific in OPCS-4)
-    DIAGNOSTIC_LAPAROSCOPY = "diagnostic_laparoscopy"
-    EXPLORATORY_LAPAROTOMY = "exploratory_laparotomy"
-    WOUND_DEBRIDEMENT = "wound_debridement"
-    INCISION_AND_DRAINAGE_OF_ABSCESS = "incision_and_drainage_of_abscess"
-    INSERTION_OF_CENTRAL_VENOUS_CATHETER = "insertion_of_central_venous_catheter"
-    REMOVAL_OF_CENTRAL_VENOUS_CATHETER = "removal_of_central_venous_catheter"
-    INSERTION_OF_PERIPHERALLY_INSERTED_CENTRAL_CATHETER = (
-        "insertion_of_peripherally_inserted_central_catheter"
+    # Amputation
+    MAJOR_LIMB_AMPUTATION = (
+        "major_limb_amputation"  # at or proximal to the ankle or wrist
     )
+    MINOR_AMPUTATION = "minor_amputation"  # digit, ray or partial foot or hand
+    REVISION_OF_AMPUTATION_STUMP = "revision_of_amputation_stump"
+    REPLANTATION_OF_LIMB_OR_DIGIT = "replantation_of_limb_or_digit"
+
+    # Transplant organ retrieval
+    ORGAN_RETRIEVAL = "organ_retrieval"  # live or deceased donor
+
+    # General / cross-specialty
+    PERITONEAL_LAVAGE = "peritoneal_lavage"  # washout of the peritoneal cavity, e.g. for peritonitis or relook
+    LAPAROSTOMY = "laparostomy"  # abdomen deliberately left open, incl. temporary abdominal closure or open abdomen NPWT
+    DELAYED_CLOSURE_OF_ABDOMEN = (
+        "delayed_closure_of_abdomen"  # closure of a laparostomy
+    )
+    DIAGNOSTIC_OR_EXPLORATORY_PROCEDURE = "diagnostic_or_exploratory_procedure"  # access and inspection only, with or without biopsy or washings, e.g. staging laparoscopy, EUA, diagnostic arthroscopy, open and close
+    INCISION_AND_DRAINAGE_OF_ABSCESS = "incision_and_drainage_of_abscess"  # any site
     REMOVAL_OF_FOREIGN_BODY = "removal_of_foreign_body"
-    EXAMINATION_UNDER_ANAESTHESIA = "examination_under_anaesthesia"
 
 
 # ENUMS - COMPLICATIONS
 
 
 class ComplicationType(str, Enum):
-    """Type of complication occurring during, or noted in immediate relation to, the procedure.
+    """Type of complication of an operation.
     Use OTHER with complication_desc for a complication not listed here."""
 
     OTHER = "other"
 
-    # General intraoperative
-    HAEMORRHAGE_MAJOR_BLOOD_LOSS = "haemorrhage_major_blood_loss"
+    # Intraoperative - injury
+    HAEMORRHAGE = "haemorrhage"  # major or unexpected bleeding, incl. post-operative bleeding, only where documented as a complication
+    BLOOD_PRODUCTS_REQUIRED = "blood_products_required"  # transfusion of allogeneic blood products (e.g. RBC, FFP, platelets, cryoprecipitate) explicitly documented; not cell salvage return
     VASCULAR_INJURY = "vascular_injury"
+    NERVE_INJURY = "nerve_injury"
+    BOWEL_INJURY_OR_ENTEROTOMY = "bowel_injury_or_enterotomy"
+    BLADDER_OR_URETERIC_INJURY = "bladder_or_ureteric_injury"
+    BILE_DUCT_INJURY = "bile_duct_injury"
     VISCERAL_ORGAN_INJURY = "visceral_organ_injury"
-    NERVE_INJURY_GENERAL = "nerve_injury_general"
+    DURAL_TEAR_OR_CSF_LEAK = "dural_tear_or_csf_leak"
+    PNEUMOTHORAX = "pneumothorax"  # incl. pleural breach
+    TENDON_OR_LIGAMENT_INJURY = "tendon_or_ligament_injury"
+    IATROGENIC_FRACTURE = "iatrogenic_fracture"
+    PERIPROSTHETIC_FRACTURE = "periprosthetic_fracture"
+    SPILLAGE_OF_CONTENTS = (
+        "spillage_of_contents"  # e.g. bile or stone spillage, tumour or cyst rupture
+    )
+
+    # Intraoperative - systemic / anaesthetic
     ANAESTHETIC_COMPLICATION = "anaesthetic_complication"
     DIFFICULT_OR_FAILED_AIRWAY = "difficult_or_failed_airway"
     ANAPHYLAXIS_ALLERGIC_REACTION = "anaphylaxis_allergic_reaction"
-    EQUIPMENT_INSTRUMENT_FAILURE = "equipment_instrument_failure"
-    CONVERSION_TO_OPEN = "conversion_to_open"
-    WRONG_SITE_OR_PROCEDURE = "wrong_site_or_procedure"
-    RETAINED_SURGICAL_ITEM = "retained_surgical_item"
+    CARDIOVASCULAR_COLLAPSE = (
+        "cardiovascular_collapse"  # e.g. severe hypotension or shock
+    )
+    RESPIRATORY_FAILURE = (
+        "respiratory_failure"  # e.g. severe hypoxia, unplanned ventilation
+    )
     CARDIAC_ARREST = "cardiac_arrest"
-    INTRAOPERATIVE_DEATH = "intraoperative_death"
-    MEDICATION_ADMINISTRATION_ERROR = "medication_administration_error"
-    INTRAOPERATIVE_CONTAMINATION_BREACH_OF_STERILITY = (
-        "intraoperative_contamination_breach_of_sterility"
-    )
-
-    # Orthopaedic / MSK - neurovascular
-    SCIATIC_NERVE_INJURY = "sciatic_nerve_injury"
-    COMMON_PERONEAL_NERVE_INJURY = "common_peroneal_nerve_injury"
-    FEMORAL_NERVE_INJURY = "femoral_nerve_injury"
-    OBTURATOR_NERVE_INJURY = "obturator_nerve_injury"
-    RADIAL_NERVE_INJURY = "radial_nerve_injury"
-    ULNAR_NERVE_INJURY = "ulnar_nerve_injury"
-    MEDIAN_NERVE_INJURY = "median_nerve_injury"
-    NAMED_VESSEL_INJURY = "named_vessel_injury"
-
-    # Orthopaedic / MSK - implant-related
-    PERIPROSTHETIC_FRACTURE = "periprosthetic_fracture"
-    IMPLANT_MALPOSITION_OR_MALALIGNMENT = "implant_malposition_or_malalignment"
-    LEG_LENGTH_DISCREPANCY = "leg_length_discrepancy"
-    INTRAOPERATIVE_DISLOCATION_OR_INSTABILITY = (
-        "intraoperative_dislocation_or_instability"
-    )
-    SCREW_OR_GUIDEWIRE_MALPOSITION = "screw_or_guidewire_malposition"
-    IMPLANT_MALFUNCTION_OR_BREAKAGE = "implant_malfunction_or_breakage"
-
-    # Orthopaedic / MSK - fracture-related
-    IATROGENIC_FRACTURE = "iatrogenic_fracture"
-
-    # Orthopaedic / MSK - systemic / anaesthetic
-    BONE_CEMENT_IMPLANTATION_SYNDROME = "bone_cement_implantation_syndrome"
+    SEIZURE = "seizure"
     FAT_EMBOLISM_SYNDROME = "fat_embolism_syndrome"
     TOURNIQUET_RELATED_COMPLICATION = "tourniquet_related_complication"
-    EXCESSIVE_BLOOD_LOSS_REQUIRING_TRANSFUSION = (
-        "excessive_blood_loss_requiring_transfusion"
-    )
-
-    # Orthopaedic / MSK - other
     COMPARTMENT_SYNDROME = "compartment_syndrome"
-    TENDON_OR_LIGAMENT_RUPTURE_IATROGENIC = "tendon_or_ligament_rupture_iatrogenic"
+
+    # Intraoperative - process / equipment
+    EQUIPMENT_INSTRUMENT_FAILURE = "equipment_instrument_failure"
+    WRONG_SITE_OR_PROCEDURE = "wrong_site_or_procedure"
+    RETAINED_SURGICAL_ITEM = "retained_surgical_item"
+    MEDICATION_ADMINISTRATION_ERROR = "medication_administration_error"
+    BREACH_OF_STERILITY = "breach_of_sterility"
+
+    # Implant-related
+    IMPLANT_OR_GUIDEWIRE_MALPOSITION = "implant_or_guidewire_malposition"
+    IMPLANT_FAILURE_LOOSENING_OR_BREAKAGE = "implant_failure_loosening_or_breakage"
+    DISLOCATION_OR_INSTABILITY = "dislocation_or_instability"
+    LEG_LENGTH_DISCREPANCY = "leg_length_discrepancy"
+
+    # Reconstruction and vascular
+    ANASTOMOTIC_OR_GRAFT_THROMBOSIS = "anastomotic_or_graft_thrombosis"  # vascular or microvascular, incl. bypass graft or AV access thrombosis
+    FLAP_COMPROMISE_OR_FAILURE = "flap_compromise_or_failure"  # e.g. venous congestion, partial or total flap loss
+
+    # Postoperative (mainly for previous operations)
+    ANASTOMOTIC_LEAK = "anastomotic_leak"
+    SURGICAL_SITE_INFECTION = "surgical_site_infection"  # superficial, deep or organ space, incl. implant infection
+    POSTOPERATIVE_COLLECTION = "postoperative_collection"  # abscess, haematoma, seroma
+    WOUND_DEHISCENCE = "wound_dehiscence"
+    VENOUS_THROMBOEMBOLISM = "venous_thromboembolism"  # DVT or PE
 
 
 # ENUMS - SUPPORTING
+
+
+class SurgicalApproach(str, Enum):
+    """Access route through which the procedure was performed."""
+
+    # Open
+    LAPAROTOMY = "laparotomy"
+    THORACOTOMY_OR_STERNOTOMY = "thoracotomy_or_sternotomy"
+    CRANIOTOMY_OR_CRANIECTOMY = "craniotomy_or_craniectomy"
+    BURR_HOLE = "burr_hole"
+    OPEN_OTHER = "open_other"  # any other open incision, e.g. groin, neck, limb
+
+    # Minimal access
+    LAPAROSCOPIC = "laparoscopic"  # incl. hand-assisted
+    THORACOSCOPIC = "thoracoscopic"  # incl. VATS
+    ARTHROSCOPIC = "arthroscopic"
+    ENDOSCOPIC = "endoscopic"  # via a scope through a natural orifice or small incision, e.g. GI, bronchoscopic, cystoscopic, hysteroscopic, transanal, endonasal
+    ROBOTIC = "robotic"  # any robot-assisted approach
+
+    # Needle, wire or catheter
+    PERCUTANEOUS = "percutaneous"  # needle, wire or drain based, incl. image-guided
+    ENDOVASCULAR = "endovascular"  # catheter based within vessels or heart
+
+    CONVERTED_TO_OPEN = (
+        "converted_to_open"  # minimal access or robotic approach converted to open
+    )
+    OTHER = "other"
 
 
 class Laterality(str, Enum):
     LEFT = "left"
     RIGHT = "right"
     BILATERAL = "bilateral"
-    MIDLINE = "midline"
-    NOT_APPLICABLE = "not_applicable"
+    NOT_APPLICABLE = "not_applicable"  # multifocal or multisite
+
+
+class OperationOutcome(str, Enum):
+    """Outcome of the operation against what was planned. Single-valued;
+    intraoperative_death takes precedence."""
+
+    COMPLETED_AS_PLANNED = "completed_as_planned"
+    MORE_THAN_PLANNED = "more_than_planned"  # additional or more extensive procedure, e.g. extended resection, unplanned stoma, procedure for an unexpected finding
+    LESS_THAN_PLANNED = "less_than_planned"  # planned procedure found not necessary, and less extensive procedure done
+    DIFFERENT_TO_PLANNED = "different_to_planned"  # alternative procedure of similar extent, e.g. Hartmann's instead of anterior resection
+    ABANDONED = "abandoned"  # planned procedure not performed, e.g. open and close for unresectable disease, aborted for instability
+    INTRAOPERATIVE_DEATH = "intraoperative_death"
 
 
 class ProcedureUrgency(str, Enum):
-    ELECTIVE = "elective"
-    URGENT = "urgent"
-    EMERGENCY = "emergency"
-    NOT_STATED = "not_stated"
+    ELECTIVE = "elective"  # planned
+    EMERGENCY = "emergency"  # unplanned urgent
+
+
+class NcepodCategory(str, Enum):
+    """NCEPOD Classification of Intervention."""
+
+    IMMEDIATE = "immediate"  # NCEPOD 1
+    URGENT = "urgent"  # NCEPOD 2, incl. local subdivisions (e.g. 2A/2B)
+    EXPEDITED = "expedited"  # NCEPOD 3
+    ELECTIVE = "elective"  # NCEPOD 4
 
 
 class AnaestheticType(str, Enum):
     GENERAL = "general"
-    REGIONAL = "regional"
-    LOCAL = "local"
+    SPINAL = "spinal"
+    EPIDURAL = "epidural"  # incl. caudal
+    PERIPHERAL_NERVE_BLOCK = (
+        "peripheral_nerve_block"  # incl. plexus and fascial plane blocks
+    )
+    LOCAL = "local"  # local anaesthetic as the main anaesthetic
     SEDATION = "sedation"
-    COMBINED = "combined"
-    NOT_STATED = "not_stated"
+
+
+class PreviousOperationRelation(str, Enum):
+    """How the current operation relates to a previous operation."""
+
+    RETURN_TO_THEATRE_FOR_COMPLICATION = (
+        "return_to_theatre_for_complication"  # unplanned reoperation
+    )
+    PLANNED_STAGED_PROCEDURE = (
+        "planned_staged_procedure"  # e.g. second look, staged reconstruction
+    )
+    REVERSAL = "reversal"  # e.g. stoma closure, Hartmann's reversal
+    REVISION = "revision"  # of an implant or previous reconstruction
+    COMPLETION = (
+        "completion"  # e.g. completion thyroidectomy, completion lymph node dissection
+    )
+    RE_EXCISION = "re_excision"  # e.g. for involved or close margins
+    REMOVAL_OF_IMPLANT = "removal_of_implant"
+    TREATMENT_OF_RECURRENCE = "treatment_of_recurrence"  # same condition has recurred
+    CONTRALATERAL_OR_OTHER_SITE = (
+        "contralateral_or_other_site"  # same condition, other side or site
+    )
+    OTHER = "other"
 
 
 # BLOCKS
 
 
 class Implant(BaseModel):
-    """A device or implant used or inserted during the procedure."""
+    """A device or material of note to a regulator that persists in the patient at
+    the end of the operation (e.g. prosthesis, cement, mesh, plate, screw, stent,
+    pacemaker, resorbable material, biological graft, haemostatic or sealant material,
+    device left for later removal). Excludes sutures, clips, staples, dressings,
+    drains, catheters, other equipment removed before the end of the operation. If in
+    doubt, include."""
 
     implant_desc: str = Field(
         description="Direct extract naming the implant/device (e.g. 'Exeter V40 cemented stem', 'DePuy Pinnacle acetabular shell', 'size 5 mesh')"
     )
-    device_type: str | None = Field(
+    device_type: Optional[str] = Field(
         None,
-        description="General category of device, in your own words (e.g. 'femoral stem', 'plate', 'mesh', 'screw')",
+        description="General category of device (e.g. 'femoral stem', 'plate', 'mesh', 'screw')",
     )
-    manufacturer: str | None = Field(
+    manufacturer: Optional[str] = Field(
         None, description="Manufacturer of the implant, if stated"
     )
-    size_or_specification: str | None = Field(
+    size_or_specification: Optional[str] = Field(
         None,
         description="Size, offset, or other specification of the implant, if stated",
     )
-    serial_or_lot_number: str | None = Field(
+    serial_or_lot_number: Optional[str] = Field(
         None, description="Serial or batch/lot number of the implant, if stated"
-    )
-
-
-class ProcedureComplication(BaseModel):
-    """A complication occurring during, or noted in immediate relation to, a procedure."""
-
-    complication_type: ComplicationType = Field(
-        description="Type of complication. Use OTHER if not in enum."
-    )
-    complication_desc: str = Field(
-        description="Direct extract or close paraphrase describing the complication as documented"
-    )
-    management: str | None = Field(
-        None,
-        description="Direct extract of how the complication was managed, if stated",
     )
 
 
 class Procedure(BaseModel):
     """A single procedure performed during the operation."""
 
-    procedure_type: ProcedureType = Field(
-        description="Specific procedure performed. Use OTHER with procedure_desc if not in enum."
+    procedure: ProcedureType = Field(
+        description="Specific procedure performed. Use OTHER with procedure_name_desc if not in enum."
     )
-    procedure_desc: str | None = Field(
+    procedure_name_desc: Optional[str] = Field(
         None,
-        description="Direct extract naming the procedure as documented. Required when procedure_type is OTHER; optional elaboration otherwise (e.g. approach, specific technique)",
+        description="Direct extract naming the procedure as documented. Required when procedure is OTHER",
     )
-    laterality: Laterality | None = Field(
-        None, description="Laterality of this procedure"
+    approach: Optional[SurgicalApproach] = Field(
+        None,
+        description="Access route through which this procedure was performed",
     )
-    implants: list[Implant] = Field(
-        default_factory=list,
-        description="Implants or devices used in this procedure; empty if none reported",
+    laterality: Optional[Laterality] = Field(
+        None,
+        description="Laterality of this procedure. not_applicable where it spans multiple foci or sites; None where not stated or the structure is unpaired",
+    )
+    site_detail: Optional[str] = Field(
+        None,
+        description="Location detail not captured by procedure (e.g. 'L4/5', 'right index finger', 'segment VII', 'axilla')",
+    )
+    incision_desc: Optional[str] = Field(
+        None,
+        description="Direct extract describing the incision or ports used",
+    )
+    implants: Optional[List[Implant]] = Field(
+        None, description="Permanent implants left in place by this procedure"
+    )
+
+
+class ProcedureComplication(BaseModel):
+    """A complication of an operation."""
+
+    complication_type: ComplicationType = Field(
+        description="Type of complication. Use OTHER if not in enum."
+    )
+    complication_desc: str = Field(
+        description="Direct extract describing the complication as documented"
+    )
+    management_desc: Optional[str] = Field(
+        None,
+        description="Direct extract of how the complication was managed, if stated",
     )
 
 
 class ProcedureMetadata(BaseModel):
-    """Operative metadata reported for the case, where stated. None/empty where not documented -
+    """Operative metadata reported for the case. None where not documented -
     do not infer or estimate."""
 
-    urgency: ProcedureUrgency | None = Field(
+    urgency: Optional[ProcedureUrgency] = Field(
+        None, description="Elective or emergency, if stated"
+    )
+    ncepod_category: Optional[NcepodCategory] = Field(
         None,
-        description="Elective, urgent, or emergency, if stated or clearly inferable from context (e.g. 'trauma list')",
+        description="NCEPOD category, only if explicitly stated (e.g. 'NCEPOD 2A'). Do not derive from urgency",
     )
-    anaesthetic_type: AnaestheticType | None = Field(
-        None, description="Type of anaesthetic used, if stated"
+    anaesthetic_types: Optional[List[AnaestheticType]] = Field(
+        None,
+        description="Types of anaesthetic used, if stated. Multi-valued (e.g. general + regional)",
     )
-    operative_time_minutes: int | None = Field(
+    operative_time_minutes: Optional[int] = Field(
         None, ge=0, description="Total operative/procedure time in minutes, if stated"
     )
-    estimated_blood_loss_ml: int | None = Field(
-        None, ge=0, description="Estimated blood loss in millilitres, if stated"
+    estimated_blood_loss_gross_ml: Optional[int] = Field(
+        None,
+        ge=0,
+        description="Estimated total blood loss in millilitres before any cell salvage return, only if a single numeric value is stated. Unit conversion is fine (e.g. '1.4L' = 1400)",
     )
-    tourniquet_time_minutes: int | None = Field(
+    estimated_blood_loss_net_ml: Optional[int] = Field(
+        None,
+        ge=0,
+        description="Estimated blood loss in millilitres net of cell salvage return, only if stated or calculable from a stated gross loss and returned volume. Unit conversion is fine",
+    )
+    estimated_blood_loss_desc: Optional[str] = Field(
+        None,
+        description="Direct extract of estimated blood loss as documented (e.g. 'minimal', '<50ml', '500-700ml')",
+    )
+    blood_units_transfused: Optional[int] = Field(
+        None,
+        ge=0,
+        description="Total units of allogeneic blood products transfused during the operation (e.g. '4 RBC, 4 FFP, 1 plt' = 9), if stated. Excludes cell salvage return",
+    )
+    blood_units_transfused_desc: Optional[str] = Field(
+        None,
+        description="Direct extract of blood products transfused as documented (e.g. '2u RBC', '4 RBC, 4 FFP, 1 plt')",
+    )
+    tourniquet_time_minutes: Optional[int] = Field(
         None, ge=0, description="Tourniquet time in minutes, if stated"
     )
-    asa_grade: int | None = Field(
-        None, ge=1, le=5, description="ASA physical status grade (1-5), if stated"
+    asa_grade: Optional[int] = Field(
+        None, ge=1, le=6, description="ASA physical status grade (1-6), if stated"
     )
-    surgeon_grade: str | None = Field(
+    asa_grade_desc: Optional[str] = Field(
+        None, description="Direct extract of ASA grade as documented (e.g. 'ASA 3E')"
+    )
+    senior_surgeon_grade: Optional[str] = Field(
         None,
-        description="Grade of the most senior operating surgeon as documented (e.g. 'consultant', 'registrar'), with names/identifiers redacted",
+        description="Grade of the most senior surgeon scrubbed or supervising in theatre, as documented (e.g. 'consultant', 'registrar')",
+    )
+
+
+class PreviousOperation(BaseModel):
+    """A previous operation that the note explicitly relates to the current operation."""
+
+    relations_to_current: List[PreviousOperationRelation] = Field(
+        min_length=1,
+        description="How the current operation relates to this previous operation. Multi-valued (e.g. a second-look washout for infection is both planned_staged_procedure and return_to_theatre_for_complication). Use OTHER if not in enum.",
+    )
+    relation_desc: str = Field(
+        description="Direct extract describing the relationship to the previous operation"
+    )
+    previous_operation_year: Optional[Year] = Field(
+        None, description="Year of the previous operation"
+    )
+    previous_operation_month: Optional[Month] = Field(
+        None, description="Month of the previous operation"
+    )
+    procedures: Optional[List[Procedure]] = Field(
+        None, description="Procedures performed in the previous operation"
+    )
+    complications: Optional[List[ProcedureComplication]] = Field(
+        None, description="Complications reported for the previous operation"
     )
 
 
@@ -857,27 +739,45 @@ class ProcedureMetadata(BaseModel):
 
 class OperationNote(BaseModel):
     is_operation_note: bool = Field(
-        description="True only if the document is an operative note or operation record describing a surgical/interventional procedure performed on a patient"
+        description="True only if the document is an operation note for a procedure performed on a specific patient"
     )
-    indication: str | None = Field(
-        None, description="Indication for the operation, in your own words"
+    operation_year: Optional[Year] = Field(None, description="Year of the operation")
+    operation_month: Optional[Month] = Field(None, description="Month of the operation")
+    indication_summary: Optional[str] = Field(
+        None, description="Short summary of the indication for the operation"
     )
-    procedures: list[Procedure] = Field(
-        default_factory=list,
-        description="All procedures performed, in the order documented; empty if not an operation note",
-    )
-    findings: str | None = Field(
-        None, description="Intraoperative or procedural findings as documented"
-    )
-    complications: list[ProcedureComplication] = Field(
-        default_factory=list,
-        description="Complications occurring during, or noted in immediate relation to, the procedure; empty if none reported",
-    )
-    metadata: ProcedureMetadata | None = Field(
+    previous_related_operations: Optional[List[PreviousOperation]] = Field(
         None,
-        description="Operative metadata reported for the case; None if nothing stated",
+        description="Previous operations the note explicitly relates to this operation (e.g. return to theatre, reversal, revision)",
     )
-    operation_summary: str | None = Field(
+    procedures: Optional[List[Procedure]] = Field(
         None,
-        description="Short free-text overall summary of the operation performed; None if not an operation note",
+        description="All procedures performed, in the order documented",
+    )
+    complications: Optional[List[ProcedureComplication]] = Field(
+        None,
+        description="Complications occurring during, or in immediate relation to, this operation. None if no complications are documented",
+    )
+    operation_outcome: Optional[OperationOutcome] = Field(
+        None,
+        description="Outcome of the operation against what was planned, only if the note makes this explicit",
+    )
+    operation_outcome_desc: Optional[str] = Field(
+        None,
+        description="Direct extract describing the outcome against what was planned",
+    )
+    metadata: Optional[ProcedureMetadata] = Field(
+        None, description="Operative metadata reported for the case"
+    )
+    findings_summary: Optional[str] = Field(
+        None,
+        description="Short summary of any other findings encountered during the operation; None if not an operation note",
+    )
+    operation_summary: Optional[str] = Field(
+        None,
+        description="Short summary of the operation and its outcome; None if not an operation note",
+    )
+    post_op_plan_summary: Optional[str] = Field(
+        None,
+        description="Short summary of the post-operative plan with essential facts only",
     )

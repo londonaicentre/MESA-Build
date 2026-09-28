@@ -20,7 +20,7 @@ def test_build_datagen_prompt() -> None:
 
     # Schema source present
     assert "OperationNote" in prompt, "Schema should contain the root model"
-    assert "procedure_type" in prompt, "Schema should contain key field"
+    assert "procedures" in prompt, "Schema should contain key field"
 
     # Example should be present
     assert '"content"' in prompt or "'content'" in prompt, (
@@ -42,4 +42,4 @@ def test_build_main_prompt() -> None:
 
     # Schema source present
     assert "OperationNote" in prompt, "Schema should contain the root model"
-    assert "procedure_type" in prompt, "Schema should contain key field"
+    assert "procedures" in prompt, "Schema should contain key field"
