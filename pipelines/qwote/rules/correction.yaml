@@ -1,0 +1,194 @@
+# Non-generative corrections to opnoteschema extractions, applied in order.
+# Each rule acts on the targets found by the JSONPath `path` for which the JSON Schema `when` validates {value: target, parent: object or list holding it, note: source note}.
+# Keywords such as `pattern` and `contains` only constrain values of their own type, so they are paired with `type` where the value may be null.
+# See datagen.correction_rules for the rule format.
+
+rules:
+  - name: operation-year-without-date
+    description: The operation year is only extracted from a stated date, so it is cleared where the note contains no date at all.
+    path: operation_year
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '\b(19|20)\d{2}\b|\b\d{1,2}[/.-]\d{1,2}[/.-]\d{2}\b'}}
+
+  - name: operation-month-without-date
+    description: The operation month is only extracted from a stated date, so it is cleared where the note contains no date at all.
+    path: operation_month
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '\b(19|20)\d{2}\b|\b\d{1,2}[/.-]\d{1,2}[/.-]\d{2}\b'}}
+
+  - name: outcome-not-stated
+    description: The outcome against plan is only set where the note states it, which the missing direct extract shows it did not.
+    path: operation_outcome
+    action: clear
+    when:
+      properties:
+        value: {not: {enum: [null, intraoperative_death]}}
+        parent:
+          properties:
+            operation_outcome_desc: {type: 'null'}
+
+  - name: ncepod-not-stated
+    description: The NCEPOD category is only extracted where the note names NCEPOD or CEPOD, never derived from urgency wording.
+    path: metadata.ncepod_category
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '(?i)\bN?CEPOD\b'}}
+
+  - name: urgency-not-stated
+    description: Urgency is only extracted from explicit wording, never inferred from a list type such as a day case or trauma list.
+    path: metadata.urgency
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '(?i)\b(elective|emergency|emergent|urgent|urgently|planned|N?CEPOD)\b'}}
+
+  - name: local-infiltration-with-general
+    description: Local anaesthetic infiltration alongside a general anaesthetic is not the main anaesthetic, so local is removed.
+    path: metadata.anaesthetic_types
+    action: remove_items
+    value: [local]
+    when:
+      properties:
+        value:
+          type: array
+          allOf:
+            - contains: {const: general}
+            - contains: {const: local}
+        note: {pattern: '(?i)infiltrat'}
+
+  - name: blood-loss-bound-or-range
+    description: Gross blood loss is only a single stated number, so it is cleared where the extract is a bound or a range.
+    path: metadata.estimated_blood_loss_gross_ml
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        parent:
+          properties:
+            estimated_blood_loss_desc: {type: string, pattern: '(?i)<|less than|up to|under\s+\d|\d\s*(-|–|to)\s*\d'}
+
+  - name: senior-grade-case
+    description: Surgeon grades are recorded in lower case, leaving abbreviations such as ST6 or SpR unchanged.
+    path: metadata.senior_surgeon_grade
+    action: lower
+    when:
+      properties:
+        value: {type: string, pattern: '^([A-Z][a-z]+ ?)+$'}
+
+  - name: incidental-adhesiolysis
+    description: Adhesiolysis done to gain access is a step of another procedure, unless it is listed in the procedure heading or documented as significant.
+    path: procedures[*]
+    action: remove
+    when:
+      properties:
+        value:
+          properties:
+            procedure: {const: adhesiolysis}
+            procedure_name_desc:
+              type: string
+              pattern: '(?i)adhesi'
+              not: {pattern: '(?i)extensive|dense|prolonged|significant|difficult|lengthy|time.consuming'}
+        parent: {minItems: 2}
+        note: {not: {pattern: '(?im)^\W*(procedure|operation)s?(\(s\))?( performed)?\s*:[^\n]*adhesio|(extensive|dense|significant)\s+adhesio'}}
+
+  - name: chest-drain-via-abdomen
+    description: A drain placed through an abdominal approach is not a chest drain insertion, and a routine drain is not a separate procedure.
+    path: procedures[*]
+    action: remove
+    when:
+      properties:
+        value:
+          properties:
+            procedure: {const: insertion_of_chest_drain}
+            approach: {enum: [laparoscopic, laparotomy]}
+        parent: {minItems: 2}
+
+  - name: laparotomy-approach
+    description: An open incision documented as a laparotomy is the laparotomy approach, not open_other.
+    path: procedures[*].approach
+    action: set
+    value: laparotomy
+    when:
+      properties:
+        value: {const: open_other}
+        parent:
+          properties:
+            incision_desc: {type: string, pattern: '(?i)laparotomy|roof.?top|chevron|mercedes'}
+
+  - name: unpaired-laterality
+    description: Laterality is null for procedures on unpaired or midline structures.
+    path: procedures[*].laterality
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        parent:
+          properties:
+            procedure:
+              enum:
+                - total_thyroidectomy
+                - septoplasty
+                - adenoidectomy
+                - laryngectomy
+                - tracheostomy
+                - total_hysterectomy
+                - subtotal_hysterectomy
+                - radical_hysterectomy
+                - myomectomy
+                - hysteroscopy
+                - endometrial_ablation
+                - uterine_curettage_or_evacuation
+                - caesarean_section
+                - radical_prostatectomy
+                - transurethral_prostate_procedure
+                - prostate_biopsy
+                - radical_cystectomy
+                - transurethral_resection_of_bladder_tumour
+                - circumcision
+                - total_gastrectomy
+                - oesophagectomy
+                - pancreaticoduodenectomy
+                - total_pancreatectomy
+                - panproctocolectomy
+                - cholecystectomy
+                - appendicectomy
+                - splenectomy
+
+  - name: excluded-implants
+    description: Drains, drainage catheters, feeding tubes, haemostatic or endoscopic clips and balloons are not implants.
+    path: procedures[*].implants[*]
+    action: remove
+    when:
+      properties:
+        value:
+          properties:
+            implant_desc:
+              type: string
+              pattern: '(?i)\b(drains?|drainage|nephrostomy|pigtail|t-tube|feeding tube|endo-?clips?|endoscopic clips?|haemo-?clips?|hemo-?clips?|liga-?clips?|balloon|foley|urinary catheter|suprapubic catheter)\b'
+              not: {pattern: '(?i)aneurysm|stent|shunt'}
+
+  - name: manufacturer-not-in-note
+    description: A manufacturer is only extracted where the note names it, not inferred from a product name.
+    path: procedures[*].implants[*].manufacturer
+    action: clear
+    when:
+      properties:
+        value: {type: string}
+        note: {not: {pattern: '(?i){value}'}}
+
+  - name: empty-implants
+    description: A procedure with no implants left after the corrections above has null implants.
+    path: procedures[*].implants
+    action: clear
+    when:
+      properties:
+        value: {type: array, maxItems: 0}
