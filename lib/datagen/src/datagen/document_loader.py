@@ -5,6 +5,7 @@ Utilites to download document batches from S3
 Before passing into training data generation
 """
 
+from itertools import zip_longest
 from pathlib import Path
 import json
 import re
@@ -90,6 +91,28 @@ class DocumentLoader:
                         doc_count += 1
 
         return doc_count
+
+    @staticmethod
+    def interleave(batches: list[list[Path]]) -> list[Path]:
+        """
+        Interleave document files round-robin across batches, so that
+        taking the first n files draws evenly from each batch.
+
+        Args:
+            batches:
+                Document files, grouped by batch
+
+        Returns:
+            Document files ordered as the first of each batch, then the
+            second of each batch, and so on, skipping exhausted batches
+
+        """
+        return [
+            path
+            for paths in zip_longest(*batches)
+            for path in paths
+            if path is not None
+        ]
 
     @staticmethod
     def list_available_document_batches(
