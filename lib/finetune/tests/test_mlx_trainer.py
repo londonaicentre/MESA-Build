@@ -15,6 +15,11 @@ from finetune.mlx_trainer import MLXLoRATrainer
 from finetune.trainer import LoRATrainer
 
 
+@pytest.fixture(autouse=True)
+def install_schema_package_mock(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("finetune.trainer.SchemaResolver.install_schema_package")
+
+
 def _patch_job_id_datetime(mocker: MockerFixture) -> MagicMock:
     mock_datetime: MagicMock = mocker.patch("finetune.trainer.datetime")
     mock_datetime.now.return_value.strftime.return_value = "20260101-120000"
