@@ -9,6 +9,7 @@ import json
 import logging
 import os
 from datetime import datetime
+from itertools import islice
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -20,6 +21,21 @@ from datagen.version_detector import get_schema_version
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
+
+
+class BatchState(BaseModel):
+    """State carried between batch generation runs.
+
+    Attributes:
+        job_id (str): Id of the most recently submitted batch job
+        sent_record_ids (list[str]): Record ids of every document sent in a
+            batch so far, so that later runs continue with unsent documents.
+            Defaults to an empty list, which sends every document afresh
+
+    """
+
+    job_id: str
+    sent_record_ids: list[str] = []
 
 
 class BedrockBatchGenerator:
@@ -79,34 +95,66 @@ class BedrockBatchGenerator:
     def _record_id(doc: Document) -> str:
         return hashlib.md5(doc.content.encode()).hexdigest()
 
+    def _documents_by_record_id(self) -> dict[str, Document]:
+        return {
+            BedrockBatchGenerator._record_id(doc): doc
+            for doc in (
+                Document.model_validate_json(doc_path.read_text())
+                for doc_path in self.__document_files
+            )
+        }
+
+    def _read_state(self) -> BatchState | None:
+        if not Path(self.__config.job_id_file).exists():
+            return None
+        with open(self.__config.job_id_file) as state_file:
+            return BatchState.model_validate_json(state_file.read())
+
+    def _write_state(self, state: BatchState) -> None:
+        with open(self.__config.job_id_file, "w") as state_file:
+            state_file.write(state.model_dump_json())
+
+    def _pending_documents(self, sample_size: int) -> dict[str, Document]:
+        sent: set[str] = (
+            set(state.sent_record_ids) if (state := self._read_state()) else set()
+        )
+        pending: dict[str, Document] = {
+            record_id: doc
+            for record_id, doc in self._documents_by_record_id().items()
+            if record_id not in sent
+        }
+        if not pending:
+            raise ValueError(
+                f"All {len(sent)} available documents have already been sent in a batch"
+            )
+        if sample_size > len(pending):
+            self._logger.warning(
+                f"Requested {sample_size} samples but only {len(pending)} unsent documents "
+                f"available. Will create {len(pending)} samples."
+            )
+        return dict(islice(pending.items(), sample_size))
+
     def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
-    ) -> str:
+    ) -> list[str]:
         """Generate batch request file for Anthropic Bedrock model.
 
         Args:
-            sample_size: Number of samples to be generated
+            sample_size: Maximum number of samples to be generated, drawn in
+                order from the documents not sent in a previous batch
             file_name: Output filename for batch request
 
         Returns:
-            The batch request filename
+            The record ids of the documents written to the batch request file
 
         """
-        max_samples = len(self.__document_files)
-        if sample_size > max_samples:
-            self._logger.warning(
-                f"Requested {sample_size} samples but only {max_samples} documents available. "
-                f"Will create {max_samples} samples."
-            )
-            sample_size = max_samples
-
+        pending: dict[str, Document] = self._pending_documents(sample_size)
         with open(file_name, "w") as outfile:
-            for doc_path in self.__document_files[:sample_size]:
-                doc = Document.model_validate_json(doc_path.read_text())
+            for record_id, doc in pending.items():
                 print(
                     json.dumps(
                         AWS.create_anthropic_bedrock_batch_entry(
-                            BedrockBatchGenerator._record_id(doc),
+                            record_id,
                             self.__system_prompt,
                             doc.content,
                         )
@@ -114,8 +162,8 @@ class BedrockBatchGenerator:
                     file=outfile,
                 )
 
-        self._logger.info(f"Generated batch file with {sample_size} entries")
-        return file_name
+        self._logger.info(f"Generated batch file with {len(pending)} entries")
+        return list(pending)
 
     def generate_via_batch(
         self,
@@ -126,7 +174,7 @@ class BedrockBatchGenerator:
         """Generate samples via batch inference.
 
         Args:
-            sample_size: Number of samples to be generated
+            sample_size: Maximum number of samples to be generated
             bucket: The name of the bucket to which the batch
                 specification should be uploaded
             bedrock_execution_role: The ARN of an IAM role with
@@ -136,9 +184,13 @@ class BedrockBatchGenerator:
         Returns:
             The id of the started job
 
+        Raises:
+            ValueError: If every available document has already been sent
+
         """
+        previous: BatchState | None = self._read_state()
         # Create batch instruction JSONL file
-        self._generate_batch(sample_size)
+        record_ids: list[str] = self._generate_batch(sample_size)
         job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
         AWS.run_batch_inference(
             job_id,
@@ -148,15 +200,17 @@ class BedrockBatchGenerator:
             bedrock_execution_role,
             self.__model_region,
         )
-        with open(self.__config.job_id_file, "w") as job_id_file:
-            job_id_file.write(json.dumps({"job_id": job_id}))
+        self._write_state(
+            BatchState(
+                job_id=job_id,
+                sent_record_ids=(previous.sent_record_ids if previous else [])
+                + record_ids,
+            )
+        )
         return job_id
 
     def __resolve_job_id(self) -> str | None:
-        if not Path(self.__config.job_id_file).exists():
-            return None
-        with open(self.__config.job_id_file) as job_id_file:
-            return str(json.loads(job_id_file.read())["job_id"])
+        return state.job_id if (state := self._read_state()) else None
 
     def extract_batch_output(
         self,
@@ -185,13 +239,7 @@ class BedrockBatchGenerator:
         else:
             batch_outputs = AWS.parse_batch_output(file_name)
 
-        docs: dict[str, Document] = {
-            BedrockBatchGenerator._record_id(doc): doc
-            for doc in (
-                Document.model_validate_json(doc_path.read_text())
-                for doc_path in self.__document_files
-            )
-        }
+        docs: dict[str, Document] = self._documents_by_record_id()
 
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
