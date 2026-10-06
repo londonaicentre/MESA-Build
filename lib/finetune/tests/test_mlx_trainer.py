@@ -269,7 +269,7 @@ class TestWriteConfig:
 
 
 def _write_resolved_config(
-    tmp_path: Path, iters: int = 1000, lr_schedule: dict[str, str] | None = None
+    tmp_path: Path, iters: int = 1000, lr_schedule: dict[str, object] | None = None
 ) -> str:
     config: dict[str, object] = {"iters": iters}
     if lr_schedule is not None:
