@@ -367,6 +367,20 @@ class TestValidModelCardVersion:
 
 
 class TestSerialise:
+    @pytest.fixture(autouse=True)
+    def install_schema_package_mock(self, mocker: MockerFixture) -> MagicMock:
+        return mocker.patch("finetune.trainer.SchemaResolver.install_schema_package")
+
+    def test_from_json_installs_schema_package_before_import(
+        self,
+        install_schema_package_mock: MagicMock,
+        make_base_trainer: BaseTrainerFactory,
+    ) -> None:
+        LoRATrainer.from_json(make_base_trainer().to_json())
+        install_schema_package_mock.assert_called_once_with(
+            "londonaicentre-fixtures", "", True
+        )
+
     def test_to_dict_stores_import_references(
         self, make_base_trainer: BaseTrainerFactory
     ) -> None:

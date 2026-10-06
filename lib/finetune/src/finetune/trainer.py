@@ -15,6 +15,7 @@ from finetune.config import FinetuneConfig
 from finetune.trainingdata_handler import TrainingDataHandler
 from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
+from utils.schema_resolver import SchemaResolver
 
 logger = logging.getLogger(__name__)
 
@@ -128,6 +129,9 @@ class LoRATrainer:
 
     @classmethod
     def _constructor_kwargs(cls, data: dict[str, Any]) -> dict[str, Any]:
+        SchemaResolver.install_schema_package(
+            f"londonaicentre-{data['schema']['module'].split('.')[0]}", "", True
+        )
         return {
             "schema": getattr(
                 import_module(data["schema"]["module"]), data["schema"]["qualname"]
