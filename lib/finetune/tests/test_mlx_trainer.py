@@ -3,7 +3,7 @@ import signal
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call
 
 import pytest
 import yaml
@@ -269,7 +269,7 @@ class TestWriteConfig:
 
 
 def _write_resolved_config(
-    tmp_path: Path, iters: int = 1000, lr_schedule: dict[str, str] | None = None
+    tmp_path: Path, iters: int = 1000, lr_schedule: dict[str, object] | None = None
 ) -> str:
     config: dict[str, object] = {"iters": iters}
     if lr_schedule is not None:
@@ -314,11 +314,30 @@ class TestTrain:
             -signal.SIGABRT, 0
         )
         make_mlx_trainer().train(config)
-        # remaining iters = original (1000) - completed (100)
         train_mocks.inject_resume.assert_called_once_with(
-            config, Path("0000100_adapters.safetensors"), 900
+            config, Path("0000100_adapters.safetensors"), 100, 900
         )
         assert train_mocks.subprocess_run.call_count == 2
+
+    def test_second_sigabrt_passes_local_not_cumulative_completed(
+        self,
+        tmp_path: Path,
+        train_mocks: TrainMocks,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000)
+        train_mocks.latest_checkpoint.side_effect = [
+            (Path("0000100_adapters.safetensors"), 100),
+            (Path("0000050_adapters.safetensors"), 50),
+        ]
+        train_mocks.subprocess_run.side_effect = TestTrain._returncodes(
+            -signal.SIGABRT, -signal.SIGABRT, 0
+        )
+        make_mlx_trainer().train(config, max_retries=3)
+        assert train_mocks.inject_resume.call_args_list == [
+            call(config, Path("0000100_adapters.safetensors"), 100, 900),
+            call(config, Path("0000050_adapters.safetensors"), 50, 850),
+        ]
 
     def test_non_sigabrt_does_not_retry(
         self,
@@ -404,7 +423,7 @@ class TestInjectResume:
     ) -> None:
         config = _write_resolved_config(tmp_path, 1000)
         make_mlx_trainer()._inject_resume(
-            config, Path("0000100_adapters.safetensors"), 900
+            config, Path("0000100_adapters.safetensors"), 100, 900
         )
         written = yaml.safe_load(Path(config).read_text())
         assert written["resume_adapter_file"] == "0000100_adapters.safetensors"
@@ -421,20 +440,94 @@ class TestInjectResume:
             make_mlx_trainer()._inject_resume(
                 _write_resolved_config(tmp_path),
                 Path("0000100_adapters.safetensors"),
+                100,
                 900,
             )
 
-    def test_lr_schedule_raises(
+    def test_unsupported_schedule_name_raises(
         self,
         tmp_path: Path,
         version_mock: MagicMock,
         make_mlx_trainer: MLXTrainerFactory,
     ) -> None:
-        config = _write_resolved_config(tmp_path, 1000, {"name": "cosine"})
-        with pytest.raises(ValueError, match="non-constant lr_schedule"):
+        config = _write_resolved_config(
+            tmp_path, 1000, {"name": "exponential_decay", "arguments": [2e-4, 0.9]}
+        )
+        with pytest.raises(ValueError, match="only supports continuing a cosine_decay"):
             make_mlx_trainer()._inject_resume(
-                config, Path("0000100_adapters.safetensors"), 900
+                config, Path("0000100_adapters.safetensors"), 100, 900
             )
+
+    def test_no_schedule_untouched(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(tmp_path, 1000)
+        make_mlx_trainer()._inject_resume(
+            config, Path("0000100_adapters.safetensors"), 100, 900
+        )
+        assert "lr_schedule" not in yaml.safe_load(Path(config).read_text())
+
+    def test_resume_mid_warmup_continues_same_ramp(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(
+            tmp_path,
+            1000,
+            {"name": "cosine_decay", "arguments": [2e-4, 1000], "warmup": 50},
+        )
+        make_mlx_trainer()._inject_resume(
+            config, Path("0000020_adapters.safetensors"), 20, 980
+        )
+        schedule = yaml.safe_load(Path(config).read_text())["lr_schedule"]
+        assert schedule["warmup"] == 30
+        assert schedule["warmup_init"] == pytest.approx(20 / 50 * 2e-4)
+        assert schedule["arguments"] == [2e-4, 1000, 0.0]
+
+    def test_resume_mid_decay_seeds_fresh_cosine_to_remaining_iters(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(
+            tmp_path,
+            1000,
+            {"name": "cosine_decay", "arguments": [2e-4, 1000]},
+        )
+        make_mlx_trainer()._inject_resume(
+            config, Path("0000500_adapters.safetensors"), 500, 500
+        )
+        schedule = yaml.safe_load(Path(config).read_text())["lr_schedule"]
+        expected_seed = 0.5 * (1 + 0) * 2e-4
+        assert schedule["arguments"] == pytest.approx([expected_seed, 500, 0.0])
+        assert "warmup" not in schedule
+
+    def test_resume_respects_grad_accumulation_steps(
+        self,
+        tmp_path: Path,
+        version_mock: MagicMock,
+        make_mlx_trainer: MLXTrainerFactory,
+    ) -> None:
+        config = _write_resolved_config(
+            tmp_path,
+            800,
+            {"name": "cosine_decay", "arguments": [2e-4, 1000], "warmup": 50},
+        )
+        config_data = yaml.safe_load(Path(config).read_text())
+        config_data["grad_accumulation_steps"] = 4
+        Path(config).write_text(yaml.safe_dump(config_data))
+        make_mlx_trainer()._inject_resume(
+            config, Path("0000200_adapters.safetensors"), 200, 600
+        )
+        schedule = yaml.safe_load(Path(config).read_text())["lr_schedule"]
+        assert schedule["warmup"] == 0
+        assert schedule["warmup_init"] == pytest.approx(2e-4)
 
 
 class TestResumeTrain:
@@ -452,7 +545,7 @@ class TestResumeTrain:
         make_mlx_trainer().resume_train(config)
         # remaining iters = original (15000) - completed (12800)
         inject.assert_called_once_with(
-            config, Path("0012800_adapters.safetensors"), 2200
+            config, Path("0012800_adapters.safetensors"), 12800, 2200
         )
         train.assert_called_once_with(config)
 
