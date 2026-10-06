@@ -5,6 +5,7 @@ Orchestrate LoRA fine-tuning locally on Apple Silicon using the mlx_lm CLIs.
 """
 
 import logging
+import math
 import re
 import shutil
 import signal
@@ -186,8 +187,63 @@ class MLXLoRATrainer(LoRATrainer):
         ]
         return max(checkpoints, key=lambda item: item[0].stat().st_mtime, default=None)
 
+    @staticmethod
+    def _resume_lr_schedule(
+        schedule: dict[str, Any],
+        grad_accumulation_steps: int,
+        completed: int,
+        remaining_iters: int,
+    ) -> dict[str, Any]:
+        """Re-parameterise a cosine_decay (+ warmup) schedule to continue a crashed run.
+
+        Args:
+            schedule: The resolved config's current ``lr_schedule`` dict.
+            grad_accumulation_steps: From the resolved config, to convert
+                ``completed``/``remaining_iters`` (raw training iterations)
+                into optimizer-update units.
+            completed: Raw training iterations run since ``schedule`` itself
+                started counting from step 0
+            remaining_iters: Raw training iterations left to run.
+
+        Returns:
+            dict[str, Any]: A replacement ``lr_schedule`` dict.
+
+        Raises:
+            ValueError: If the schedule isn't the ``cosine_decay`` shape
+                ``to_mlx_config`` emits.
+
+        """
+        if schedule.get("name") != "cosine_decay":
+            raise ValueError(
+                "resume only supports continuing a cosine_decay lr_schedule, "
+                f"found {schedule.get('name')!r}"
+            )
+        initial_lr, schedule_steps, *extra_args = schedule["arguments"]
+        end = extra_args[0] if extra_args else 0.0
+        warmup_steps = schedule.get("warmup", 0)
+        # https://github.com/ml-explore/mlx-lm/blob/v0.31.3/mlx_lm/tuner/trainer.py#L255-L259,L322
+        update = completed // grad_accumulation_steps
+
+        if warmup_steps and update < warmup_steps + 1:
+            # https://github.com/ml-explore/mlx/blob/v0.31.2/python/mlx/optimizers/schedulers.py#L131-L156
+            seed = min(update, warmup_steps) * initial_lr / warmup_steps
+            return {
+                "name": "cosine_decay",
+                "arguments": [initial_lr, schedule_steps, end],
+                "warmup": warmup_steps - update,
+                "warmup_init": seed,
+            }
+
+        # https://github.com/ml-explore/mlx/blob/v0.31.2/python/mlx/optimizers/schedulers.py#L91-L126
+        local = update - (warmup_steps + 1 if warmup_steps else 0)
+        # https://github.com/ml-explore/mlx/blob/v0.31.2/python/mlx/optimizers/schedulers.py#L61-L86
+        decay = 0.5 * (1 + math.cos(math.pi / schedule_steps * min(local, schedule_steps)))
+        seed = end + decay * (initial_lr - end)
+        remaining_updates = max(1, remaining_iters // grad_accumulation_steps)
+        return {"name": "cosine_decay", "arguments": [seed, remaining_updates, end]}
+
     def _inject_resume(
-        self, config_path: str, checkpoint: Path, remaining_iters: int
+        self, config_path: str, checkpoint: Path, completed: int, remaining_iters: int
     ) -> None:
         if version("mlx-lm") != self.MLX_LM_VALIDATED_VERSION:
             raise RuntimeError(
@@ -195,12 +251,14 @@ class MLXLoRATrainer(LoRATrainer):
                 f"{version('mlx-lm')}; re-verify resume semantics before bumping"
             )
         config = yaml.safe_load(Path(config_path).read_text())
-        if config.get("lr_schedule"):
-            raise ValueError(
-                "resume unsupported with a non-constant lr_schedule "
-                "(mlx_lm restarts the step counter, replaying the schedule from zero)"
-            )
         config["resume_adapter_file"] = str(checkpoint)
+        if (schedule := config.get("lr_schedule")) is not None:
+            config["lr_schedule"] = self._resume_lr_schedule(
+                schedule,
+                config.get("grad_accumulation_steps", 1),
+                completed,
+                remaining_iters,
+            )
         config["iters"] = remaining_iters
         Path(config_path).write_text(yaml.safe_dump(config, sort_keys=False))
 
@@ -238,7 +296,7 @@ class MLXLoRATrainer(LoRATrainer):
                 f"resuming from {checkpoint_path.name}"
             )
             self._inject_resume(
-                config_path, checkpoint_path, original_iters - completed
+                config_path, checkpoint_path, segment, original_iters - completed
             )
 
     def resume_train(self, config_path: str) -> None:
@@ -257,6 +315,7 @@ class MLXLoRATrainer(LoRATrainer):
         self._inject_resume(
             config_path,
             checkpoint_path,
+            completed,
             yaml.safe_load(Path(config_path).read_text())["iters"] - completed,
         )
         self.train(config_path)
