@@ -8,8 +8,10 @@ dependencies = [
     "dotenv>=0.9.9",
     "ipykernel>=7.3.0",
     "londonaicentre-mesa-datagen",
-    "londonaicentre-opnoteschema"
+    "londonaicentre-opnoteschema",
+    "mesa-runtime",
 ]
 
 [tool.uv.sources]
 londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
+mesa-runtime = { git = "https://github.com/londonaicentre/mesa-runtime.git", subdirectory = "lib", rev = "main" }

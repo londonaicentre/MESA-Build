@@ -1189,6 +1189,15 @@ wheels = [
 ]
 
 [[package]]
+name = "mesa-runtime"
+version = "0.1.0"
+source = { git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib&rev=main#eee5957b37f78fa221a6b11e189a2d81ce13887b" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+
+[[package]]
 name = "multidict"
 version = "6.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1343,6 +1352,7 @@ dependencies = [
     { name = "ipykernel" },
     { name = "londonaicentre-mesa-datagen" },
     { name = "londonaicentre-opnoteschema" },
+    { name = "mesa-runtime" },
 ]
 
 [package.metadata]
@@ -1351,6 +1361,7 @@ requires-dist = [
     { name = "ipykernel", specifier = ">=7.3.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
     { name = "londonaicentre-opnoteschema" },
+    { name = "mesa-runtime", git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib&rev=main" },
 ]
 
 [[package]]
