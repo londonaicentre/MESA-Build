@@ -1039,6 +1039,15 @@ wheels = [
 ]
 
 [[package]]
+name = "jsonpath-ng"
+version = "1.10.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/dc/178bf7bb75d2df2532d0d1796805381f2599eb805c40eeda089538af9393/jsonpath_ng-1.10.1.tar.gz", hash = "sha256:1247d0983361ebe44f47741e759bbb76e74213c68f25abb4b65f6de21d1934d6", size = 87626, upload-time = "2026-10-12T12:57:12.048Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/08/e6/d0f38911783aa7bc69afb0cdf5151e8cefeecd8ca3944c5453e13fc5afda/jsonpath_ng-1.10.1-py3-none-any.whl", hash = "sha256:9355047e5e6a8919f5ae0ccfd5b793bff69e4165f1248b1763e8962457b58ff5", size = 75386, upload-time = "2026-10-12T12:57:10.48Z" },
+]
+
+[[package]]
 name = "jsonschema"
 version = "4.26.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1136,7 +1145,10 @@ version = "1.0.0"
 source = { editable = "../../lib/datagen" }
 dependencies = [
     { name = "boto3" },
+    { name = "jsonpath-ng" },
+    { name = "jsonschema" },
     { name = "litellm" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types" },
     { name = "londonaicentre-mesa-utils" },
     { name = "pydantic-settings" },
@@ -1146,7 +1158,10 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "boto3", specifier = ">=1.41.1" },
+    { name = "jsonpath-ng", specifier = ">=1.8.0" },
+    { name = "jsonschema", specifier = ">=4.25.1" },
     { name = "litellm", specifier = ">=1.80.0" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types", editable = "../../lib/types" },
     { name = "londonaicentre-mesa-utils", editable = "../../lib/utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
@@ -1160,12 +1175,27 @@ dev = [
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "pytest-mock", specifier = ">=3.15.1" },
     { name = "ruff", specifier = ">=0.14.6" },
+    { name = "types-jsonschema", specifier = ">=4.26.0.20260518" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
 ]
 
 [[package]]
+name = "londonaicentre-mesa-runtime"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "boto3" },
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/91/f5/81e8fd4aff34c864f40e6b22b6ed042065c325a51c47dbf0a309a65f89ae/londonaicentre_mesa_runtime-0.1.0.tar.gz", hash = "sha256:2434cd4b0f16e67436e92b311eba57cfe3562fb2d31fb6bf05c0b2791c813507", size = 5485, upload-time = "2026-10-14T15:52:09.724Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/fb/539fcf26d12ae351c644df9daccaff570bfbb540c819799df2a11a5a057a/londonaicentre_mesa_runtime-0.1.0-py3-none-any.whl", hash = "sha256:2003e9394af60d64693a84c65a4bf8b5c2447d7af3c115438a07ecb949a441ee", size = 6597, upload-time = "2026-10-14T15:52:08.905Z" },
+]
+
+[[package]]
 name = "londonaicentre-mesa-types"
-version = "2.4.1"
+version = "2.5.0"
 source = { editable = "../../lib/types" }
 dependencies = [
     { name = "pydantic" },
@@ -1187,7 +1217,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.3.0"
+version = "1.4.0"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
@@ -1328,15 +1358,6 @@ wheels = [
 ]
 
 [[package]]
-name = "mesa-runtime"
-version = "0.1.0"
-source = { git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib#d9b2c9b1bd75ed493c7cb59a34e37efdec92b3a5" }
-dependencies = [
-    { name = "httpx" },
-    { name = "pydantic" },
-]
-
-[[package]]
 name = "multidict"
 version = "6.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1463,8 +1484,8 @@ dependencies = [
     { name = "ipykernel" },
     { name = "londonaicentre-docsynth" },
     { name = "londonaicentre-mesa-datagen" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-paedacuteschema" },
-    { name = "mesa-runtime" },
 ]
 
 [package.metadata]
@@ -1473,8 +1494,8 @@ requires-dist = [
     { name = "ipykernel", specifier = ">=7.3.0" },
     { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth?branch=spike%2Fmesa-build-refactor" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-paedacuteschema", specifier = ">=1.2.0" },
-    { name = "mesa-runtime", git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib" },
 ]
 
 [[package]]

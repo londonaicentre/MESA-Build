@@ -1,5 +1,6 @@
 import hashlib
 from dataclasses import dataclass
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, mock_open
@@ -7,12 +8,17 @@ from unittest.mock import MagicMock, mock_open
 import pytest
 from pytest_mock import MockerFixture
 
-from datagen.batch_generator import BatchState, BedrockBatchGenerator
+from datagen.batch_generator import (
+    BatchGenerator,
+    BatchState,
+    BedrockBatchGenerator,
+    MESARuntimeBatchGenerator,
+)
 from mesa_types import Document
 from tests.types import PathOperations
 
 
-class BatchGeneratorFixture(BedrockBatchGenerator):
+class BatchGeneratorFixture(BatchGenerator):
     def generate_batch(
         self, sample_size: int, file_name: str = "foo.jsonl"
     ) -> list[str]:
@@ -29,6 +35,9 @@ class BatchGeneratorFixture(BedrockBatchGenerator):
 
     def pending_documents(self, sample_size: int) -> dict[str, Document]:
         return self._pending_documents(sample_size)
+
+    def submit_batch(self, sample_size: int, submit: Callable[[str], object]) -> str:
+        return self._submit_batch(sample_size, submit)
 
 
 @dataclass
@@ -72,12 +81,19 @@ class ExtractDependencies:
 
 
 @dataclass
-class GenerateViaBatchDependencies:
-    run_batch_inference: MagicMock
+class SubmitBatchDependencies:
+    submit: MagicMock
     _generate_batch: MagicMock
     _read_state: MagicMock
     _write_state: MagicMock
     datetime: MagicMock
+
+
+@dataclass
+class GenerateViaDependencies:
+    _submit_batch: MagicMock
+    run_batch_inference: MagicMock
+    mesa_runtime: MagicMock
 
 
 @dataclass
@@ -131,6 +147,41 @@ def generator(
         schema_name="baz",
         model_name="foo_model",
         document_batches=["foobar.tar.gz"],
+    )
+
+
+GENERATOR_ARGS: dict[str, Any] = {
+    "system_prompt": "foo",
+    "schema": MagicMock,
+    "schema_name": "baz",
+    "model_name": "foo_model",
+    "document_batches": ["foobar.tar.gz"],
+}
+
+
+@pytest.fixture
+def bedrock_generator(
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+) -> BedrockBatchGenerator:
+    return BedrockBatchGenerator(**GENERATOR_ARGS)
+
+
+@pytest.fixture
+def mock_mesa_runtime(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("datagen.batch_generator.MesaRuntime", autospec=True)
+
+
+@pytest.fixture
+def runtime_generator(
+    mock_mesa_runtime: MagicMock,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+) -> MESARuntimeBatchGenerator:
+    return MESARuntimeBatchGenerator(
+        **GENERATOR_ARGS, base_url="https://foo", username="bar", password="baz"
     )
 
 
@@ -204,13 +255,15 @@ def mock_extract_dependencies(mocker: MockerFixture) -> ExtractDependencies:
 
 
 @pytest.fixture
-def mock_generate_via_batch_dependencies(
+def mock_submit_batch_dependencies(
     mocker: MockerFixture, generator: BatchGeneratorFixture
-) -> GenerateViaBatchDependencies:
-    return GenerateViaBatchDependencies(
-        run_batch_inference=mocker.patch(
-            "datagen.batch_generator.AWS.run_batch_inference", autospec=True
-        ),
+) -> SubmitBatchDependencies:
+    mock_datetime: MagicMock = mocker.patch(
+        "datagen.batch_generator.datetime", autospec=True
+    )
+    mock_datetime.now.return_value.strftime.return_value = "2026-01-01-0000"
+    return SubmitBatchDependencies(
+        submit=MagicMock(),
         _generate_batch=mocker.patch.object(
             generator, "_generate_batch", autospec=True, return_value=["foo", "bar"]
         ),
@@ -218,10 +271,25 @@ def mock_generate_via_batch_dependencies(
             generator, "_read_state", autospec=True, return_value=None
         ),
         _write_state=mocker.patch.object(generator, "_write_state", autospec=True),
-        datetime=mocker.patch(
-            "datagen.batch_generator.datetime",
-            autospec=True,
+        datetime=mock_datetime,
+    )
+
+
+@pytest.fixture
+def mock_generate_via_dependencies(
+    mocker: MockerFixture,
+    mock_mesa_runtime: MagicMock,
+    bedrock_generator: BedrockBatchGenerator,
+    runtime_generator: MESARuntimeBatchGenerator,
+) -> GenerateViaDependencies:
+    return GenerateViaDependencies(
+        _submit_batch=mocker.patch.object(
+            BatchGenerator, "_submit_batch", autospec=True, return_value="foo/bar"
         ),
+        run_batch_inference=mocker.patch(
+            "datagen.batch_generator.AWS.run_batch_inference", autospec=True
+        ),
+        mesa_runtime=mock_mesa_runtime,
     )
 
 
@@ -437,16 +505,43 @@ def test_generate_batch_documents_pending_returns_record_ids(
     mock_filesystem.open.assert_called_once_with("custom.jsonl", "w")
 
 
-def test_generate_via_batch_valid_params_calls_generate_inference_writes_file_returns_id(
-    mock_filesystem: FileSystem,
-    mock_generate_via_batch_dependencies: GenerateViaBatchDependencies,
+def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
+    mock_generate_via_dependencies: GenerateViaDependencies,
+    bedrock_generator: BedrockBatchGenerator,
+) -> None:
+    assert bedrock_generator.generate_via_batch(10, "foo", "bar") == "foo/bar"
+    mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
+    mock_generate_via_dependencies.run_batch_inference.assert_called_once_with(
+        "baz/qux", "bedrock/foo", "batch.jsonl", "foo", "bar", "eu-west-2"
+    )
+
+
+def test_generate_via_mesa_runtime_valid_params_submits_to_runtime_returns_id(
+    mock_generate_via_dependencies: GenerateViaDependencies,
+    runtime_generator: MESARuntimeBatchGenerator,
+) -> None:
+    assert runtime_generator.generate_via_mesa_runtime(10, "foo") == "foo/bar"
+    mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
+    mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
+        "https://foo", "bar", "baz"
+    )
+    mock_generate_via_dependencies.mesa_runtime.return_value.run_batch_inference.assert_called_once_with(
+        "baz/qux", "bedrock/foo", "batch.jsonl", "foo"
+    )
+
+
+def test_submit_batch_valid_params_submits_job_returns_id(
+    mock_submit_batch_dependencies: SubmitBatchDependencies,
     generator: BatchGeneratorFixture,
 ) -> None:
-    mock_generate_via_batch_dependencies.datetime.now.return_value.strftime.return_value = "2026-01-01-0000"
-    result: str = generator.generate_via_batch(10, "bucket", "role_arn")
-    mock_generate_via_batch_dependencies._generate_batch.assert_called_once_with(10)
-    mock_generate_via_batch_dependencies.run_batch_inference.assert_called_once()
-    assert result == "datagen/2026-01-01-0000"
+    assert (
+        generator.submit_batch(10, mock_submit_batch_dependencies.submit)
+        == "datagen/2026-01-01-0000"
+    )
+    mock_submit_batch_dependencies._generate_batch.assert_called_once_with(10)
+    mock_submit_batch_dependencies.submit.assert_called_once_with(
+        "datagen/2026-01-01-0000"
+    )
 
 
 @pytest.mark.parametrize(
@@ -459,32 +554,29 @@ def test_generate_via_batch_valid_params_calls_generate_inference_writes_file_re
         ),
     ],
 )
-def test_generate_via_batch_batch_submitted_appends_sent_record_ids(
-    mock_filesystem: FileSystem,
-    mock_generate_via_batch_dependencies: GenerateViaBatchDependencies,
+def test_submit_batch_batch_submitted_appends_sent_record_ids(
+    mock_submit_batch_dependencies: SubmitBatchDependencies,
     generator: BatchGeneratorFixture,
     previous: BatchState | None,
     expected: list[str],
 ) -> None:
-    mock_generate_via_batch_dependencies.datetime.now.return_value.strftime.return_value = "2026-01-01-0000"
-    mock_generate_via_batch_dependencies._read_state.return_value = previous
-    generator.generate_via_batch(10, "bucket", "role_arn")
-    mock_generate_via_batch_dependencies._write_state.assert_called_once_with(
+    mock_submit_batch_dependencies._read_state.return_value = previous
+    generator.submit_batch(10, mock_submit_batch_dependencies.submit)
+    mock_submit_batch_dependencies._write_state.assert_called_once_with(
         BatchState(job_id="datagen/2026-01-01-0000", sent_record_ids=expected)
     )
 
 
-def test_generate_via_batch_submission_fails_records_nothing(
-    mock_filesystem: FileSystem,
-    mock_generate_via_batch_dependencies: GenerateViaBatchDependencies,
+def test_submit_batch_submission_fails_records_nothing(
+    mock_submit_batch_dependencies: SubmitBatchDependencies,
     generator: BatchGeneratorFixture,
 ) -> None:
-    mock_generate_via_batch_dependencies.run_batch_inference.side_effect = ValueError(
+    mock_submit_batch_dependencies.submit.side_effect = ValueError(
         "Error submitting job"
     )
     with pytest.raises(ValueError, match="Error submitting job"):
-        generator.generate_via_batch(10, "bucket", "role_arn")
-    mock_generate_via_batch_dependencies._write_state.assert_not_called()
+        generator.submit_batch(10, mock_submit_batch_dependencies.submit)
+    mock_submit_batch_dependencies._write_state.assert_not_called()
 
 
 @pytest.fixture

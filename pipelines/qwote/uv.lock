@@ -1016,6 +1016,7 @@ dependencies = [
     { name = "jsonpath-ng" },
     { name = "jsonschema" },
     { name = "litellm" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types" },
     { name = "londonaicentre-mesa-utils" },
     { name = "pydantic-settings" },
@@ -1028,6 +1029,7 @@ requires-dist = [
     { name = "jsonpath-ng", specifier = ">=1.8.0" },
     { name = "jsonschema", specifier = ">=4.25.1" },
     { name = "litellm", specifier = ">=1.80.0" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types", editable = "../../lib/types" },
     { name = "londonaicentre-mesa-utils", editable = "../../lib/utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
@@ -1043,6 +1045,20 @@ dev = [
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-jsonschema", specifier = ">=4.26.0.20260518" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
+]
+
+[[package]]
+name = "londonaicentre-mesa-runtime"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "boto3" },
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/91/f5/81e8fd4aff34c864f40e6b22b6ed042065c325a51c47dbf0a309a65f89ae/londonaicentre_mesa_runtime-0.1.0.tar.gz", hash = "sha256:2434cd4b0f16e67436e92b311eba57cfe3562fb2d31fb6bf05c0b2791c813507", size = 5485, upload-time = "2026-10-14T15:52:09.724Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/fb/539fcf26d12ae351c644df9daccaff570bfbb540c819799df2a11a5a057a/londonaicentre_mesa_runtime-0.1.0-py3-none-any.whl", hash = "sha256:2003e9394af60d64693a84c65a4bf8b5c2447d7af3c115438a07ecb949a441ee", size = 6597, upload-time = "2026-10-14T15:52:08.905Z" },
 ]
 
 [[package]]
@@ -1186,15 +1202,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/bd/c0/9f7c9a46090390368a4d7bcb76bb87a4a36c421e4c0792cdb53486ffac7a/matplotlib_inline-0.2.2.tar.gz", hash = "sha256:72f3fe8fce36b70d4a5b612f899090cd0401deddc4ea90e1572b9f4bfb058c79", size = 8150, upload-time = "2026-05-08T17:33:33.49Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/41/09/5b161152e2d90f7b87f781c2e1267494aef9c32498df793f73ad0a0a494a/matplotlib_inline-0.2.2-py3-none-any.whl", hash = "sha256:3c821cf1c209f59fb2d2d64abbf5b23b67bcb2210d663f9918dd851c6da1fcf6", size = 9534, upload-time = "2026-05-08T17:33:32.055Z" },
-]
-
-[[package]]
-name = "mesa-runtime"
-version = "0.1.0"
-source = { git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib&rev=main#eee5957b37f78fa221a6b11e189a2d81ce13887b" }
-dependencies = [
-    { name = "httpx" },
-    { name = "pydantic" },
 ]
 
 [[package]]
@@ -1351,8 +1358,8 @@ dependencies = [
     { name = "dotenv" },
     { name = "ipykernel" },
     { name = "londonaicentre-mesa-datagen" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-opnoteschema" },
-    { name = "mesa-runtime" },
 ]
 
 [package.metadata]
@@ -1360,8 +1367,8 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "ipykernel", specifier = ">=7.3.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-opnoteschema" },
-    { name = "mesa-runtime", git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib&rev=main" },
 ]
 
 [[package]]
