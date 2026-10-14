@@ -1,7 +1,6 @@
 name: Feature
 description: Raise a feature request
 type: Feature
-projects: ["londonaicentre/16"]
 body:
   - type: textarea
     id: short-description
