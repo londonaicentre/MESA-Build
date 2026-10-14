@@ -16,7 +16,7 @@ dependencies = [
     "pyyaml>=6.0",
     "londonaicentre-mesa-utils",
     "londonaicentre-mesa-types",
-    "mesa-runtime",
+    "londonaicentre-mesa-runtime",
     "jsonpath-ng>=1.8.0",
     "jsonschema>=4.25.1",
 ]
@@ -26,7 +26,6 @@ build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-mesa-types = { path = "../types", editable = true }
 londonaicentre-mesa-utils = { path = "../utils", editable = true }
-mesa-runtime = { git = "https://github.com/londonaicentre/mesa-runtime.git", subdirectory = "lib", rev = "main" }
 [tool.setuptools.package-data]
 datagen = [
     "config/*",

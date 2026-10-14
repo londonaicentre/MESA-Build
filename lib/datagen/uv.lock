@@ -818,9 +818,9 @@ dependencies = [
     { name = "jsonpath-ng" },
     { name = "jsonschema" },
     { name = "litellm" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types" },
     { name = "londonaicentre-mesa-utils" },
-    { name = "mesa-runtime" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
 ]
@@ -842,9 +842,9 @@ requires-dist = [
     { name = "jsonpath-ng", specifier = ">=1.8.0" },
     { name = "jsonschema", specifier = ">=4.25.1" },
     { name = "litellm", specifier = ">=1.80.0" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types", editable = "../types" },
     { name = "londonaicentre-mesa-utils", editable = "../utils" },
-    { name = "mesa-runtime", git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib&rev=main" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "pyyaml", specifier = ">=6.0" },
 ]
@@ -858,6 +858,20 @@ dev = [
     { name = "ruff", specifier = ">=0.14.6" },
     { name = "types-jsonschema", specifier = ">=4.26.0.20260518" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250915" },
+]
+
+[[package]]
+name = "londonaicentre-mesa-runtime"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "boto3" },
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/91/f5/81e8fd4aff34c864f40e6b22b6ed042065c325a51c47dbf0a309a65f89ae/londonaicentre_mesa_runtime-0.1.0.tar.gz", hash = "sha256:2434cd4b0f16e67436e92b311eba57cfe3562fb2d31fb6bf05c0b2791c813507", size = 5485, upload-time = "2026-10-14T15:52:09.724Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/fb/539fcf26d12ae351c644df9daccaff570bfbb540c819799df2a11a5a057a/londonaicentre_mesa_runtime-0.1.0-py3-none-any.whl", hash = "sha256:2003e9394af60d64693a84c65a4bf8b5c2447d7af3c115438a07ecb949a441ee", size = 6597, upload-time = "2026-10-14T15:52:08.905Z" },
 ]
 
 [[package]]
@@ -987,16 +1001,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/fb/df/5bd7a48c256faecd1d36edc13133e51397e41b73bb77e1a69deab746ebac/markupsafe-3.0.3-cp314-cp314t-win32.whl", hash = "sha256:915c04ba3851909ce68ccc2b8e2cd691618c4dc4c4232fb7982bca3f41fd8c3d", size = 14819, upload-time = "2025-09-27T18:37:26.285Z" },
     { url = "https://files.pythonhosted.org/packages/1a/8a/0402ba61a2f16038b48b39bccca271134be00c5c9f0f623208399333c448/markupsafe-3.0.3-cp314-cp314t-win_amd64.whl", hash = "sha256:4faffd047e07c38848ce017e8725090413cd80cbc23d86e55c587bf979e579c9", size = 15426, upload-time = "2025-09-27T18:37:27.316Z" },
     { url = "https://files.pythonhosted.org/packages/70/bc/6f1c2f612465f5fa89b95bead1f44dcb607670fd42891d8fdcd5d039f4f4/markupsafe-3.0.3-cp314-cp314t-win_arm64.whl", hash = "sha256:32001d6a8fc98c8cb5c947787c5d08b0a50663d139f1305bac5885d98d9b40fa", size = 14146, upload-time = "2025-09-27T18:37:28.327Z" },
-]
-
-[[package]]
-name = "mesa-runtime"
-version = "0.1.0"
-source = { git = "https://github.com/londonaicentre/mesa-runtime.git?subdirectory=lib&rev=main#8f0c6c96924e1b749829611ecefa3d774e67c4d2" }
-dependencies = [
-    { name = "boto3" },
-    { name = "httpx" },
-    { name = "pydantic" },
 ]
 
 [[package]]
