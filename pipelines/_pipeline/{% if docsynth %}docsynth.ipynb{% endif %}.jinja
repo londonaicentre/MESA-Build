@@ -1,0 +1,99 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### {{ _folder_name | capitalize }}: Synthetic document generation"
+   ],
+   "id": "00000000"
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Set up environment (including `assume --env` credentials if required)"
+   ],
+   "id": "00000001"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "from dotenv import load_dotenv\n",
+    "load_dotenv()"
+   ],
+   "id": "00000002"
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Import generator"
+   ],
+   "id": "00000003"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from docsynth.generate import Generator\n",
+    "generator: Generator = Generator()"
+   ],
+   "id": "00000004"
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Generate documents (AWS Bedrock Sonnet batch)"
+   ],
+   "id": "00000005"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "generator.generate_via_batch(os.environ[\"BUCKET\"], os.environ[\"BEDROCK_EXECUTION_ROLE\"])"
+   ],
+   "id": "00000006"
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Download, parse and re-upload batch"
+   ],
+   "id": "00000007"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "generator.extract_batch_output(os.environ[\"BUCKET\"])"
+   ],
+   "id": "00000008"
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
