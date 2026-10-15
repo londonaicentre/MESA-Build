@@ -93,6 +93,8 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 
 ## Schema Packages
 
+<!-- schemas:start -->
+
 [**entityschema**](schemas/entityschema/src/entityschema/schema.py): Clinical entity extraction schema for MESA
 
 [**genoschema**](schemas/genoschema/src/genoschema/schema.py): Genomic report extraction schema for MESA
@@ -106,6 +108,8 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 [**opnoteschema**](schemas/opnoteschema/src/opnoteschema/schema.py): Operation notes
 
 [**paedacuteschema**](schemas/paedacuteschema/src/paedacuteschema/schema.py): Paediatric acute triage sign extraction schema for MESA
+
+<!-- schemas:end -->
 
 Each schema package is independently versioned and published to PyPI
 
