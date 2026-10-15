@@ -93,11 +93,19 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 
 ## Schema Packages
 
-[**oncoschema**](schemas/oncoschema/src/oncoschema/schema.py): Pydantic schema and prompts for extracting information from cancer clinical documents
+[**entityschema**](schemas/entityschema/src/entityschema/schema.py): Clinical entity extraction schema for MESA
 
-[**genoschema**](schemas/genoschema/src/genoschema/schema.py): Pydantic schema and prompts for extracting biomarker information from NHS genomic laboratory hub reports.
+[**genoschema**](schemas/genoschema/src/genoschema/schema.py): Genomic report extraction schema for MESA
 
-[**entityschema**](schemas/entityschema/src/entityschema/schema.py): Schema package for clinical entity extraction from NHS medical documents.
+[**oncopathschema**](schemas/oncopathschema/src/oncopathschema/schema.py): Histopathology
+
+[**oncoradschema**](schemas/oncoradschema/src/oncoradschema/schema.py): Radiology
+
+[**oncoschema**](schemas/oncoschema/src/oncoschema/schema.py): Oncology extraction schema for MESA
+
+[**opnoteschema**](schemas/opnoteschema/src/opnoteschema/schema.py): Operation notes
+
+[**paedacuteschema**](schemas/paedacuteschema/src/paedacuteschema/schema.py): Paediatric acute triage sign extraction schema for MESA
 
 Each schema package is independently versioned and published to PyPI
 
