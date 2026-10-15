@@ -1,0 +1,15 @@
+# questions
+schema_name:
+    type: str
+    help: Which schema package does this pipeline use (e.g. 'paedacuteschema')?
+
+docsynth:
+    type: bool
+    help: Does this pipeline generate synthetic documents?
+    default: false
+
+_tasks:
+  - "uv add --editable ../../lib/datagen ../../schemas/{{schema_name}}"
+  - "uv add dotenv ipykernel londonaicentre-mesa-runtime"
+  - command: "uv add git+ssh://git@github.com/londonaicentre/MESA-Docsynth"
+    when: "{{ docsynth }}"
