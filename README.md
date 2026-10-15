@@ -1,17 +1,17 @@
 # MESA-Build
 
-End-to-end framework for fine-tuning LLMs for **M**edical **E**ntity **E**xtraction with **S**chema **A**lignment.
+End-to-end framework for fine-tuning LLMs for **M**edical-concept **E**xtraction with **S**chema **A**lignment (MESA).
 
 <img src="_assets/repo.png" alt="repo" width="500"/>
 
 Other parts of the MESA family include:
+
 - [**MESA**](https://github.com/londonaicentre/MESA) - tutorials and example notebooks showing end-to-end model development and inference
-- **MESA-DocSynth** - configuration driven synthetic document generation
+- [**MESA-DocSynth**](https://github.com/londonaicentre/MESA-Docsynth) - configuration driven synthetic document generation
 - **MESA-Deploy** - deployment of inference endpoint to local or cloud infrastructure
 - **MESA-Runner** - stateless runtime for deploying models to live infrastructure
 - **MESA-Ansible** - ansible projects for provisioning entire MESA infrastructure
 - **MESA-Validate** - simple Python application for HITL validation of MESA model outputs vs source documents
-
 
 ## Overview
 
