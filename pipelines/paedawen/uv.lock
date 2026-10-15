@@ -1130,9 +1130,10 @@ wheels = [
 [[package]]
 name = "londonaicentre-docsynth"
 version = "1.0.0"
-source = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth?branch=spike%2Fmesa-build-refactor#391d9b0cf9b14f632a40ad0c49900935aa5f2f48" }
+source = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth#28b37d486d0a949e317f6b99b5b332c54838beb4" }
 dependencies = [
     { name = "google-generativeai" },
+    { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-mesa-types" },
     { name = "londonaicentre-mesa-utils" },
     { name = "pydantic-settings" },
@@ -1492,7 +1493,7 @@ dependencies = [
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "ipykernel", specifier = ">=7.3.0" },
-    { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth?branch=spike%2Fmesa-build-refactor" },
+    { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
     { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-paedacuteschema", specifier = ">=1.2.0" },
