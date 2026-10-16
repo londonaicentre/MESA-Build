@@ -349,6 +349,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         self,
         sample_size: int,
         bucket: str,
+        split_across_models: bool = False,
     ) -> str:
         """Generate samples via batch inference on the MESA Runtime, in place
             of Bedrock, using the model from config.json as served by the
@@ -359,6 +360,9 @@ class MESARuntimeBatchGenerator(BatchGenerator):
             bucket: The name of the bucket to which the batch
                 specification should be uploaded and from which the
                 runtime reads it
+            split_across_models: Split samples across every model served by
+                the runtime, in turn, rather than using the config.json
+                model. Defaults to False.
 
         Returns:
             The id of the started job
@@ -370,6 +374,10 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         return self._submit_batch(
             sample_size,
             lambda job_id: self.__runtime.run_batch_inference(
-                job_id, self._model_id, self._model_batch_file, bucket
+                job_id,
+                "" if split_across_models else self._model_id,
+                self._model_batch_file,
+                bucket,
+                split_across_models=split_across_models,
             ),
         )
