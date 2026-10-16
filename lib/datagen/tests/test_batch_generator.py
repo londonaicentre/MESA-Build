@@ -516,17 +516,29 @@ def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
     )
 
 
+@pytest.mark.parametrize(
+    ("split_across_models", "model_id"), [(False, "bedrock/foo"), (True, "")]
+)
 def test_generate_via_mesa_runtime_valid_params_submits_to_runtime_returns_id(
     mock_generate_via_dependencies: GenerateViaDependencies,
     runtime_generator: MESARuntimeBatchGenerator,
+    split_across_models: bool,
+    model_id: str,
 ) -> None:
-    assert runtime_generator.generate_via_mesa_runtime(10, "foo") == "foo/bar"
+    assert (
+        runtime_generator.generate_via_mesa_runtime(10, "foo", split_across_models)
+        == "foo/bar"
+    )
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
         "https://foo", "bar", "baz"
     )
     mock_generate_via_dependencies.mesa_runtime.return_value.run_batch_inference.assert_called_once_with(
-        "baz/qux", "bedrock/foo", "batch.jsonl", "foo"
+        "baz/qux",
+        model_id,
+        "batch.jsonl",
+        "foo",
+        split_across_models=split_across_models,
     )
 
 
