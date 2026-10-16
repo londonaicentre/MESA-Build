@@ -1,5 +1,5 @@
 [project]
-name = "oncoradschema"
+name = "londonaicentre-oncoradschema"
 version = "0.5.0"
 description = "Radiology"
 readme = "README.md"
