@@ -16,7 +16,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from datagen.config import Config
+from datagen.config import Config, ModelConfig
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
 from datagen.version_detector import get_schema_version
@@ -47,7 +47,8 @@ class BatchGenerator:
         system_prompt: System prompt for sample generation
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
-        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4')
+        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
+            or None to use the runtime defaults with no model
         document_batches: S3 batch filenames to download
     """
 
@@ -56,7 +57,7 @@ class BatchGenerator:
         system_prompt: str,
         schema: type[BaseModel],
         schema_name: str,
-        model_name: str,
+        model_name: str | None,
         document_batches: list[str],
     ):
         self.__config: Config = Config()
@@ -69,10 +70,15 @@ class BatchGenerator:
         self.__schema_name: str = schema_name
         self.__schema_version: str = get_schema_version(schema_name)
 
-        self._model_id: str = self.__config.models[model_name].model
-        self._model_region: str = self.__config.models[model_name].region
+        model: ModelConfig = (
+            self.__config.models[model_name]
+            if model_name
+            else self.__config.runtime_model
+        )
+        self._model_id: str = model.model
+        self._model_region: str = model.region
         os.environ["AWS_REGION_NAME"] = self._model_region
-        self._model_batch_file: str = self.__config.models[model_name].batch_file
+        self._model_batch_file: str = model.batch_file
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
@@ -316,13 +322,15 @@ class MESARuntimeBatchGenerator(BatchGenerator):
     """MESA Runtime batch sample generator.
 
     Uses batch inference on the MESA Runtime, in place of Bedrock, with the
-    model from config.json as served by the runtime.
+    model from config.json as served by the runtime, or split across every
+    model the runtime serves if no model is given.
 
     Args:
         system_prompt: System prompt for sample generation
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
-        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4')
+        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
+            or None to split samples across every model the runtime serves
         document_batches: S3 batch filenames to download
         base_url: Base URL of the MESA Runtime API
         username: Basic auth username for the MESA Runtime API
@@ -334,7 +342,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         system_prompt: str,
         schema: type[BaseModel],
         schema_name: str,
-        model_name: str,
+        model_name: str | None,
         document_batches: list[str],
         base_url: str,
         username: str,
@@ -349,20 +357,15 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         self,
         sample_size: int,
         bucket: str,
-        split_across_models: bool = False,
     ) -> str:
         """Generate samples via batch inference on the MESA Runtime, in place
-            of Bedrock, using the model from config.json as served by the
-            runtime.
+            of Bedrock.
 
         Args:
             sample_size: Maximum number of samples to be generated
             bucket: The name of the bucket to which the batch
                 specification should be uploaded and from which the
                 runtime reads it
-            split_across_models: Split samples across every model served by
-                the runtime, in turn, rather than using the config.json
-                model. Defaults to False.
 
         Returns:
             The id of the started job
@@ -375,9 +378,9 @@ class MESARuntimeBatchGenerator(BatchGenerator):
             sample_size,
             lambda job_id: self.__runtime.run_batch_inference(
                 job_id,
-                "" if split_across_models else self._model_id,
+                self._model_id,
                 self._model_batch_file,
                 bucket,
-                split_across_models=split_across_models,
+                split_across_models=not self._model_id,
             ),
         )
