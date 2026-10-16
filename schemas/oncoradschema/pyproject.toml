@@ -1,6 +1,6 @@
 [project]
 name = "londonaicentre-oncoradschema"
-version = "0.5.0"
+version = "0.5.1"
 description = "Radiology"
 readme = "README.md"
 authors = [
