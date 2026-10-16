@@ -37,13 +37,13 @@ See [examples](examples/).
     Construct a `MESARuntimeBatchGenerator` in place of the `BedrockBatchGenerator` in step 3, taking the same arguments plus `base_url`, `username` and `password` for the MESA Runtime API, then:
 
     ```python
-    gen.generate_via_mesa_runtime(
+    gen.generate_via_batch(
         sample_size =
         bucket =
     )
     ```
 
-    Pass `split_across_models = True` to split samples across every model the runtime serves, in turn, rather than using the `config.json` model.
+    Pass `model_name = None` to split samples across every model the runtime serves, in turn, rather than using a `config.json` model.
     Output is written in the Bedrock batch format, so the remaining steps are unchanged.
 
 5. Download and parse batch outputs
