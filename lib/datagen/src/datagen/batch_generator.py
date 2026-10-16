@@ -329,12 +329,13 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         system_prompt: System prompt for sample generation
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
-        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
-            or None to split samples across every model the runtime serves
         document_batches: S3 batch filenames to download
         base_url: Base URL of the MESA Runtime API
         username: Basic auth username for the MESA Runtime API
         password: Basic auth password for the MESA Runtime API
+        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
+            or None to split samples across every model the runtime serves.
+            Defaults to None.
     """
 
     def __init__(
@@ -342,11 +343,11 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         system_prompt: str,
         schema: type[BaseModel],
         schema_name: str,
-        model_name: str | None,
         document_batches: list[str],
         base_url: str,
         username: str,
         password: str,
+        model_name: str | None = None,
     ):
         super().__init__(
             system_prompt, schema, schema_name, model_name, document_batches
@@ -378,9 +379,9 @@ class MESARuntimeBatchGenerator(BatchGenerator):
             sample_size,
             lambda job_id: self.__runtime.run_batch_inference(
                 job_id,
-                self._model_id,
                 self._model_batch_file,
                 bucket,
+                self._model_id,
                 split_across_models=not self._model_id,
             ),
         )

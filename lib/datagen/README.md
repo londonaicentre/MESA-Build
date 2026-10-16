@@ -34,7 +34,8 @@ See [examples](examples/).
     ```
 
     Alternatively, run the batch on the MESA Runtime instead of Bedrock, serving the `model` of the `model_name` entry in `config.json`.
-    Construct a `MESARuntimeBatchGenerator` in place of the `BedrockBatchGenerator` in step 3, taking the same arguments plus `base_url`, `username` and `password` for the MESA Runtime API, then:
+    Construct a `MESARuntimeBatchGenerator` in place of the `BedrockBatchGenerator` in step 3, taking the same arguments plus `base_url`, `username` and `password` for the MESA Runtime API.
+    Omit `model_name` to split samples across every model the runtime serves, then:
 
     ```python
     gen.generate_via_batch(
