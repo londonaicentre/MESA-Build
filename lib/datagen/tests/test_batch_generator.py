@@ -189,11 +189,11 @@ def runtime_generator(
         system_prompt="foo",
         schema=MagicMock,
         schema_name="baz",
-        model_name=getattr(request, "param", "foo_model"),
         document_batches=["foobar.tar.gz"],
         base_url="https://foo",
         username="bar",
         password="baz",
+        **getattr(request, "param", {"model_name": "foo_model"}),
     )
 
 
@@ -546,8 +546,8 @@ def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
 @pytest.mark.parametrize(
     ("runtime_generator", "model_id", "batch_file", "split_across_models"),
     [
-        ("foo_model", "bedrock/foo", "batch.jsonl", False),
-        (None, "", "runtime.jsonl", True),
+        ({"model_name": "foo_model"}, "bedrock/foo", "batch.jsonl", False),
+        ({}, "", "runtime.jsonl", True),
     ],
     indirect=["runtime_generator"],
 )
