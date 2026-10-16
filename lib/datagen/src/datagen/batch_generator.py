@@ -353,7 +353,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         )
         self.__runtime: MesaRuntime = MesaRuntime(base_url, username, password)
 
-    def generate_via_mesa_runtime(
+    def generate_via_batch(
         self,
         sample_size: int,
         bucket: str,
