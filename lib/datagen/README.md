@@ -43,6 +43,7 @@ See [examples](examples/).
     )
     ```
 
+    Pass `split_across_models = True` to split samples across every model the runtime serves, in turn, rather than using the `config.json` model.
     Output is written in the Bedrock batch format, so the remaining steps are unchanged.
 
 5. Download and parse batch outputs
