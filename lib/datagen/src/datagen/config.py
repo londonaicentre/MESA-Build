@@ -20,6 +20,9 @@ class ModelConfig(BaseModel):
 class Config(BaseSettings):
     models: dict[str, ModelConfig]
     job_id_file: str = ".job_id.json"
+    runtime_model: ModelConfig = ModelConfig(
+        model="", region="eu-west-2", batch_file="anthropic_batch_job.jsonl"
+    )
 
     def __init__(self) -> None:
         super().__init__(

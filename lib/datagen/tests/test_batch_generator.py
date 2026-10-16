@@ -44,6 +44,7 @@ class BatchGeneratorFixture(BatchGenerator):
 class MockConfig:
     models: dict[str, Any]
     job_id_file: str = ".job_id.json"
+    runtime_model: Any = None
 
 
 @dataclass
@@ -120,7 +121,10 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
             "foo_model": MagicMock(
                 model="bedrock/foo", region="eu-west-2", batch_file="batch.jsonl"
             )
-        }
+        },
+        runtime_model=MagicMock(
+            model="", region="eu-west-1", batch_file="runtime.jsonl"
+        ),
     )
     return GeneratorDependencies(
         config=mock_config,
@@ -175,13 +179,21 @@ def mock_mesa_runtime(mocker: MockerFixture) -> MagicMock:
 
 @pytest.fixture
 def runtime_generator(
+    request: pytest.FixtureRequest,
     mock_mesa_runtime: MagicMock,
     mock_path_operations: PathOperations,
     mock_filesystem: FileSystem,
     mock_generator_dependencies: GeneratorDependencies,
 ) -> MESARuntimeBatchGenerator:
     return MESARuntimeBatchGenerator(
-        **GENERATOR_ARGS, base_url="https://foo", username="bar", password="baz"
+        system_prompt="foo",
+        schema=MagicMock,
+        schema_name="baz",
+        model_name=getattr(request, "param", "foo_model"),
+        document_batches=["foobar.tar.gz"],
+        base_url="https://foo",
+        username="bar",
+        password="baz",
     )
 
 
@@ -306,7 +318,22 @@ def test_init_model_with_region_sets_aws_region_env_var(
     mock_filesystem: FileSystem,
     generator: BatchGeneratorFixture,
 ) -> None:
-    assert "AWS_REGION_NAME" in mock_filesystem.environ
+    assert mock_filesystem.environ["AWS_REGION_NAME"] == "eu-west-2"
+
+
+def test_init_no_model_sets_runtime_aws_region_env_var(
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+) -> None:
+    BatchGeneratorFixture(
+        system_prompt="foo",
+        schema=MagicMock,
+        schema_name="baz",
+        model_name=None,
+        document_batches=["foobar.tar.gz"],
+    )
+    assert mock_filesystem.environ["AWS_REGION_NAME"] == "eu-west-1"
 
 
 def test_init_multiple_batches_downloads_all(
@@ -517,18 +544,21 @@ def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
 
 
 @pytest.mark.parametrize(
-    ("split_across_models", "model_id"), [(False, "bedrock/foo"), (True, "")]
+    ("runtime_generator", "model_id", "batch_file", "split_across_models"),
+    [
+        ("foo_model", "bedrock/foo", "batch.jsonl", False),
+        (None, "", "runtime.jsonl", True),
+    ],
+    indirect=["runtime_generator"],
 )
-def test_generate_via_mesa_runtime_valid_params_submits_to_runtime_returns_id(
+def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     mock_generate_via_dependencies: GenerateViaDependencies,
     runtime_generator: MESARuntimeBatchGenerator,
-    split_across_models: bool,
     model_id: str,
+    batch_file: str,
+    split_across_models: bool,
 ) -> None:
-    assert (
-        runtime_generator.generate_via_mesa_runtime(10, "foo", split_across_models)
-        == "foo/bar"
-    )
+    assert runtime_generator.generate_via_batch(10, "foo") == "foo/bar"
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
         "https://foo", "bar", "baz"
@@ -536,7 +566,7 @@ def test_generate_via_mesa_runtime_valid_params_submits_to_runtime_returns_id(
     mock_generate_via_dependencies.mesa_runtime.return_value.run_batch_inference.assert_called_once_with(
         "baz/qux",
         model_id,
-        "batch.jsonl",
+        batch_file,
         "foo",
         split_across_models=split_across_models,
     )
