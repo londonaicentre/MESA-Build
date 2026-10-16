@@ -120,13 +120,15 @@ class LesionNature(str, Enum):
 
 
 class LesionMargin(str, Enum):
-    """Edge transitions using BI-RADS lexicon"""
+    """Edge transitions using BI-RADS lexicon, extended with general radiology terms"""
 
     CIRCUMSCRIBED_WELLDEFINED = "circumscribed_welldefined"
     MICROLOBULATED = "microlobulated"  # small undulations along margin
     OBSCURED = "obscured"  # margin hidden by superimposed tissue
     INDISTINCT_ILLDEFINED = "indistinct_illdefined"
     SPICULATED = "spiculated"  # radiating lines from mass
+    IRREGULAR = "irregular"  # uneven, non-spiculated edge (TI-RADS, O-RADS, CT/MRI)
+    LOBULATED = "lobulated"  # larger smooth undulations along margin (TI-RADS)
 
 
 class LesionShape(str, Enum):
