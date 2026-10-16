@@ -565,9 +565,9 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     )
     mock_generate_via_dependencies.mesa_runtime.return_value.run_batch_inference.assert_called_once_with(
         "baz/qux",
-        model_id,
         batch_file,
         "foo",
+        model_id,
         split_across_models=split_across_models,
     )
 
