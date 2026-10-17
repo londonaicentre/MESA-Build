@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0] - 2026-10-17
+
+### Enum members added
+
+- **`LesionMargin.IRREGULAR`** and **`LesionMargin.LOBULATED`**: the BI-RADS margin lexicon has no home for these general radiology terms (TI-RADS, O-RADS, CT/MRI), so the model was writing shape values into `margin`.
+  Both remain valid `LesionShape` values, as margin and shape share these terms in practice.
+
 ## [0.5.0] - 2026-08-05 [EJ/JZ]
 
 Arising from the PharosAI imaging schema review and the prompt-output discrepancy review.

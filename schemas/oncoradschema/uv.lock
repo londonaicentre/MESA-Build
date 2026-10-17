@@ -808,7 +808,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-oncoradschema"
-version = "0.5.1"
+version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
