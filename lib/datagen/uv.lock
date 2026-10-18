@@ -842,7 +842,7 @@ requires-dist = [
     { name = "jsonpath-ng", specifier = ">=1.8.0" },
     { name = "jsonschema", specifier = ">=4.25.1" },
     { name = "litellm", specifier = ">=1.80.0" },
-    { name = "londonaicentre-mesa-runtime", specifier = ">=0.4.0" },
+    { name = "londonaicentre-mesa-runtime", specifier = ">=0.5.0" },
     { name = "londonaicentre-mesa-types", editable = "../types" },
     { name = "londonaicentre-mesa-utils", editable = "../utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
@@ -862,16 +862,16 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-runtime"
-version = "0.4.0"
+version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
     { name = "httpx" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4b/6f/e7431c60863f2c44005cd9eacea3d737593706d76771875a258710ecc5c7/londonaicentre_mesa_runtime-0.4.0.tar.gz", hash = "sha256:1775b766122641177e7952fed3bba237db98c1311ff87e48785b7cf31dc1ee4a", size = 5585, upload-time = "2026-10-17T10:45:34.984Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/af/87/3421d8969e24f1966f8596e796313c834efde4f41872b17574e87fb02a08/londonaicentre_mesa_runtime-0.5.0.tar.gz", hash = "sha256:1946c5e61ed1da6591b6290fe27dcc6863d539aff23c5062c75375a867ced4b2", size = 5711, upload-time = "2026-10-18T19:02:11.53Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/73/36/71b8f4d82da4a4638d3d45e68103c6aac55d62d2b7451e7d0211dec803ff/londonaicentre_mesa_runtime-0.4.0-py3-none-any.whl", hash = "sha256:bdfbd0bcdf24b8fbb1ddedb33e6e164f977462ad86b07f9acc01335fe5231c73", size = 6694, upload-time = "2026-10-17T10:45:34.047Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/7d/aa1155a24bc55f11447a79ceef805b76835bf2c4b93f108077b3e464879e/londonaicentre_mesa_runtime-0.5.0-py3-none-any.whl", hash = "sha256:423c1daad83a94f6915ca2868efbf75e8a675e5716273f04396f0b897123ecdd", size = 6835, upload-time = "2026-10-18T19:02:10.54Z" },
 ]
 
 [[package]]
