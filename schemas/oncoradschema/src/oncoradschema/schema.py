@@ -223,7 +223,7 @@ class AnatomicalSite(str, Enum):
     # CNS
     BRAIN = "brain"
     MENINGES = "meninges"
-    SPINAL_CORD = "spinal_cord"
+    SPINAL_CORD = "spinal_cord"  # the cord itself; vertebral findings are bone_spine
 
     # Head & neck
     ORAL_CAVITY = "oral_cavity"
@@ -302,7 +302,7 @@ class NonCancerFindingType(str, Enum):
     PNEUMOTHORAX_PNEUMOPERITONEUM = "pneumothorax_pneumoperitoneum"
     INFLAMMATION_INFECTION = "inflammation_infection"  # e.g. signs of pneumonia, colitis, cystitis, cholecystitis etc
     OBSTRUCTION_DILATATION = "obstruction_dilatation"  # bowel obstruction, hydronephrosis, biliary dilatation
-    CALCULUS = "calculus"  # stones in any duct/cavity
+    CALCULUS = "calculus"  # stones in any duct/cavity, not calcification
     FIBROSIS_SCARRING = "fibrosis_scarring"  # e.g. ILD, radiation, chronic scar
     STEATOSIS_FATTY_CHANGE = "steatosis_fatty_change"  # hepatic/pancreatic fatty change
     ATROPHY = "atrophy"
@@ -335,7 +335,7 @@ class SpecialtySpecificScore(BaseModel):
     response, or background-tissue scores."""
 
     scoring_system: ScoringSystem = Field(
-        description="Structured scoring system. Use OTHER if not in enum."
+        description="Structured scoring system. Use 'other' if not in enum."
     )
     scoring_system_name_desc: Optional[str] = Field(
         None, description="Name of scoring system as described in clinical text"
@@ -476,7 +476,7 @@ class CancerLesion(BaseModel):
 
 class NonCancerFinding(BaseModel):
     finding: NonCancerFindingType = Field(
-        description="Mechanism-based finding type. Use OTHER for findings not in the enum."
+        description="Mechanism-based finding type. Use 'other' for findings not in the enum."
     )
     finding_desc: str = Field(
         description="Direct extract of descriptive text for the finding"

@@ -7,6 +7,12 @@
 - **`LesionMargin.IRREGULAR`** and **`LesionMargin.LOBULATED`**: the BI-RADS margin lexicon has no home for these general radiology terms (TI-RADS, O-RADS, CT/MRI), so the model was writing shape values into `margin`.
   Both remain valid `LesionShape` values, as margin and shape share these terms in practice.
 
+### Descriptions clarified
+
+- **`scoring_system`** and **`finding`**: now say to use `'other'` rather than `OTHER`, as the model was copying the member name, which fails validation.
+- **`AnatomicalSite.SPINAL_CORD`**: notes that vertebral findings are `bone_spine`, as spinal degenerative change was landing on the cord.
+- **`NonCancerFindingType.CALCULUS`**: excludes calcification, as the model was classing tissue and vascular calcification as stones.
+
 ## [0.5.0] - 2026-08-05 [EJ/JZ]
 
 Arising from the PharosAI imaging schema review and the prompt-output discrepancy review.
