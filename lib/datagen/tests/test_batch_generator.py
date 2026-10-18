@@ -178,9 +178,17 @@ def mock_mesa_runtime(mocker: MockerFixture) -> MagicMock:
 
 
 @pytest.fixture
+def mock_version(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch(
+        "datagen.batch_generator.version", autospec=True, return_value="1.2.3"
+    )
+
+
+@pytest.fixture
 def runtime_generator(
     request: pytest.FixtureRequest,
     mock_mesa_runtime: MagicMock,
+    mock_version: MagicMock,
     mock_path_operations: PathOperations,
     mock_filesystem: FileSystem,
     mock_generator_dependencies: GeneratorDependencies,
@@ -563,7 +571,12 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
         "https://foo", "bar", "baz"
     )
     mock_generate_via_dependencies.mesa_runtime.return_value.run_batch_inference.assert_called_once_with(
-        "baz/qux", batch_file, "foo", model_id
+        "baz/qux",
+        batch_file,
+        "foo",
+        model_id,
+        schema_name="londonaicentre-baz",
+        schema_version="1.2.3",
     )
 
 

@@ -11,6 +11,7 @@ import logging
 import os
 from collections.abc import Callable
 from datetime import datetime
+from importlib.metadata import version
 from itertools import islice
 from pathlib import Path
 
@@ -353,6 +354,8 @@ class MESARuntimeBatchGenerator(BatchGenerator):
             system_prompt, schema, schema_name, model_name, document_batches
         )
         self.__runtime: MesaRuntime = MesaRuntime(base_url, username, password)
+        self.__schema_package: str = f"londonaicentre-{schema_name}"
+        self.__schema_version: str = version(self.__schema_package)
 
     def generate_via_batch(
         self,
@@ -378,6 +381,11 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         return self._submit_batch(
             sample_size,
             lambda job_id: self.__runtime.run_batch_inference(
-                job_id, self._model_batch_file, bucket, self._model_id or None
+                job_id,
+                self._model_batch_file,
+                bucket,
+                self._model_id or None,
+                schema_name=self.__schema_package,
+                schema_version=self.__schema_version,
             ),
         )
