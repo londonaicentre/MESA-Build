@@ -5,6 +5,7 @@ from collections.abc import Iterator
 from importlib import import_module
 from pathlib import Path
 from random import Random
+from types import ModuleType
 
 from pydantic import BaseModel
 
@@ -33,8 +34,29 @@ class Corpus:
         logging.getLogger("datagen.extraction").setLevel(logging.CRITICAL)
 
         self.__schema_package: str = schema_package
-        self.__schema: type[BaseModel] = import_module(schema_package).Schema
-        Corpus.SCRATCH_FOLDER.mkdir(parents=True, exist_ok=True)
+        self.__schema: type[BaseModel] = Corpus._import(schema_package).Schema
+
+    @staticmethod
+    def _import(module: str) -> ModuleType:
+        return import_module(module)
+
+    @staticmethod
+    def _read_lines(path: Path) -> Iterator[str]:
+        with path.open() as file:
+            yield from file
+
+    @staticmethod
+    def _read_text(path: Path) -> str:
+        return path.read_text()
+
+    @staticmethod
+    def _write_text(path: Path, text: str) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+
+    @staticmethod
+    def _modified(path: Path) -> float:
+        return path.stat().st_mtime
 
     def get_schema(self) -> type[BaseModel]:
         """Get the schema outputs must validate against.
@@ -59,15 +81,13 @@ class Corpus:
             tuple[str, BatchOutput]: The raw record line, and the parsed record
 
         """
-        with Corpus.BATCH_OUTPUT_FILE.open() as batch_output_file:
-            yield from (
-                (line, record)
-                for line in batch_output_file
-                if record_ids is None
-                or any(record_id in line for record_id in record_ids)
-                for record in [BatchOutput.model_validate_json(line)]
-                if record_ids is None or record.recordId in record_ids
-            )
+        yield from (
+            (line, record)
+            for line in Corpus._read_lines(Corpus.BATCH_OUTPUT_FILE)
+            if record_ids is None or any(record_id in line for record_id in record_ids)
+            for record in [BatchOutput.model_validate_json(line)]
+            if record_ids is None or record.recordId in record_ids
+        )
 
     @staticmethod
     def note(record: BatchOutput) -> str:
@@ -131,7 +151,7 @@ class Corpus:
             record_ids_by_status.setdefault(self.status(record), []).append(
                 record.recordId
             )
-        Corpus.CENSUS_FILE.write_text(json.dumps(record_ids_by_status))
+        Corpus._write_text(Corpus.CENSUS_FILE, json.dumps(record_ids_by_status))
         self.__logger.info(
             "\n".join(
                 f"{status}: {len(record_ids)}"
@@ -156,22 +176,23 @@ class Corpus:
             RuntimeError: If the batch output changed after the census was taken
 
         """
-        if (
-            Corpus.BATCH_OUTPUT_FILE.stat().st_mtime
-            > Corpus.CENSUS_FILE.stat().st_mtime
+        if Corpus._modified(Corpus.BATCH_OUTPUT_FILE) > Corpus._modified(
+            Corpus.CENSUS_FILE
         ):
             raise RuntimeError(
                 f"{Corpus.BATCH_OUTPUT_FILE} changed after the census, so re-run census"
             )
-        record_ids: list[str] = json.loads(Corpus.CENSUS_FILE.read_text())[status]
+        record_ids: list[str] = json.loads(Corpus._read_text(Corpus.CENSUS_FILE))[
+            status
+        ]
         sampled: list[str] = Random().sample(record_ids, min(size, len(record_ids)))
         manifests: list[Path] = [
             Corpus.SCRATCH_FOLDER / f"{status}_{index // batch + 1}.json"
             for index in range(0, len(sampled), batch)
         ]
         for index, manifest in enumerate(manifests):
-            manifest.write_text(
-                json.dumps(sampled[index * batch : (index + 1) * batch])
+            Corpus._write_text(
+                manifest, json.dumps(sampled[index * batch : (index + 1) * batch])
             )
         self.__logger.info("\n".join(str(manifest) for manifest in manifests))
         return manifests
@@ -206,13 +227,13 @@ class Corpus:
         """
         test_file: Path = Corpus.SCRATCH_FOLDER / "prompt_test.jsonl.out"
         lines: list[tuple[str, BatchOutput]] = list(Corpus.records(set(record_ids)))
-        test_file.write_text("".join(line for line, _ in lines))
+        Corpus._write_text(test_file, "".join(line for line, _ in lines))
         before: dict[str, str] = {
             record.recordId: self.status(record) for _, record in lines
         }
         BatchOutputCorrector(self.__schema, test_file).correct_with_claude(
             prompt_file,
-            import_module(self.__schema_package + ".prompt_builder")
+            Corpus._import(self.__schema_package + ".prompt_builder")
             .PromptBuilder()
             .build_datagen_prompt(),
         )
@@ -220,7 +241,7 @@ class Corpus:
             "\n\n".join(
                 f"=== {record.recordId}: {before[record.recordId]} -> {self.status(record)}\n"
                 + Corpus.response(record)[:chars]
-                for line in test_file.read_text().splitlines()
+                for line in Corpus._read_text(test_file).splitlines()
                 for record in [BatchOutput.model_validate_json(line)]
             )
         )

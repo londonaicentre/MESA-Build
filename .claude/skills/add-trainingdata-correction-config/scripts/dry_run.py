@@ -7,11 +7,10 @@ from pathlib import Path
 from random import Random
 from typing import NamedTuple
 
+from corpus import Corpus
 from datagen.correction_rules import CorrectionRule, CorrectionRules
 from datagen.extraction import extract_and_validate_json
 from datagen.types import JSONValue
-
-from corpus import Corpus
 
 
 class Change(NamedTuple):
@@ -37,7 +36,7 @@ class DryRun:
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__rules: CorrectionRules = CorrectionRules.load(rules_file)
 
-    def __apply(
+    def _apply(
         self, rules: list[CorrectionRule]
     ) -> tuple[dict[str, list[Change]], list[str]]:
         changes: dict[str, list[Change]] = {rule.name: [] for rule in rules}
@@ -63,7 +62,7 @@ class DryRun:
         return changes, unstable
 
     @staticmethod
-    def __render(rule_name: str, change: Change, chars: int) -> str:
+    def _render(rule_name: str, change: Change, chars: int) -> str:
         return (
             f"=== {rule_name}: {change.record_id}\n"
             + "\n".join(
@@ -99,7 +98,7 @@ class DryRun:
         ]
         if not rules:
             raise ValueError(f"No rule named {rule_name}")
-        changes, unstable = self.__apply(rules)
+        changes, unstable = self._apply(rules)
         self.__logger.info(
             "\n".join(
                 f"{name}: {len(rule_changes)}" for name, rule_changes in changes.items()
@@ -119,7 +118,7 @@ class DryRun:
         if show:
             self.__logger.info(
                 "\n\n".join(
-                    DryRun.__render(name, change, chars)
+                    DryRun._render(name, change, chars)
                     for name, rule_changes in changes.items()
                     for change in Random().sample(
                         rule_changes, min(show, len(rule_changes))
