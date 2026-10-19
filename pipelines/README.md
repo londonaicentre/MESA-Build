@@ -16,3 +16,7 @@ Notebooks for manual end-to-end fine-tuning
 2. Answer the questions posed.
 
 3. Add custom content to each notebook and config file.
+
+## Correcting training data
+
+Run `/add-trainingdata-correction-config <pipeline>` in Claude Code to create a pipeline's `prompts/correction.txt` and `rules/correction.yaml`, which `BatchOutputCorrector` uses to correct its batch outputs.
