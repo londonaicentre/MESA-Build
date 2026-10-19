@@ -25,7 +25,7 @@ class ScanModality(str, Enum):
 
 
 class ScanContrast(str, Enum):
-    WITHOUT_CONTRAST = "without_contrast"  # no contrast required or none given (e.g. non-contrast CT or scintigraphy)
+    WITHOUT_CONTRAST = "without_contrast"  # stated as non-contrast, or a modality that never uses contrast (e.g. scintigraphy)
     WITH_CONTRAST = "with_contrast"  # single phase
     DUAL_PHASE = "dual_phase"
     TRIPLE_PHASE = "triple_phase"
@@ -95,7 +95,7 @@ class ScoringSystem(str, Enum):
     OTHER = "other"
     TNM = "tnm"
     AJCC_STAGE = "ajcc_stage"
-    RCR = "rcr"  # UK RCR 1-5, modality-prefixed (M/U/MRI); NHS default
+    RCR = "rcr"  # UK RCR 1-5, modality-prefixed (M/U/MRI); NHS default; not RECIST
     BI_RADS = "bi_rads"
     ACR_BREAST_DENSITY = "acr_breast_density"  # background density A-D
     PI_RADS = "pi_rads"
@@ -319,7 +319,8 @@ class NonCancerFindingType(str, Enum):
 class ScanMetadata(BaseModel):
     modality: ScanModality = Field(description="Scan modality used")
     contrast: Optional[ScanContrast] = Field(
-        None, description="Contrast usage for the scan"
+        None,
+        description="Contrast usage for the scan; None if the report does not say whether contrast was given",
     )
     regions: Optional[List[ScanRegion]] = Field(
         None, description="Anatomical regions captured by the scan"
@@ -418,7 +419,8 @@ class CancerLesion(BaseModel):
     )
     size: Optional[LesionSize] = Field(None, description="Reported lesion dimensions")
     is_recist_target: bool = Field(
-        False, description="True if designated a RECIST target lesion"
+        False,
+        description="True if the report designates this a RECIST target lesion; false if the choice would rest only on the lesion being measurable",
     )
     is_index_lesion: bool = Field(
         False,
@@ -447,7 +449,7 @@ class CancerLesion(BaseModel):
     )
     morphology: Optional[LesionMorphology] = Field(
         None,
-        description="Tissue composition (anatomic imaging)",
+        description="Tissue composition (anatomic imaging) as described in the report; None if not described, and None for bone lesions",
     )
     internal_features: List[LesionInternalFeature] = Field(
         default_factory=list,
@@ -458,15 +460,15 @@ class CancerLesion(BaseModel):
     )
     margin: Optional[LesionMargin] = Field(
         None,
-        description="Edge appearance",
+        description="Edge appearance; None unless the report describes the margin itself (an irregular shape is not an irregular margin)",
     )
     shape: Optional[LesionShape] = Field(
         None,
-        description="Contour shape",
+        description="Contour shape; None if the report does not describe it",
     )
     uptake: Optional[LesionUptake] = Field(
         None,
-        description="Functional tracer uptake",
+        description="Functional tracer uptake (PET / nuclear medicine); None on CT, MRI or ultrasound, where avid enhancement is not uptake",
     )
     characterisation_desc: Optional[str] = Field(
         None,

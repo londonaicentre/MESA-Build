@@ -12,6 +12,13 @@
 - **`scoring_system`** and **`finding`**: now say to use `'other'` rather than `OTHER`, as the model was copying the member name, which fails validation.
 - **`AnatomicalSite.SPINAL_CORD`**: notes that vertebral findings are `bone_spine`, as spinal degenerative change was landing on the cord.
 - **`NonCancerFindingType.CALCULUS`**: excludes calcification, as the model was classing tissue and vascular calcification as stones.
+- **`margin`**, **`shape`**, **`morphology`** and **`contrast`**: now say to leave them `None` unless the report describes them, as the model was filling them by default (e.g. `solid` on lesions never described as solid).
+- **`margin`**: notes that an irregular shape is not an irregular margin, as the model was carrying shape wording into `margin`.
+- **`morphology`**: is now `None` for bone lesions, matching the `LesionMorphology` docstring.
+- **`ScanContrast.WITHOUT_CONTRAST`**: no longer covers contrast that is not mentioned, as the model was assuming non-contrast CT and MRI.
+- **`uptake`**: now `None` on CT, MRI and ultrasound, as the model was reading avid enhancement as tracer uptake.
+- **`is_recist_target`**: requires the report to designate the target, as the model was flagging measurable lesions on pre-treatment scans.
+- **`ScoringSystem.RCR`**: notes that it is not RECIST, as RECIST responses were being filed under `rcr`.
 
 ## [0.5.0] - 2026-08-05 [EJ/JZ]
 
