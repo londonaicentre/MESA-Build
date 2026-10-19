@@ -1,0 +1,27 @@
+name: add-trainingdata-correction-config test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .claude/skills/add-trainingdata-correction-config/scripts/**
+
+jobs:
+  test:
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    permissions:
+      contents: read
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: .claude/skills/add-trainingdata-correction-config/scripts
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync
+      - run: uv run ruff check
+      - run: uv run mypy .
+      - run: uv run pytest --cov --cov-fail-under=80
+      - if: ${{ !cancelled() }}
+        uses: vibecert/action@v1.0.0
