@@ -1,12 +1,14 @@
 """Base prompt builder for schemas"""
 
 import inspect
+import re
 from abc import ABC
 from functools import reduce
 from importlib.resources import files
 from importlib.resources.abc import Traversable
+from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field, create_model
 
 
 class BasePromptBuilder(ABC):
@@ -15,31 +17,55 @@ class BasePromptBuilder(ABC):
     (adapted from SchemaLlamaAssets wrapper)
     """
 
+    __RESERVED_NAMES: frozenset[str] = frozenset({"schema", "example"})
+    __NAME_PATTERN: re.Pattern[str] = re.compile(r"[a-z][a-z0-9_]*")
+    __VALUE_PATTERN: str = r"^[\w '(),.-]+$"
+
     def __init__(
         self,
         base_dir: str,
         schema: type[BaseModel],
-        parameters: type[BaseModel] | None = None,
+        parameters: tuple[str, ...] = (),
     ) -> None:
         """Initialize prompt builder.
 
         Args:
             base_dir: Package name (e.g. 'oncoschema', 'genoschema')
             schema: Pydantic model class for this schema
-            parameters (type[BaseModel] | None): Model whose string fields name the
-                caller-supplied prompt placeholders (e.g. `condition` fills
-                `{CONDITION}`). Defaults to None, for a schema without parameters.
+            parameters (tuple[str, ...]): Names of the caller-supplied prompt
+                parameters, each filling its upper-cased placeholder (e.g. `condition`
+                fills `{CONDITION}`). Defaults to no parameters.
+
+        Raises:
+            ValueError: If a parameter name is not lower snake case or shadows a
+                placeholder the builder fills itself.
         """
+        if invalid_names := [
+            name
+            for name in parameters
+            if name in BasePromptBuilder.__RESERVED_NAMES
+            or not BasePromptBuilder.__NAME_PATTERN.fullmatch(name)
+        ]:
+            raise ValueError(f"Invalid prompt parameter names: {invalid_names}")
         self._base_dir: Traversable = files(base_dir)
         self._schema: type[BaseModel] = schema
-        self.__parameters: type[BaseModel] | None = parameters
+        self.__parameters: tuple[str, ...] = parameters
+        fields: dict[str, Any] = {
+            name: (
+                str,
+                Field(pattern=BasePromptBuilder.__VALUE_PATTERN, max_length=100),
+            )
+            for name in parameters
+        }
+        self.__parameters_model: type[BaseModel] = create_model(
+            "PromptParameters", __config__=ConfigDict(extra="forbid"), **fields
+        )
 
-    def get_parameters(self) -> type[BaseModel] | None:
-        """Get the model of caller-supplied prompt parameters.
+    def get_parameters(self) -> tuple[str, ...]:
+        """Get the names of the caller-supplied prompt parameters.
 
         Returns:
-            type[BaseModel] | None: The parameters model, or None if the schema takes
-                no parameters.
+            tuple[str, ...]: The parameter names, empty if the schema takes none.
 
         """
         return self.__parameters
@@ -47,21 +73,11 @@ class BasePromptBuilder(ABC):
     def _substitute_parameters(
         self, prompt: str, parameters: dict[str, str] | None
     ) -> str:
-        if self.__parameters is None:
-            if parameters:
-                raise ValueError("This schema does not take prompt parameters")
-            return prompt
-        if extra_keys := (parameters or {}).keys() - self.__parameters.model_fields:
-            raise ValueError(f"Unknown prompt parameters: {sorted(extra_keys)}")
         return reduce(
             lambda text, item: text.replace("{" + item[0].upper() + "}", item[1]),
-            [
-                (name, value)
-                for name, value in self.__parameters.model_validate(parameters or {})
-                .model_dump()
-                .items()
-                if value is not None
-            ],
+            self.__parameters_model.model_validate(parameters or {})
+            .model_dump()
+            .items(),
             prompt,
         )
 
@@ -93,8 +109,7 @@ class BasePromptBuilder(ABC):
 
         Args:
             parameters (dict[str, str] | None): Values for the schema's prompt
-                parameters, where an `example` value replaces the packaged example.
-                Defaults to None.
+                parameters. Defaults to None.
 
         Returns:
             Complete prompt with parameters, {SCHEMA} and {EXAMPLE} replaced
