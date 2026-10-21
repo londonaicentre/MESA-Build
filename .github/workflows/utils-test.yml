@@ -12,3 +12,10 @@ jobs:
     uses: ./.github/workflows/test.yml
     with:
       working-directory: lib/utils
+  vibecert:
+    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: vibecert/action@v1.0.0
