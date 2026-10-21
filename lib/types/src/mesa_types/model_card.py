@@ -29,6 +29,7 @@ class ModelCard(BaseModel):
     output_schema: type[BaseModel] | None = None
     schema_name: str | None = None
     schema_version: str | None = None
+    prompt_parameters: list[dict[str, str]] | None = None
 
     @model_validator(mode="after")
     def _derive_schema_info(self) -> "ModelCard":
