@@ -185,14 +185,17 @@ class TrainingDataHandler:
             sample
             for sample in samples
             if len(
-                tokenizer.apply_chat_template(
-                    [
-                        {"role": message.role, "content": message.content}
-                        for message in sample.messages
-                    ],
-                    tokenize=True,
-                    add_generation_prompt=False,
-                )
+                tokenizer(
+                    tokenizer.apply_chat_template(
+                        [
+                            {"role": message.role, "content": message.content}
+                            for message in sample.messages
+                        ],
+                        tokenize=False,
+                        add_generation_prompt=False,
+                    ),
+                    add_special_tokens=False,
+                )["input_ids"]
             )
             < max_seq_length
         ]
