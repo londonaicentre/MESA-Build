@@ -1,6 +1,6 @@
 [project]
 name = "oncopathschema"
-version = "0.5.0"
+version = "0.5.1"
 description = "Histopathology"
 readme = "README.md"
 authors = [
@@ -9,7 +9,7 @@ authors = [
 requires-python = ">=3.13"
 license = "LicenseRef-Proprietary"
 dependencies = [
-    "londonaicentre-mesa-utils",
+    "londonaicentre-mesa-utils>=1.5.1",
     "pydantic>=2.13.4",
 ]
 

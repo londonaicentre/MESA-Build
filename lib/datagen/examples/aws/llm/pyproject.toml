@@ -9,4 +9,4 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-londonaicentre-mesa-datagen = { path = "../../lib/datagen", editable = true }
+londonaicentre-mesa-datagen = { path = "../../..", editable = true }
