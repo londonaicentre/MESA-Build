@@ -26,6 +26,9 @@ build-backend = "uv_build"
 constraint-dependencies = [
     "tokenizers<=0.23.0",
 ]
+override-dependencies = [
+    "importlib-metadata>=8.0.0,<9.0",
+]
 
 [tool.uv.sources]
 londonaicentre-mesa-finetune = { path = "../../lib/finetune", editable = true }
