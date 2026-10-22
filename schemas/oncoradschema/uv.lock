@@ -900,7 +900,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-oncoradschema"
-version = "0.6.0"
+version = "0.6.1"
 source = { editable = "." }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
