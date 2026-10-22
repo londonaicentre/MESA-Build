@@ -64,6 +64,7 @@ class TrainingDataUploader:
         short_description: str,
         long_description: str,
         num_samples: int,
+        prompt_parameters: dict[str, str] | None,
     ) -> str:
         """Create metadata YAML file.
 
@@ -73,6 +74,7 @@ class TrainingDataUploader:
             short_description: Short description
             long_description: Long description
             num_samples: Number of samples
+            prompt_parameters: Values used for the schema's prompt parameters
 
         Returns:
             Filename of created YAML file
@@ -85,6 +87,7 @@ class TrainingDataUploader:
             "description": long_description,
             "num_samples": num_samples,
             "created_at": datetime.now().isoformat(),
+            **({"prompt_parameters": prompt_parameters} if prompt_parameters else {}),
         }
         with open(filename, "w") as f:
             yaml.dump(metadata, f, default_flow_style=False)
@@ -121,6 +124,7 @@ class TrainingDataUploader:
         bucket: str = "aicentre-nlpteam-mesa-build",
         s3_prefix: str = "trainingdata",
         region: str = "eu-west-2",
+        prompt_parameters: dict[str, str] | None = None,
     ) -> str:
         """Upload training data to S3.
 
@@ -134,6 +138,7 @@ class TrainingDataUploader:
             bucket: S3 bucket name
             s3_prefix: S3 prefix path
             region: AWS region
+            prompt_parameters: Values used for the schema's prompt parameters (optional)
 
         Returns:
             S3 URI of uploaded batch
@@ -189,6 +194,7 @@ class TrainingDataUploader:
             short_description,
             long_description or short_description,
             len(samples),
+            prompt_parameters,
         )
         AWS.upload_file(
             region, metadata_filename, bucket, metadata_filename, s3_run_path
