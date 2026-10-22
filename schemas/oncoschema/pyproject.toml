@@ -12,7 +12,7 @@ requires-python = ">=3.12"
 license = "LicenseRef-Proprietary"
 dependencies = [
     "pydantic>=2.12.5",
-    "londonaicentre-mesa-utils>=1.0.0",
+    "londonaicentre-mesa-utils>=1.5.1",
 ]
 
 [build-system]
