@@ -47,7 +47,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "pb = PromptBuilder()"
+    "pb = PromptBuilder(){% if condition_based %}\n{% endif %}",
+    "{% if condition_based %}prompt_parameters: dict[str, str] = {\"condition\": \"{{ condition }}\", \"cui\": \"{{ cui }}\"}{% endif %}"
    ],
    "id": "00000004"
   },
@@ -66,7 +67,7 @@
    "outputs": [],
    "source": [
     "gen = BedrockBatchGenerator(\n",
-    "    system_prompt=pb.build_datagen_prompt(),\n",
+    "    system_prompt=pb.build_datagen_prompt({% if condition_based %}prompt_parameters{% endif %}),\n",
     "    schema=Schema,\n",
     "    schema_name=\"{{ schema_name }}\",\n",
     "    model_name=\"sonnet4\",\n",
@@ -174,10 +175,11 @@
     "s3_uri = TrainingDataUploader.upload(\n",
     "    schema=Schema,\n",
     "    schema_name=\"{{ schema_name }}\",\n",
-    "    system_prompt=pb.build_main_prompt(),\n",
+    "    system_prompt=pb.build_main_prompt({% if condition_based %}prompt_parameters{% endif %}),\n",
     "    short_description=\"{{ _folder_name }}-batch\",\n",
     "    long_description=\"Training data for {{ _folder_name | capitalize }}\",\n",
     "    input_folder=Path(\"./data/trainingdata\"),\n",
+    "{% if condition_based %}    prompt_parameters=prompt_parameters,\n{% endif %}",
     ")"
    ],
    "id": "00000011"
