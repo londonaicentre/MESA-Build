@@ -8,4 +8,8 @@ class PromptBuilder(BasePromptBuilder):
     """Build prompts for {{discipline}} extraction."""
 
     def __init__(self) -> None:
-        super().__init__("{{schema_name}}", {{output_model}})
+        super().__init__(
+            "{{schema_name}}",
+            {{output_model}},
+            # ("foo",),  # prompt parameter names, each filling {FOO} in the prompts
+        )
