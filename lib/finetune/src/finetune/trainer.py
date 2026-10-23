@@ -197,7 +197,7 @@ class LoRATrainer:
     def _prepare_training_data(self, output_file: str) -> str:
         return TrainingDataHandler.prepare(
             schema=self.schema,
-            system_prompt=self.prompt_builder.build_main_prompt(),
+            prompt_builder=self.prompt_builder,
             training_batch_names=self.training_batch_names,
             base_model=self.base_model,
             max_seq_length=self.max_seq_length,
