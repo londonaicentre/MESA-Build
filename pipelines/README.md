@@ -14,6 +14,7 @@ Notebooks for manual end-to-end fine-tuning
 1. Create a new pipeline boilerplate directory: `uvx copier copy _pipeline <new pipeline name> --trust`.
 
 2. Answer the questions posed.
+   For a single condition, answer yes to the first question to use `conditionschema`, and give the condition and its SNOMED CT concept ID.
 
 3. Add custom content to each notebook and config file.
 
