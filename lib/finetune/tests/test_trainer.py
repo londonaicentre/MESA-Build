@@ -48,6 +48,7 @@ class TestMakeJobId:
 class SchemaMetadataMocks:
     packages_distributions: MagicMock
     version: MagicMock
+    load_prompt_parameters: MagicMock
 
 
 @pytest.fixture
@@ -55,6 +56,10 @@ def schema_metadata_mocks(mocker: MockerFixture) -> SchemaMetadataMocks:
     return SchemaMetadataMocks(
         mocker.patch("importlib.metadata.packages_distributions", return_value={}),
         mocker.patch("importlib.metadata.version", return_value="1.0.0"),
+        mocker.patch(
+            "finetune.trainer.TrainingDataHandler.load_prompt_parameters",
+            return_value=None,
+        ),
     )
 
 
@@ -75,6 +80,23 @@ class TestBuildModelCard:
         assert card.model_description == "foo"
         assert card.training_data == ["batch-a", "batch-b"]
         assert card.output_schema is SchemaFixture
+        assert card.prompt_parameters is None
+
+    def test_build_model_card_parameterised_batches_records_parameters(
+        self,
+        make_base_trainer: BaseTrainerFactory,
+        schema_metadata_mocks: SchemaMetadataMocks,
+    ) -> None:
+        schema_metadata_mocks.load_prompt_parameters.side_effect = [
+            {"condition": "foo"},
+            None,
+        ]
+        assert make_base_trainer(
+            training_batch_names=["batch-a", "batch-b"]
+        ).build_model_card(1, 2, 3).prompt_parameters == [{"condition": "foo"}]
+        schema_metadata_mocks.load_prompt_parameters.assert_any_call(
+            "batch-a", "qux", "trainingdata", "quux"
+        )
 
     def test_build_model_card_description_override(
         self,

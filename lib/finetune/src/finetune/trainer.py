@@ -180,6 +180,17 @@ class LoRATrainer:
             model_description=model_description or self.description,
             training_data=list(self.training_batch_names),
             output_schema=self.schema,
+            prompt_parameters=[
+                parameters
+                for batch_name in self.training_batch_names
+                if (
+                    parameters := TrainingDataHandler.load_prompt_parameters(
+                        batch_name, self.bucket, "trainingdata", self.region
+                    )
+                )
+                is not None
+            ]
+            or None,
         )
 
     def valid_model_card_version(self, model_card: ModelCard) -> bool:
