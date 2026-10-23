@@ -1,0 +1,14 @@
+name: conditionschema test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/conditionschema/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      working-directory: schemas/conditionschema
