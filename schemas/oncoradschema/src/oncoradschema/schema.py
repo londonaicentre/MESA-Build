@@ -25,7 +25,7 @@ class ScanModality(str, Enum):
 
 
 class ScanContrast(str, Enum):
-    WITHOUT_CONTRAST = "without_contrast"  # no contrast required or none given (e.g. non-contrast CT or scintigraphy)
+    WITHOUT_CONTRAST = "without_contrast"  # stated as non-contrast, or a modality that never uses contrast (e.g. scintigraphy)
     WITH_CONTRAST = "with_contrast"  # single phase
     DUAL_PHASE = "dual_phase"
     TRIPLE_PHASE = "triple_phase"
@@ -95,7 +95,7 @@ class ScoringSystem(str, Enum):
     OTHER = "other"
     TNM = "tnm"
     AJCC_STAGE = "ajcc_stage"
-    RCR = "rcr"  # UK RCR 1-5, modality-prefixed (M/U/MRI); NHS default
+    RCR = "rcr"  # UK RCR 1-5, modality-prefixed (M/U/MRI); NHS default; not RECIST
     BI_RADS = "bi_rads"
     ACR_BREAST_DENSITY = "acr_breast_density"  # background density A-D
     PI_RADS = "pi_rads"
@@ -120,13 +120,15 @@ class LesionNature(str, Enum):
 
 
 class LesionMargin(str, Enum):
-    """Edge transitions using BI-RADS lexicon"""
+    """Edge transitions using BI-RADS lexicon, extended with general radiology terms"""
 
     CIRCUMSCRIBED_WELLDEFINED = "circumscribed_welldefined"
     MICROLOBULATED = "microlobulated"  # small undulations along margin
     OBSCURED = "obscured"  # margin hidden by superimposed tissue
     INDISTINCT_ILLDEFINED = "indistinct_illdefined"
     SPICULATED = "spiculated"  # radiating lines from mass
+    IRREGULAR = "irregular"  # uneven, non-spiculated edge (TI-RADS, O-RADS, CT/MRI)
+    LOBULATED = "lobulated"  # larger smooth undulations along margin (TI-RADS)
 
 
 class LesionShape(str, Enum):
@@ -221,7 +223,7 @@ class AnatomicalSite(str, Enum):
     # CNS
     BRAIN = "brain"
     MENINGES = "meninges"
-    SPINAL_CORD = "spinal_cord"
+    SPINAL_CORD = "spinal_cord"  # the cord itself; vertebral findings are bone_spine
 
     # Head & neck
     ORAL_CAVITY = "oral_cavity"
@@ -300,7 +302,7 @@ class NonCancerFindingType(str, Enum):
     PNEUMOTHORAX_PNEUMOPERITONEUM = "pneumothorax_pneumoperitoneum"
     INFLAMMATION_INFECTION = "inflammation_infection"  # e.g. signs of pneumonia, colitis, cystitis, cholecystitis etc
     OBSTRUCTION_DILATATION = "obstruction_dilatation"  # bowel obstruction, hydronephrosis, biliary dilatation
-    CALCULUS = "calculus"  # stones in any duct/cavity
+    CALCULUS = "calculus"  # stones in any duct/cavity, not calcification
     FIBROSIS_SCARRING = "fibrosis_scarring"  # e.g. ILD, radiation, chronic scar
     STEATOSIS_FATTY_CHANGE = "steatosis_fatty_change"  # hepatic/pancreatic fatty change
     ATROPHY = "atrophy"
@@ -317,7 +319,8 @@ class NonCancerFindingType(str, Enum):
 class ScanMetadata(BaseModel):
     modality: ScanModality = Field(description="Scan modality used")
     contrast: Optional[ScanContrast] = Field(
-        None, description="Contrast usage for the scan"
+        None,
+        description="Contrast usage for the scan; None if the report does not say whether contrast was given",
     )
     regions: Optional[List[ScanRegion]] = Field(
         None, description="Anatomical regions captured by the scan"
@@ -333,7 +336,7 @@ class SpecialtySpecificScore(BaseModel):
     response, or background-tissue scores."""
 
     scoring_system: ScoringSystem = Field(
-        description="Structured scoring system. Use OTHER if not in enum."
+        description="Structured scoring system. Use 'other' if not in enum."
     )
     scoring_system_name_desc: Optional[str] = Field(
         None, description="Name of scoring system as described in clinical text"
@@ -416,7 +419,8 @@ class CancerLesion(BaseModel):
     )
     size: Optional[LesionSize] = Field(None, description="Reported lesion dimensions")
     is_recist_target: bool = Field(
-        False, description="True if designated a RECIST target lesion"
+        False,
+        description="True if the report designates this a RECIST target lesion; false if the choice would rest only on the lesion being measurable",
     )
     is_index_lesion: bool = Field(
         False,
@@ -445,7 +449,7 @@ class CancerLesion(BaseModel):
     )
     morphology: Optional[LesionMorphology] = Field(
         None,
-        description="Tissue composition (anatomic imaging)",
+        description="Tissue composition (anatomic imaging) as described in the report; None if not described, and None for bone lesions",
     )
     internal_features: List[LesionInternalFeature] = Field(
         default_factory=list,
@@ -456,15 +460,15 @@ class CancerLesion(BaseModel):
     )
     margin: Optional[LesionMargin] = Field(
         None,
-        description="Edge appearance",
+        description="Edge appearance; None unless the report describes the margin itself (an irregular shape is not an irregular margin)",
     )
     shape: Optional[LesionShape] = Field(
         None,
-        description="Contour shape",
+        description="Contour shape; None if the report does not describe it",
     )
     uptake: Optional[LesionUptake] = Field(
         None,
-        description="Functional tracer uptake",
+        description="Functional tracer uptake (PET / nuclear medicine); None on CT, MRI or ultrasound, where avid enhancement is not uptake",
     )
     characterisation_desc: Optional[str] = Field(
         None,
@@ -474,7 +478,7 @@ class CancerLesion(BaseModel):
 
 class NonCancerFinding(BaseModel):
     finding: NonCancerFindingType = Field(
-        description="Mechanism-based finding type. Use OTHER for findings not in the enum."
+        description="Mechanism-based finding type. Use 'other' for findings not in the enum."
     )
     finding_desc: str = Field(
         description="Direct extract of descriptive text for the finding"

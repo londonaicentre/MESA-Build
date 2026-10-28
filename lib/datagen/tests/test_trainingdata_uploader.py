@@ -158,7 +158,7 @@ def test_create_metadata_valid_params_writes_yaml(
     num_samples: int = 10
     assert (
         TrainingDataUploader._create_metadata(
-            schema, schema_version, short_description, description, num_samples
+            schema, schema_version, short_description, description, num_samples, None
         )
         == "metadata.yaml"
     )
@@ -169,6 +169,20 @@ def test_create_metadata_valid_params_writes_yaml(
     assert call_args["short_description"] == short_description
     assert call_args["description"] == description
     assert call_args["num_samples"] == num_samples
+    assert "prompt_parameters" not in call_args
+
+
+def test_create_metadata_prompt_parameters_writes_parameters(
+    mocker: MockerFixture,
+    mock_file_operations: FileOperations,
+) -> None:
+    mock_yaml_dump: MagicMock = mocker.patch(
+        "datagen.trainingdata_uploader.yaml.dump", autospec=True
+    )
+    TrainingDataUploader._create_metadata(
+        "foo_schema", "1_2_3", "foo", "foobar", 10, {"condition": "bar"}
+    )
+    assert mock_yaml_dump.call_args[0][0]["prompt_parameters"] == {"condition": "bar"}
 
 
 def test_create_samples_archive_valid_files_creates_tar(
@@ -345,7 +359,7 @@ def test_upload_long_description_none_uses_short_description(
     )
     TrainingDataUploader.upload(mock_schema, "foo_schema", "bar", "foo")
     mock_helper_methods.create_metadata.assert_called_once_with(
-        "foo_schema", "1_2_3", "foo", "foo", 3
+        "foo_schema", "1_2_3", "foo", "foo", 3, None
     )
 
 
@@ -370,7 +384,7 @@ def test_upload_long_description_provided_uses_long_description(
         long_description="foobar",
     )
     mock_helper_methods.create_metadata.assert_called_once_with(
-        "foo_schema", "1_2_3", "foo", "foobar", 3
+        "foo_schema", "1_2_3", "foo", "foobar", 3, None
     )
 
 
@@ -394,3 +408,28 @@ def test_upload_schema_validation_error_skips_sample(
     ]
     TrainingDataUploader.upload(mock_schema, "foo_schema", "bar", "foo")
     assert mock_upload_dependencies.upload_file.call_count == 3
+
+
+def test_upload_prompt_parameters_passes_parameters_to_metadata(
+    mock_helper_methods: HelperMethods,
+    mock_uploader_path_operations: PathOperations,
+    mock_upload_dependencies: UploadDependencies,
+    mock_schema: type[BaseModel],
+) -> None:
+    mock_example: MagicMock = MagicMock()
+    mock_example.content = "foo"
+    mock_example.output = {"field": "bar"}
+    mock_upload_dependencies.model_validate_json.return_value = mock_example
+    mock_upload_dependencies.datetime.now.return_value.strftime.return_value = (
+        "20260101-000000"
+    )
+    TrainingDataUploader.upload(
+        mock_schema,
+        "foo_schema",
+        "bar",
+        "foo",
+        prompt_parameters={"condition": "baz"},
+    )
+    mock_helper_methods.create_metadata.assert_called_once_with(
+        "foo_schema", "1_2_3", "foo", "foo", 3, {"condition": "baz"}
+    )

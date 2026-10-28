@@ -6,7 +6,7 @@ authors = [
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
 ]
-version = "1.0.0"
+version = "1.1.0"
 requires-python = ">=3.12"
 license = "LicenseRef-Proprietary"
 dependencies = [
@@ -33,6 +33,10 @@ mlx = [
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
+[tool.uv]
+override-dependencies = [
+    "importlib-metadata>=8.0.0,<9.0",
+]
 [tool.uv.sources]
 londonaicentre-mesa-utils = { path = "../utils", editable = true }
 londonaicentre-mesa-datagen = { path = "../datagen", editable = true }

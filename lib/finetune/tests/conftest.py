@@ -23,7 +23,7 @@ class PromptBuilderFixture(BasePromptBuilder):
     def __init__(self) -> None:
         pass
 
-    def build_main_prompt(self) -> str:
+    def build_main_prompt(self, parameters: dict[str, str] | None = None) -> str:
         return "foo"
 
 

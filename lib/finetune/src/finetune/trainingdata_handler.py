@@ -11,10 +11,12 @@ import logging
 import random
 from pathlib import Path
 
+import yaml
 from pydantic import BaseModel
 
 from mesa_types import TrainingSample
 from utils.aws import AWS
+from utils.prompt import BasePromptBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +26,43 @@ class TrainingDataHandler:
     Download and prepare training data batches from S3
     """
 
+    __CACHE_DIR: Path = Path("data/_cache/training_batches")
+
+    @staticmethod
+    def load_prompt_parameters(
+        batch_name: str, bucket: str, s3_prefix: str, region: str
+    ) -> dict[str, str] | None:
+        """Load the prompt parameters a training batch was generated with.
+
+        Args:
+            batch_name (str): Training batch folder name.
+            bucket (str): S3 bucket name.
+            s3_prefix (str): S3 prefix path.
+            region (str): AWS region.
+
+        Returns:
+            dict[str, str] | None: The batch's prompt parameters, None if it has none.
+
+        Raises:
+            ValueError: If the batch's metadata cannot be downloaded.
+        """
+        TrainingDataHandler.__CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        metadata_path: Path = (
+            TrainingDataHandler.__CACHE_DIR / f"{batch_name}_metadata.yaml"
+        )
+        if not metadata_path.exists() and not AWS.download_file(
+            region_name=region,
+            bucket=bucket,
+            file_name=str(metadata_path),
+            object_name=f"{s3_prefix}/{batch_name}/metadata.yaml",
+        ):
+            raise ValueError(f"Failed to download metadata for {batch_name}")
+        return yaml.safe_load(metadata_path.read_text()).get("prompt_parameters")
+
     @staticmethod
     def prepare(
         schema: type[BaseModel],
-        system_prompt: str,
+        prompt_builder: BasePromptBuilder,
         training_batch_names: list[str],
         base_model: str,
         max_seq_length: int,
@@ -41,7 +76,7 @@ class TrainingDataHandler:
 
         Args:
             schema: Pydantic schema class for validation (e.g., OncologyModel)
-            system_prompt: Expected system prompt (from PromptBuilder.build_main_prompt())
+            prompt_builder: Prompt builder for each batch's expected system prompt
             training_batch_names: List of training batch folder names
                 (e.g., ["20260123-094248_test-batch"])
             bucket: S3 bucket name
@@ -53,7 +88,7 @@ class TrainingDataHandler:
         Returns:
             Path to local combined JSONL file
         """
-        cache_dir = Path("data/_cache/training_batches")
+        cache_dir = TrainingDataHandler.__CACHE_DIR
         cache_dir.mkdir(parents=True, exist_ok=True)
 
         all_samples = []
@@ -94,6 +129,12 @@ class TrainingDataHandler:
                 )
                 if not success:
                     raise ValueError(f"Failed to download {jsonl_key}")
+
+            system_prompt: str = prompt_builder.build_main_prompt(
+                TrainingDataHandler.load_prompt_parameters(
+                    batch_name, bucket, s3_prefix, region
+                )
+            )
 
             # validation
             logger.info(f"Validating {jsonl_path}...")
@@ -185,14 +226,17 @@ class TrainingDataHandler:
             sample
             for sample in samples
             if len(
-                tokenizer.apply_chat_template(
-                    [
-                        {"role": message.role, "content": message.content}
-                        for message in sample.messages
-                    ],
-                    tokenize=True,
-                    add_generation_prompt=False,
-                )
+                tokenizer(
+                    tokenizer.apply_chat_template(
+                        [
+                            {"role": message.role, "content": message.content}
+                            for message in sample.messages
+                        ],
+                        tokenize=False,
+                        add_generation_prompt=False,
+                    ),
+                    add_special_tokens=False,
+                )["input_ids"]
             )
             < max_seq_length
         ]

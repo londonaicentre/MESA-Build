@@ -1,0 +1,32 @@
+# questions
+condition_based:
+    type: bool
+    help: Does this pipeline extract a single condition with conditionschema?
+    default: false
+
+schema_name:
+    type: str
+    help: Which schema package does this pipeline use (e.g. 'paedacuteschema')?
+    when: "{{ not condition_based }}"
+    default: "{% if condition_based %}conditionschema{% endif %}"
+
+condition:
+    type: str
+    help: Which condition does this pipeline extract (e.g. 'type 2 diabetes')?
+    when: "{{ condition_based }}"
+
+cui:
+    type: str
+    help: What is the condition's SNOMED CT concept ID (e.g. '44054006')?
+    when: "{{ condition_based }}"
+
+docsynth:
+    type: bool
+    help: Does this pipeline generate synthetic documents?
+    default: false
+
+_tasks:
+  - "uv add --editable ../../lib/datagen ../../schemas/{{schema_name}}"
+  - "uv add dotenv ipykernel londonaicentre-mesa-runtime"
+  - command: "uv add git+ssh://git@github.com/londonaicentre/MESA-Docsynth"
+    when: "{{ docsynth }}"

@@ -1,0 +1,11 @@
+{
+  "content": "CLINIC LETTER\n\nPast medical history: foo, resolved 2019.\nFamily history: mother has Foo.\n\nExamination: no signs of FOO today.\n\nImpression: ?foo recurrence. Plan: repeat bloods and review in six months.",
+  "output": {
+    "mentions": [
+      {"value": "foo", "presence": "True", "subject": "Patient", "time": "Past"},
+      {"value": "Foo", "presence": "True", "subject": "Other", "time": "Recent"},
+      {"value": "FOO", "presence": "False", "subject": "Patient", "time": "Recent"},
+      {"value": "foo", "presence": "Hypothetical", "subject": "Patient", "time": "Recent"}
+    ]
+  }
+}

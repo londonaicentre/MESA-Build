@@ -188,7 +188,7 @@ class TestPrepareData:
         trainer.prepare_data()
         prepare_data_mocks.training_data_handler.assert_called_once_with(
             schema=trainer.schema,
-            system_prompt="foo",
+            prompt_builder=trainer.prompt_builder,
             training_batch_names=["20260101-120000_corge-quux"],
             base_model="baz",
             max_seq_length=2048,

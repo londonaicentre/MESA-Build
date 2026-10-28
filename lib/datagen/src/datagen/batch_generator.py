@@ -1,36 +1,55 @@
 """
 batch_generator.py
 
-Class to handle use of AWS batch inference API
+Classes to handle use of batch inference, via the AWS batch inference API
+or the MESA Runtime
 """
 
+import hashlib
 import json
 import logging
 import os
+from collections.abc import Callable
 from datetime import datetime
+from importlib.metadata import version
+from itertools import islice
 from pathlib import Path
 
 from pydantic import BaseModel
 
-from datagen.config import Config
+from datagen.config import Config, ModelConfig
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
 from datagen.version_detector import get_schema_version
+from mesa_runtime import MesaRuntime
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
 
 
-class BedrockBatchGenerator:
-    """Bedrock batch sample generator for large-scale processing.
+class BatchState(BaseModel):
+    """State carried between batch generation runs.
 
-    Uses AWS Bedrock batch inference API for cost-effective large-scale generation.
+    Attributes:
+        job_id (str): Id of the most recently submitted batch job
+        sent_record_ids (list[str]): Record ids of every document sent in a
+            batch so far, so that later runs continue with unsent documents.
+            Defaults to an empty list, which sends every document afresh
 
+    """
+
+    job_id: str
+    sent_record_ids: list[str] = []
+
+
+class BatchGenerator:
+    """Base batch sample generator for large-scale processing.
     Args:
         system_prompt: System prompt for sample generation
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
-        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4')
+        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
+            or None to use the runtime defaults with no model
         document_batches: S3 batch filenames to download
     """
 
@@ -39,7 +58,7 @@ class BedrockBatchGenerator:
         system_prompt: str,
         schema: type[BaseModel],
         schema_name: str,
-        model_name: str,
+        model_name: str | None,
         document_batches: list[str],
     ):
         self.__config: Config = Config()
@@ -52,14 +71,19 @@ class BedrockBatchGenerator:
         self.__schema_name: str = schema_name
         self.__schema_version: str = get_schema_version(schema_name)
 
-        self.__model_id: str = self.__config.models[model_name].model
-        self.__model_region: str = self.__config.models[model_name].region
-        os.environ["AWS_REGION_NAME"] = self.__model_region
-        self.__model_batch_file: str = self.__config.models[model_name].batch_file
+        model: ModelConfig = (
+            self.__config.models[model_name]
+            if model_name
+            else self.__config.runtime_model
+        )
+        self._model_id: str = model.model
+        self._model_region: str = model.region
+        os.environ["AWS_REGION_NAME"] = self._model_region
+        self._model_batch_file: str = model.batch_file
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
-        self.__document_files: list[Path] = []
+        batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
@@ -68,39 +92,76 @@ class BedrockBatchGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("*.json")))
+            batches.append(sorted(output_folder.glob("*.json")))
+        self.__document_files: list[Path] = DocumentLoader.interleave(batches)
 
     def get_document_files_count(self) -> int:
         return len(self.__document_files)
 
+    @staticmethod
+    def _record_id(doc: Document) -> str:
+        return hashlib.md5(doc.content.encode()).hexdigest()
+
+    def _documents_by_record_id(self) -> dict[str, Document]:
+        return {
+            BatchGenerator._record_id(doc): doc
+            for doc in (
+                Document.model_validate_json(doc_path.read_text())
+                for doc_path in self.__document_files
+            )
+        }
+
+    def _read_state(self) -> BatchState | None:
+        if not Path(self.__config.job_id_file).exists():
+            return None
+        with open(self.__config.job_id_file) as state_file:
+            return BatchState.model_validate_json(state_file.read())
+
+    def _write_state(self, state: BatchState) -> None:
+        with open(self.__config.job_id_file, "w") as state_file:
+            state_file.write(state.model_dump_json())
+
+    def _pending_documents(self, sample_size: int) -> dict[str, Document]:
+        sent: set[str] = (
+            set(state.sent_record_ids) if (state := self._read_state()) else set()
+        )
+        pending: dict[str, Document] = {
+            record_id: doc
+            for record_id, doc in self._documents_by_record_id().items()
+            if record_id not in sent
+        }
+        if not pending:
+            raise ValueError(
+                f"All {len(sent)} available documents have already been sent in a batch"
+            )
+        if sample_size > len(pending):
+            self._logger.warning(
+                f"Requested {sample_size} samples but only {len(pending)} unsent documents "
+                f"available. Will create {len(pending)} samples."
+            )
+        return dict(islice(pending.items(), sample_size))
+
     def _generate_batch(
         self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
-    ) -> str:
+    ) -> list[str]:
         """Generate batch request file for Anthropic Bedrock model.
 
         Args:
-            sample_size: Number of samples to be generated
+            sample_size: Maximum number of samples to be generated, drawn in
+                order from the documents not sent in a previous batch
             file_name: Output filename for batch request
 
         Returns:
-            The batch request filename
+            The record ids of the documents written to the batch request file
 
         """
-        max_samples = len(self.__document_files)
-        if sample_size > max_samples:
-            self._logger.warning(
-                f"Requested {sample_size} samples but only {max_samples} documents available. "
-                f"Will create {max_samples} samples."
-            )
-            sample_size = max_samples
-
+        pending: dict[str, Document] = self._pending_documents(sample_size)
         with open(file_name, "w") as outfile:
-            for idx, doc_path in enumerate(self.__document_files[:sample_size]):
-                doc = Document.model_validate_json(doc_path.read_text())
+            for record_id, doc in pending.items():
                 print(
                     json.dumps(
                         AWS.create_anthropic_bedrock_batch_entry(
-                            str(idx),
+                            record_id,
                             self.__system_prompt,
                             doc.content,
                         )
@@ -108,49 +169,26 @@ class BedrockBatchGenerator:
                     file=outfile,
                 )
 
-        self._logger.info(f"Generated batch file with {sample_size} entries")
-        return file_name
+        self._logger.info(f"Generated batch file with {len(pending)} entries")
+        return list(pending)
 
-    def generate_via_batch(
-        self,
-        sample_size: int,
-        bucket: str,
-        bedrock_execution_role: str,
-    ) -> str:
-        """Generate samples via batch inference.
-
-        Args:
-            sample_size: Number of samples to be generated
-            bucket: The name of the bucket to which the batch
-                specification should be uploaded
-            bedrock_execution_role: The ARN of an IAM role with
-                permissions to access S3 for batch specification and
-                access cross-region models
-
-        Returns:
-            The id of the started job
-
-        """
+    def _submit_batch(self, sample_size: int, submit: Callable[[str], object]) -> str:
+        previous: BatchState | None = self._read_state()
         # Create batch instruction JSONL file
-        self._generate_batch(sample_size)
+        record_ids: list[str] = self._generate_batch(sample_size)
         job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-        AWS.run_batch_inference(
-            job_id,
-            self.__model_id,
-            self.__model_batch_file,
-            bucket,
-            bedrock_execution_role,
-            self.__model_region,
+        submit(job_id)
+        self._write_state(
+            BatchState(
+                job_id=job_id,
+                sent_record_ids=(previous.sent_record_ids if previous else [])
+                + record_ids,
+            )
         )
-        with open(self.__config.job_id_file, "w") as job_id_file:
-            job_id_file.write(json.dumps({"job_id": job_id}))
         return job_id
 
     def __resolve_job_id(self) -> str | None:
-        if not Path(self.__config.job_id_file).exists():
-            return None
-        with open(self.__config.job_id_file) as job_id_file:
-            return str(json.loads(job_id_file.read())["job_id"])
+        return state.job_id if (state := self._read_state()) else None
 
     def extract_batch_output(
         self,
@@ -174,18 +212,22 @@ class BedrockBatchGenerator:
         job_id: str | None = self.__resolve_job_id() if bucket is not None else None
         if bucket is not None and job_id is not None:
             batch_outputs = AWS.get_batch_inference_outputs(
-                self.__model_region, bucket, job_id, file_name
+                self._model_region, bucket, job_id, file_name
             )
         else:
             batch_outputs = AWS.parse_batch_output(file_name)
 
+        docs: dict[str, Document] = self._documents_by_record_id()
+
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
         failed_generations: int = 0
-        for sample_id, bedrock_batch_output in enumerate(batch_outputs.outputs):
+        for bedrock_batch_output in batch_outputs.outputs:
             try:
-                doc_path = self.__document_files[sample_id]
-                doc = Document.model_validate_json(doc_path.read_text())
+                if (doc := docs.get(bedrock_batch_output.recordId)) is None:
+                    raise ValueError(
+                        f"no document matches record {bedrock_batch_output.recordId}"
+                    )
 
                 if save_training_sample(
                     str(bedrock_batch_output.modelOutput.content[0].text),
@@ -201,7 +243,9 @@ class BedrockBatchGenerator:
                     failed_generations += 1
             except Exception as e:
                 failed_generations += 1
-                self._logger.error(f"Error processing batch output {sample_id}: {e}")
+                self._logger.error(
+                    f"Error processing batch output {bedrock_batch_output.recordId}: {e}"
+                )
         self._logger.info(
             f"Processing complete: {successful_generations} successful, {failed_generations} failed"
         )
@@ -223,13 +267,125 @@ class BedrockBatchGenerator:
         """
         job_id: str | None = self.__resolve_job_id()
         if job_id is None:
-            raise ValueError(
-                "No batch job id found; generate_via_batch must be called first."
-            )
+            raise ValueError("No batch job id found; a batch must be submitted first.")
 
         return any(
-            object["Key"].endswith(self.__model_batch_file + ".out")
+            object["Key"].endswith(self._model_batch_file + ".out")
             for object in AWS.list_s3_objects(
-                self.__model_region, bucket, job_id + "/output/"
+                self._model_region, bucket, job_id + "/output/"
             )
+        )
+
+
+class BedrockBatchGenerator(BatchGenerator):
+    """Bedrock batch sample generator.
+
+    Uses AWS Bedrock batch inference API for cost-effective large-scale generation.
+    """
+
+    def generate_via_batch(
+        self,
+        sample_size: int,
+        bucket: str,
+        bedrock_execution_role: str,
+    ) -> str:
+        """Generate samples via batch inference.
+
+        Args:
+            sample_size: Maximum number of samples to be generated
+            bucket: The name of the bucket to which the batch
+                specification should be uploaded
+            bedrock_execution_role: The ARN of an IAM role with
+                permissions to access S3 for batch specification and
+                access cross-region models
+
+        Returns:
+            The id of the started job
+
+        Raises:
+            ValueError: If every available document has already been sent
+
+        """
+        return self._submit_batch(
+            sample_size,
+            lambda job_id: AWS.run_batch_inference(
+                job_id,
+                self._model_id,
+                self._model_batch_file,
+                bucket,
+                bedrock_execution_role,
+                self._model_region,
+            ),
+        )
+
+
+class MESARuntimeBatchGenerator(BatchGenerator):
+    """MESA Runtime batch sample generator.
+
+    Uses batch inference on the MESA Runtime, in place of Bedrock, with the
+    model from config.json as served by the runtime, or split across every
+    model the runtime serves if no model is given.
+
+    Args:
+        system_prompt: System prompt for sample generation
+        schema: Pydantic schema class for validation
+        schema_name: Schema name for output filenames
+        document_batches: S3 batch filenames to download
+        base_url: Base URL of the MESA Runtime API
+        username: Basic auth username for the MESA Runtime API
+        password: Basic auth password for the MESA Runtime API
+        model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
+            or None to split samples across every model the runtime serves.
+            Defaults to None.
+    """
+
+    def __init__(
+        self,
+        system_prompt: str,
+        schema: type[BaseModel],
+        schema_name: str,
+        document_batches: list[str],
+        base_url: str,
+        username: str,
+        password: str,
+        model_name: str | None = None,
+    ):
+        super().__init__(
+            system_prompt, schema, schema_name, model_name, document_batches
+        )
+        self.__runtime: MesaRuntime = MesaRuntime(base_url, username, password)
+        self.__schema_package: str = f"londonaicentre-{schema_name}"
+        self.__schema_version: str = version(self.__schema_package)
+
+    def generate_via_batch(
+        self,
+        sample_size: int,
+        bucket: str,
+    ) -> str:
+        """Generate samples via batch inference on the MESA Runtime, in place
+            of Bedrock.
+
+        Args:
+            sample_size: Maximum number of samples to be generated
+            bucket: The name of the bucket to which the batch
+                specification should be uploaded and from which the
+                runtime reads it
+
+        Returns:
+            The id of the started job
+
+        Raises:
+            ValueError: If every available document has already been sent
+
+        """
+        return self._submit_batch(
+            sample_size,
+            lambda job_id: self.__runtime.run_batch_inference(
+                job_id,
+                self._model_batch_file,
+                bucket,
+                self._model_id or None,
+                schema_name=self.__schema_package,
+                schema_version=self.__schema_version,
+            ),
         )

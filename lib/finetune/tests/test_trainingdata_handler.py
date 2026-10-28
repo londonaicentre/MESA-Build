@@ -2,14 +2,16 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock, mock_open
+from unittest.mock import MagicMock, call, mock_open
 
 import pytest
 from pytest_mock import MockerFixture
 
+from conftest import PromptBuilderFixture
 from finetune.trainingdata_handler import TrainingDataHandler
 from fixtures import SchemaFixture
 from mesa_types import TrainingMessage, TrainingSample
+from utils.prompt import BasePromptBuilder
 
 
 @dataclass
@@ -32,12 +34,14 @@ class PrepareMocks:
     shuffle: MagicMock
     logger: MagicMock
     exclude_overlong_samples: MagicMock
+    load_prompt_parameters: MagicMock
 
 
 @dataclass
-class ExcludeOverlongSamplesMocks:
-    auto_tokenizer: MagicMock
-    tokenizer: MagicMock
+class LoadPromptParametersMocks:
+    path_mocks: PathMocks
+    download_file: MagicMock
+    read_text: MagicMock
 
 
 @pytest.fixture
@@ -84,19 +88,56 @@ def prepare_mocks(mocker: MockerFixture, valid_sample_json: str) -> PrepareMocks
             "finetune.trainingdata_handler.TrainingDataHandler.exclude_overlong_samples",
             side_effect=lambda samples, *args, **kwargs: samples,
         ),
+        mocker.patch(
+            "finetune.trainingdata_handler.TrainingDataHandler.load_prompt_parameters",
+            return_value=None,
+        ),
     )
 
 
 @pytest.fixture
-def exclude_overlong_samples_mocks(
-    mocker: MockerFixture,
-) -> ExcludeOverlongSamplesMocks:
-    mock_tokenizer: MagicMock = MagicMock()
-    mock_auto_tokenizer: MagicMock = mocker.patch(
-        "transformers.AutoTokenizer.from_pretrained",
-        return_value=mock_tokenizer,
+def load_prompt_parameters_mocks(mocker: MockerFixture) -> LoadPromptParametersMocks:
+    return LoadPromptParametersMocks(
+        PathMocks(
+            mocker.patch.object(Path, "mkdir"),
+            mocker.patch.object(Path, "exists", return_value=False),
+        ),
+        mocker.patch(
+            "finetune.trainingdata_handler.AWS.download_file", return_value=True
+        ),
+        mocker.patch.object(
+            Path, "read_text", return_value="prompt_parameters:\n  condition: foo\n"
+        ),
     )
-    return ExcludeOverlongSamplesMocks(mock_auto_tokenizer, mock_tokenizer)
+
+
+@pytest.fixture(scope="module")
+def tokenizer_path(tmp_path_factory: pytest.TempPathFactory) -> str:
+    path: Path = tmp_path_factory.mktemp("tokenizer")
+    (path / "tokenizer.json").write_text(
+        json.dumps(
+            {
+                "version": "1.0",
+                "added_tokens": [],
+                "pre_tokenizer": {"type": "WhitespaceSplit"},
+                "model": {
+                    "type": "WordLevel",
+                    "vocab": {"[UNK]": 0, "foo": 1},
+                    "unk_token": "[UNK]",
+                },
+            }
+        )
+    )
+    (path / "tokenizer_config.json").write_text(
+        json.dumps(
+            {
+                "tokenizer_class": "PreTrainedTokenizerFast",
+                "chat_template": "{% for message in messages %}"
+                "{{ message.content }} {% endfor %}",
+            }
+        )
+    )
+    return str(path)
 
 
 class TestS3Operations:
@@ -107,7 +148,7 @@ class TestS3Operations:
     ) -> None:
         TrainingDataHandler.prepare(
             SchemaFixture,
-            "foo",
+            PromptBuilderFixture(),
             ["bar"],
             "foo.bar1.2baz",
             1024,
@@ -124,7 +165,7 @@ class TestS3Operations:
         self, prepare_mocks: PrepareMocks
     ) -> None:
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.aws_mocks.download_file.assert_called_once()
 
@@ -134,7 +175,7 @@ class TestS3Operations:
         prepare_mocks.aws_mocks.list_s3_objects.return_value = []
         with pytest.raises(ValueError, match="No JSONL file found in foo"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
 
     def test_prepare_multiple_jsonl_files_raises_value_error(
@@ -146,7 +187,7 @@ class TestS3Operations:
         ]
         with pytest.raises(ValueError, match="Multiple JSONL files found in foo"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
 
     def test_prepare_download_fails_raises_value_error(
@@ -155,15 +196,87 @@ class TestS3Operations:
         prepare_mocks.aws_mocks.download_file.return_value = False
         with pytest.raises(ValueError, match="Failed to download"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
+
+
+class TestLoadPromptParameters:
+    def test_load_prompt_parameters_present_returns_parameters(
+        self, load_prompt_parameters_mocks: LoadPromptParametersMocks
+    ) -> None:
+        assert TrainingDataHandler.load_prompt_parameters(
+            "foo", "bar", "baz", "qux"
+        ) == {"condition": "foo"}
+        load_prompt_parameters_mocks.download_file.assert_called_once_with(
+            region_name="qux",
+            bucket="bar",
+            file_name="data/_cache/training_batches/foo_metadata.yaml",
+            object_name="baz/foo/metadata.yaml",
+        )
+
+    def test_load_prompt_parameters_absent_returns_none(
+        self, load_prompt_parameters_mocks: LoadPromptParametersMocks
+    ) -> None:
+        load_prompt_parameters_mocks.read_text.return_value = "schema: foo\n"
+        assert (
+            TrainingDataHandler.load_prompt_parameters("foo", "bar", "baz", "qux")
+            is None
+        )
+
+    def test_load_prompt_parameters_cached_skips_download(
+        self, load_prompt_parameters_mocks: LoadPromptParametersMocks
+    ) -> None:
+        load_prompt_parameters_mocks.path_mocks.exists.return_value = True
+        TrainingDataHandler.load_prompt_parameters("foo", "bar", "baz", "qux")
+        load_prompt_parameters_mocks.download_file.assert_not_called()
+
+    def test_load_prompt_parameters_download_fails_raises_value_error(
+        self, load_prompt_parameters_mocks: LoadPromptParametersMocks
+    ) -> None:
+        load_prompt_parameters_mocks.download_file.return_value = False
+        with pytest.raises(ValueError, match="Failed to download metadata for foo"):
+            TrainingDataHandler.load_prompt_parameters("foo", "bar", "baz", "qux")
+
+
+class TestBatchPrompt:
+    def test_prepare_loads_prompt_parameters_per_batch(
+        self, prepare_mocks: PrepareMocks
+    ) -> None:
+        prepare_mocks.aws_mocks.list_s3_objects.side_effect = [
+            [{"Key": "trainingdata/foo/qux.jsonl"}],
+            [{"Key": "trainingdata/bar/quux.jsonl"}],
+        ]
+        TrainingDataHandler.prepare(
+            SchemaFixture,
+            PromptBuilderFixture(),
+            ["foo", "bar"],
+            "foo.bar1.2baz",
+            1024,
+            bucket="baz",
+            region="qux",
+        )
+        assert prepare_mocks.load_prompt_parameters.call_args_list == [
+            call("foo", "baz", "trainingdata", "qux"),
+            call("bar", "baz", "trainingdata", "qux"),
+        ]
+
+    def test_prepare_builds_prompt_from_batch_parameters(
+        self, prepare_mocks: PrepareMocks
+    ) -> None:
+        prepare_mocks.load_prompt_parameters.return_value = {"condition": "bar"}
+        prompt_builder: MagicMock = MagicMock(spec=BasePromptBuilder)
+        prompt_builder.build_main_prompt.return_value = "foo"
+        TrainingDataHandler.prepare(
+            SchemaFixture, prompt_builder, ["foo"], "foo.bar1.2baz", 1024
+        )
+        prompt_builder.build_main_prompt.assert_called_once_with({"condition": "bar"})
 
 
 class TestCaching:
     # Two distinct behaviours: create the cache dir, and skip the download when already cached.
     def test_prepare_creates_cache_directory(self, prepare_mocks: PrepareMocks) -> None:
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.path_mocks.mkdir.assert_called_once_with(
             parents=True, exist_ok=True
@@ -174,7 +287,7 @@ class TestCaching:
     ) -> None:
         prepare_mocks.path_mocks.exists.return_value = True
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.aws_mocks.download_file.assert_not_called()
 
@@ -203,7 +316,7 @@ class TestSampleValidation:
         )
         with pytest.raises(ValueError, match="No valid training samples found"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
         prepare_mocks.logger.warning.assert_called()
 
@@ -225,7 +338,7 @@ class TestSampleValidation:
         )
         with pytest.raises(ValueError, match="No valid training samples found"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
         prepare_mocks.logger.warning.assert_called()
 
@@ -235,7 +348,7 @@ class TestSampleValidation:
         prepare_mocks.open_mock.return_value.__iter__ = lambda _: iter(["foo"])
         with pytest.raises(ValueError, match="No valid training samples found"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
         prepare_mocks.logger.warning.assert_called()
 
@@ -248,7 +361,7 @@ class TestSampleValidation:
         )
         with pytest.raises(ValueError, match="No valid training samples found"):
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
 
 
@@ -258,7 +371,7 @@ class TestShuffle:
         self, prepare_mocks: PrepareMocks
     ) -> None:
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.shuffle.assert_called_once()
 
@@ -267,7 +380,12 @@ class TestShuffle:
     ) -> None:
         prepare_mocks.shuffle.reset_mock()
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024, shuffle=False
+            SchemaFixture,
+            PromptBuilderFixture(),
+            ["foo"],
+            "foo.bar1.2baz",
+            1024,
+            shuffle=False,
         )
         prepare_mocks.shuffle.assert_not_called()
 
@@ -278,7 +396,7 @@ class TestOutput:
     ) -> None:
         assert (
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+                SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
             == "train.jsonl"
         )
@@ -290,7 +408,7 @@ class TestOutput:
         assert (
             TrainingDataHandler.prepare(
                 SchemaFixture,
-                "foo",
+                PromptBuilderFixture(),
                 ["foo"],
                 "foo.bar1.2baz",
                 1024,
@@ -311,7 +429,11 @@ class TestMultipleBatches:
         ]
         assert (
             TrainingDataHandler.prepare(
-                SchemaFixture, "foo", ["foo", "bar"], "foo.bar1.2baz", 1024
+                SchemaFixture,
+                PromptBuilderFixture(),
+                ["foo", "bar"],
+                "foo.bar1.2baz",
+                1024,
             )
             == "train.jsonl"
         )
@@ -323,20 +445,24 @@ class TestExcludeOverlongSamples:
         self, prepare_mocks: PrepareMocks
     ) -> None:
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.exclude_overlong_samples.assert_called_once()
 
     def test_prepare_skips_exclude_overlong_samples_with_empty_base_model(
         self, prepare_mocks: PrepareMocks
     ) -> None:
-        TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"], "", 1024)
+        TrainingDataHandler.prepare(
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "", 1024
+        )
         prepare_mocks.exclude_overlong_samples.assert_not_called()
 
     def test_prepare_skips_exclude_overlong_samples_with_zero_max_seq_length(
         self, prepare_mocks: PrepareMocks
     ) -> None:
-        TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 0)
+        TrainingDataHandler.prepare(
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 0
+        )
         prepare_mocks.exclude_overlong_samples.assert_not_called()
 
     def test_prepare_warns_when_more_than_half_samples_excluded(
@@ -349,7 +475,7 @@ class TestExcludeOverlongSamples:
             lambda samples, *_, **__: samples[: len(samples) // 3]
         )
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.logger.warning.assert_called_once_with(
             "Samples consistently exceed max_seq_length, consider increasing"
@@ -376,205 +502,57 @@ class TestExcludeOverlongSamples:
             lambda samples, *_, **__: samples[:remaining_samples]
         )
         TrainingDataHandler.prepare(
-            SchemaFixture, "foo", ["foo"], "foo.bar1.2baz", 1024
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
         )
         prepare_mocks.logger.warning.assert_not_called()
 
     def test_prepare_does_not_warn_when_exclude_overlong_samples_not_called(
         self, prepare_mocks: PrepareMocks
     ) -> None:
-        TrainingDataHandler.prepare(SchemaFixture, "foo", ["foo"], "", 1024)
+        TrainingDataHandler.prepare(
+            SchemaFixture, PromptBuilderFixture(), ["foo"], "", 1024
+        )
         prepare_mocks.logger.warning.assert_not_called()
 
-    def create_sample(self, content_length: int = 1) -> TrainingSample:
+    @staticmethod
+    def create_sample(token_count: int) -> TrainingSample:
         return TrainingSample(
             messages=[
-                TrainingMessage(role="system", content="a" * content_length),
-                TrainingMessage(role="user", content="b" * content_length),
-                TrainingMessage(role="assistant", content="c" * content_length),
+                TrainingMessage(role="system", content=""),
+                TrainingMessage(role="user", content=""),
+                TrainingMessage(
+                    role="assistant", content=" ".join(["foo"] * token_count)
+                ),
             ]
         )
 
-    def test_exclude_overlong_samples_loads_tokenizer_with_base_model(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
-            1,
-            2,
-            3,
-        ]
-        TrainingDataHandler.exclude_overlong_samples(
-            [self.create_sample()], 100, "foo.bar1.2baz"
-        )
-        exclude_overlong_samples_mocks.auto_tokenizer.assert_called_once_with(
-            "foo.bar1.2baz", trust_remote_code=True
-        )
-
     @pytest.mark.parametrize(
-        "token_count,sample_count,expected_count",
+        "token_counts,max_seq_length,expected_indices",
         [
-            (3, 1, 1),  # single sample under limit
-            (200, 1, 0),  # single sample over limit
-            (3, 2, 2),  # all samples under limit
-            (200, 2, 0),  # all samples over limit
+            ([], 100, []),
+            ([3], 100, [0]),
+            ([200], 100, []),
+            ([100], 100, []),
+            ([50, 50], 100, [0, 1]),
+            ([200, 200], 100, []),
+            ([200, 150, 50, 30, 20, 10], 100, [2, 3, 4, 5]),
+            ([9, 18, 27, 36, 45, 54, 63, 72, 81, 90], 50, [0, 1, 2, 3, 4]),
+            ([150, 90, 40, 30], 100, [1, 2, 3]),
+            ([50, 150, 40, 30, 20], 100, [0, 2, 3, 4]),
+            ([50, 150, 40, 160], 100, [0, 2]),
         ],
     )
-    def test_exclude_overlong_samples_simple_cases(
+    def test_exclude_overlong_samples_mixed_lengths_returns_samples_under_limit(
         self,
-        exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks,
-        token_count: int,
-        sample_count: int,
-        expected_count: int,
+        tokenizer_path: str,
+        token_counts: list[int],
+        max_seq_length: int,
+        expected_indices: list[int],
     ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
-            1
-        ] * token_count
-        assert (
-            len(
-                TrainingDataHandler.exclude_overlong_samples(
-                    [self.create_sample() for _ in range(sample_count)], 100, "foo"
-                )
-            )
-            == expected_count
-        )
-
-    def test_exclude_overlong_samples_mixed_lengths_returns_acceptable_samples(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda msgs, **_: [1] * sum(len(msg["content"]) for msg in msgs)
-        )
-        result: list[TrainingSample] = TrainingDataHandler.exclude_overlong_samples(
-            [
-                self.create_sample(200),
-                self.create_sample(150),
-                self.create_sample(50),
-                self.create_sample(30),
-                self.create_sample(20),
-                self.create_sample(10),
-            ],
-            100,
-            "foo",
-        )
-        assert len(result) == 3
-        assert all(
-            sum(len(msg.content) for msg in sample.messages) < 100 for sample in result
-        )
-
-    def test_exclude_overlong_samples_progressive_lengths_partial_pass(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda msgs, **_: [1] * sum(len(msg["content"]) for msg in msgs)
-        )
-        assert (
-            len(
-                TrainingDataHandler.exclude_overlong_samples(
-                    [self.create_sample(i * 3) for i in range(1, 11)], 50, "foo"
-                )
-            )
-            == 5
-        )
-
-    def test_exclude_overlong_samples_empty_list_returns_empty(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        assert TrainingDataHandler.exclude_overlong_samples([], 100, "foo") == []
-
-    def test_exclude_overlong_samples_overlong_head_does_not_affect_rest(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        token_counts: list[int] = [150, 90, 40, 30]
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda _, **__: [1] * token_counts.pop(0)
-        )
-        assert (
-            len(
-                TrainingDataHandler.exclude_overlong_samples(
-                    [
-                        self.create_sample(100),
-                        self.create_sample(80),
-                        self.create_sample(40),
-                        self.create_sample(30),
-                    ],
-                    100,
-                    "foo",
-                )
-            )
-            == 3
-        )
-
-    def test_exclude_overlong_samples_includes_passing_sample_before_failed_sample(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        token_counts: list[int] = [50, 150, 40, 30, 20]
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda _, **__: [1] * token_counts.pop(0)
-        )
-        assert (
-            len(
-                TrainingDataHandler.exclude_overlong_samples(
-                    [
-                        self.create_sample(100),
-                        self.create_sample(90),
-                        self.create_sample(50),
-                        self.create_sample(40),
-                        self.create_sample(30),
-                    ],
-                    100,
-                    "foo",
-                )
-            )
-            == 4
-        )
-
-    def test_exclude_overlong_samples_boundary_exactly_max_seq_length_fails(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
-            1
-        ] * 100
-        assert (
-            TrainingDataHandler.exclude_overlong_samples(
-                [self.create_sample()], 100, "foo"
-            )
-            == []
-        )
-
-    def test_exclude_overlong_samples_non_consecutive_failures_returns_passing_samples(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        token_counts: list[int] = [50, 150, 40, 160]
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.side_effect = (
-            lambda _, **__: [1] * token_counts.pop(0)
-        )
-        assert (
-            len(
-                TrainingDataHandler.exclude_overlong_samples(
-                    [
-                        self.create_sample(100),
-                        self.create_sample(90),
-                        self.create_sample(50),
-                        self.create_sample(40),
-                    ],
-                    100,
-                    "foo",
-                )
-            )
-            == 2
-        )
-
-    def test_exclude_overlong_samples_all_samples_within_limit_returns_all(
-        self, exclude_overlong_samples_mocks: ExcludeOverlongSamplesMocks
-    ) -> None:
-        exclude_overlong_samples_mocks.tokenizer.apply_chat_template.return_value = [
-            1
-        ] * 50
-        assert (
-            len(
-                TrainingDataHandler.exclude_overlong_samples(
-                    [self.create_sample(), self.create_sample()], 100, "foo"
-                )
-            )
-            == 2
-        )
+        samples: list[TrainingSample] = [
+            TestExcludeOverlongSamples.create_sample(token_count)
+            for token_count in token_counts
+        ]
+        assert TrainingDataHandler.exclude_overlong_samples(
+            samples, max_seq_length, tokenizer_path
+        ) == [samples[index] for index in expected_indices]

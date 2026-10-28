@@ -1,0 +1,14 @@
+name: oncoradschema test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/oncoradschema/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      working-directory: schemas/oncoradschema

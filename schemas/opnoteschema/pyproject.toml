@@ -1,15 +1,15 @@
 [project]
-name = "opnoteschema"
-version = "0.1.0"
+name = "londonaicentre-opnoteschema"
+version = "0.3.1"
 description = "Operation notes"
 readme = "README.md"
 authors = [
-    { name = "Martin Chapman", email = "contact@martinchapman.co.uk" }
+    { name = "Joe Zhang", email = "jzhang@nhs.net" }
 ]
 requires-python = ">=3.13"
 license = "LicenseRef-Proprietary"
 dependencies = [
-    "londonaicentre-mesa-utils",
+    "londonaicentre-mesa-utils>=1.5.1",
     "pydantic>=2.13.4",
 ]
 
@@ -28,7 +28,7 @@ dev = [
 ]
 [tool.setuptools.package-data]
 opnoteschema = [
-    "*.txt", 
-    "examples/*.json", 
+    "*.txt",
+    "examples/*.json",
     "py.typed"
 ]

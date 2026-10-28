@@ -62,7 +62,7 @@ class LLMGenerator:
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # batches from S3
-        self.__document_files: list[Path] = []
+        batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
@@ -71,7 +71,8 @@ class LLMGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            self.__document_files.extend(sorted(output_folder.glob("*.json")))
+            batches.append(sorted(output_folder.glob("*.json")))
+        self.__document_files: list[Path] = DocumentLoader.interleave(batches)
 
     def _generate_sample(self, doc_path: Path) -> bool:
         """Generate structured output from a document.

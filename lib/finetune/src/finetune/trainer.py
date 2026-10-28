@@ -15,6 +15,7 @@ from finetune.config import FinetuneConfig
 from finetune.trainingdata_handler import TrainingDataHandler
 from utils.aws import AWS
 from utils.prompt import BasePromptBuilder
+from utils.schema_resolver import SchemaResolver
 
 logger = logging.getLogger(__name__)
 
@@ -128,6 +129,9 @@ class LoRATrainer:
 
     @classmethod
     def _constructor_kwargs(cls, data: dict[str, Any]) -> dict[str, Any]:
+        SchemaResolver.install_schema_package(
+            f"londonaicentre-{data['schema']['module'].split('.')[0]}", "", True
+        )
         return {
             "schema": getattr(
                 import_module(data["schema"]["module"]), data["schema"]["qualname"]
@@ -176,6 +180,17 @@ class LoRATrainer:
             model_description=model_description or self.description,
             training_data=list(self.training_batch_names),
             output_schema=self.schema,
+            prompt_parameters=[
+                parameters
+                for batch_name in self.training_batch_names
+                if (
+                    parameters := TrainingDataHandler.load_prompt_parameters(
+                        batch_name, self.bucket, "trainingdata", self.region
+                    )
+                )
+                is not None
+            ]
+            or None,
         )
 
     def valid_model_card_version(self, model_card: ModelCard) -> bool:
@@ -193,7 +208,7 @@ class LoRATrainer:
     def _prepare_training_data(self, output_file: str) -> str:
         return TrainingDataHandler.prepare(
             schema=self.schema,
-            system_prompt=self.prompt_builder.build_main_prompt(),
+            prompt_builder=self.prompt_builder,
             training_batch_names=self.training_batch_names,
             base_model=self.base_model,
             max_seq_length=self.max_seq_length,
