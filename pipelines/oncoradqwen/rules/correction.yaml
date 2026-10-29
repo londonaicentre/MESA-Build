@@ -1,0 +1,256 @@
+# Non-generative corrections to oncoradschema extractions, applied in order.
+# Each rule acts on the targets found by the JSONPath `path` for which the JSON Schema `when` validates {value: target, parent: object or list holding it, note: source note}.
+# Keywords such as `pattern` and `contains` only constrain values of their own type, so they are paired with `type` where the value may be null.
+# See datagen.correction_rules for the rule format.
+
+rules:
+  - name: suspected-from-uncertain-lesion
+    description: Malignancy is suspected on the scan whenever it holds an uncertain lesion.
+    path: is_malignancy_suspected_on_scan
+    action: set
+    value: true
+    when:
+      properties:
+        value: {const: false}
+        parent:
+          properties:
+            cancer_lesions:
+              type: array
+              contains:
+                properties:
+                  lesion_status: {const: uncertain}
+
+  - name: identified-from-cancerous-lesion
+    description: Malignancy is identified on the scan whenever it holds a cancerous lesion.
+    path: is_malignancy_identified_on_scan
+    action: set
+    value: true
+    when:
+      properties:
+        value: {const: false}
+        parent:
+          properties:
+            cancer_lesions:
+              type: array
+              contains:
+                properties:
+                  lesion_status: {const: cancerous}
+
+  - name: morphology-on-bone
+    description: Morphology is not recorded for bone lesions, whose composition goes in internal_features.
+    path: cancer_lesions[*].morphology
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        parent:
+          properties:
+            anatomical_site: {type: string, pattern: '^bone_'}
+
+  - name: solid-not-described
+    description: Morphology is only recorded as described, so solid is cleared where the note never describes anything as solid, soft tissue or without a cystic component.
+    path: cancer_lesions[*].morphology
+    action: clear
+    when:
+      properties:
+        value: {const: solid}
+        note: {not: {pattern: '(?i)solid|soft[- ]tissue|non[- ]?cystic|\bno\b[^.]{0,30}cystic (component|element|area|change)|tissue (density|attenuation)|internal composition'}}
+
+  - name: uptake-without-functional-imaging
+    description: Uptake is functional tracer uptake, so it is cleared where the note mentions no nuclear medicine imaging (e.g. DCE-MRI uptake or avid enhancement).
+    path: cancer_lesions[*].uptake
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '(?i)\bPET\b|FDG|\bSUV|tracer|scintigra|SPECT|isotope|radionuclide|nuclear medicine|PSMA|DOTATATE|octreotide|MIBG|gallium|technetium|\bTc[- ]?99|choline|fluciclovine'}}
+
+  - name: recist-target-not-designated
+    description: RECIST target lesions are designated by the reader, so a lesion is not a target where the note never names targets.
+    path: cancer_lesions[*].is_recist_target
+    action: set
+    value: false
+    when:
+      properties:
+        value: {const: true}
+        note: {not: {pattern: '(?i)target|RECIST measurable|baseline sum'}}
+
+  - name: recist-response-not-stated
+    description: A RECIST response is only recorded where the report gives one explicitly, which it cannot without naming RECIST.
+    path: cancer_status.recist_response
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '(?i)RECIST|Response Evaluation Criteria|response[^.]{0,40}(dimensional|measur)'}}
+
+  - name: miliary-not-described
+    description: A lesion is only miliary where the report describes it so.
+    path: cancer_lesions[*].is_miliary
+    action: set
+    value: false
+    when:
+      properties:
+        value: {const: true}
+        note: {not: {pattern: '(?i)miliary|innumerable|too numerous|micronodul'}}
+
+  - name: contrast-not-stated
+    description: A cross-sectional scan is only without contrast where the report says so, so the value is cleared where the note never mentions contrast.
+    path: scan_metadata.contrast
+    action: clear
+    when:
+      properties:
+        value: {const: without_contrast}
+        parent:
+          properties:
+            modality: {enum: [ct, mri, pet_ct, pet_mri, spect_ct]}
+        note: {not: {pattern: '(?i)contrast|gadolin|enhanc|omnipaque|iohexol|visipaque|dotarem|gadovist|multihance|primovist|\bIV\b|intravenous|plain'}}
+
+  - name: shape-not-described
+    description: Shape is only recorded as described, so it is cleared where the note never uses its wording.
+    path: cancer_lesions[*].shape
+    action: clear
+    when:
+      anyOf:
+        - properties:
+            value: {const: irregular}
+            note: {not: {pattern: '(?i)irregular'}}
+        - properties:
+            value: {const: round}
+            note: {not: {pattern: '(?i)\bround|spheric'}}
+        - properties:
+            value: {const: oval}
+            note: {not: {pattern: '(?i)oval|ovoid|ellip'}}
+        - properties:
+            value: {const: lobulated}
+            note: {not: {pattern: '(?i)lobulat|multilobul'}}
+
+  - name: margin-not-described
+    description: Margin is only recorded as described, so it is cleared where the note never uses its wording.
+    path: cancer_lesions[*].margin
+    action: clear
+    when:
+      anyOf:
+        - properties:
+            value: {const: circumscribed_welldefined}
+            note: {not: {pattern: '(?i)circumscrib|well[- ]?defined|well[- ]?demarcated|well[- ]?marginated|sharp|smooth|clearly defined|discrete|geographic'}}
+        - properties:
+            value: {const: microlobulated}
+            note: {not: {pattern: '(?i)microlobul'}}
+        - properties:
+            value: {const: obscured}
+            note: {not: {pattern: '(?i)obscur'}}
+        - properties:
+            value: {const: indistinct_illdefined}
+            note: {not: {pattern: '(?i)indistinct|ill[- ]?defined|poorly[- ]?defined|ill[- ]?marginated|poorly[- ]?marginated|blur|hazy|fuzzy'}}
+        - properties:
+            value: {const: spiculated}
+            note: {not: {pattern: '(?i)spicul|stellate'}}
+        - properties:
+            value: {const: irregular}
+            note: {not: {pattern: '(?i)irregular'}}
+        - properties:
+            value: {const: lobulated}
+            note: {not: {pattern: '(?i)lobulat|multilobul'}}
+
+  - name: internal-feature-not-described
+    description: Internal features are only recorded as described, so a feature is removed where the note never uses its wording.
+    path: cancer_lesions[*].internal_features[*]
+    action: remove
+    when:
+      anyOf:
+        - properties:
+            value: {const: necrotic}
+            note: {not: {pattern: '(?i)necro|cavitat|liquef|photopenic cent|cystic degeneration'}}
+        - properties:
+            value: {const: calcified}
+            note: {not: {pattern: '(?i)calcif|punctate (echogenic|hyperechoic) foc'}}
+        - properties:
+            value: {const: haemorrhagic}
+            note: {not: {pattern: '(?i)haemorrh|hemorrh|blood|bleed|haematoma|hematoma|haemosider|hemosider|blooming'}}
+        - properties:
+            value: {const: mucinous}
+            note: {not: {pattern: '(?i)mucin|mucoid|colloid'}}
+        - properties:
+            value: {const: fat_containing}
+            note: {not: {pattern: '(?i)fat|lipid'}}
+        - properties:
+            value: {const: sclerotic}
+            note: {not: {pattern: '(?i)scleros|sclerotic|blastic|dense|densit'}}
+        - properties:
+            value: {const: lytic}
+            note: {not: {pattern: '(?i)lytic|lysis|destructi|lucen'}}
+
+  - name: response-not-a-staging-score
+    description: RCR (BSBR) 1-5 grades suspicion of malignancy and TNM or AJCC grade stage, so a treatment response recorded under them is moved to other.
+    path: specialty_specific_scores[*].scoring_system
+    action: set
+    value: other
+    when:
+      properties:
+        value: {enum: [rcr, tnm, ajcc_stage]}
+        parent:
+          properties:
+            score_or_stage: {type: string, pattern: '(?i)progressive disease|(partial|complete)( metabolic)? response|stable disease'}
+
+  - name: bpe-not-breast-density
+    description: BI-RADS reports background parenchymal enhancement separately from breast density, so a BPE level recorded as density is moved to other.
+    path: specialty_specific_scores[*].scoring_system
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: acr_breast_density}
+        parent:
+          anyOf:
+            - properties:
+                score_or_stage: {type: string, pattern: '(?i)^\s*(minimal|mild|moderate|marked)\b'}
+                scoring_system_name_desc: {not: {type: string, pattern: '(?i)fibroglandular|density'}}
+                score_desc: {not: {type: string, pattern: '(?i)fibroglandular|density'}}
+            - properties:
+                scoring_system_name_desc: {type: string, pattern: '(?i)parenchymal enhancement|\bBPE\b'}
+
+  - name: calcification-not-calculus
+    description: The calculus type covers stones and not calcification, so a calcification without a stone is moved to other.
+    path: non_cancer_findings[*].finding
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: calculus}
+        parent:
+          properties:
+            finding_desc:
+              type: string
+              pattern: '(?i)calcif'
+              not: {pattern: '(?i)calcul|stone|lith'}
+
+  - name: size-empty
+    description: A lesion with no reported dimension has a null size rather than an object of nulls.
+    path: cancer_lesions[*].size
+    action: clear
+    when:
+      properties:
+        value:
+          type: object
+          properties:
+            longest_diameter_mm: {type: 'null'}
+            short_axis_mm: {type: 'null'}
+            x_mm: {type: 'null'}
+            y_mm: {type: 'null'}
+            z_mm: {type: 'null'}
+            volume_ml: {type: 'null'}
+            lesion_depth_mm: {type: 'null'}
+
+  - name: cancer-status-empty
+    description: A report with no comparison against a prior has a null cancer_status rather than an object of nulls.
+    path: cancer_status
+    action: clear
+    when:
+      properties:
+        value:
+          type: object
+          properties:
+            overall_status: {type: 'null'}
+            recist_response: {type: 'null'}
+            progression_desc: {type: 'null'}
