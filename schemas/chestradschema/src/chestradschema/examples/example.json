@@ -1,0 +1,398 @@
+{
+  "content": "CT PULMONARY ANGIOGRAM AND HRCT CHEST\n\nPatient: [redacted], MRN [redacted], DOB [redacted]\nStudy date: [redacted]\n\nAN ADDENDUM HAS BEEN ENTERED AT THE END OF THIS REPORT\n\nClinical details: Rheumatoid arthritis on methotrexate. Known ILD. Two weeks of increasing breathlessness, raised D-dimer. Pulmonary TB treated 1998. ?PE ?ILD progression.\n\nComparison: HRCT 2023.\n\nTechnique: CT pulmonary angiogram followed by non-contrast prone and expiratory HRCT sequences. Respiratory motion artefact at the lung bases on the CTPA; the HRCT sequences are diagnostic.\n\nFindings:\n\nPulmonary arteries: Occlusive filling defect in the left lower lobe lobar artery, with further non-occlusive filling defects in the right lower lobe segmental arteries. Qanadli obstruction index 25%. The main pulmonary artery is enlarged at 33mm. RV:LV ratio 0.8 with no CT features of right heart strain.\n\nLungs: Bibasal subpleural fibrotic reticulation with traction bronchiectasis, mild to moderate in extent, progressed since 2023. No honeycombing. Minor ground glass in the right lower lobe, unchanged. The appearances represent a probable UIP pattern. No mosaic attenuation or air trapping on expiratory imaging.\n\nSmall wedge-shaped peripheral opacity in the right lower lobe which may represent early pulmonary infarction.\n\n4mm nodule in the left upper lobe, indeterminate.\n\nCalcified granuloma in the right upper lobe with adjacent scarring, in keeping with previous TB.\n\nPleura: The small left pleural effusion on the previous study has resolved. No pneumothorax.\n\nMediastinum and heart: Mildly enlarged mediastinal lymph nodes measuring up to 12mm short axis, stable and likely reactive. Heart size normal. No pericardial effusion. Moderate coronary artery calcification.\n\nUpper abdomen: Hepatic steatosis.\n\nImpression:\n1. Acute bilateral lower lobe pulmonary emboli without right heart strain.\n2. Progression of fibrotic ILD since 2023 with a probable UIP pattern, in keeping with rheumatoid arthritis-associated ILD and meeting criteria for progressive pulmonary fibrosis. Methotrexate-related pneumonitis is considered less likely but cannot be excluded.\n3. No features of superimposed infection.\n4. Possible early right lower lobe infarct.\n\nADDENDUM START\nOn review of the prone images, the 4mm left upper lobe nodule is perifissural, in keeping with an intrapulmonary lymph node. No follow-up required.",
+  "output": {
+    "is_radiology_report": true,
+    "is_thoracic_imaging": true,
+    "is_unremarkable_study": false,
+    "scan_metadata": {
+      "modalities": [
+        "ct"
+      ],
+      "protocols": [
+        "ctpa",
+        "hrct",
+        "prone",
+        "expiratory"
+      ],
+      "contrast": "with_contrast",
+      "comparison_year": 2023,
+      "image_quality_desc": "Respiratory motion artefact at the lung bases on the CTPA; the HRCT sequences are diagnostic."
+    },
+    "overall_change": "progressive",
+    "overall_change_desc": "Progression of fibrotic ILD since 2023",
+    "findings": [
+      {
+        "finding": "pulmonary_embolism",
+        "finding_desc": "Occlusive filling defect in the left lower lobe lobar artery, with further non-occlusive filling defects in the right lower lobe segmental arteries",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "pulmonary_vessels",
+          "lobar_pulmonary_artery",
+          "segmental_pulmonary_artery",
+          "left_lung",
+          "left_lower_lobe",
+          "right_lung",
+          "right_lower_lobe"
+        ],
+        "anatomical_site_distribution_desc": "left lower lobe lobar artery ... right lower lobe segmental arteries"
+      },
+      {
+        "finding": "pulmonary_artery_enlargement",
+        "finding_desc": "The main pulmonary artery is enlarged at 33mm",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": "33mm",
+        "anatomical_site_distribution": [
+          "pulmonary_vessels",
+          "main_pulmonary_artery"
+        ],
+        "anatomical_site_distribution_desc": "main pulmonary artery"
+      },
+      {
+        "finding": "right_heart_strain",
+        "finding_desc": "RV:LV ratio 0.8 with no CT features of right heart strain",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "heart"
+        ],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "fibrosis",
+        "finding_desc": "Bibasal subpleural fibrotic reticulation with traction bronchiectasis",
+        "assertion": "positive",
+        "change": "progressive",
+        "change_desc": "progressed since 2023",
+        "extent": "moderate",
+        "extent_desc": "mild to moderate in extent",
+        "anatomical_site_distribution": [
+          "left_lung",
+          "right_lung",
+          "left_lower_zone",
+          "right_lower_zone",
+          "left_subpleural_peripheral",
+          "right_subpleural_peripheral"
+        ],
+        "anatomical_site_distribution_desc": "Bibasal subpleural"
+      },
+      {
+        "finding": "reticulation",
+        "finding_desc": "Bibasal subpleural fibrotic reticulation with traction bronchiectasis",
+        "assertion": "positive",
+        "change": "progressive",
+        "change_desc": "progressed since 2023",
+        "extent": "moderate",
+        "extent_desc": "mild to moderate in extent",
+        "anatomical_site_distribution": [
+          "left_lung",
+          "right_lung",
+          "left_lower_zone",
+          "right_lower_zone",
+          "left_subpleural_peripheral",
+          "right_subpleural_peripheral"
+        ],
+        "anatomical_site_distribution_desc": "Bibasal subpleural"
+      },
+      {
+        "finding": "traction_bronchiectasis",
+        "finding_desc": "Bibasal subpleural fibrotic reticulation with traction bronchiectasis",
+        "assertion": "positive",
+        "change": "progressive",
+        "change_desc": "progressed since 2023",
+        "extent": "moderate",
+        "extent_desc": "mild to moderate in extent",
+        "anatomical_site_distribution": [
+          "left_lung",
+          "right_lung",
+          "left_lower_zone",
+          "right_lower_zone",
+          "left_subpleural_peripheral",
+          "right_subpleural_peripheral"
+        ],
+        "anatomical_site_distribution_desc": "Bibasal subpleural"
+      },
+      {
+        "finding": "honeycombing",
+        "finding_desc": "No honeycombing",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "ground_glass",
+        "finding_desc": "Minor ground glass in the right lower lobe, unchanged",
+        "assertion": "positive",
+        "change": "stable",
+        "change_desc": "unchanged",
+        "extent": "mild_small",
+        "extent_desc": "Minor",
+        "anatomical_site_distribution": [
+          "right_lung",
+          "right_lower_lobe"
+        ],
+        "anatomical_site_distribution_desc": "right lower lobe"
+      },
+      {
+        "finding": "probable_uip_pattern",
+        "finding_desc": "The appearances represent a probable UIP pattern",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "mosaic_attenuation",
+        "finding_desc": "No mosaic attenuation or air trapping on expiratory imaging",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "air_trapping",
+        "finding_desc": "No mosaic attenuation or air trapping on expiratory imaging",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "opacity",
+        "finding_desc": "Small wedge-shaped peripheral opacity in the right lower lobe",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "mild_small",
+        "extent_desc": "Small",
+        "anatomical_site_distribution": [
+          "right_lung",
+          "right_lower_lobe",
+          "right_subpleural_peripheral"
+        ],
+        "anatomical_site_distribution_desc": "peripheral ... right lower lobe"
+      },
+      {
+        "finding": "pulmonary_infarct",
+        "finding_desc": "may represent early pulmonary infarction",
+        "assertion": "uncertain",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "right_lung",
+          "right_lower_lobe",
+          "right_subpleural_peripheral"
+        ],
+        "anatomical_site_distribution_desc": "peripheral ... right lower lobe"
+      },
+      {
+        "finding": "nodule",
+        "finding_desc": "4mm left upper lobe nodule is perifissural, in keeping with an intrapulmonary lymph node",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": "4mm",
+        "anatomical_site_distribution": [
+          "left_lung",
+          "left_upper_lobe"
+        ],
+        "anatomical_site_distribution_desc": "left upper lobe"
+      },
+      {
+        "finding": "perifissural_nodule",
+        "finding_desc": "4mm left upper lobe nodule is perifissural, in keeping with an intrapulmonary lymph node",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": "4mm",
+        "anatomical_site_distribution": [
+          "left_lung",
+          "left_upper_lobe"
+        ],
+        "anatomical_site_distribution_desc": "left upper lobe"
+      },
+      {
+        "finding": "calcified_granuloma",
+        "finding_desc": "Calcified granuloma in the right upper lobe",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "right_lung",
+          "right_upper_lobe"
+        ],
+        "anatomical_site_distribution_desc": "right upper lobe"
+      },
+      {
+        "finding": "scarring",
+        "finding_desc": "adjacent scarring",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "right_lung",
+          "right_upper_lobe"
+        ],
+        "anatomical_site_distribution_desc": "right upper lobe"
+      },
+      {
+        "finding": "pleural_effusion",
+        "finding_desc": "The small left pleural effusion on the previous study has resolved",
+        "assertion": "positive",
+        "change": "resolved",
+        "change_desc": "has resolved",
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "left_pleura"
+        ],
+        "anatomical_site_distribution_desc": "left"
+      },
+      {
+        "finding": "pneumothorax",
+        "finding_desc": "No pneumothorax",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "lymphadenopathy",
+        "finding_desc": "Mildly enlarged mediastinal lymph nodes measuring up to 12mm short axis, stable and likely reactive",
+        "assertion": "positive",
+        "change": "stable",
+        "change_desc": "stable",
+        "extent": "mild_small",
+        "extent_desc": "Mildly enlarged ... up to 12mm short axis",
+        "anatomical_site_distribution": [
+          "mediastinum"
+        ],
+        "anatomical_site_distribution_desc": "mediastinal"
+      },
+      {
+        "finding": "cardiomegaly",
+        "finding_desc": "Heart size normal",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "heart"
+        ],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "pericardial_effusion",
+        "finding_desc": "No pericardial effusion",
+        "assertion": "negated",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "pericardium"
+        ],
+        "anatomical_site_distribution_desc": null
+      },
+      {
+        "finding": "coronary_artery_calcification",
+        "finding_desc": "Moderate coronary artery calcification",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "moderate",
+        "extent_desc": "Moderate",
+        "anatomical_site_distribution": [
+          "heart"
+        ],
+        "anatomical_site_distribution_desc": "coronary artery"
+      },
+      {
+        "finding": "hepatic_steatosis",
+        "finding_desc": "Hepatic steatosis",
+        "assertion": "positive",
+        "change": "not_stated",
+        "change_desc": null,
+        "extent": "not_stated",
+        "extent_desc": null,
+        "anatomical_site_distribution": [
+          "upper_abdomen",
+          "liver"
+        ],
+        "anatomical_site_distribution_desc": "Upper abdomen"
+      }
+    ],
+    "diagnoses": [
+      {
+        "diagnosis": "interstitial_lung_disease",
+        "diagnosis_desc": "fibrotic ILD",
+        "assertion": "positive"
+      },
+      {
+        "diagnosis": "ctd_ild",
+        "diagnosis_desc": "in keeping with rheumatoid arthritis-associated ILD",
+        "assertion": "positive"
+      },
+      {
+        "diagnosis": "progressive_pulmonary_fibrosis",
+        "diagnosis_desc": "meeting criteria for progressive pulmonary fibrosis",
+        "assertion": "positive"
+      },
+      {
+        "diagnosis": "drug_induced_pneumonitis",
+        "diagnosis_desc": "Methotrexate-related pneumonitis is considered less likely but cannot be excluded",
+        "assertion": "uncertain"
+      },
+      {
+        "diagnosis": "pneumonia_infection",
+        "diagnosis_desc": "No features of superimposed infection",
+        "assertion": "negated"
+      },
+      {
+        "diagnosis": "tuberculosis",
+        "diagnosis_desc": "in keeping with previous TB",
+        "assertion": "positive"
+      }
+    ],
+    "scores": [
+      {
+        "score_name_desc": "Qanadli obstruction index",
+        "score_value_desc": "25%"
+      }
+    ]
+  }
+}
