@@ -1,0 +1,14 @@
+name: chestradschema test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - schemas/chestradschema/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      working-directory: schemas/chestradschema
