@@ -46,8 +46,9 @@ The user wires that config into the pipeline's notebook and runs the correction.
 - Assign each finding to one of:
   - the prompt, for records with no valid extraction, which Claude must create or fix;
   - a rule, for a mechanical fix to a valid extraction, decidable from its fields and a regular expression over the note;
-  - upstream, for a fix to the datagen prompt or schema, which is suggested to the user and not made;
   - none, for judgement calls on valid extractions (e.g. procedure choice or summaries), which neither the prompt nor the rules can safely make.
+- The schema and datagen prompt are fixed, as the user may not be able to change them, so never triage a finding to a change in either.
+  Where their wording is ambiguous, read it as written, and triage the finding to a rule only if every reading agrees, otherwise to none.
 - Present the census, the findings with their counts and sources, and the triage to the user, and agree them before writing anything.
 
 ## 5. Write the prompt
@@ -73,4 +74,4 @@ The user wires that config into the pipeline's notebook and runs the correction.
 
 ## 7. Report
 
-- Report the files written, the dry run counts and any upstream suggestions.
+- Report the files written and the dry run counts.
