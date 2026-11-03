@@ -131,39 +131,30 @@ class CostEstimator:
             },
         )["inputTokens"]
 
-    def estimate(
-        self, documents: list[Document], sample_sizes: list[int]
-    ) -> dict[int, float]:
-        """Estimate the cost of generating each sample size.
+    def estimate(self, documents: list[Document], sample_size: int) -> float:
+        """Estimate the cost of generating a sample size.
 
         Args:
             documents (list[Document]): Documents in the order they would be
                 sent for generation
-            sample_sizes (list[int]): Numbers of samples to estimate the cost
-                of, each drawn from the start of `documents`
+            sample_size (int): Number of samples to estimate the cost of,
+                drawn from the start of `documents`
 
         Returns:
-            dict[int, float]: The upper-bound USD cost of each sample size
+            float: The upper-bound USD cost of the sample size
 
         """
         prices: TokenPrices = self._prices()
-        costs: dict[int, float] = {
-            sample_size: sum(
-                self._count_tokens(document) * prices.per_input_token
-                + self.__max_tokens * prices.per_output_token
-                for document in islice(documents, sample_size)
-            )
-            for sample_size in sample_sizes
-        }
-        self.__estimated_sample_size = max(sample_sizes)
-        self.__logger.info(
-            f"Upper-bound cost with {self.__model}: "
-            + ", ".join(
-                f"{sample_size} samples ${cost:.2f}"
-                for sample_size, cost in costs.items()
-            )
+        cost: float = sum(
+            self._count_tokens(document) * prices.per_input_token
+            + self.__max_tokens * prices.per_output_token
+            for document in islice(documents, sample_size)
         )
-        return costs
+        self.__estimated_sample_size = max(self.__estimated_sample_size, sample_size)
+        self.__logger.info(
+            f"Upper-bound cost of {sample_size} samples with {self.__model}: ${cost:.2f}"
+        )
+        return cost
 
     def warn_if_unestimated(self, sample_size: int) -> None:
         """Warn if no estimate covers generating this sample size.

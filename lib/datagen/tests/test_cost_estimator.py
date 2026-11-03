@@ -206,32 +206,29 @@ def test_count_tokens_document_given_counts_with_base_model(
 
 
 @pytest.mark.parametrize(
-    ("sample_sizes", "expected"),
-    [
-        ([1, 3], {1: 1.1, 3: 6.3}),
-        ([2, 10], {2: 3.2, 10: 6.3}),
-    ],
+    ("sample_size", "expected"),
+    [(1, 1.1), (3, 6.3), (10, 6.3)],
 )
-def test_estimate_sample_sizes_given_returns_cumulative_costs(
+def test_estimate_sample_size_given_returns_cost(
     estimate_mocks: EstimateMocks,
     estimator: CostEstimatorFixture,
     documents: list[Document],
-    sample_sizes: list[int],
-    expected: dict[int, float],
+    sample_size: int,
+    expected: float,
 ) -> None:
-    assert estimator.estimate(documents, sample_sizes) == pytest.approx(expected)
+    assert estimator.estimate(documents, sample_size) == pytest.approx(expected)
 
 
 def test_estimate_no_documents_returns_zero(
     estimate_mocks: EstimateMocks, estimator: CostEstimatorFixture
 ) -> None:
-    assert estimator.estimate([], [5]) == {5: 0.0}
+    assert estimator.estimate([], 5) == 0.0
 
 
 @pytest.mark.parametrize(
     ("estimated_sizes", "sample_size", "warned"),
     [
-        (None, 10, True),
+        ([], 10, True),
         ([5], 10, True),
         ([10, 5], 10, False),
     ],
@@ -240,12 +237,12 @@ def test_warn_if_unestimated_sample_size_given_warns_when_uncovered(
     mocker: MockerFixture,
     estimate_mocks: EstimateMocks,
     estimator: CostEstimatorFixture,
-    estimated_sizes: list[int] | None,
+    estimated_sizes: list[int],
     sample_size: int,
     warned: bool,
 ) -> None:
-    if estimated_sizes:
-        estimator.estimate([], estimated_sizes)
+    for estimated_size in estimated_sizes:
+        estimator.estimate([], estimated_size)
     warning: MagicMock = mocker.patch("logging.Logger.warning")
     estimator.warn_if_unestimated(sample_size)
     assert warning.called == warned

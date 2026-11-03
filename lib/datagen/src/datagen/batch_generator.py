@@ -319,22 +319,22 @@ class BedrockBatchGenerator(BatchGenerator):
             self._model_max_tokens,
         )
 
-    def estimate_cost(self, sample_sizes: list[int]) -> dict[int, float]:
-        """Estimate the upper-bound USD cost of generating each sample size via batch inference.
+    def estimate_cost(self, sample_size: int) -> float:
+        """Estimate the upper-bound USD cost of generating a sample size via batch inference.
 
         Args:
-            sample_sizes: Numbers of samples to estimate the cost of, each
-                drawn in order from the documents not sent in a previous batch
+            sample_size: Number of samples to estimate the cost of, drawn in
+                order from the documents not sent in a previous batch
 
         Returns:
-            The upper-bound USD cost of each sample size
+            The upper-bound USD cost of the sample size
 
         Raises:
             ValueError: If every available document has already been sent
 
         """
         return self.__cost_estimator.estimate(
-            list(self._pending_documents(max(sample_sizes)).values()), sample_sizes
+            list(self._pending_documents(sample_size).values()), sample_size
         )
 
     def generate_via_batch(

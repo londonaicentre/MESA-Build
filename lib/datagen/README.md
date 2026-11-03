@@ -23,10 +23,10 @@ See [examples](examples/).
     )
     ```
 
-4. Estimate the upper-bound cost, in USD, of each sample size you may generate
+4. Estimate the upper-bound cost, in USD, of each sample size you may generate, with one call per size
 
     ```python
-    gen.estimate_cost([100, 3000])
+    gen.estimate_cost(3000)
     ```
 
 5. Start batch generation

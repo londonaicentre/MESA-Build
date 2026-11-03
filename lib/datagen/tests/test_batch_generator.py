@@ -599,7 +599,7 @@ def test_init_bedrock_model_unpriced_raises(
         BedrockBatchGenerator("foo", MagicMock, "baz", "bar_model", ["foobar.tar.gz"])
 
 
-def test_estimate_cost_sample_sizes_given_estimates_pending_documents(
+def test_estimate_cost_sample_size_given_estimates_pending_documents(
     mocker: MockerFixture,
     mock_cost_estimator: MagicMock,
     bedrock_generator: BedrockBatchGenerator,
@@ -609,12 +609,10 @@ def test_estimate_cost_sample_sizes_given_estimates_pending_documents(
         "_pending_documents",
         return_value={"id0": "foo", "id1": "bar"},
     )
-    mock_cost_estimator.return_value.estimate.return_value = {1: 0.5, 2: 1.0}
-    assert bedrock_generator.estimate_cost([1, 2]) == {1: 0.5, 2: 1.0}
+    mock_cost_estimator.return_value.estimate.return_value = 1.0
+    assert bedrock_generator.estimate_cost(2) == 1.0
     pending_documents.assert_called_once_with(2)
-    mock_cost_estimator.return_value.estimate.assert_called_once_with(
-        ["foo", "bar"], [1, 2]
-    )
+    mock_cost_estimator.return_value.estimate.assert_called_once_with(["foo", "bar"], 2)
 
 
 @pytest.mark.parametrize(
