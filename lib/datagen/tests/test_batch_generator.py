@@ -119,11 +119,14 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
     mock_config.return_value = MockConfig(
         models={
             "foo_model": MagicMock(
-                model="bedrock/foo", region="eu-west-2", batch_file="batch.jsonl"
+                model="bedrock/foo",
+                region="eu-west-2",
+                batch_file="batch.jsonl",
+                max_tokens=123,
             )
         },
         runtime_model=MagicMock(
-            model="", region="eu-west-1", batch_file="runtime.jsonl"
+            model="", region="eu-west-1", batch_file="runtime.jsonl", max_tokens=456
         ),
     )
     return GeneratorDependencies(
@@ -526,9 +529,9 @@ def test_generate_batch_sample_size_given_creates_correct_entries(
     generator.generate_batch(3)
     mock_batch_dependencies._pending_documents.assert_called_once_with(3)
     assert [
-        call.args[0]
+        (call.args[0], call.args[3])
         for call in mock_batch_dependencies.create_anthropic_bedrock_batch_entry.call_args_list
-    ] == ["id0", "id1", "id2"]
+    ] == [("id0", 123), ("id1", 123), ("id2", 123)]
 
 
 def test_generate_batch_documents_pending_returns_record_ids(

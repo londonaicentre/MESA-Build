@@ -15,6 +15,7 @@ class ModelConfig(BaseModel):
     model: str
     region: str
     batch_file: str
+    max_tokens: int = 8192
 
 
 class Config(BaseSettings):

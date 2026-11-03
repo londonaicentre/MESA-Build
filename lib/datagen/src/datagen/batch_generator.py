@@ -80,6 +80,7 @@ class BatchGenerator:
         self._model_region: str = model.region
         os.environ["AWS_REGION_NAME"] = self._model_region
         self._model_batch_file: str = model.batch_file
+        self._model_max_tokens: int = model.max_tokens
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
@@ -164,6 +165,7 @@ class BatchGenerator:
                             record_id,
                             self.__system_prompt,
                             doc.content,
+                            self._model_max_tokens,
                         )
                     ),
                     file=outfile,
