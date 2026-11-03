@@ -18,6 +18,7 @@ from pathlib import Path
 from pydantic import BaseModel
 
 from datagen.config import Config, ModelConfig
+from datagen.cost_estimator import CostEstimator
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
 from datagen.version_detector import get_schema_version
@@ -81,6 +82,7 @@ class BatchGenerator:
         os.environ["AWS_REGION_NAME"] = self._model_region
         self._model_batch_file: str = model.batch_file
         self._model_max_tokens: int = model.max_tokens
+        self._model_price_list_model: str | None = model.price_list_model
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
@@ -283,7 +285,57 @@ class BedrockBatchGenerator(BatchGenerator):
     """Bedrock batch sample generator.
 
     Uses AWS Bedrock batch inference API for cost-effective large-scale generation.
+
+    Args:
+        system_prompt: System prompt for sample generation
+        schema: Pydantic schema class for validation
+        schema_name: Schema name for output filenames
+        model_name: Model name from config.json with a `price_list_model`
+            (e.g., 'sonnet4', 'opus4')
+        document_batches: S3 batch filenames to download
+
+    Raises:
+        ValueError: If the model has no `price_list_model` in config.json
     """
+
+    def __init__(
+        self,
+        system_prompt: str,
+        schema: type[BaseModel],
+        schema_name: str,
+        model_name: str,
+        document_batches: list[str],
+    ):
+        super().__init__(
+            system_prompt, schema, schema_name, model_name, document_batches
+        )
+        if self._model_price_list_model is None:
+            raise ValueError(f"{model_name} has no price_list_model in config.json")
+        self.__cost_estimator: CostEstimator = CostEstimator(
+            self._model_id,
+            self._model_price_list_model,
+            self._model_region,
+            system_prompt,
+            self._model_max_tokens,
+        )
+
+    def estimate_cost(self, sample_sizes: list[int]) -> dict[int, float]:
+        """Estimate the upper-bound USD cost of generating each sample size via batch inference.
+
+        Args:
+            sample_sizes: Numbers of samples to estimate the cost of, each
+                drawn in order from the documents not sent in a previous batch
+
+        Returns:
+            The upper-bound USD cost of each sample size
+
+        Raises:
+            ValueError: If every available document has already been sent
+
+        """
+        return self.__cost_estimator.estimate(
+            list(self._pending_documents(max(sample_sizes)).values()), sample_sizes
+        )
 
     def generate_via_batch(
         self,
@@ -308,6 +360,7 @@ class BedrockBatchGenerator(BatchGenerator):
             ValueError: If every available document has already been sent
 
         """
+        self.__cost_estimator.warn_if_unestimated(sample_size)
         return self._submit_batch(
             sample_size,
             lambda job_id: AWS.run_batch_inference(

@@ -123,10 +123,22 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
                 region="eu-west-2",
                 batch_file="batch.jsonl",
                 max_tokens=123,
-            )
+                price_list_model="Foo Bar 1.2",
+            ),
+            "bar_model": MagicMock(
+                model="bedrock/bar",
+                region="eu-west-2",
+                batch_file="batch.jsonl",
+                max_tokens=123,
+                price_list_model=None,
+            ),
         },
         runtime_model=MagicMock(
-            model="", region="eu-west-1", batch_file="runtime.jsonl", max_tokens=456
+            model="",
+            region="eu-west-1",
+            batch_file="runtime.jsonl",
+            max_tokens=456,
+            price_list_model=None,
         ),
     )
     return GeneratorDependencies(
@@ -167,10 +179,16 @@ GENERATOR_ARGS: dict[str, Any] = {
 
 
 @pytest.fixture
+def mock_cost_estimator(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("datagen.batch_generator.CostEstimator", autospec=True)
+
+
+@pytest.fixture
 def bedrock_generator(
     mock_path_operations: PathOperations,
     mock_filesystem: FileSystem,
     mock_generator_dependencies: GeneratorDependencies,
+    mock_cost_estimator: MagicMock,
 ) -> BedrockBatchGenerator:
     return BedrockBatchGenerator(**GENERATOR_ARGS)
 
@@ -551,6 +569,51 @@ def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.run_batch_inference.assert_called_once_with(
         "baz/qux", "bedrock/foo", "batch.jsonl", "foo", "bar", "eu-west-2"
+    )
+
+
+def test_generate_via_batch_sample_size_given_checks_cost_estimate(
+    mock_generate_via_dependencies: GenerateViaDependencies,
+    mock_cost_estimator: MagicMock,
+    bedrock_generator: BedrockBatchGenerator,
+) -> None:
+    bedrock_generator.generate_via_batch(10, "foo", "bar")
+    mock_cost_estimator.return_value.warn_if_unestimated.assert_called_once_with(10)
+
+
+def test_init_bedrock_model_priced_creates_cost_estimator(
+    mock_cost_estimator: MagicMock, bedrock_generator: BedrockBatchGenerator
+) -> None:
+    mock_cost_estimator.assert_called_once_with(
+        "bedrock/foo", "Foo Bar 1.2", "eu-west-2", "foo", 123
+    )
+
+
+def test_init_bedrock_model_unpriced_raises(
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+    mock_cost_estimator: MagicMock,
+) -> None:
+    with pytest.raises(ValueError, match="bar_model has no price_list_model"):
+        BedrockBatchGenerator("foo", MagicMock, "baz", "bar_model", ["foobar.tar.gz"])
+
+
+def test_estimate_cost_sample_sizes_given_estimates_pending_documents(
+    mocker: MockerFixture,
+    mock_cost_estimator: MagicMock,
+    bedrock_generator: BedrockBatchGenerator,
+) -> None:
+    pending_documents: MagicMock = mocker.patch.object(
+        bedrock_generator,
+        "_pending_documents",
+        return_value={"id0": "foo", "id1": "bar"},
+    )
+    mock_cost_estimator.return_value.estimate.return_value = {1: 0.5, 2: 1.0}
+    assert bedrock_generator.estimate_cost([1, 2]) == {1: 0.5, 2: 1.0}
+    pending_documents.assert_called_once_with(2)
+    mock_cost_estimator.return_value.estimate.assert_called_once_with(
+        ["foo", "bar"], [1, 2]
     )
 
 
