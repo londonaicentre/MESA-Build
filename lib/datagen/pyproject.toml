@@ -6,7 +6,7 @@ authors = [
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
 ]
-version = "1.4.1"
+version = "1.5.0"
 requires-python = ">=3.12"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
@@ -33,7 +33,7 @@ datagen = [
 ]
 [dependency-groups]
 dev = [
-    "boto3-stubs>=1.41.2",
+    "boto3-stubs[bedrock-runtime,pricing]>=1.41.2",
     "mypy>=1.18.2",
     "pytest>=9.0.2",
     "pytest-mock>=3.15.1",

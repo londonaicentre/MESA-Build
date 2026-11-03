@@ -23,7 +23,13 @@ See [examples](examples/).
     )
     ```
 
-4. Start batch generation
+4. Estimate the upper-bound cost, in USD, of each sample size you may generate, with one call per size
+
+    ```python
+    gen.estimate_cost(3000)
+    ```
+
+5. Start batch generation
 
     ```python
     gen.generate_via_batch(
@@ -34,7 +40,7 @@ See [examples](examples/).
     ```
 
     Alternatively, run the batch on the MESA Runtime instead of Bedrock, serving the `model` of the `model_name` entry in `config.json`.
-    Construct a `MESARuntimeBatchGenerator` in place of the `BedrockBatchGenerator` in step 3, taking the same arguments plus `base_url`, `username` and `password` for the MESA Runtime API.
+    Construct a `MESARuntimeBatchGenerator` in place of the `BedrockBatchGenerator` in step 3, skipping step 4, taking the same arguments plus `base_url`, `username` and `password` for the MESA Runtime API.
     Omit `model_name` to split samples across every model the runtime serves, then:
 
     ```python
@@ -47,7 +53,7 @@ See [examples](examples/).
     Pass `model_name = None` to split samples across every model the runtime serves, in turn, rather than using a `config.json` model.
     Output is written in the Bedrock batch format, so the remaining steps are unchanged.
 
-5. Download and parse batch outputs
+6. Download and parse batch outputs
 
     ```python
     gen.extract_batch_output(
@@ -56,7 +62,7 @@ See [examples](examples/).
     )
     ```
 
-6. Upload formatted document:schema pairs as training data
+7. Upload formatted document:schema pairs as training data
 
     ```python
     from datagen import TrainingDataUploader

@@ -119,11 +119,26 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
     mock_config.return_value = MockConfig(
         models={
             "foo_model": MagicMock(
-                model="bedrock/foo", region="eu-west-2", batch_file="batch.jsonl"
-            )
+                model="bedrock/foo",
+                region="eu-west-2",
+                batch_file="batch.jsonl",
+                max_tokens=123,
+                price_list_model="Foo Bar 1.2",
+            ),
+            "bar_model": MagicMock(
+                model="bedrock/bar",
+                region="eu-west-2",
+                batch_file="batch.jsonl",
+                max_tokens=123,
+                price_list_model=None,
+            ),
         },
         runtime_model=MagicMock(
-            model="", region="eu-west-1", batch_file="runtime.jsonl"
+            model="",
+            region="eu-west-1",
+            batch_file="runtime.jsonl",
+            max_tokens=456,
+            price_list_model=None,
         ),
     )
     return GeneratorDependencies(
@@ -164,10 +179,16 @@ GENERATOR_ARGS: dict[str, Any] = {
 
 
 @pytest.fixture
+def mock_cost_estimator(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch("datagen.batch_generator.CostEstimator", autospec=True)
+
+
+@pytest.fixture
 def bedrock_generator(
     mock_path_operations: PathOperations,
     mock_filesystem: FileSystem,
     mock_generator_dependencies: GeneratorDependencies,
+    mock_cost_estimator: MagicMock,
 ) -> BedrockBatchGenerator:
     return BedrockBatchGenerator(**GENERATOR_ARGS)
 
@@ -526,9 +547,9 @@ def test_generate_batch_sample_size_given_creates_correct_entries(
     generator.generate_batch(3)
     mock_batch_dependencies._pending_documents.assert_called_once_with(3)
     assert [
-        call.args[0]
+        (call.args[0], call.args[3])
         for call in mock_batch_dependencies.create_anthropic_bedrock_batch_entry.call_args_list
-    ] == ["id0", "id1", "id2"]
+    ] == [("id0", 123), ("id1", 123), ("id2", 123)]
 
 
 def test_generate_batch_documents_pending_returns_record_ids(
@@ -549,6 +570,49 @@ def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
     mock_generate_via_dependencies.run_batch_inference.assert_called_once_with(
         "baz/qux", "bedrock/foo", "batch.jsonl", "foo", "bar", "eu-west-2"
     )
+
+
+def test_generate_via_batch_sample_size_given_checks_cost_estimate(
+    mock_generate_via_dependencies: GenerateViaDependencies,
+    mock_cost_estimator: MagicMock,
+    bedrock_generator: BedrockBatchGenerator,
+) -> None:
+    bedrock_generator.generate_via_batch(10, "foo", "bar")
+    mock_cost_estimator.return_value.warn_if_unestimated.assert_called_once_with(10)
+
+
+def test_init_bedrock_model_priced_creates_cost_estimator(
+    mock_cost_estimator: MagicMock, bedrock_generator: BedrockBatchGenerator
+) -> None:
+    mock_cost_estimator.assert_called_once_with(
+        "bedrock/foo", "Foo Bar 1.2", "eu-west-2", "foo", 123
+    )
+
+
+def test_init_bedrock_model_unpriced_raises(
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+    mock_cost_estimator: MagicMock,
+) -> None:
+    with pytest.raises(ValueError, match="bar_model has no price_list_model"):
+        BedrockBatchGenerator("foo", MagicMock, "baz", "bar_model", ["foobar.tar.gz"])
+
+
+def test_estimate_cost_sample_size_given_estimates_pending_documents(
+    mocker: MockerFixture,
+    mock_cost_estimator: MagicMock,
+    bedrock_generator: BedrockBatchGenerator,
+) -> None:
+    pending_documents: MagicMock = mocker.patch.object(
+        bedrock_generator,
+        "_pending_documents",
+        return_value={"id0": "foo", "id1": "bar"},
+    )
+    mock_cost_estimator.return_value.estimate.return_value = 1.0
+    assert bedrock_generator.estimate_cost(2) == 1.0
+    pending_documents.assert_called_once_with(2)
+    mock_cost_estimator.return_value.estimate.assert_called_once_with(["foo", "bar"], 2)
 
 
 @pytest.mark.parametrize(
