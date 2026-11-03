@@ -1,10 +1,11 @@
 import json
 import logging
 import re
-from itertools import islice
+from statistics import fmean
 from typing import TYPE_CHECKING, Any, ClassVar, NamedTuple
 
 import boto3
+from botocore.config import Config
 
 from mesa_types import Document
 from utils.aws import AWS
@@ -35,6 +36,7 @@ class CostEstimator:
     """
 
     __UNIT_MULTIPLIERS: ClassVar[dict[str, int]] = {"": 1, "K": 1_000, "M": 1_000_000}
+    __TOKEN_COUNT_SAMPLE_SIZE: ClassVar[int] = 50
 
     def __init__(
         self,
@@ -56,7 +58,9 @@ class CostEstimator:
         self.__max_tokens: int = max_tokens
         self.__estimated_sample_size: int = 0
         self._runtime: "BedrockRuntimeClient" = boto3.client(
-            "bedrock-runtime", region_name=region
+            "bedrock-runtime",
+            region_name=region,
+            config=Config(retries={"mode": "adaptive"}),
         )
         self._pricing: "PricingClient" = boto3.client(
             "pricing", region_name="us-east-1"
@@ -145,10 +149,20 @@ class CostEstimator:
 
         """
         prices: TokenPrices = self._prices()
-        cost: float = sum(
-            self._count_tokens(document) * prices.per_input_token
-            + self.__max_tokens * prices.per_output_token
-            for document in islice(documents, sample_size)
+        run: list[Document] = documents[:sample_size]
+        counted: int = min(len(run), CostEstimator.__TOKEN_COUNT_SAMPLE_SIZE)
+        token_counts: list[int] = [
+            self._count_tokens(run[index * len(run) // counted])
+            for index in range(counted)
+        ]
+        cost: float = (
+            len(run)
+            * (
+                fmean(token_counts) * prices.per_input_token
+                + self.__max_tokens * prices.per_output_token
+            )
+            if token_counts
+            else 0.0
         )
         self.__estimated_sample_size = max(self.__estimated_sample_size, sample_size)
         self.__logger.info(

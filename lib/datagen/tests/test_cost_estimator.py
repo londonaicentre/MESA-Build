@@ -128,9 +128,7 @@ def estimate_mocks(
         _count_tokens=mocker.patch.object(
             estimator,
             "_count_tokens",
-            side_effect=lambda document: {"bar0": 100, "bar1": 200, "bar2": 300}[
-                document.content
-            ],
+            side_effect=lambda document: 100 * (int(document.content[3:]) + 1),
         ),
     )
 
@@ -217,6 +215,27 @@ def test_estimate_sample_size_given_returns_cost(
     expected: float,
 ) -> None:
     assert estimator.estimate(documents, sample_size) == pytest.approx(expected)
+
+
+def test_estimate_many_documents_counts_spread_sample(
+    estimate_mocks: EstimateMocks, estimator: CostEstimatorFixture
+) -> None:
+    assert estimator.estimate(
+        [
+            Document.model_validate(
+                {
+                    "source": "foo",
+                    "content": f"bar{index}",
+                    "timestamp": "2026-01-01T00:00:00Z",
+                }
+            )
+            for index in range(60)
+        ],
+        60,
+    ) == pytest.approx(60 * (3000 * 0.01 + 100 * 0.001))
+    assert [
+        call.args[0].content for call in estimate_mocks._count_tokens.call_args_list
+    ] == [f"bar{index * 60 // 50}" for index in range(50)]
 
 
 def test_estimate_no_documents_returns_zero(
