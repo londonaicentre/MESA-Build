@@ -16,6 +16,7 @@ class ModelConfig(BaseModel):
     region: str
     batch_file: str
     max_tokens: int = 8192
+    price_list_model: str | None = None
 
 
 class Config(BaseSettings):

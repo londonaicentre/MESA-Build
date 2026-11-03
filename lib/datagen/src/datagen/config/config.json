@@ -1,11 +1,13 @@
 {
     "sonnet4": {
         "model": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "price_list_model": "Claude Sonnet 4.5",
         "region": "eu-west-2",
         "batch_file": "anthropic_batch_job.jsonl"
     },
     "opus4": {
         "model": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+        "price_list_model": "Claude Opus 4.5",
         "region": "eu-west-2",
         "batch_file": "anthropic_batch_job.jsonl"
     },

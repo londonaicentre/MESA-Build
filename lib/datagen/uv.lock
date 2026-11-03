@@ -243,6 +243,14 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/38/3c/0a50a08ab787db67e2b90f1defb6deb79b61a29972e624e37538c55645ec/boto3_stubs-1.41.2-py3-none-any.whl", hash = "sha256:5aac2ee5c1bed1a322016d37077e42c68c3ff83a42f989549be3ed21f0a7e0a0", size = 69296, upload-time = "2025-11-21T20:41:45.64Z" },
 ]
 
+[package.optional-dependencies]
+bedrock-runtime = [
+    { name = "mypy-boto3-bedrock-runtime" },
+]
+pricing = [
+    { name = "mypy-boto3-pricing" },
+]
+
 [[package]]
 name = "botocore"
 version = "1.43.117"
@@ -857,7 +865,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "boto3-stubs" },
+    { name = "boto3-stubs", extra = ["bedrock-runtime", "pricing"] },
     { name = "mypy" },
     { name = "pytest" },
     { name = "pytest-mock" },
@@ -881,7 +889,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "boto3-stubs", specifier = ">=1.41.2" },
+    { name = "boto3-stubs", extras = ["bedrock-runtime", "pricing"], specifier = ">=1.41.2" },
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "pytest-mock", specifier = ">=3.15.1" },
@@ -1162,6 +1170,24 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/e9/ba/89b2901dd77414dd7a8c8729985832a5735053be15b744c18e4586e506ef/mypy-1.18.2-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:20c02215a080e3a2be3aa50506c67242df1c151eaba0dcbc1e4e557922a26075", size = 13514749, upload-time = "2025-09-19T00:10:44.827Z" },
     { url = "https://files.pythonhosted.org/packages/25/bc/cc98767cffd6b2928ba680f3e5bc969c4152bf7c2d83f92f5a504b92b0eb/mypy-1.18.2-cp314-cp314-win_amd64.whl", hash = "sha256:749b5f83198f1ca64345603118a6f01a4e99ad4bf9d103ddc5a3200cc4614adf", size = 9982959, upload-time = "2025-09-19T00:10:37.344Z" },
     { url = "https://files.pythonhosted.org/packages/87/e3/be76d87158ebafa0309946c4a73831974d4d6ab4f4ef40c3b53a385a66fd/mypy-1.18.2-py3-none-any.whl", hash = "sha256:22a1748707dd62b58d2ae53562ffc4d7f8bcc727e8ac7cbc69c053ddc874d47e", size = 2352367, upload-time = "2025-09-19T00:10:15.489Z" },
+]
+
+[[package]]
+name = "mypy-boto3-bedrock-runtime"
+version = "1.41.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/12/019df59c4aba09f7bb644e2f2862a381735924c482bf9ff3928469ffb2dc/mypy_boto3_bedrock_runtime-1.41.5.tar.gz", hash = "sha256:2234cc48427acf9a1bcc0e29259eb5430eea3caea5b6cc64446a4e55fa4b3d41", size = 28893, upload-time = "2025-11-26T20:33:01.718Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fc/d9/da37e9e72b8276a189aa1c54139d1c73071e54706d834efc334f654d00a6/mypy_boto3_bedrock_runtime-1.41.5-py3-none-any.whl", hash = "sha256:afd7280fdff99a703ae1b5eef1e40ae95747ac6203c053a63312e06e272ccb06", size = 34976, upload-time = "2025-11-26T20:32:55.004Z" },
+]
+
+[[package]]
+name = "mypy-boto3-pricing"
+version = "1.41.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/fe/9961a141442eb8fc194520e55cd988956635109d181a543f03b6b8653ec5/mypy_boto3_pricing-1.41.0.tar.gz", hash = "sha256:d1c099de1196321acd90444d21773737aa9d85ba71244244b1d554057925362b", size = 17085, upload-time = "2025-11-19T20:59:45.47Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fd/20/c0e54049b80361264b11480d49ccafab3d0db5a42d4aaec1e56c43ae8c2a/mypy_boto3_pricing-1.41.0-py3-none-any.whl", hash = "sha256:ca16fa38c5c5a148935c957365d6a0f06d6449d3f720922ca4541e426d4e963a", size = 22398, upload-time = "2025-11-19T20:59:43.971Z" },
 ]
 
 [[package]]

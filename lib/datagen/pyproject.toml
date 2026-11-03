@@ -33,7 +33,7 @@ datagen = [
 ]
 [dependency-groups]
 dev = [
-    "boto3-stubs>=1.41.2",
+    "boto3-stubs[bedrock-runtime,pricing]>=1.41.2",
     "mypy>=1.18.2",
     "pytest>=9.0.2",
     "pytest-mock>=3.15.1",
