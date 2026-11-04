@@ -1,3 +1,6 @@
+import os
+import subprocess
+import tempfile
 from re import Match, DOTALL, search
 from typing import Any, Literal
 
@@ -43,6 +46,8 @@ class BatchOutputs(BaseModel):
 
 
 class LLM:
+    __THINKING_TOKENS: int = 3000
+
     @staticmethod
     def completion(
         model_name: str,
@@ -80,6 +85,51 @@ class LLM:
             stream=False,
             **kwargs,
         )
+
+    @staticmethod
+    def claude_code(model_name: str, system_prompt: str, user_prompt: str) -> str:
+        """Use Claude Code non-interactively, with no tools, settings or session.
+
+        Args:
+            model_name (str): The model, as accepted by `claude --model`
+            system_prompt (str): The system prompt to use
+            user_prompt (str): The user prompt to use
+
+        Returns:
+            str: The model's response, stripped of surrounding whitespace
+
+        Raises:
+            CalledProcessError: If Claude Code exits with an error
+
+        """
+        return subprocess.run(
+            [
+                "claude",
+                "-p",
+                "--model",
+                model_name,
+                "--system-prompt",
+                system_prompt,
+                "--tools",
+                "",
+                "--strict-mcp-config",
+                "--setting-sources",
+                "",
+                "--disable-slash-commands",
+                "--no-session-persistence",
+                "--settings",
+                '{"alwaysThinkingEnabled": true}',
+            ],
+            input=user_prompt,
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=tempfile.gettempdir(),
+            env={
+                **os.environ,
+                "MAX_THINKING_TOKENS": str(LLM.__THINKING_TOKENS),
+            },
+        ).stdout.strip()
 
     @staticmethod
     def extract_output_content(response_text: str) -> tuple[bool, str, str]:
