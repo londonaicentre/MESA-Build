@@ -6,6 +6,7 @@ from unittest.mock import MagicMock
 
 import pytest
 from docsynth.types.documents import DocsynthDocument
+from docsynth.types.sampling import SamplingElement
 from pytest_mock import MockerFixture
 from yaml import safe_load
 
@@ -26,6 +27,10 @@ class DocumentsFixture(Documents):
         Documents._reset_folder(folder)
 
     @staticmethod
+    def sections(domain: str) -> dict[str, SamplingElement]:
+        return Documents._sections(domain)
+
+    @staticmethod
     def supplement(folder: Path) -> int:
         return Documents._supplement(folder)
 
@@ -37,6 +42,9 @@ class DocumentsFixture(Documents):
     def render(folder: Path, doc_ids: list[str], chars: int) -> str:
         return Documents._render(folder, doc_ids, chars)
 
+    def options(self, document: DocsynthDocument) -> dict[str, list[str]]:
+        return self._options(document)
+
     @staticmethod
     def read_document(folder: Path, doc_id: str) -> DocsynthDocument:
         return Documents._read_document(folder, doc_id)
@@ -47,6 +55,7 @@ class ConstructorMocks:
     getLogger: MagicMock
     basicConfig: MagicMock
     _read_text: MagicMock
+    _sections: MagicMock
 
 
 @dataclass
@@ -77,13 +86,38 @@ def make_document(
     )
 
 
+STYLE: dict[str, SamplingElement] = {
+    "foo_bar": SamplingElement.model_validate(
+        {
+            "mutually_exclusive": True,
+            "baz": {"probability": 3, "description": "Baz qux."},
+            "quux": {"probability": 1, "description": ""},
+        }
+    )
+}
+CONTENT: dict[str, SamplingElement] = {
+    "corge": SamplingElement.model_validate(
+        {
+            "grault": {"probability": 0.5, "description": "Grault."},
+            "garply": {"probability": 0.2, "description": "Garply."},
+        }
+    )
+}
+
+
 @pytest.fixture
 def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
     return ConstructorMocks(
         getLogger=mocker.patch("documents.logging.getLogger"),
         basicConfig=mocker.patch("documents.logging.basicConfig"),
         _read_text=mocker.patch.object(
-            Documents, "_read_text", return_value="output:\n  subdirectory: foo\n"
+            Documents,
+            "_read_text",
+            return_value="output:\n  subdirectory: foo\n"
+            "profile_selection:\n  domain: waldo\n",
+        ),
+        _sections=mocker.patch.object(
+            Documents, "_sections", return_value=STYLE | CONTENT
         ),
     )
 
@@ -150,6 +184,12 @@ class TestDocumentAccess:
         self, documents: DocumentsFixture, constructor_mocks: ConstructorMocks
     ) -> None:
         constructor_mocks._read_text.assert_called_once_with(Path("pipeline.yml"))
+        constructor_mocks._sections.assert_called_once_with("waldo")
+
+    def test_sections_domain_returns_style_and_content_sections(self) -> None:
+        assert {"document_type", "present_findings"} <= set(
+            DocumentsFixture.sections("chestrad")
+        )
 
     def test_doc_ids_folder_returns_sorted_ids_without_metadata(
         self, tmp_path: Path
@@ -182,6 +222,58 @@ class TestDocumentAccess:
         )
 
 
+class TestCensus:
+    @pytest.mark.parametrize(
+        "requirements, expected",
+        [
+            (
+                "**Foo Bar:**\n- Baz qux.\n\n**Corge:**\n- Grault.\n- Garply.",
+                {"foo_bar": ["baz"], "corge": ["grault", "garply"]},
+            ),
+            ("**Corge:**\n- Garply.", {"foo_bar": ["quux"], "corge": ["garply"]}),
+        ],
+    )
+    def test_options_prompt_returns_selected_options(
+        self,
+        documents: DocumentsFixture,
+        requirements: str,
+        expected: dict[str, list[str]],
+    ) -> None:
+        assert (
+            documents.options(
+                make_document(
+                    prompt="# SPECIFIC INSTRUCTIONS\n\n## FRED\n\n"
+                    f"{requirements}\n\n# YOUR TASK\n"
+                )
+            )
+            == expected
+        )
+
+    def test_census_documents_reports_shares(
+        self,
+        documents: DocumentsFixture,
+        mocker: MockerFixture,
+        constructor_mocks: ConstructorMocks,
+        document_mocks: DocumentMocks,
+    ) -> None:
+        mocker.patch.object(Documents, "_doc_ids", return_value=["foo", "bar"])
+        mocker.patch.object(
+            Documents,
+            "_options",
+            side_effect=[
+                {"foo_bar": ["baz"], "corge": ["grault"]},
+                {"foo_bar": ["quux"], "corge": ["grault", "garply"]},
+            ],
+        )
+        documents.census()
+        constructor_mocks.getLogger.return_value.info.assert_called_once_with(
+            "foo_bar\n  baz: 1/2 (50%), configured 75%\n"
+            "  quux: 1/2 (50%), configured 25%\n"
+            "corge\n  grault: 2/2 (100%), configured 50%\n"
+            "  garply: 1/2 (50%), configured 20%"
+        )
+
+
 class TestSample:
     @pytest.mark.parametrize("size, expected_sizes", [(10, [2, 1]), (1, [1])])
     def test_sample_size_writes_manifests(
@@ -207,6 +299,35 @@ class TestSample:
             "bar",
             "baz",
         }
+
+    def test_sample_requirement_samples_matching_documents(
+        self,
+        documents: DocumentsFixture,
+        mocker: MockerFixture,
+        document_mocks: DocumentMocks,
+    ) -> None:
+        mocker.patch.object(Documents, "_doc_ids", return_value=["foo", "bar"])
+        mocker.patch.object(
+            Documents,
+            "_options",
+            side_effect=[{"corge": ["grault"]}, {"corge": ["garply"]}],
+        )
+        documents.sample(10, 5, ("corge", "garply"))
+        document_mocks._write_text.assert_called_once_with(
+            Documents.SCRATCH_FOLDER / "documents-corge-garply_1.json",
+            json.dumps(["bar"]),
+        )
+
+    @pytest.mark.parametrize("requirement", [("fred", "baz"), ("foo_bar", "fred")])
+    def test_sample_unknown_requirement_raises(
+        self,
+        documents: DocumentsFixture,
+        mocker: MockerFixture,
+        requirement: tuple[str, str],
+    ) -> None:
+        mocker.patch.object(Documents, "_doc_ids", return_value=["foo"])
+        with pytest.raises(ValueError, match="Unknown requirement"):
+            documents.sample(10, 5, requirement)
 
 
 class TestShow:
@@ -258,6 +379,7 @@ class TestTestSupplement:
         }
         assert safe_load(written[Documents.TEST_FOLDER / "pipeline.yml"]) == {
             "output": {"subdirectory": "supplement"},
+            "profile_selection": {"domain": "waldo"},
         }
         assert safe_load(written[Documents.TEST_FOLDER / "supplement.yaml"]) == {
             "supplements": [
@@ -283,7 +405,13 @@ class TestMain:
     @pytest.mark.parametrize(
         "arguments, method, expected",
         [
-            (["sample", "--size", "5", "--batch", "2"], "sample", (5, 2)),
+            (["sample", "--size", "5", "--batch", "2"], "sample", (5, 2, None)),
+            (
+                ["sample", "--requirement", "foo=bar"],
+                "sample",
+                (100, 25, ("foo", "bar")),
+            ),
+            (["census"], "census", ()),
             (["show", "foo", "bar", "--chars", "10"], "show", (["foo", "bar"], 10)),
             (
                 ["test-supplement", "baz.yaml"],

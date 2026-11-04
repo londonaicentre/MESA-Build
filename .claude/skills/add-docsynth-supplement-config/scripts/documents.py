@@ -8,7 +8,9 @@ from random import Random
 
 from docsynth.generate import Generator
 from docsynth.types.documents import DocsynthDocument
+from docsynth.types.sampling import SamplingAttribute, SamplingElement
 from docsynth.types.supplements import Supplements
+from docsynth.types.wrapper import DocsynthAssets
 from yaml import safe_dump, safe_load
 
 
@@ -30,6 +32,9 @@ class Documents:
         self.__documents_folder: Path = Path("output") / str(
             self.__pipeline["output"]["subdirectory"]
         )
+        self.__sections: dict[str, SamplingElement] = Documents._sections(
+            self.__pipeline["profile_selection"]["domain"]
+        )
 
     @staticmethod
     def _read_text(path: Path) -> str:
@@ -45,6 +50,11 @@ class Documents:
         if folder.exists():
             shutil.rmtree(folder)
         folder.mkdir(parents=True)
+
+    @staticmethod
+    def _sections(domain: str) -> dict[str, SamplingElement]:
+        assets: DocsynthAssets = DocsynthAssets.from_domain(domain)
+        return assets.load_style_data().root | assets.load_content_data().root
 
     @staticmethod
     def _supplement(folder: Path) -> int:
@@ -84,21 +94,101 @@ class Documents:
             if not section.startswith("MIMIC")
         ).strip()
 
-    def sample(self, size: int, batch: int) -> list[Path]:
+    def _options(self, document: DocsynthDocument) -> dict[str, list[str]]:
+        instructions: str = Documents.instructions(document)
+        options: dict[str, list[str]] = {}
+        for section_name, element in self.__sections.items():
+            header: str = f"**{section_name.replace('_', ' ').title()}:**\n"
+            items: list[str] = [
+                item.strip()
+                for item in (
+                    "\n" + instructions.split(header)[1].split("\n\n")[0]
+                    if header in instructions
+                    else ""
+                ).split("\n- ")[1:]
+            ]
+            options[section_name] = [
+                option
+                for option, attribute in element.get_options().items()
+                if attribute.description and attribute.description.strip() in items
+            ]
+            if element.mutually_exclusive and not options[section_name]:
+                options[section_name] = [
+                    option
+                    for option, attribute in element.get_options().items()
+                    if not attribute.description
+                ]
+        return options
+
+    def census(self) -> None:
+        """Report each option's sampled share against its configured probability."""
+        doc_ids: list[str] = Documents._doc_ids(self.__documents_folder)
+        options: list[dict[str, list[str]]] = [
+            self._options(Documents._read_document(self.__documents_folder, doc_id))
+            for doc_id in doc_ids
+        ]
+        lines: list[str] = []
+        for section_name, element in self.__sections.items():
+            attributes: dict[str, SamplingAttribute] = element.get_options()
+            total: float = (
+                sum(attribute.probability for attribute in attributes.values())
+                if element.mutually_exclusive
+                else 1
+            )
+            lines.append(section_name)
+            lines.extend(
+                f"  {option}: {count}/{len(doc_ids)}"
+                f" ({count / max(len(doc_ids), 1):.0%}),"
+                f" configured {attribute.probability / total:.0%}"
+                for option, attribute in attributes.items()
+                for count in [
+                    sum(
+                        option in document_options[section_name]
+                        for document_options in options
+                    )
+                ]
+            )
+        self.__logger.info("\n".join(lines))
+
+    def sample(
+        self, size: int, batch: int, requirement: tuple[str, str] | None = None
+    ) -> list[Path]:
         """Write random batch manifests of doc IDs, for fan-out.
 
         Args:
             size (int): Number of documents to sample
             batch (int): Number of documents per manifest
+            requirement (tuple[str, str], optional): Section and option the
+                sampled documents' prompts must have selected. Defaults to
+                None, which samples every document
 
         Returns:
             list[Path]: The manifest files
 
+        Raises:
+            ValueError: If the requirement names an unknown section or option
+
         """
         doc_ids: list[str] = Documents._doc_ids(self.__documents_folder)
+        if requirement is not None:
+            section_name, option = requirement
+            if (
+                section_name not in self.__sections
+                or option not in self.__sections[section_name].get_options()
+            ):
+                raise ValueError(f"Unknown requirement: {section_name}={option}")
+            doc_ids = [
+                doc_id
+                for doc_id in doc_ids
+                if option
+                in self._options(
+                    Documents._read_document(self.__documents_folder, doc_id)
+                )[section_name]
+            ]
         sampled: list[str] = Random().sample(doc_ids, min(size, len(doc_ids)))
         manifests: list[Path] = [
-            Documents.SCRATCH_FOLDER / f"documents_{index // batch + 1}.json"
+            Documents.SCRATCH_FOLDER
+            / f"{'-'.join(['documents', *(requirement or ())])}_{index // batch + 1}.json"
             for index in range(0, len(sampled), batch)
         ]
         for index, manifest in enumerate(manifests):
@@ -175,6 +265,10 @@ class Documents:
         sample_parser: ArgumentParser = commands.add_parser("sample")
         sample_parser.add_argument("--size", type=int, default=100)
         sample_parser.add_argument("--batch", type=int, default=25)
+        sample_parser.add_argument(
+            "--requirement", type=lambda value: tuple(value.split("=", 1))
+        )
+        commands.add_parser("census")
         show_parser: ArgumentParser = commands.add_parser("show")
         show_parser.add_argument("doc_ids", nargs="+")
         show_parser.add_argument("--chars", type=int, default=4000)
@@ -185,7 +279,9 @@ class Documents:
         documents: Documents = Documents()
         match arguments.command:
             case "sample":
-                documents.sample(arguments.size, arguments.batch)
+                documents.sample(arguments.size, arguments.batch, arguments.requirement)
+            case "census":
+                documents.census()
             case "show":
                 logging.getLogger(__name__).info(
                     documents.show(arguments.doc_ids, arguments.chars)
