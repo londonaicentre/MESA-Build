@@ -1,21 +1,20 @@
 ## Brief
 
-You are reviewing LLM-generated synthetic clinical documents, used to create training data, against the prompts they were generated from.
+You are checking whether LLM-generated synthetic clinical documents, used to create training data, meet one requirement of the prompts they were generated from.
 
 - The documents' style and content requirements are sampled from `{STYLE_PATH}` and `{CONTENT_PATH}`, and their profiles from `{PROFILES_PATH}`.
-- Your documents are listed in `{MANIFEST}`.
-- From `{PIPELINE_DIR}`, view them with `uv run python ../../.claude/skills/add-docsynth-supplement-config/scripts/documents.py show <doc_id>...`, several at a time, which prints each document's requirements and profile, then its content.
+- Every document listed in `{MANIFEST}` was asked to meet this requirement, from the `{SECTION}` section: {REQUIREMENT}
+- From `{PIPELINE_DIR}`, view the documents with `uv run python ../../.claude/skills/add-docsynth-supplement-config/scripts/documents.py show <doc_id>...`, several at a time, which prints each document's requirements and profile, then its content.
   Add `--chars <n>` to see more of a long document.
 - Never open the documents folder directly.
 
-Find where documents break a requirement or the profile they were generated from: missing or extra sections, the wrong number of findings, lengths or styles that do not match, details the profile contradicts, wording reused from the requirements, and leftover preamble.
-Judge each document against its own requirements, as they differ from document to document.
+Judge each document against the requirement as written, and against its own profile where the requirement refers to it (e.g. the profile's possible findings).
+Where a document misses the requirement, say which of the section's other options it matches instead, from:
 
-These issues are already known, so do not report them again:
+{OTHER_OPTIONS}
 
-{KNOWN_ISSUES}
+Report, in no more than 300 words:
 
-Report only issues you have verified against the document text.
-For each, give the number of your documents it affects (n/N), one or two doc IDs, the requirement it breaks, and a quote from the document of no more than 20 words.
-Say whether replacing one exact span would fix it, or the document needs regenerating.
-Group issues by kind, most frequent first, in no more than 400 words.
+- the number of documents that meet the requirement (n/N);
+- for those that miss it, the number matching each other option, with one or two doc IDs and a quote from the document of no more than 20 words;
+- any document you could not judge, and why.
