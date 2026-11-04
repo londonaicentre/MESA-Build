@@ -1,8 +1,6 @@
 import json
 import logging
 import os
-import subprocess
-import tempfile
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -10,7 +8,7 @@ from pydantic import BaseModel
 from datagen.correction_rules import CorrectionRules
 from datagen.extraction import extract_and_validate_json
 from datagen.types import JSONValue
-from utils.llm import BatchOutput
+from utils.llm import LLM, BatchOutput
 
 
 class BatchOutputCorrector:
@@ -21,8 +19,6 @@ class BatchOutputCorrector:
         batch_output_file (Path): Bedrock batch output file to correct
 
     """
-
-    __THINKING_TOKENS: int = 3000
 
     def __init__(self, schema: type[BaseModel], batch_output_file: Path) -> None:
         self._logger: logging.Logger = logging.getLogger(__name__)
@@ -72,37 +68,6 @@ class BatchOutputCorrector:
             },
         }
 
-    @staticmethod
-    def _run_claude(system_prompt: str, user_prompt: str) -> str:
-        return subprocess.run(
-            [
-                "claude",
-                "-p",
-                "--model",
-                "haiku",
-                "--system-prompt",
-                system_prompt,
-                "--tools",
-                "",
-                "--strict-mcp-config",
-                "--setting-sources",
-                "",
-                "--disable-slash-commands",
-                "--no-session-persistence",
-                "--settings",
-                '{"alwaysThinkingEnabled": true}',
-            ],
-            input=user_prompt,
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=tempfile.gettempdir(),
-            env={
-                **os.environ,
-                "MAX_THINKING_TOKENS": str(BatchOutputCorrector.__THINKING_TOKENS),
-            },
-        ).stdout.strip()
-
     def correct_with_claude(self, prompt_file: Path, extraction_prompt: str) -> int:
         """Send, to Claude Code, every output that has no valid extraction.
 
@@ -134,7 +99,8 @@ class BatchOutputCorrector:
             )
             records[index] = BatchOutputCorrector._replace_response(
                 record,
-                BatchOutputCorrector._run_claude(
+                LLM.claude_code(
+                    "haiku",
                     system_prompt,
                     f"<note>\n{BatchOutputCorrector._get_note(record)}\n</note>\n\n"
                     f"<original_response>\n{BatchOutputCorrector._get_response(record)}\n</original_response>",

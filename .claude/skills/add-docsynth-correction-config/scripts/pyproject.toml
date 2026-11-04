@@ -1,0 +1,41 @@
+[project]
+name = "add-docsynth-correction-config"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "londonaicentre-docsynth",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+londonaicentre-docsynth = { git = "https://github.com/londonaicentre/MESA-Docsynth" }
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.1",
+    "ruff>=0.14.6",
+    "types-pyyaml>=6.0.12.20261103",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["documents"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[tool.coverage.run]
+source = ["."]
+omit = ["tests/*"]
+
+[tool.mypy]
+check_untyped_defs = true
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+warn_unreachable = true

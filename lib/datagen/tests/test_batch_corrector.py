@@ -8,6 +8,7 @@ from pydantic import BaseModel, ValidationError
 from pytest_mock import MockerFixture
 
 from datagen.batch_corrector import BatchOutputCorrector
+from utils.llm import LLM
 
 
 class MockSchema(BaseModel):
@@ -33,10 +34,6 @@ class BatchOutputCorrectorFixture(BatchOutputCorrector):
     def replace_response(record: dict[str, object], response: str) -> dict[str, object]:
         return BatchOutputCorrector._replace_response(record, response)
 
-    @staticmethod
-    def run_claude(system_prompt: str, user_prompt: str) -> str:
-        return BatchOutputCorrector._run_claude(system_prompt, user_prompt)
-
 
 @dataclass
 class FileMocks:
@@ -58,7 +55,7 @@ class CorrectionMocks:
 @dataclass
 class ClaudeMocks:
     read_text: MagicMock
-    _run_claude: MagicMock
+    claude_code: MagicMock
 
 
 def make_record(text: str | None = "foo") -> dict[str, object]:
@@ -132,9 +129,7 @@ def claude_mocks(mocker: MockerFixture) -> ClaudeMocks:
         read_text=mocker.patch.object(
             Path, "read_text", return_value="corge {EXTRACTION_PROMPT}"
         ),
-        _run_claude=mocker.patch.object(
-            BatchOutputCorrector, "_run_claude", return_value="grault"
-        ),
+        claude_code=mocker.patch.object(LLM, "claude_code", return_value="grault"),
     )
 
 
@@ -183,26 +178,6 @@ class TestRecordAccess:
             BatchOutputCorrectorFixture.replace_response({"modelOutput": None}, "bar")
 
 
-class TestRunClaude:
-    def test_run_claude_prompts_returns_stripped_output(
-        self, mocker: MockerFixture
-    ) -> None:
-        mock_run: MagicMock = mocker.patch(
-            "datagen.batch_corrector.subprocess.run", autospec=True
-        )
-        mock_run.return_value.stdout = " <output>foo</output>\n"
-        assert (
-            BatchOutputCorrectorFixture.run_claude("foo", "bar")
-            == "<output>foo</output>"
-        )
-        arguments: list[str] = mock_run.call_args.args[0]
-        assert arguments[:4] == ["claude", "-p", "--model", "haiku"]
-        assert arguments[arguments.index("--system-prompt") + 1] == "foo"
-        assert mock_run.call_args.kwargs["input"] == "bar"
-        assert mock_run.call_args.kwargs["check"]
-        assert mock_run.call_args.kwargs["env"]["MAX_THINKING_TOKENS"] == "3000"
-
-
 class TestCorrectWithClaude:
     def test_correct_with_claude_invalid_records_corrects_only_those(
         self,
@@ -216,7 +191,8 @@ class TestCorrectWithClaude:
             (None, {"foo": 1}),
         ]
         assert corrector.correct_with_claude(Path("foo.txt"), "bar") == 2
-        assert claude_mocks._run_claude.call_args_list[0].args == (
+        assert claude_mocks.claude_code.call_args_list[0].args == (
+            "haiku",
             "corge bar",
             "<note>\nqux\n</note>\n\n<original_response>\nquux\n</original_response>",
         )
@@ -254,7 +230,7 @@ class TestCorrectWithClaude:
             {"field": "foo"},
         )
         assert corrector.correct_with_claude(Path("foo.txt"), "bar") == 0
-        claude_mocks._run_claude.assert_not_called()
+        claude_mocks.claude_code.assert_not_called()
         correction_mocks._write.assert_not_called()
 
 

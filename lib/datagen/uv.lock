@@ -849,7 +849,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-datagen"
-version = "1.5.0"
+version = "1.5.1"
 source = { editable = "." }
 dependencies = [
     { name = "boto3" },
@@ -936,7 +936,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.5.1"
+version = "1.6.0"
 source = { editable = "../utils" }
 dependencies = [
     { name = "boto3" },
