@@ -1,0 +1,1 @@
+Looking at the batch outputs in output, assess whether document variety is suitable in respect of the upstream Docsynth config, visible in the library source.
