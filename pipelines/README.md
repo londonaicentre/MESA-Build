@@ -18,6 +18,8 @@ Notebooks for manual end-to-end fine-tuning
 
 3. Add custom content to each notebook and config file.
 
-## Correcting training data
+## Correcting documents and training data
+
+Run `/add-docsynth-correction-config <pipeline>` in Claude Code to create a pipeline's `prompts/document_correction.txt`, which docsynth's `Corrector` uses to review and correct its generated documents.
 
 Run `/add-trainingdata-correction-config <pipeline>` in Claude Code to create a pipeline's `prompts/correction.txt` and `rules/correction.yaml`, which `BatchOutputCorrector` uses to correct its batch outputs.
