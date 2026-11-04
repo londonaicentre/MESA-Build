@@ -2,35 +2,33 @@ import json
 import logging
 import shutil
 from argparse import ArgumentParser, Namespace
-from difflib import unified_diff
+from contextlib import chdir
 from pathlib import Path
 from random import Random
 
-from docsynth.correct import Corrector
-from docsynth.types.correction_rules import (
-    DocumentCorrectionRule,
-    DocumentCorrectionRules,
-)
+from docsynth.generate import Generator
 from docsynth.types.documents import DocsynthDocument
-from yaml import safe_load
+from docsynth.types.supplements import Supplements
+from yaml import safe_dump, safe_load
 
 
 class Documents:
     """Compact views of a pipeline's generated documents, run from the pipeline
-    folder, for authoring a document correction prompt.
+    folder, for authoring a document supplement.
     """
 
     SCRATCH_FOLDER: Path = Path("_scratch/corrections")
-    TEST_FOLDER: Path = SCRATCH_FOLDER / "prompt_test"
+    TEST_FOLDER: Path = SCRATCH_FOLDER / "supplement_test"
 
     def __init__(self) -> None:
         self.__logger: logging.Logger = logging.getLogger(__name__)
         logging.basicConfig(format="%(message)s", level=logging.INFO)
 
+        self.__pipeline: dict[str, dict[str, str]] = safe_load(
+            Documents._read_text(Path("pipeline.yml"))
+        )
         self.__documents_folder: Path = Path("output") / str(
-            safe_load(Documents._read_text(Path("pipeline.yml")))["output"][
-                "subdirectory"
-            ]
+            self.__pipeline["output"]["subdirectory"]
         )
 
     @staticmethod
@@ -48,10 +46,16 @@ class Documents:
             shutil.rmtree(folder)
         folder.mkdir(parents=True)
 
-    def _doc_ids(self) -> list[str]:
+    @staticmethod
+    def _supplement(folder: Path) -> int:
+        with chdir(folder):
+            return Generator().supplement(Path("supplement.yaml"))
+
+    @staticmethod
+    def _doc_ids(folder: Path) -> list[str]:
         return sorted(
             document_file.stem
-            for document_file in self.__documents_folder.glob("*.json")
+            for document_file in folder.glob("*.json")
             if document_file.name != "metadata.json"
         )
 
@@ -91,7 +95,7 @@ class Documents:
             list[Path]: The manifest files
 
         """
-        doc_ids: list[str] = self._doc_ids()
+        doc_ids: list[str] = Documents._doc_ids(self.__documents_folder)
         sampled: list[str] = Random().sample(doc_ids, min(size, len(doc_ids)))
         manifests: list[Path] = [
             Documents.SCRATCH_FOLDER / f"documents_{index // batch + 1}.json"
@@ -103,6 +107,15 @@ class Documents:
             )
         self.__logger.info("\n".join(str(manifest) for manifest in manifests))
         return manifests
+
+    @staticmethod
+    def _render(folder: Path, doc_ids: list[str], chars: int) -> str:
+        return "\n\n".join(
+            f"=== {document.doc_id}\nINSTRUCTIONS\n{Documents.instructions(document)}"
+            f"\nCONTENT\n{document.content[:chars]}"
+            for doc_id in doc_ids
+            for document in [Documents._read_document(folder, doc_id)]
+        )
 
     def show(self, doc_ids: list[str], chars: int) -> str:
         """Render documents compactly, with their prompt's instructions and
@@ -116,63 +129,41 @@ class Documents:
             str: The rendered documents
 
         """
-        return "\n\n".join(
-            f"=== {document.doc_id}\nINSTRUCTIONS\n{Documents.instructions(document)}"
-            f"\nCONTENT\n{document.content[:chars]}"
-            for doc_id in doc_ids
-            for document in [Documents._read_document(self.__documents_folder, doc_id)]
-        )
+        return Documents._render(self.__documents_folder, doc_ids, chars)
 
-    def test_prompt(self, prompt_file: Path, doc_ids: list[str], chars: int) -> None:
-        """Review and correct copies of some documents with a correction prompt,
-        leaving the documents untouched, and report each document's rules and
-        changes.
+    def test_supplement(self, supplement_file: Path, chars: int) -> None:
+        """Generate one document per supplement entry, apart from the pipeline's.
 
         Args:
-            prompt_file (Path): Document correction prompt
-            doc_ids (list[str]): Documents to review and correct
-            chars (int): Maximum characters of each document's diff
+            supplement_file (Path): Supplement file
+            chars (int): Maximum characters of each document's content
 
         """
-        rules_file: Path = Documents.TEST_FOLDER / "document_correction.yaml"
         Documents._reset_folder(Documents.TEST_FOLDER)
-        before: dict[str, DocsynthDocument] = {
-            doc_id: Documents._read_document(self.__documents_folder, doc_id)
-            for doc_id in doc_ids
-        }
-        for doc_id, document in before.items():
-            Documents._write_text(
-                Documents.TEST_FOLDER / f"{doc_id}.json",
-                document.model_dump_json(indent=2),
-            )
-        corrector: Corrector = Corrector(Documents.TEST_FOLDER, rules_file)
-        corrector.review(prompt_file)
-        corrector.correct_with_rules()
-        corrector.correct_with_claude()
-        rules: list[DocumentCorrectionRule] = DocumentCorrectionRules.load(
-            rules_file
-        ).rules
+        Documents._write_text(
+            Documents.TEST_FOLDER / "pipeline.yml",
+            safe_dump(
+                self.__pipeline
+                | {"output": self.__pipeline["output"] | {"subdirectory": "supplement"}}
+            ),
+        )
+        Documents._write_text(
+            Documents.TEST_FOLDER / "supplement.yaml",
+            safe_dump(
+                Supplements(
+                    supplements=[
+                        supplement.model_copy(update={"count": 1})
+                        for supplement in Supplements.load(supplement_file).supplements
+                    ]
+                ).model_dump()
+            ),
+        )
+        Documents._supplement(Documents.TEST_FOLDER)
         self.__logger.info(
-            "\n\n".join(
-                f"=== {doc_id}\n"
-                + "".join(
-                    f"{rule.action}: {rule.description}\n"
-                    for rule in rules
-                    if rule.document == doc_id
-                )
-                + "\n".join(
-                    list(
-                        unified_diff(
-                            document.content.splitlines(),
-                            Documents._read_document(
-                                Documents.TEST_FOLDER, doc_id
-                            ).content.splitlines(),
-                            lineterm="",
-                            n=1,
-                        )
-                    )[2:]
-                )[:chars]
-                for doc_id, document in before.items()
+            Documents._render(
+                Documents.TEST_FOLDER / "output" / "supplement",
+                Documents._doc_ids(Documents.TEST_FOLDER / "output" / "supplement"),
+                chars,
             )
         )
 
@@ -187,10 +178,9 @@ class Documents:
         show_parser: ArgumentParser = commands.add_parser("show")
         show_parser.add_argument("doc_ids", nargs="+")
         show_parser.add_argument("--chars", type=int, default=4000)
-        test_prompt_parser: ArgumentParser = commands.add_parser("test-prompt")
-        test_prompt_parser.add_argument("prompt_file", type=Path)
-        test_prompt_parser.add_argument("doc_ids", nargs="+")
-        test_prompt_parser.add_argument("--chars", type=int, default=1500)
+        test_supplement_parser: ArgumentParser = commands.add_parser("test-supplement")
+        test_supplement_parser.add_argument("supplement_file", type=Path)
+        test_supplement_parser.add_argument("--chars", type=int, default=4000)
         arguments: Namespace = parser.parse_args()
         documents: Documents = Documents()
         match arguments.command:
@@ -200,10 +190,8 @@ class Documents:
                 logging.getLogger(__name__).info(
                     documents.show(arguments.doc_ids, arguments.chars)
                 )
-            case "test-prompt":
-                documents.test_prompt(
-                    arguments.prompt_file, arguments.doc_ids, arguments.chars
-                )
+            case "test-supplement":
+                documents.test_supplement(arguments.supplement_file, arguments.chars)
 
 
 if __name__ == "__main__":

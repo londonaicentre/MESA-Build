@@ -1407,7 +1407,7 @@ wheels = [
 [[package]]
 name = "londonaicentre-docsynth"
 version = "1.0.0"
-source = { git = "https://github.com/londonaicentre/MESA-Docsynth#dc0d43bf8b07c5e4c8c1e2a81f4b2b52068dad0d" }
+source = { git = "https://github.com/londonaicentre/MESA-Docsynth#2cecea76d708b96ee9c8030a5207d6b0d684c600" }
 dependencies = [
     { name = "google-generativeai" },
     { name = "londonaicentre-mesa-runtime" },

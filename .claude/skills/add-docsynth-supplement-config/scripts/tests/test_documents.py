@@ -5,12 +5,9 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
-from docsynth.types.correction_rules import (
-    DocumentCorrectionAction,
-    DocumentCorrectionRule,
-)
 from docsynth.types.documents import DocsynthDocument
 from pytest_mock import MockerFixture
+from yaml import safe_load
 
 from documents import Documents
 
@@ -28,8 +25,17 @@ class DocumentsFixture(Documents):
     def reset_folder(folder: Path) -> None:
         Documents._reset_folder(folder)
 
-    def doc_ids(self) -> list[str]:
-        return self._doc_ids()
+    @staticmethod
+    def supplement(folder: Path) -> int:
+        return Documents._supplement(folder)
+
+    @staticmethod
+    def doc_ids(folder: Path) -> list[str]:
+        return Documents._doc_ids(folder)
+
+    @staticmethod
+    def render(folder: Path, doc_ids: list[str], chars: int) -> str:
+        return Documents._render(folder, doc_ids, chars)
 
     @staticmethod
     def read_document(folder: Path, doc_id: str) -> DocsynthDocument:
@@ -50,10 +56,11 @@ class DocumentMocks:
 
 
 @dataclass
-class PromptTestMocks:
+class SupplementTestMocks:
     _reset_folder: MagicMock
-    Corrector: MagicMock
-    load: MagicMock
+    _supplement: MagicMock
+    _doc_ids: MagicMock
+    _render: MagicMock
 
 
 def make_document(
@@ -90,11 +97,12 @@ def document_mocks(mocker: MockerFixture) -> DocumentMocks:
 
 
 @pytest.fixture
-def test_prompt_mocks(mocker: MockerFixture) -> PromptTestMocks:
-    return PromptTestMocks(
+def supplement_test_mocks(mocker: MockerFixture) -> SupplementTestMocks:
+    return SupplementTestMocks(
         _reset_folder=mocker.patch.object(Documents, "_reset_folder"),
-        Corrector=mocker.patch("documents.Corrector"),
-        load=mocker.patch("documents.DocumentCorrectionRules.load"),
+        _supplement=mocker.patch.object(Documents, "_supplement"),
+        _doc_ids=mocker.patch.object(Documents, "_doc_ids", return_value=["foo"]),
+        _render=mocker.patch.object(Documents, "_render", return_value="bar"),
     )
 
 
@@ -122,6 +130,20 @@ class TestFileAccess:
         DocumentsFixture.reset_folder(tmp_path / "foo")
         assert list((tmp_path / "foo").iterdir()) == []
 
+    def test_supplement_empty_supplement_generates_nothing(
+        self, tmp_path: Path
+    ) -> None:
+        (tmp_path / "pipeline.yml").write_text(
+            "llm:\n  enabled: false\n  provider: none\n"
+            "profile_selection:\n  domain: chestrad\n  mode: random\n"
+            "  count: 1\n  file: null\n"
+            "structure_selection:\n  enabled_structures: null\n"
+            "prompt_config:\n  include_style: true\n  include_content: true\n"
+            "output:\n  subdirectory: foo\n"
+        )
+        (tmp_path / "supplement.yaml").write_text("supplements: []\n")
+        assert DocumentsFixture.supplement(tmp_path) == 0
+
 
 class TestDocumentAccess:
     def test_init_pipeline_reads_pipeline_config(
@@ -130,15 +152,11 @@ class TestDocumentAccess:
         constructor_mocks._read_text.assert_called_once_with(Path("pipeline.yml"))
 
     def test_doc_ids_folder_returns_sorted_ids_without_metadata(
-        self, documents: DocumentsFixture, mocker: MockerFixture
+        self, tmp_path: Path
     ) -> None:
-        glob: MagicMock = mocker.patch.object(
-            Path,
-            "glob",
-            return_value=[Path("bar.json"), Path("metadata.json"), Path("baz.json")],
-        )
-        assert documents.doc_ids() == ["bar", "baz"]
-        glob.assert_called_once_with("*.json")
+        for name in ["bar.json", "metadata.json", "baz.json", "qux.txt"]:
+            (tmp_path / name).write_text("")
+        assert DocumentsFixture.doc_ids(tmp_path) == ["bar", "baz"]
 
     def test_read_document_doc_id_parses_document(
         self, constructor_mocks: ConstructorMocks
@@ -192,66 +210,73 @@ class TestSample:
 
 
 class TestShow:
-    def test_show_doc_ids_renders_instructions_and_truncated_content(
-        self,
-        documents: DocumentsFixture,
-        mocker: MockerFixture,
-        document_mocks: DocumentMocks,
+    def test_render_doc_ids_renders_instructions_and_truncated_content(
+        self, mocker: MockerFixture, document_mocks: DocumentMocks
     ) -> None:
         mocker.patch.object(Documents, "instructions", return_value="grault")
         document_mocks._read_document.return_value = make_document(content="abcdef")
         assert (
-            documents.show(["foo"], 3) == "=== foo\nINSTRUCTIONS\ngrault\nCONTENT\nabc"
+            DocumentsFixture.render(Path("bar"), ["foo"], 3)
+            == "=== foo\nINSTRUCTIONS\ngrault\nCONTENT\nabc"
         )
-        document_mocks._read_document.assert_called_once_with(Path("output/foo"), "foo")
+        document_mocks._read_document.assert_called_once_with(Path("bar"), "foo")
+
+    def test_show_doc_ids_renders_pipeline_documents(
+        self, documents: DocumentsFixture, mocker: MockerFixture
+    ) -> None:
+        render: MagicMock = mocker.patch.object(
+            Documents, "_render", return_value="bar"
+        )
+        assert documents.show(["foo"], 3) == "bar"
+        render.assert_called_once_with(Path("output/foo"), ["foo"], 3)
 
 
-class TestTestPrompt:
-    def test_test_prompt_doc_ids_corrects_copies_and_reports(
+class TestTestSupplement:
+    def test_test_supplement_file_generates_one_per_entry_and_reports(
         self,
+        tmp_path: Path,
         documents: DocumentsFixture,
         constructor_mocks: ConstructorMocks,
         document_mocks: DocumentMocks,
-        test_prompt_mocks: PromptTestMocks,
+        supplement_test_mocks: SupplementTestMocks,
     ) -> None:
-        rules_file: Path = Documents.TEST_FOLDER / "document_correction.yaml"
-        document_mocks._read_document.side_effect = [
-            make_document(content="bar\nbaz"),
-            make_document(content="bar\nqux"),
-        ]
-        test_prompt_mocks.load.return_value.rules = [
-            DocumentCorrectionRule(
-                name="foo-1",
-                description="grault",
-                document="foo",
-                action=DocumentCorrectionAction.REPLACE,
-                find="baz",
-                value="qux",
-            ),
-            DocumentCorrectionRule(
-                name="garply-1",
-                description="waldo",
-                document="garply",
-                action=DocumentCorrectionAction.REGENERATE,
-            ),
-        ]
-        documents.test_prompt(Path("quux.txt"), ["foo"], 15)
-        test_prompt_mocks._reset_folder.assert_called_once_with(Documents.TEST_FOLDER)
-        document_mocks._write_text.assert_called_once_with(
-            Documents.TEST_FOLDER / "foo.json",
-            make_document(content="bar\nbaz").model_dump_json(indent=2),
+        (tmp_path / "supplement.yaml").write_text(
+            "supplements:\n"
+            "  - name: foo\n"
+            "    description: bar\n"
+            "    count: 10\n"
+            "    requirements:\n"
+            "      baz: qux\n"
         )
-        test_prompt_mocks.Corrector.assert_called_once_with(
-            Documents.TEST_FOLDER, rules_file
+        documents.test_supplement(tmp_path / "supplement.yaml", 5)
+        supplement_test_mocks._reset_folder.assert_called_once_with(
+            Documents.TEST_FOLDER
         )
-        corrector: MagicMock = test_prompt_mocks.Corrector.return_value
-        corrector.review.assert_called_once_with(Path("quux.txt"))
-        corrector.correct_with_rules.assert_called_once_with()
-        corrector.correct_with_claude.assert_called_once_with()
-        test_prompt_mocks.load.assert_called_once_with(rules_file)
-        constructor_mocks.getLogger.return_value.info.assert_called_once_with(
-            "=== foo\nreplace: grault\n@@ -1,2 +1,2 @@"
+        written: dict[Path, str] = {
+            call.args[0]: call.args[1]
+            for call in document_mocks._write_text.call_args_list
+        }
+        assert safe_load(written[Documents.TEST_FOLDER / "pipeline.yml"]) == {
+            "output": {"subdirectory": "supplement"},
+        }
+        assert safe_load(written[Documents.TEST_FOLDER / "supplement.yaml"]) == {
+            "supplements": [
+                {
+                    "name": "foo",
+                    "description": "bar",
+                    "count": 1,
+                    "requirements": {"baz": "qux"},
+                }
+            ]
+        }
+        supplement_test_mocks._supplement.assert_called_once_with(Documents.TEST_FOLDER)
+        supplement_test_mocks._doc_ids.assert_called_once_with(
+            Documents.TEST_FOLDER / "output" / "supplement"
         )
+        supplement_test_mocks._render.assert_called_once_with(
+            Documents.TEST_FOLDER / "output" / "supplement", ["foo"], 5
+        )
+        constructor_mocks.getLogger.return_value.info.assert_called_once_with("bar")
 
 
 class TestMain:
@@ -261,9 +286,9 @@ class TestMain:
             (["sample", "--size", "5", "--batch", "2"], "sample", (5, 2)),
             (["show", "foo", "bar", "--chars", "10"], "show", (["foo", "bar"], 10)),
             (
-                ["test-prompt", "baz.txt", "foo"],
-                "test_prompt",
-                (Path("baz.txt"), ["foo"], 1500),
+                ["test-supplement", "baz.yaml"],
+                "test_supplement",
+                (Path("baz.yaml"), 4000),
             ),
         ],
     )
