@@ -8,7 +8,7 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "add-docsynth-correction-config"
+name = "add-docsynth-supplement-config"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

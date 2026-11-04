@@ -1,11 +1,11 @@
-name: add-docsynth-correction-config test
+name: add-docsynth-supplement-config test
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - .claude/skills/add-docsynth-correction-config/scripts/**
+      - .claude/skills/add-docsynth-supplement-config/scripts/**
 
 jobs:
   test:
@@ -15,7 +15,7 @@ jobs:
       pull-requests: write
     defaults:
       run:
-        working-directory: .claude/skills/add-docsynth-correction-config/scripts
+        working-directory: .claude/skills/add-docsynth-supplement-config/scripts
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7

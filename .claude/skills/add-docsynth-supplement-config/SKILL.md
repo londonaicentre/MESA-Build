@@ -1,5 +1,5 @@
 ---
-name: add-docsynth-correction-config
+name: add-docsynth-supplement-config
 description: Explore a pipeline's docsynth documents, then write the review prompt that docsynth's Corrector judges each document against its generation prompt with
 argument-hint: "<pipeline>"
 ---
@@ -17,7 +17,7 @@ The user wires it into the pipeline's notebook and runs the review and correctio
 - Read `config/document_correction_format.txt` and `correct.py` in the same `docsynth` package, for the output format appended to the review prompt and for how the rules are applied.
 - If the pipeline already has `prompts/document_correction.txt`, extend it rather than replacing it.
   Otherwise create the `prompts/` folder in the pipeline.
-- Run the script below from the pipeline folder, as `uv run python ../../.claude/skills/add-docsynth-correction-config/scripts/documents.py ...`.
+- Run the script below from the pipeline folder, as `uv run python ../../.claude/skills/add-docsynth-supplement-config/scripts/documents.py ...`.
   It reads the documents in `output/<subdirectory>/` and writes to `_scratch/corrections/`, which git ignores.
 - Never Read the documents folder whole, as it can hold thousands of documents.
   Use the script, or short scripts of your own that print only counts and truncated examples.

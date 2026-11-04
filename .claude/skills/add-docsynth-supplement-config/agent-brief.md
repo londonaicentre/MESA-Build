@@ -4,7 +4,7 @@ You are reviewing LLM-generated synthetic clinical documents, used to create tra
 
 - The documents' style and content requirements are sampled from `{STYLE_PATH}` and `{CONTENT_PATH}`, and their profiles from `{PROFILES_PATH}`.
 - Your documents are listed in `{MANIFEST}`.
-- From `{PIPELINE_DIR}`, view them with `uv run python ../../.claude/skills/add-docsynth-correction-config/scripts/documents.py show <doc_id>...`, several at a time, which prints each document's requirements and profile, then its content.
+- From `{PIPELINE_DIR}`, view them with `uv run python ../../.claude/skills/add-docsynth-supplement-config/scripts/documents.py show <doc_id>...`, several at a time, which prints each document's requirements and profile, then its content.
   Add `--chars <n>` to see more of a long document.
 - Never open the documents folder directly.
 
