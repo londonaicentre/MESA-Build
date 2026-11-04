@@ -50,12 +50,14 @@ The user runs `Generator.supplement` in the pipeline's notebook, which generates
   - a supplement entry, which pins that option, and any others it depends on (e.g. a comparison option for an overall change summary);
   - none, for criteria too loose to judge reliably or deviations a real document could plausibly have.
 - Size each entry's count:
-  - The count that restores the configured probability `p` in a corpus of `N` documents, with `a` documents meeting the requirement, is `(p × N − a) / (1 − p)`, rounded up.
-  - Each document is part of a Claude Code call on the user's quota (five documents per call by default), so propose a smaller count where the full one is large, keeping the total small.
+  - Its full count is the number of extra documents, all meeting the requirement, that would bring the share of documents meeting it back to its configured probability.
+    With a probability `p` and `a` of the corpus's `N` documents meeting it, that is `(p × N − a) / (1 − p)`, rounded up.
+  - Each document is part of a Claude Code call on the user's quota (five documents per call by default), so the total is limited to a budget, by default 5% of the corpus (e.g. 200 documents for 4000).
+    Split the budget across the entries in proportion to their full counts, giving no entry more than its full count.
   - Adding documents for one option lowers the shares of the section's other options, so check the counts against each other.
 - The docsynth assets are fixed, as the user may not be able to change them, so never triage a shortfall to a change in them.
   Where a requirement's wording is ambiguous, read it as written, and give it an entry only if every reading agrees that documents miss it.
-- Present the findings with their counts and sources, and the entries with the full and proposed counts and the total, to the user, and agree them before writing anything.
+- Present the findings with their counts and sources, and the entries with their full and budgeted counts and the budget, to the user, and agree them before writing anything.
 
 ## 5. Write the supplement
 
