@@ -24,8 +24,9 @@ class BatchGeneratorFixture(BatchGenerator):
     ) -> list[str]:
         return self._generate_batch(sample_size, file_name)
 
-    def documents_by_record_id(self) -> dict[str, Document]:
-        return self._documents_by_record_id()
+    @staticmethod
+    def documents_by_record_id(document_files: list[Path]) -> dict[str, Document]:
+        return BatchGeneratorFixture._documents_by_record_id(document_files)
 
     def read_state(self) -> BatchState | None:
         return self._read_state()
@@ -36,7 +37,9 @@ class BatchGeneratorFixture(BatchGenerator):
     def pending_documents(self, sample_size: int) -> dict[str, Document]:
         return self._pending_documents(sample_size)
 
-    def submit_batch(self, sample_size: int, submit: Callable[[str], object]) -> str:
+    def submit_batch(
+        self, sample_size: int, submit: Callable[[str], object]
+    ) -> tuple[str, object]:
         return self._submit_batch(sample_size, submit)
 
 
@@ -71,6 +74,7 @@ class BatchDependencies:
 class PendingDependencies:
     _documents_by_record_id: MagicMock
     _read_state: MagicMock
+    interleave: MagicMock
 
 
 @dataclass
@@ -249,18 +253,21 @@ def mock_batch_dependencies(
 
 
 @pytest.fixture
-def mock_pending_dependencies(
-    mocker: MockerFixture, generator: BatchGeneratorFixture
-) -> PendingDependencies:
+def mock_pending_dependencies(mocker: MockerFixture) -> PendingDependencies:
     return PendingDependencies(
         _documents_by_record_id=mocker.patch.object(
-            generator,
+            BatchGenerator,
             "_documents_by_record_id",
             autospec=True,
             return_value={f"id{index}": MagicMock() for index in range(5)},
         ),
         _read_state=mocker.patch.object(
-            generator, "_read_state", autospec=True, return_value=None
+            BatchGenerator, "_read_state", autospec=True, return_value=None
+        ),
+        interleave=mocker.patch(
+            "datagen.batch_generator.DocumentLoader.interleave",
+            autospec=True,
+            side_effect=lambda batches: [item for batch in batches for item in batch],
         ),
     )
 
@@ -325,7 +332,10 @@ def mock_generate_via_dependencies(
 ) -> GenerateViaDependencies:
     return GenerateViaDependencies(
         _submit_batch=mocker.patch.object(
-            BatchGenerator, "_submit_batch", autospec=True, return_value="foo/bar"
+            BatchGenerator,
+            "_submit_batch",
+            autospec=True,
+            return_value=("foo/bar", 123),
         ),
         run_batch_inference=mocker.patch(
             "datagen.batch_generator.AWS.run_batch_inference", autospec=True
@@ -427,7 +437,9 @@ def test_documents_by_record_id_documents_read_keys_by_content_hash(
     mocker.patch(
         "datagen.batch_generator.Document.model_validate_json", side_effect=documents
     )
-    assert generator.documents_by_record_id() == {
+    assert BatchGeneratorFixture.documents_by_record_id(
+        [Path(f"foo{index}.json") for index in range(5)]
+    ) == {
         hashlib.md5(document.content.encode()).hexdigest(): document
         for document in documents
     }
@@ -443,7 +455,11 @@ def test_documents_by_record_id_duplicate_content_keeps_one_entry(
         "datagen.batch_generator.Document.model_validate_json",
         return_value=MagicMock(source="foo", content="bar"),
     )
-    assert list(generator.documents_by_record_id()) == [hashlib.md5(b"bar").hexdigest()]
+    assert list(
+        BatchGeneratorFixture.documents_by_record_id(
+            [Path("foo.json"), Path("bar.json")]
+        )
+    ) == [hashlib.md5(b"bar").hexdigest()]
 
 
 def test_read_state_file_absent_returns_none(
@@ -511,6 +527,37 @@ def test_pending_documents_documents_sent_returns_next_unsent_documents(
 ) -> None:
     mock_pending_dependencies._read_state.return_value = state
     assert list(generator.pending_documents(3)) == expected
+
+
+def test_pending_documents_multiple_batches_interleaves_unsent_documents(
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+    mock_pending_dependencies: PendingDependencies,
+) -> None:
+    documents: dict[str, MagicMock] = {
+        name: MagicMock() for name in ["foo0", "foo1", "foo2", "bar0", "bar1"]
+    }
+    mock_pending_dependencies._documents_by_record_id.side_effect = [
+        {name: documents[name] for name in ["foo0", "foo1", "foo2"]},
+        {name: documents[name] for name in ["bar0", "bar1"]},
+    ]
+    mock_pending_dependencies._read_state.return_value = BatchState(
+        job_id="foo/bar", sent_record_ids=["foo0", "foo1"]
+    )
+    BatchGeneratorFixture(
+        system_prompt="foo",
+        schema=MagicMock,
+        schema_name="baz",
+        model_name="foo_model",
+        document_batches=["foo.tar.gz", "bar.tar.gz"],
+    ).pending_documents(3)
+    mock_pending_dependencies.interleave.assert_called_with(
+        [
+            [("foo2", documents["foo2"])],
+            [("bar0", documents["bar0"]), ("bar1", documents["bar1"])],
+        ]
+    )
 
 
 def test_pending_documents_fewer_remain_than_requested_warns(
@@ -629,7 +676,7 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     model_id: str | None,
     batch_file: str,
 ) -> None:
-    assert runtime_generator.generate_via_batch(10, "foo") == "foo/bar"
+    assert runtime_generator.generate_via_batch(10, "foo") == 123
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
         "https://foo", "bar", "baz"
@@ -644,13 +691,13 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     )
 
 
-def test_submit_batch_valid_params_submits_job_returns_id(
+def test_submit_batch_valid_params_submits_job_returns_id_and_submitted(
     mock_submit_batch_dependencies: SubmitBatchDependencies,
     generator: BatchGeneratorFixture,
 ) -> None:
-    assert (
-        generator.submit_batch(10, mock_submit_batch_dependencies.submit)
-        == "datagen/2026-01-01-0000"
+    assert generator.submit_batch(10, mock_submit_batch_dependencies.submit) == (
+        "datagen/2026-01-01-0000",
+        mock_submit_batch_dependencies.submit.return_value,
     )
     mock_submit_batch_dependencies._generate_batch.assert_called_once_with(10)
     mock_submit_batch_dependencies.submit.assert_called_once_with(
@@ -679,6 +726,16 @@ def test_submit_batch_batch_submitted_appends_sent_record_ids(
     mock_submit_batch_dependencies._write_state.assert_called_once_with(
         BatchState(job_id="datagen/2026-01-01-0000", sent_record_ids=expected)
     )
+
+
+def test_get_batch_run_run_id_given_returns_run(
+    mock_mesa_runtime: MagicMock, runtime_generator: MESARuntimeBatchGenerator
+) -> None:
+    assert (
+        runtime_generator.get_batch_run(123)
+        == mock_mesa_runtime.return_value.get_inference_run.return_value
+    )
+    mock_mesa_runtime.return_value.get_inference_run.assert_called_once_with(123)
 
 
 def test_submit_batch_submission_fails_records_nothing(

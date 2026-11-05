@@ -93,17 +93,17 @@ class DocumentLoader:
         return doc_count
 
     @staticmethod
-    def interleave(batches: list[list[Path]]) -> list[Path]:
+    def interleave[T](batches: list[list[T]]) -> list[T]:
         """
-        Interleave document files round-robin across batches, so that
-        taking the first n files draws evenly from each batch.
+        Interleave items round-robin across batches, so that taking the
+        first n items draws evenly from each batch.
 
         Args:
             batches:
-                Document files, grouped by batch
+                Items (e.g. document files), grouped by batch
 
         Returns:
-            Document files ordered as the first of each batch, then the
+            Items ordered as the first of each batch, then the
             second of each batch, and so on, skipping exhausted batches
 
         """

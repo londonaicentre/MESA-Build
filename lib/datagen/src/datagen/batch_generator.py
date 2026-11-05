@@ -22,7 +22,7 @@ from datagen.cost_estimator import CostEstimator
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
 from datagen.version_detector import get_schema_version
-from mesa_runtime import MesaRuntime
+from mesa_runtime import MesaRuntime, WorkflowRun
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
@@ -86,7 +86,7 @@ class BatchGenerator:
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
-        batches: list[list[Path]] = []
+        self.__document_batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
@@ -95,8 +95,10 @@ class BatchGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            batches.append(sorted(output_folder.glob("*.json")))
-        self.__document_files: list[Path] = DocumentLoader.interleave(batches)
+            self.__document_batches.append(sorted(output_folder.glob("*.json")))
+        self.__document_files: list[Path] = DocumentLoader.interleave(
+            self.__document_batches
+        )
 
     def get_document_files_count(self) -> int:
         return len(self.__document_files)
@@ -105,12 +107,13 @@ class BatchGenerator:
     def _record_id(doc: Document) -> str:
         return hashlib.md5(doc.content.encode()).hexdigest()
 
-    def _documents_by_record_id(self) -> dict[str, Document]:
+    @staticmethod
+    def _documents_by_record_id(document_files: list[Path]) -> dict[str, Document]:
         return {
             BatchGenerator._record_id(doc): doc
             for doc in (
                 Document.model_validate_json(doc_path.read_text())
-                for doc_path in self.__document_files
+                for doc_path in document_files
             )
         }
 
@@ -128,11 +131,20 @@ class BatchGenerator:
         sent: set[str] = (
             set(state.sent_record_ids) if (state := self._read_state()) else set()
         )
-        pending: dict[str, Document] = {
-            record_id: doc
-            for record_id, doc in self._documents_by_record_id().items()
-            if record_id not in sent
-        }
+        pending: dict[str, Document] = dict(
+            DocumentLoader.interleave(
+                [
+                    [
+                        (record_id, doc)
+                        for record_id, doc in BatchGenerator._documents_by_record_id(
+                            batch
+                        ).items()
+                        if record_id not in sent
+                    ]
+                    for batch in self.__document_batches
+                ]
+            )
+        )
         if not pending:
             raise ValueError(
                 f"All {len(sent)} available documents have already been sent in a batch"
@@ -176,12 +188,14 @@ class BatchGenerator:
         self._logger.info(f"Generated batch file with {len(pending)} entries")
         return list(pending)
 
-    def _submit_batch(self, sample_size: int, submit: Callable[[str], object]) -> str:
+    def _submit_batch[T](
+        self, sample_size: int, submit: Callable[[str], T]
+    ) -> tuple[str, T]:
         previous: BatchState | None = self._read_state()
         # Create batch instruction JSONL file
         record_ids: list[str] = self._generate_batch(sample_size)
         job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-        submit(job_id)
+        submitted: T = submit(job_id)
         self._write_state(
             BatchState(
                 job_id=job_id,
@@ -189,7 +203,7 @@ class BatchGenerator:
                 + record_ids,
             )
         )
-        return job_id
+        return job_id, submitted
 
     def __resolve_job_id(self) -> str | None:
         return state.job_id if (state := self._read_state()) else None
@@ -221,7 +235,9 @@ class BatchGenerator:
         else:
             batch_outputs = AWS.parse_batch_output(file_name)
 
-        docs: dict[str, Document] = self._documents_by_record_id()
+        docs: dict[str, Document] = BatchGenerator._documents_by_record_id(
+            self.__document_files
+        )
 
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
@@ -371,7 +387,7 @@ class BedrockBatchGenerator(BatchGenerator):
                 bedrock_execution_role,
                 self._model_region,
             ),
-        )
+        )[0]
 
 
 class MESARuntimeBatchGenerator(BatchGenerator):
@@ -416,7 +432,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         self,
         sample_size: int,
         bucket: str,
-    ) -> str:
+    ) -> int:
         """Generate samples via batch inference on the MESA Runtime, in place
             of Bedrock.
 
@@ -427,7 +443,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
                 runtime reads it
 
         Returns:
-            The id of the started job
+            The id of the started MESA Runtime workflow run
 
         Raises:
             ValueError: If every available document has already been sent
@@ -443,4 +459,16 @@ class MESARuntimeBatchGenerator(BatchGenerator):
                 schema_name=self.__schema_package,
                 schema_version=self.__schema_version,
             ),
-        )
+        )[1]
+
+    def get_batch_run(self, run_id: int) -> WorkflowRun:
+        """Get a MESA Runtime batch inference workflow run.
+
+        Args:
+            run_id: The id of the run, as returned by `generate_via_batch`
+
+        Returns:
+            The run's current state, including its status, conclusion and URL
+
+        """
+        return self.__runtime.get_inference_run(run_id)

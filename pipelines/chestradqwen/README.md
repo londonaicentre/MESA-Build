@@ -1,0 +1,6 @@
+# chestradqwen pipeline
+
+## License
+
+chestradqwen pipeline © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
+To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>
