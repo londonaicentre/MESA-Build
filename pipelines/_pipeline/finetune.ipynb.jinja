@@ -28,7 +28,9 @@
    "source": [
     "from mesa_runtime import MesaRuntime\n",
     "runtime: MesaRuntime = MesaRuntime(\n",
-    "    os.environ[\"BASE_URL\"], os.environ[\"USERNAME\"], os.environ[\"PASSWORD\"]\n",
+    "    os.environ[\"LLM__MESA_RUNTIME__BASE_URL\"],\n",
+    "    os.environ[\"LLM__MESA_RUNTIME__USERNAME\"],\n",
+    "    os.environ[\"LLM__MESA_RUNTIME__PASSWORD\"],\n",
     ")"
    ],
    "id": "00000002"

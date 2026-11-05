@@ -71,9 +71,9 @@
     "    schema=Schema,\n",
     "    schema_name=\"{{ schema_name }}\",\n",
     "    document_batches=[\"<add document batch>\"],\n",
-    "    base_url=os.environ[\"BASE_URL\"],\n",
-    "    username=os.environ[\"USERNAME\"],\n",
-    "    password=os.environ[\"PASSWORD\"],\n",
+    "    base_url=os.environ[\"LLM__MESA_RUNTIME__BASE_URL\"],\n",
+    "    username=os.environ[\"LLM__MESA_RUNTIME__USERNAME\"],\n",
+    "    password=os.environ[\"LLM__MESA_RUNTIME__PASSWORD\"],\n",
     "    model_name=\"qwen3.5\",\n",
     ")"
    ],
