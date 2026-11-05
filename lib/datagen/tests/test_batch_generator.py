@@ -37,7 +37,9 @@ class BatchGeneratorFixture(BatchGenerator):
     def pending_documents(self, sample_size: int) -> dict[str, Document]:
         return self._pending_documents(sample_size)
 
-    def submit_batch(self, sample_size: int, submit: Callable[[str], object]) -> str:
+    def submit_batch(
+        self, sample_size: int, submit: Callable[[str], object]
+    ) -> tuple[str, object]:
         return self._submit_batch(sample_size, submit)
 
 
@@ -330,7 +332,10 @@ def mock_generate_via_dependencies(
 ) -> GenerateViaDependencies:
     return GenerateViaDependencies(
         _submit_batch=mocker.patch.object(
-            BatchGenerator, "_submit_batch", autospec=True, return_value="foo/bar"
+            BatchGenerator,
+            "_submit_batch",
+            autospec=True,
+            return_value=("foo/bar", 123),
         ),
         run_batch_inference=mocker.patch(
             "datagen.batch_generator.AWS.run_batch_inference", autospec=True
@@ -671,7 +676,7 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     model_id: str | None,
     batch_file: str,
 ) -> None:
-    assert runtime_generator.generate_via_batch(10, "foo") == "foo/bar"
+    assert runtime_generator.generate_via_batch(10, "foo") == 123
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
         "https://foo", "bar", "baz"
@@ -686,13 +691,13 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     )
 
 
-def test_submit_batch_valid_params_submits_job_returns_id(
+def test_submit_batch_valid_params_submits_job_returns_id_and_submitted(
     mock_submit_batch_dependencies: SubmitBatchDependencies,
     generator: BatchGeneratorFixture,
 ) -> None:
-    assert (
-        generator.submit_batch(10, mock_submit_batch_dependencies.submit)
-        == "datagen/2026-01-01-0000"
+    assert generator.submit_batch(10, mock_submit_batch_dependencies.submit) == (
+        "datagen/2026-01-01-0000",
+        mock_submit_batch_dependencies.submit.return_value,
     )
     mock_submit_batch_dependencies._generate_batch.assert_called_once_with(10)
     mock_submit_batch_dependencies.submit.assert_called_once_with(
@@ -721,6 +726,16 @@ def test_submit_batch_batch_submitted_appends_sent_record_ids(
     mock_submit_batch_dependencies._write_state.assert_called_once_with(
         BatchState(job_id="datagen/2026-01-01-0000", sent_record_ids=expected)
     )
+
+
+def test_get_batch_run_run_id_given_returns_run(
+    mock_mesa_runtime: MagicMock, runtime_generator: MESARuntimeBatchGenerator
+) -> None:
+    assert (
+        runtime_generator.get_batch_run(123)
+        == mock_mesa_runtime.return_value.get_inference_run.return_value
+    )
+    mock_mesa_runtime.return_value.get_inference_run.assert_called_once_with(123)
 
 
 def test_submit_batch_submission_fails_records_nothing(

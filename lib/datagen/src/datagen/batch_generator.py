@@ -22,7 +22,7 @@ from datagen.cost_estimator import CostEstimator
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
 from datagen.version_detector import get_schema_version
-from mesa_runtime import MesaRuntime
+from mesa_runtime import MesaRuntime, WorkflowRun
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
@@ -188,12 +188,14 @@ class BatchGenerator:
         self._logger.info(f"Generated batch file with {len(pending)} entries")
         return list(pending)
 
-    def _submit_batch(self, sample_size: int, submit: Callable[[str], object]) -> str:
+    def _submit_batch[T](
+        self, sample_size: int, submit: Callable[[str], T]
+    ) -> tuple[str, T]:
         previous: BatchState | None = self._read_state()
         # Create batch instruction JSONL file
         record_ids: list[str] = self._generate_batch(sample_size)
         job_id: str = "datagen/" + datetime.now().strftime("%Y-%m-%d-%H%M")
-        submit(job_id)
+        submitted: T = submit(job_id)
         self._write_state(
             BatchState(
                 job_id=job_id,
@@ -201,7 +203,7 @@ class BatchGenerator:
                 + record_ids,
             )
         )
-        return job_id
+        return job_id, submitted
 
     def __resolve_job_id(self) -> str | None:
         return state.job_id if (state := self._read_state()) else None
@@ -385,7 +387,7 @@ class BedrockBatchGenerator(BatchGenerator):
                 bedrock_execution_role,
                 self._model_region,
             ),
-        )
+        )[0]
 
 
 class MESARuntimeBatchGenerator(BatchGenerator):
@@ -430,7 +432,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         self,
         sample_size: int,
         bucket: str,
-    ) -> str:
+    ) -> int:
         """Generate samples via batch inference on the MESA Runtime, in place
             of Bedrock.
 
@@ -441,7 +443,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
                 runtime reads it
 
         Returns:
-            The id of the started job
+            The id of the started MESA Runtime workflow run
 
         Raises:
             ValueError: If every available document has already been sent
@@ -457,4 +459,16 @@ class MESARuntimeBatchGenerator(BatchGenerator):
                 schema_name=self.__schema_package,
                 schema_version=self.__schema_version,
             ),
-        )
+        )[1]
+
+    def get_batch_run(self, run_id: int) -> WorkflowRun:
+        """Get a MESA Runtime batch inference workflow run.
+
+        Args:
+            run_id: The id of the run, as returned by `generate_via_batch`
+
+        Returns:
+            The run's current state, including its status, conclusion and URL
+
+        """
+        return self.__runtime.get_inference_run(run_id)

@@ -39,20 +39,6 @@ See [examples](examples/).
     )
     ```
 
-    Alternatively, run the batch on the MESA Runtime instead of Bedrock, serving the `model` of the `model_name` entry in `config.json`.
-    Construct a `MESARuntimeBatchGenerator` in place of the `BedrockBatchGenerator` in step 3, skipping step 4, taking the same arguments plus `base_url`, `username` and `password` for the MESA Runtime API.
-    Omit `model_name` to split samples across every model the runtime serves, then:
-
-    ```python
-    gen.generate_via_batch(
-        sample_size =
-        bucket =
-    )
-    ```
-
-    Pass `model_name = None` to split samples across every model the runtime serves, in turn, rather than using a `config.json` model.
-    Output is written in the Bedrock batch format, so the remaining steps are unchanged.
-
 6. Download and parse batch outputs
 
     ```python
@@ -75,6 +61,42 @@ See [examples](examples/).
         input_folder =
     )
     ```
+
+## Quickstart (MESA Runtime batch generation)
+
+1. Follow step 1 of the AWS quickstart, and obtain the name of an S3 bucket to upload a batch specification to, along with the base URL, username and password of the MESA Runtime API.
+
+2. Download documents from batch, giving the `model_name` of a `config.json` entry whose `model` the runtime serves, or omitting it to split samples across every model the runtime serves
+
+    ```python
+    from datagen import MESARuntimeBatchGenerator
+    gen = MESARuntimeBatchGenerator(
+        system_prompt =
+        schema =
+        schema_name =
+        document_batches =
+        base_url =
+        username =
+        password =
+    )
+    ```
+
+3. Start batch generation
+
+    ```python
+    run_id = gen.generate_via_batch(
+        sample_size =
+        bucket =
+    )
+    ```
+
+4. Check the run's `status`, `conclusion` and `html_url`
+
+    ```python
+    gen.get_batch_run(run_id)
+    ```
+
+5. Follow steps 6 and 7 of the AWS quickstart.
 
 ## License
 
