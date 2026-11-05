@@ -1220,8 +1220,8 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-docsynth"
-version = "1.0.0"
-source = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth#28b37d486d0a949e317f6b99b5b332c54838beb4" }
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-generativeai" },
     { name = "londonaicentre-mesa-runtime" },
@@ -1230,10 +1230,14 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "pyyaml" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/13/b2/5ca9bd9705bbeb76681da34916659474a068544187b3483f3aa2d1946cef/londonaicentre_docsynth-1.1.0.tar.gz", hash = "sha256:159d5e4670315b3cbad618565ce63993e8565d1c51f6953ae3347c77e365479c", size = 3307504, upload-time = "2026-11-05T14:19:33.807Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/d8/1c2c059d85d1f3c5c0bda1991ffd2ed9b2c0f01df1eca0ee9485d349481b/londonaicentre_docsynth-1.1.0-py3-none-any.whl", hash = "sha256:887624909b7c89209feed7f888f3cde09da7278f0698e813391d9b540c022781", size = 4300651, upload-time = "2026-11-05T14:19:31.767Z" },
+]
 
 [[package]]
 name = "londonaicentre-mesa-datagen"
-version = "1.3.0"
+version = "1.5.1"
 source = { editable = "../../lib/datagen" }
 dependencies = [
     { name = "boto3" },
@@ -1262,7 +1266,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "boto3-stubs", specifier = ">=1.41.2" },
+    { name = "boto3-stubs", extras = ["bedrock-runtime", "pricing"], specifier = ">=1.41.2" },
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "pytest-mock", specifier = ">=3.15.1" },
@@ -1287,7 +1291,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.5.0"
+version = "2.6.0"
 source = { editable = "../../lib/types" }
 dependencies = [
     { name = "pydantic" },
@@ -1309,7 +1313,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.5.0"
+version = "1.6.0"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
@@ -1584,7 +1588,7 @@ dependencies = [
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "ipykernel", specifier = ">=7.3.0" },
-    { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth" },
+    { name = "londonaicentre-docsynth", specifier = ">=1.1.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
     { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-paedacuteschema", specifier = ">=1.2.0" },
