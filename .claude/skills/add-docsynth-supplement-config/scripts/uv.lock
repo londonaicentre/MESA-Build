@@ -26,7 +26,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "londonaicentre-docsynth", git = "https://github.com/londonaicentre/MESA-Docsynth" }]
+requires-dist = [{ name = "londonaicentre-docsynth", specifier = ">=1.1.0" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1406,8 +1406,8 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-docsynth"
-version = "1.0.0"
-source = { git = "https://github.com/londonaicentre/MESA-Docsynth#b74853de1da0d60c071e15330dc12294741f8b78" }
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-generativeai" },
     { name = "londonaicentre-mesa-runtime" },
@@ -1415,6 +1415,10 @@ dependencies = [
     { name = "londonaicentre-mesa-utils" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/13/b2/5ca9bd9705bbeb76681da34916659474a068544187b3483f3aa2d1946cef/londonaicentre_docsynth-1.1.0.tar.gz", hash = "sha256:159d5e4670315b3cbad618565ce63993e8565d1c51f6953ae3347c77e365479c", size = 3307504, upload-time = "2026-11-05T14:19:33.807Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/d8/1c2c059d85d1f3c5c0bda1991ffd2ed9b2c0f01df1eca0ee9485d349481b/londonaicentre_docsynth-1.1.0-py3-none-any.whl", hash = "sha256:887624909b7c89209feed7f888f3cde09da7278f0698e813391d9b540c022781", size = 4300651, upload-time = "2026-11-05T14:19:31.767Z" },
 ]
 
 [[package]]

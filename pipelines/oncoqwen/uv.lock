@@ -1197,8 +1197,8 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-docsynth"
-version = "1.0.0"
-source = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth#28b37d486d0a949e317f6b99b5b332c54838beb4" }
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-generativeai" },
     { name = "londonaicentre-mesa-runtime" },
@@ -1207,19 +1207,23 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "pyyaml" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/13/b2/5ca9bd9705bbeb76681da34916659474a068544187b3483f3aa2d1946cef/londonaicentre_docsynth-1.1.0.tar.gz", hash = "sha256:159d5e4670315b3cbad618565ce63993e8565d1c51f6953ae3347c77e365479c", size = 3307504, upload-time = "2026-11-05T14:19:33.807Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/d8/1c2c059d85d1f3c5c0bda1991ffd2ed9b2c0f01df1eca0ee9485d349481b/londonaicentre_docsynth-1.1.0-py3-none-any.whl", hash = "sha256:887624909b7c89209feed7f888f3cde09da7278f0698e813391d9b540c022781", size = 4300651, upload-time = "2026-11-05T14:19:31.767Z" },
+]
 
 [[package]]
 name = "londonaicentre-mesa-runtime"
-version = "0.2.0"
+version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
     { name = "httpx" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6c/e9/186aa4a1dd245db49bf62b8f6919b2dae1556368ef2288e668ee4268cc01/londonaicentre_mesa_runtime-0.2.0.tar.gz", hash = "sha256:c83261f6e505ded8626490528b4f4b3793f4a8252d25a995b5db61ac917dc478", size = 5644, upload-time = "2026-10-15T22:51:08.301Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/af/87/3421d8969e24f1966f8596e796313c834efde4f41872b17574e87fb02a08/londonaicentre_mesa_runtime-0.5.0.tar.gz", hash = "sha256:1946c5e61ed1da6591b6290fe27dcc6863d539aff23c5062c75375a867ced4b2", size = 5711, upload-time = "2026-10-18T19:02:11.53Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/2d/10f647fa1db5c44e8105d8fc45241f12f82f5510aa8cf576666c1e314e75/londonaicentre_mesa_runtime-0.2.0-py3-none-any.whl", hash = "sha256:ccb7e726016c8efc5cfd8cbba0e360299d3f66ddd50fa27e96f8e732c81ac0b9", size = 6783, upload-time = "2026-10-15T22:51:06.74Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/7d/aa1155a24bc55f11447a79ceef805b76835bf2c4b93f108077b3e464879e/londonaicentre_mesa_runtime-0.5.0-py3-none-any.whl", hash = "sha256:423c1daad83a94f6915ca2868efbf75e8a675e5716273f04396f0b897123ecdd", size = 6835, upload-time = "2026-10-18T19:02:10.54Z" },
 ]
 
 [[package]]
@@ -1236,7 +1240,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.5.1"
+version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -1247,9 +1251,9 @@ dependencies = [
     { name = "markdown" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/52/d8/e2f884a28b9f8949e3fd9ee4c4441177dd68e92892e23439324b43fb9564/londonaicentre_mesa_utils-1.5.1.tar.gz", hash = "sha256:402800fd6f4447584cf8655b69266f063400fd9270cba5163c3fd3d15ffac0b5", size = 17064, upload-time = "2026-10-22T10:46:38.336Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/79/d1287b6072e07c1ff1ca90fc8081fccf46e0072f4a633a86b2cb2894d33b/londonaicentre_mesa_utils-1.6.0.tar.gz", hash = "sha256:bd0efa98c7d33c7c15593e10e06f9eafcb7e6c287a321432c7c11d0629d95879", size = 17616, upload-time = "2026-11-04T13:50:25.583Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d4/0a/508421e871e5ed60e6b5318e22a39e9f261a55632a09bcc9c371167fbcf1/londonaicentre_mesa_utils-1.5.1-py3-none-any.whl", hash = "sha256:3b7e662b29528813910d0dd37bee04d4f2fbc0050cfc40af5ed4e672bbca0bbf", size = 15341, upload-time = "2026-10-22T10:46:37.209Z" },
+    { url = "https://files.pythonhosted.org/packages/44/31/b02c5092c4fa9d2729a9bd6ef20429bcee56282b6836f12486276a949b35/londonaicentre_mesa_utils-1.6.0-py3-none-any.whl", hash = "sha256:4b46cd0f0659e0ed7055afb85f33b141da6c04095f9514472e14338178da12c0", size = 15784, upload-time = "2026-11-04T13:50:24.574Z" },
 ]
 
 [[package]]
@@ -1430,7 +1434,7 @@ dependencies = [
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "ipykernel", specifier = ">=7.3.0" },
-    { name = "londonaicentre-docsynth", git = "ssh://git@github.com/londonaicentre/MESA-Docsynth" },
+    { name = "londonaicentre-docsynth", specifier = ">=1.1.0" },
     { name = "londonaicentre-mesa-runtime" },
 ]
 
