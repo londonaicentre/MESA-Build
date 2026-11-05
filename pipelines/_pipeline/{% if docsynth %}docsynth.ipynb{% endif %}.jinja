@@ -51,7 +51,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "### Generate documents (AWS Bedrock Sonnet batch)"
+    "### Generate documents (MESA Runtime)"
    ],
    "id": "00000005"
   },
@@ -61,7 +61,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "generator.generate_via_batch(os.environ[\"BUCKET\"], os.environ[\"BEDROCK_EXECUTION_ROLE\"])"
+    "generator.generate_via_batch(os.environ[\"BUCKET\"])"
    ],
    "id": "00000006"
   },
