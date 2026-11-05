@@ -35,7 +35,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "from datagen import BedrockBatchGenerator, TrainingDataUploader\n",
+    "from datagen import MESARuntimeBatchGenerator, TrainingDataUploader\n",
     "from {{ schema_name }}.prompt_builder import PromptBuilder\n",
     "from {{ schema_name }} import Schema"
    ],
@@ -66,12 +66,15 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "gen = BedrockBatchGenerator(\n",
+    "gen = MESARuntimeBatchGenerator(\n",
     "    system_prompt=pb.build_datagen_prompt({% if condition_based %}prompt_parameters{% endif %}),\n",
     "    schema=Schema,\n",
     "    schema_name=\"{{ schema_name }}\",\n",
-    "    model_name=\"sonnet4\",\n",
     "    document_batches=[\"<add document batch>\"],\n",
+    "    base_url=os.environ[\"BASE_URL\"],\n",
+    "    username=os.environ[\"USERNAME\"],\n",
+    "    password=os.environ[\"PASSWORD\"],\n",
+    "    model_name=\"qwen3.5\",\n",
     ")"
    ],
    "id": "00000006"
@@ -108,7 +111,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "gen.generate_via_batch(100, os.environ[\"BUCKET\"], os.environ[\"BEDROCK_EXECUTION_ROLE\"])"
+    "gen.generate_via_batch(100, os.environ[\"BUCKET\"])"
    ],
    "id": "0000000a"
   },
@@ -144,7 +147,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "gen.generate_via_batch(3000, os.environ[\"BUCKET\"], os.environ[\"BEDROCK_EXECUTION_ROLE\"])"
+    "gen.generate_via_batch(3000, os.environ[\"BUCKET\"])"
    ],
    "id": "0000000e"
   },
