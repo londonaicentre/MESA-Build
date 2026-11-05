@@ -86,7 +86,7 @@ class BatchGenerator:
         self.__output_folder_name: str = "./data/trainingdata/"
 
         # download and extract batches from S3
-        batches: list[list[Path]] = []
+        self.__document_batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
             output_folder = Path(f"./data/documents/{batch_name}")
@@ -95,8 +95,10 @@ class BatchGenerator:
                 filename=batch_filename,
                 output_folder=output_folder,
             )
-            batches.append(sorted(output_folder.glob("*.json")))
-        self.__document_files: list[Path] = DocumentLoader.interleave(batches)
+            self.__document_batches.append(sorted(output_folder.glob("*.json")))
+        self.__document_files: list[Path] = DocumentLoader.interleave(
+            self.__document_batches
+        )
 
     def get_document_files_count(self) -> int:
         return len(self.__document_files)
@@ -105,12 +107,13 @@ class BatchGenerator:
     def _record_id(doc: Document) -> str:
         return hashlib.md5(doc.content.encode()).hexdigest()
 
-    def _documents_by_record_id(self) -> dict[str, Document]:
+    @staticmethod
+    def _documents_by_record_id(document_files: list[Path]) -> dict[str, Document]:
         return {
             BatchGenerator._record_id(doc): doc
             for doc in (
                 Document.model_validate_json(doc_path.read_text())
-                for doc_path in self.__document_files
+                for doc_path in document_files
             )
         }
 
@@ -128,11 +131,20 @@ class BatchGenerator:
         sent: set[str] = (
             set(state.sent_record_ids) if (state := self._read_state()) else set()
         )
-        pending: dict[str, Document] = {
-            record_id: doc
-            for record_id, doc in self._documents_by_record_id().items()
-            if record_id not in sent
-        }
+        pending: dict[str, Document] = dict(
+            DocumentLoader.interleave(
+                [
+                    [
+                        (record_id, doc)
+                        for record_id, doc in BatchGenerator._documents_by_record_id(
+                            batch
+                        ).items()
+                        if record_id not in sent
+                    ]
+                    for batch in self.__document_batches
+                ]
+            )
+        )
         if not pending:
             raise ValueError(
                 f"All {len(sent)} available documents have already been sent in a batch"
@@ -221,7 +233,9 @@ class BatchGenerator:
         else:
             batch_outputs = AWS.parse_batch_output(file_name)
 
-        docs: dict[str, Document] = self._documents_by_record_id()
+        docs: dict[str, Document] = BatchGenerator._documents_by_record_id(
+            self.__document_files
+        )
 
         os.makedirs(self.__output_folder_name, exist_ok=True)
         successful_generations: int = 0
