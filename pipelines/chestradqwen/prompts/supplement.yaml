@@ -1,0 +1,42 @@
+supplements:
+  - name: single-finding
+    description: 2 of 21 reports asked for one finding report one, a ~2% share against 25% configured
+    count: 38
+    requirements:
+      present_findings: one_finding
+  - name: findings-only
+    description: 11 of 25 reports asked to describe findings only name no disease, a ~16% share against 35% configured
+    count: 36
+    requirements:
+      diagnoses_offered: findings_only
+  - name: no-history
+    description: 7 of 25 reports asked for no clinical history leave it out, a ~7% share against 25% configured
+    count: 29
+    requirements:
+      clinical_history_inclusion: exclude_history
+  - name: no-negatives
+    description: 4 of 25 reports asked to state no absent abnormalities state none, a ~3% share against 20% configured
+    count: 26
+    requirements:
+      absent_findings: none_stated
+  - name: brief
+    description: 13 of 25 reports asked to be very short are, a ~13% share against 25% configured
+    count: 20
+    requirements:
+      report_length: brief
+  - name: overall-line
+    description: 6 of 10 comparing reports asked for an overall change line open with one, ~25% of comparing reports against 40% configured
+    count: 19
+    requirements:
+      overall_change_summary: overall_line
+      comparison: descriptive_change
+  - name: preliminary
+    description: 220 of 729 reports asked to be preliminary are marked as such, a ~6% share against 18% configured
+    count: 19
+    requirements:
+      document_type: preliminary_report
+  - name: addendum
+    description: 96 of 496 reports asked for an addendum have one, a ~2.5% share against 12% configured
+    count: 13
+    requirements:
+      document_type: addendum_report

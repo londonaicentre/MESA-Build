@@ -1340,7 +1340,7 @@ dev = [
 [[package]]
 name = "londonaicentre-docsynth"
 version = "1.0.0"
-source = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth#b662d53496ccf6ea0cedadbb1213f226684db381" }
+source = { git = "ssh://git@github.com/londonaicentre/MESA-Docsynth#3b490c6783321c690bb3fd9ff1731bd7aa336ce6" }
 dependencies = [
     { name = "google-generativeai" },
     { name = "londonaicentre-mesa-runtime" },
@@ -1352,7 +1352,7 @@ dependencies = [
 
 [[package]]
 name = "londonaicentre-mesa-datagen"
-version = "1.5.0"
+version = "1.5.1"
 source = { editable = "../../lib/datagen" }
 dependencies = [
     { name = "boto3" },
@@ -1428,7 +1428,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.5.1"
+version = "1.6.0"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
