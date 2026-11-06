@@ -50,6 +50,9 @@ The user wires that config into the pipeline's notebook and runs the correction.
   - none, for judgement calls on valid extractions (e.g. procedure choice or summaries), which neither the prompt nor the rules can safely make.
 - The schema and datagen prompt are fixed, as the user may not be able to change them, so never triage a finding to a change in either.
   Where their wording is ambiguous, read it as written, and triage the finding to a rule or flag only if every reading agrees, otherwise to none.
+- Keep the records sent to Claude (every failure status and every flagged record) under the limit that `corpus.py census` reports (5% of the corpus), as correcting more replaces the generated training data rather than correcting it.
+  If failures alone exceed it, triage no flags, and report that the batch needs regenerating.
+  Otherwise, keep the flags that cover the most clear-cut errors within the limit, and triage the rest to none.
 - Present the census, the findings with their counts and sources, and the triage to the user, and agree them before writing anything.
 
 ## 5. Write the rules
@@ -72,7 +75,7 @@ The user wires that config into the pipeline's notebook and runs the correction.
 - Use these sections: a title, a role, the inputs in `<note>`, `<original_response>` and (for flagged records) `<issues>` tags, numbered rules for each failure found, the original datagen prompt under REFERENCE INSTRUCTIONS as `{EXTRACTION_PROMPT}`, and OUTPUT last, with no code fences.
 - For flagged records, instruct Claude to correct only the fields the issues name and to keep every other value as it is.
 - Do not repeat what the datagen prompt already says.
-- Run `corpus.py census` again, as records that flag rules hold for now show as `flagged`.
+- Run `corpus.py census` again, as records that flag rules hold for now show as `flagged`, and check that the share sent to Claude is still under its limit.
 - Test the prompt with `corpus.py test-prompt prompts/correction.txt <recordId>...` on up to ten records spread across the failure statuses and `flagged`.
   It corrects copies of the records with Claude Haiku, leaving the batch output untouched, and reports each record's status before and after.
   Each record takes about 25 seconds and uses the user's Claude quota.

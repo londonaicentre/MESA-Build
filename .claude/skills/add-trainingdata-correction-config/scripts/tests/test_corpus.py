@@ -250,20 +250,32 @@ class TestRecordAccess:
 
 
 class TestCensus:
-    def test_census_records_groups_and_writes_record_ids(
+    def test_census_records_groups_writes_and_reports_claude_share(
         self,
         corpus: CorpusFixture,
+        constructor_mocks: ConstructorMocks,
         file_mocks: FileMocks,
         record_mocks: RecordMocks,
     ) -> None:
         record_mocks.records.return_value = [
             ("", make_record(record_id)) for record_id in ["foo", "bar", "baz"]
         ]
-        record_mocks.status.side_effect = ["valid", "prose", "valid"]
-        expected: dict[str, list[str]] = {"valid": ["foo", "baz"], "prose": ["bar"]}
+        record_mocks.status.side_effect = ["valid", "prose", "flagged", "valid"]
+        record_mocks.records.return_value = [
+            ("", make_record(record_id)) for record_id in ["foo", "bar", "qux", "baz"]
+        ]
+        expected: dict[str, list[str]] = {
+            "valid": ["foo", "baz"],
+            "prose": ["bar"],
+            "flagged": ["qux"],
+        }
         assert corpus.census() == expected
         file_mocks._write_text.assert_called_once_with(
             Corpus.CENSUS_FILE, json.dumps(expected)
+        )
+        assert (
+            "\nSent to Claude: 50.0% (limit 5%)\n"
+            in (constructor_mocks.getLogger.return_value.info.call_args.args[0])
         )
 
 

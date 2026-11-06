@@ -29,6 +29,7 @@ class Corpus:
     RULES_FILE: Path = Path("rules/correction.yaml")
     SCRATCH_FOLDER: Path = Path("_scratch/corrections")
     CENSUS_FILE: Path = SCRATCH_FOLDER / "census.json"
+    CLAUDE_SHARE_LIMIT: float = 0.05
 
     def __init__(self, schema_package: str) -> None:
         self.__logger: logging.Logger = logging.getLogger(__name__)
@@ -158,7 +159,8 @@ class Corpus:
         return "has_output" if "<output>" in response else "prose"
 
     def census(self) -> dict[str, list[str]]:
-        """Group record IDs by extraction status, writing them to the census file.
+        """Group record IDs by extraction status, writing them to the census file,
+        and report the share of records that `correct_with_claude` would send.
 
         Returns:
             dict[str, list[str]]: Record IDs by status
@@ -175,6 +177,9 @@ class Corpus:
                 f"{status}: {len(record_ids)}"
                 for status, record_ids in record_ids_by_status.items()
             )
+            + "\nSent to Claude: "
+            + f"{1 - len(record_ids_by_status.get('valid', [])) / sum(map(len, record_ids_by_status.values())):.1%}"
+            + f" (limit {Corpus.CLAUDE_SHARE_LIMIT:.0%})"
             + f"\nRecord IDs by status written to {Corpus.CENSUS_FILE}"
         )
         return record_ids_by_status
