@@ -44,6 +44,14 @@ resource "aws_s3_bucket_versioning" "mesa_build_bucket_versioning" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
+resource "aws_s3_bucket_logging" "mesa_build_bucket_logging" {
+  bucket        = aws_s3_bucket.mesa_build_bucket.id
+  target_bucket = "aws-accelerator-s3-access-logs-${data.aws_caller_identity.current.account_id}-eu-west-2"
+  target_prefix = "${aws_s3_bucket.mesa_build_bucket.id}/"
+}
+
 resource "aws_s3_bucket_lifecycle_configuration" "terraform_state_bucket_lifecycle_configuration" {
   bucket = aws_s3_bucket.mesa_build_bucket.id
 
@@ -88,4 +96,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "mesa_public_bucket_lifecycle_c
 
     status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket_logging" "mesa_public_bucket_logging" {
+  bucket        = aws_s3_bucket.mesa_public_bucket.id
+  target_bucket = "aws-accelerator-s3-access-logs-${data.aws_caller_identity.current.account_id}-eu-west-2"
+  target_prefix = "${aws_s3_bucket.mesa_public_bucket.id}/"
 }
