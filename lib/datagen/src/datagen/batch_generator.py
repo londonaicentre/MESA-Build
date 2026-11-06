@@ -228,11 +228,16 @@ class BatchGenerator:
         """
         batch_outputs: BatchOutputs
         job_id: str | None = self.__resolve_job_id() if bucket is not None else None
-        if bucket is not None and job_id is not None:
+        if bucket is not None and job_id is not None and not os.path.exists(file_name):
             batch_outputs = AWS.get_batch_inference_outputs(
                 self._model_region, bucket, job_id, file_name
             )
         else:
+            if bucket is not None and job_id is not None:
+                self._logger.warning(
+                    f"Extracting from the existing {file_name} rather than "
+                    "downloading it, so delete it to download it again"
+                )
             batch_outputs = AWS.parse_batch_output(file_name)
 
         docs: dict[str, Document] = BatchGenerator._documents_by_record_id(

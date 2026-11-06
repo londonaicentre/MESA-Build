@@ -1356,7 +1356,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-datagen"
-version = "1.5.2"
+version = "1.7.0"
 source = { editable = "../../lib/datagen" }
 dependencies = [
     { name = "boto3" },

@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import shutil
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -13,6 +14,9 @@ from utils.llm import LLM, BatchOutput
 
 class BatchOutputCorrector:
     """Corrector of Bedrock batch outputs, overwriting the output file in place.
+
+    Each write clears the training samples extracted from the output file, as
+    they no longer match it, so they must be extracted again before upload.
 
     Args:
         schema (type[BaseModel]): Schema that outputs must validate against
@@ -28,6 +32,7 @@ class BatchOutputCorrector:
 
         self.__schema: type[BaseModel] = schema
         self.__batch_output_file: Path = batch_output_file
+        self.__trainingdata_folder: Path = Path("data/trainingdata")
 
     def _read(self) -> list[dict[str, object]]:
         return [
@@ -41,6 +46,11 @@ class BatchOutputCorrector:
             "".join(json.dumps(record) + "\n" for record in records)
         )
         os.replace(temporary_file, self.__batch_output_file)
+        if self.__trainingdata_folder.exists():
+            shutil.rmtree(self.__trainingdata_folder)
+            self._logger.warning(
+                f"Cleared {self.__trainingdata_folder}, so extract the samples again"
+            )
 
     @staticmethod
     def _get_note(record: dict[str, object]) -> str:

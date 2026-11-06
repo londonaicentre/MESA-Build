@@ -1,0 +1,394 @@
+# Rule-based corrections to chestradschema extractions, applied in order, and flags (`action: flag`) that send an extraction to Claude to correct.
+# Each rule acts on the targets found by the JSONPath `path` for which the JSON Schema `when` validates {value: target, parent: object or list holding it, note: source note}.
+# Keywords such as `pattern` and `contains` only constrain values of their own type, so they are paired with `type` where the value may be null.
+# See datagen.correction_rules for the rule format.
+
+rules:
+  - name: metadata-missing
+    description: The document is a radiology report but scan_metadata is null, so fill in scan_metadata (modalities, protocols, contrast, comparison_year and image_quality_desc) from what the report states.
+    path: scan_metadata
+    action: flag
+    when:
+      properties:
+        value: {type: 'null'}
+        parent:
+          properties:
+            is_radiology_report: {const: true}
+
+  - name: protocol-pa-not-stated
+    description: Protocols are only those the report states, so PA is removed where the note never names a PA or posteroanterior view.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [pa]
+    when:
+      properties:
+        value: {type: array, contains: {const: pa}}
+        note: {not: {pattern: '\bPA\b|(?i:postero-?\s?anterior)'}}
+
+  - name: protocol-ap-not-stated
+    description: Protocols are only those the report states, so AP is removed where the note never names an AP or anteroposterior view.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [ap]
+    when:
+      properties:
+        value: {type: array, contains: {const: ap}}
+        note: {not: {pattern: '\bAP\b|(?i:antero-?\s?posterior)'}}
+
+  - name: protocol-lateral-not-stated
+    description: Protocols are only those the report states, so lateral is removed where the note never mentions a lateral.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [lateral]
+    when:
+      properties:
+        value: {type: array, contains: {const: lateral}}
+        note: {not: {pattern: '(?i)\blat(eral)?\b'}}
+
+  - name: protocol-supine-not-stated
+    description: Protocols are only those the report states, so supine is removed where the note never says supine (e.g. an AP sitting film).
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [supine]
+    when:
+      properties:
+        value: {type: array, contains: {const: supine}}
+        note: {not: {pattern: '(?i)supine'}}
+
+  - name: protocol-mobile-not-stated
+    description: Protocols are only those the report states, so mobile is removed where the note never says mobile, portable or bedside (e.g. a film inferred to be mobile from a resus or PICU setting).
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [mobile]
+    when:
+      properties:
+        value: {type: array, contains: {const: mobile}}
+        note: {not: {pattern: '(?i)mobile|portable|bedside'}}
+
+  - name: protocol-hrct-not-stated
+    description: Protocols are only those the report states, so HRCT is removed where the note never names HRCT or high resolution (e.g. a thin-section CT).
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [hrct]
+    when:
+      properties:
+        value: {type: array, contains: {const: hrct}}
+        note: {not: {pattern: '(?i)HRCT|high[- ]resolution'}}
+
+  - name: protocol-ctpa-not-stated
+    description: Protocols are only those the report states, so CTPA is removed where the note never names a CT pulmonary angiogram (e.g. a coronary CT angiogram or a contrast CT chest).
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [ctpa]
+    when:
+      properties:
+        value: {type: array, contains: {const: ctpa}}
+        note: {not: {pattern: '(?i)CTPA|CT\s*PA\b|pulmonary\b.{0,15}angiogra|pulmonary arter(y|ial) (phase|tree)'}}
+
+  - name: protocol-ct-aortogram-not-stated
+    description: Protocols are only those the report states, so CT aortogram is removed where the note never names an aortogram or an angiogram of the aorta.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [ct_aortogram]
+    when:
+      properties:
+        value: {type: array, contains: {const: ct_aortogram}}
+        note: {not: {pattern: '(?i)aortogra|aort\w*\s*(\w+\s*)?angiogra|aortoiliofemoral|angiogra[a-z]*( of)?( the)?( thoracic)? aort'}}
+
+  - name: protocol-low-dose-not-stated
+    description: Protocols are only those the report states, so low dose is removed where the note never names a low-dose or screening CT.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [low_dose]
+    when:
+      properties:
+        value: {type: array, contains: {const: low_dose}}
+        note: {not: {pattern: '(?i)low[- ]dose|LDCT|\bLD\b|screening|TLHC|lung health'}}
+
+  - name: protocol-expiratory-not-stated
+    description: Protocols are only those the report states, so expiratory is removed where the note never mentions expiration.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [expiratory]
+    when:
+      properties:
+        value: {type: array, contains: {const: expiratory}}
+        note: {not: {pattern: '(?i)expirat'}}
+
+  - name: protocol-prone-not-stated
+    description: Protocols are only those the report states, so prone is removed where the note never says prone.
+    path: scan_metadata.protocols
+    action: remove_items
+    value: [prone]
+    when:
+      properties:
+        value: {type: array, contains: {const: prone}}
+        note: {not: {pattern: '(?i)prone'}}
+
+  - name: contrast-not-stated
+    description: Contrast is null where the report does not say whether contrast was given, which a note never mentioning contrast, enhancement or a contrast study cannot (e.g. a plain chest X-ray).
+    path: scan_metadata.contrast
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: {not: {pattern: '(?i)contrast|enhanc|intravenous|\bIV\b|omnipaque|iodin|gadolin|CTPA|\bCTA\b|angiogra|aortogra|venogra|(arterial|venous|portal|delayed) phase|barium|gastrografin|water[- ]soluble'}}
+
+  - name: comparison-year-not-stated
+    description: The comparison year is only recorded where explicitly stated, so it is cleared where the note gives neither the year nor a date with a two-digit year (e.g. a year worked out from "12 months ago").
+    path: scan_metadata.comparison_year
+    action: clear
+    when:
+      properties:
+        value: {type: integer}
+        note:
+          allOf:
+            - not: {pattern: '{value}'}
+            - not: {pattern: '\b\d{1,2}[/-](\d{1,2}[/-])?\d{2}(?!\d)|(?i:\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.? ''?\d{2})(?!\d)'}
+
+  - name: no-prior-comparison-year
+    description: A report stating that no previous imaging is available has no comparison year.
+    path: scan_metadata.comparison_year
+    action: clear
+    when:
+      properties:
+        value: {type: integer}
+        note: &no_prior
+          allOf:
+            - pattern: '(?i)\bno (previous|prior|old)( \w+){0,3} (imaging|studies|study|films?|radiographs?|examinations?|scans?|CT|CXR)\b[^.\n]{0,30}(available|for comparison)|\bno (comparison|comparative)( (imaging|studies|study))? (is |are )?available|comparison: none'
+            - not: {pattern: '(?i)compared (with|to)|comparison (is |was )?made|comparison with (the )?(prior|previous)'}
+
+  - name: no-prior-finding-change
+    description: Change is against a previous scan, so findings have no change in a report stating that no previous imaging is available.
+    path: findings[*].change
+    action: set
+    value: not_stated
+    when:
+      properties:
+        value: {not: {const: not_stated}}
+        note: *no_prior
+
+  - name: no-prior-finding-change-desc
+    description: Change is against a previous scan, so findings have no change description in a report stating that no previous imaging is available.
+    path: findings[*].change_desc
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: *no_prior
+
+  - name: no-prior-overall-change
+    description: Overall change is against a previous scan, so it is not stated in a report stating that no previous imaging is available.
+    path: overall_change
+    action: set
+    value: not_stated
+    when:
+      properties:
+        value: {not: {const: not_stated}}
+        note: *no_prior
+
+  - name: no-prior-overall-change-desc
+    description: Overall change is against a previous scan, so it has no description in a report stating that no previous imaging is available.
+    path: overall_change_desc
+    action: clear
+    when:
+      properties:
+        value: {not: {type: 'null'}}
+        note: *no_prior
+
+  - name: extent-from-measurement
+    description: Extent is graded as the radiologist grades it, so it is not stated where its only support is a measurement (e.g. "2.8 cm" as moderate).
+    path: findings[*].extent
+    action: set
+    value: not_stated
+    when:
+      properties:
+        value: {not: {const: not_stated}}
+        parent:
+          properties:
+            extent_desc: {type: string, pattern: '(?i)^\s*(~|approx(imately|\.)?|measuring|up to)?\s*\d+(\.\d+)?\s*(x\s*\d+(\.\d+)?\s*)*(mm|cm)\.?\s*$'}
+
+  - name: emphysema-as-empyema-diagnosis
+    description: Emphysema is not empyema, so an empyema diagnosis whose description names emphysema and never empyema is other (emphysema alone does not establish COPD, per GOLD 2025).
+    path: diagnoses[*].diagnosis
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: empyema}
+        parent:
+          properties:
+            diagnosis_desc: {pattern: '(?i)emphysema', not: {pattern: '(?i)empyema'}}
+
+  - name: empyema-as-emphysema-finding
+    description: Empyema is not emphysema, and has no finding type of its own, so an emphysema finding whose description names empyema and never emphysema is other.
+    path: findings[*].finding
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: emphysema}
+        parent:
+          properties:
+            finding_desc: {pattern: '(?i)empyema', not: {pattern: '(?i)emphysema'}}
+
+  - name: asthma-as-copd
+    description: Asthma is not COPD and has no diagnosis type of its own, so a COPD diagnosis whose description names asthma and never COPD or emphysema is other.
+    path: diagnoses[*].diagnosis
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: copd}
+        parent:
+          properties:
+            diagnosis_desc: {pattern: '(?i)asthma', not: {pattern: '(?i)COPD|COAD|chronic obstructive|chronic airflow|emphysema'}}
+
+  - name: osteopenia-as-degenerative-or-lesion
+    description: Osteopenia is neither degenerative change nor a lytic or sclerotic bone lesion, and has no finding type of its own, so it is other.
+    path: findings[*].finding
+    action: set
+    value: other
+    when:
+      properties:
+        value: {enum: [degenerative_change, bone_lesion]}
+        parent:
+          properties:
+            finding_desc: {pattern: '(?i)osteopen|demineral|osteopor', not: {pattern: '(?i)degenerat|spondyl|lytic|sclerotic|lesion|osteophyt|fractur|compression|collapse|deposit|metasta|disc'}}
+
+  - name: flattened-diaphragm-duplicate
+    description: Flattened diaphragms are hyperinflation, not diaphragm elevation, so the entry is removed where the record already holds hyperinflation.
+    path: findings[*]
+    action: remove
+    when:
+      properties:
+        value:
+          properties:
+            finding: {const: diaphragm_elevation}
+            finding_desc: {pattern: '(?i)flatten', not: {pattern: '(?i)elevat|raised|eventrat|\bhigh'}}
+        parent:
+          contains:
+            properties:
+              finding: {const: hyperinflation}
+
+  - name: flattened-diaphragm-as-elevation
+    description: Flattened diaphragms are hyperinflation, not diaphragm elevation.
+    path: findings[*].finding
+    action: set
+    value: hyperinflation
+    when:
+      properties:
+        value: {const: diaphragm_elevation}
+        parent:
+          properties:
+            finding_desc: {pattern: '(?i)flatten', not: {pattern: '(?i)elevat|raised|eventrat|\bhigh'}}
+
+  - name: goitre-without-thyroid
+    description: A thyroid nodule or goitre needs the thyroid, so the finding is other where neither its description nor its site names the thyroid (e.g. chest wall swelling).
+    path: findings[*].finding
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: thyroid_nodule_goitre}
+        parent:
+          properties:
+            finding_desc: {not: {pattern: '(?i)thyro|goit|retrosternal|isthmus'}}
+            anatomical_site_distribution_desc: {not: {type: string, pattern: '(?i)thyro|goit|retrosternal|isthmus'}}
+            anatomical_site_distribution: {not: {contains: {const: thyroid}}}
+
+  - name: steatosis-unsupported
+    description: Hepatic steatosis is fatty, low-attenuation liver, so the finding is other where its description says nothing of either (e.g. gallstones).
+    path: findings[*].finding
+    action: set
+    value: other
+    when:
+      properties:
+        value: {const: hepatic_steatosis}
+        parent:
+          properties:
+            finding_desc: {not: {pattern: '(?i)steato|fatty|\bfat\b|low[- ]?(attenuation|density)|hypo-?dens|hypo-?attenuat|NAFLD|MASLD|(reduced|decreased) (hepatic |liver )?attenuation'}}
+
+  - name: thoracic-spine-not-thoracic
+    description: The thoracic spine site is removed where the finding names only the cervical or lumbar spine (e.g. a C7 cervical rib).
+    path: findings[*].anatomical_site_distribution
+    action: remove_items
+    value: [thoracic_spine]
+    when:
+      properties:
+        value: {type: array, contains: {const: thoracic_spine}}
+        parent:
+          anyOf:
+            - properties:
+                finding_desc: {pattern: '(?i)cervical|lumbar|\b[CL][1-7]\b'}
+            - properties:
+                anatomical_site_distribution_desc: {type: string, pattern: '(?i)cervical|lumbar|\b[CL][1-7]\b'}
+          properties:
+            finding_desc: {not: {pattern: '(?i)thora|dorsal|\bT\d{1,2}\b'}}
+            anatomical_site_distribution_desc: {not: {type: string, pattern: '(?i)thora|dorsal|\bT\d{1,2}\b'}}
+
+  - name: lung-side-right
+    description: A right lung lobe, zone or distribution also gets its lung side.
+    path: findings[*].anatomical_site_distribution
+    action: add_items
+    value: [right_lung]
+    when:
+      properties:
+        value:
+          type: array
+          contains: {enum: [right_upper_lobe, right_middle_lobe, right_lower_lobe, right_upper_zone, right_mid_zone, right_lower_zone, right_subpleural_peripheral, right_central_peribronchovascular, right_perihilar, right_diffuse]}
+          not: {contains: {const: right_lung}}
+
+  - name: lung-side-left
+    description: A left lung lobe, zone or distribution also gets its lung side.
+    path: findings[*].anatomical_site_distribution
+    action: add_items
+    value: [left_lung]
+    when:
+      properties:
+        value:
+          type: array
+          contains: {enum: [left_upper_lobe, lingula, left_lower_lobe, left_upper_zone, left_mid_zone, left_lower_zone, left_subpleural_peripheral, left_central_peribronchovascular, left_perihilar, left_diffuse]}
+          not: {contains: {const: left_lung}}
+
+  - name: lung-unspecified-with-location
+    description: The lung location is not unspecified where a lung side is recorded.
+    path: findings[*].anatomical_site_distribution
+    action: remove_items
+    value: [lung_location_unspecified]
+    when:
+      properties:
+        value:
+          type: array
+          allOf:
+            - contains: {const: lung_location_unspecified}
+            - contains: {enum: [left_lung, right_lung]}
+
+  - name: airways-unspecified-with-location
+    description: The airway location is not unspecified where a specific airway is recorded.
+    path: findings[*].anatomical_site_distribution
+    action: remove_items
+    value: [airways_location_unspecified]
+    when:
+      properties:
+        value:
+          type: array
+          allOf:
+            - contains: {const: airways_location_unspecified}
+            - contains: {enum: [trachea, left_main_bronchus, right_main_bronchus]}
+
+  - name: duplicate-findings
+    description: A finding is recorded once, so exact repeats are removed.
+    path: findings
+    action: dedupe
+    when:
+      properties:
+        value: {type: array, not: {uniqueItems: true}}
+
+  - name: duplicate-diagnoses
+    description: A diagnosis is recorded once, so exact repeats are removed.
+    path: diagnoses
+    action: dedupe
+    when:
+      properties:
+        value: {type: array, not: {uniqueItems: true}}
