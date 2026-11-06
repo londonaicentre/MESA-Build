@@ -179,18 +179,28 @@ class TestRecordAccess:
 
 
 class TestCorrectWithClaude:
+    @pytest.fixture
+    def mock_rules(self, mocker: MockerFixture) -> MagicMock:
+        mock_rules: MagicMock = MagicMock()
+        mock_rules.flag.return_value = []
+        mocker.patch(
+            "datagen.batch_corrector.CorrectionRules.load", return_value=mock_rules
+        )
+        return mock_rules
+
     def test_correct_with_claude_invalid_records_corrects_only_those(
         self,
         corrector: BatchOutputCorrectorFixture,
         correction_mocks: CorrectionMocks,
         claude_mocks: ClaudeMocks,
+        mock_rules: MagicMock,
     ) -> None:
         correction_mocks.extract_and_validate_json.side_effect = [
             (None, None),
             (MockSchema(field="foo"), {"field": "foo"}),
             (None, {"foo": 1}),
         ]
-        assert corrector.correct_with_claude(Path("foo.txt"), "bar") == 2
+        assert corrector.correct_with_claude(Path("foo.txt"), "bar", Path("baz")) == 2
         assert claude_mocks.claude_code.call_args_list[0].args == (
             "haiku",
             "corge bar",
@@ -205,31 +215,87 @@ class TestCorrectWithClaude:
                 {"recordId": "baz", "text": "grault"},
             ],
         )
+        mock_rules.flag.assert_called_once_with({"field": "foo"}, "qux")
+
+    @pytest.mark.parametrize(
+        "corrected, expected",
+        [
+            (
+                (MockSchema(field="bar"), {"field": "bar"}),
+                [{"recordId": "foo", "text": "grault"}],
+            ),
+            ((None, None), None),
+        ],
+    )
+    def test_correct_with_claude_flagged_record_sends_issues_and_keeps_valid_correction(
+        self,
+        corrector: BatchOutputCorrectorFixture,
+        correction_mocks: CorrectionMocks,
+        claude_mocks: ClaudeMocks,
+        mock_rules: MagicMock,
+        corrected: tuple[MockSchema | None, dict[str, str] | None],
+        expected: list[dict[str, str]] | None,
+    ) -> None:
+        correction_mocks._read.return_value = [{"recordId": "foo"}]
+        correction_mocks.extract_and_validate_json.side_effect = [
+            (MockSchema(field="foo"), {"field": "foo"}),
+            corrected,
+        ]
+        mock_rules.flag.return_value = ["garply", "waldo"]
+        assert corrector.correct_with_claude(
+            Path("foo.txt"), "bar", Path("baz")
+        ) == len(expected or [])
+        assert claude_mocks.claude_code.call_args.args[2] == (
+            "<note>\nqux\n</note>\n\n<original_response>\nquux\n</original_response>"
+            "\n\n<issues>\n- garply\n- waldo\n</issues>"
+        )
+        if expected is None:
+            correction_mocks._write.assert_not_called()
+        else:
+            correction_mocks._write.assert_called_once_with(corrector, expected)
 
     def test_correct_with_claude_many_invalid_records_writes_each_correction(
         self,
         corrector: BatchOutputCorrectorFixture,
         correction_mocks: CorrectionMocks,
         claude_mocks: ClaudeMocks,
+        mock_rules: MagicMock,
     ) -> None:
         correction_mocks._read.return_value = [
             {"recordId": index} for index in range(12)
         ]
         correction_mocks.extract_and_validate_json.return_value = (None, None)
-        assert corrector.correct_with_claude(Path("foo.txt"), "bar") == 12
+        assert corrector.correct_with_claude(Path("foo.txt"), "bar", Path("baz")) == 12
         assert correction_mocks._write.call_count == 12
 
-    def test_correct_with_claude_no_invalid_records_does_nothing(
+    def test_correct_with_claude_no_rules_file_flags_nothing(
         self,
         corrector: BatchOutputCorrectorFixture,
         correction_mocks: CorrectionMocks,
         claude_mocks: ClaudeMocks,
+        mocker: MockerFixture,
     ) -> None:
+        load: MagicMock = mocker.patch("datagen.batch_corrector.CorrectionRules.load")
         correction_mocks.extract_and_validate_json.return_value = (
             MockSchema(field="foo"),
             {"field": "foo"},
         )
         assert corrector.correct_with_claude(Path("foo.txt"), "bar") == 0
+        load.assert_not_called()
+        claude_mocks.claude_code.assert_not_called()
+
+    def test_correct_with_claude_no_invalid_or_flagged_records_does_nothing(
+        self,
+        corrector: BatchOutputCorrectorFixture,
+        correction_mocks: CorrectionMocks,
+        claude_mocks: ClaudeMocks,
+        mock_rules: MagicMock,
+    ) -> None:
+        correction_mocks.extract_and_validate_json.return_value = (
+            MockSchema(field="foo"),
+            {"field": "foo"},
+        )
+        assert corrector.correct_with_claude(Path("foo.txt"), "bar", Path("baz")) == 0
         claude_mocks.claude_code.assert_not_called()
         correction_mocks._write.assert_not_called()
 
