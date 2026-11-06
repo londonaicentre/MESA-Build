@@ -94,6 +94,33 @@ def test_create_model_invocation_job_valid_input_succeeds(
 
 
 @patch("utils.aws.boto3.client")
+def test_create_model_invocation_job_local_path_reads_base_name(
+    mock_client: MagicMock,
+) -> None:
+    mock_bedrock_client = MagicMock()
+    mock_client.return_value = mock_bedrock_client
+    AWS.create_model_invocation_job("foo", "bar", "baz/qux", "quux", "corge", "grault")
+    assert mock_bedrock_client.create_model_invocation_job.call_args.kwargs[
+        "inputDataConfig"
+    ]["s3InputDataConfig"]["s3Uri"] == ("s3://quux/foo/input/qux")
+
+
+@patch("utils.aws.AWS.create_model_invocation_job")
+@patch("utils.aws.AWS.upload_file")
+def test_run_batch_inference_local_path_uploads_under_base_name(
+    mock_upload_file: MagicMock,
+    mock_create_model_invocation_job: MagicMock,
+) -> None:
+    AWS.run_batch_inference("foo", "bar", "baz/qux", "quux", "corge", "grault")
+    mock_upload_file.assert_called_once_with(
+        "grault", "baz/qux", "quux", path="foo/input"
+    )
+    mock_create_model_invocation_job.assert_called_once_with(
+        "foo", "bar", "baz/qux", "quux", "corge", "grault"
+    )
+
+
+@patch("utils.aws.boto3.client")
 def test_create_model_invocation_job_rejected_raises_client_error(
     mock_client: MagicMock,
 ) -> None:
@@ -112,9 +139,9 @@ def test_download_batch_output_file_found_downloads_file(
     mock_download_file_with_wildcard: MagicMock,
 ) -> None:
     mock_download_file_with_wildcard.return_value = True
-    AWS.download_batch_output("foo", "bar", "baz", "qux")
+    AWS.download_batch_output("foo", "bar", "baz", "qux/quux")
     mock_download_file_with_wildcard.assert_called_once_with(
-        "foo", "bar", "qux", "qux", "baz/output/*"
+        "foo", "bar", "qux/quux", "quux", "baz/output/*"
     )
 
 
