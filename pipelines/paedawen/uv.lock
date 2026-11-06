@@ -1220,7 +1220,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-docsynth"
-version = "1.1.0"
+version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-generativeai" },
@@ -1230,14 +1230,14 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/13/b2/5ca9bd9705bbeb76681da34916659474a068544187b3483f3aa2d1946cef/londonaicentre_docsynth-1.1.0.tar.gz", hash = "sha256:159d5e4670315b3cbad618565ce63993e8565d1c51f6953ae3347c77e365479c", size = 3307504, upload-time = "2026-11-05T14:19:33.807Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/85/257772ee66b45144ec7af394d5d6108cafb954886cfa98fdb198d727c6b1/londonaicentre_docsynth-2.0.0.tar.gz", hash = "sha256:7a98305bd1e709ee905b6759d2343fbc170030c7e2d13a4e4b4ba61cd1646473", size = 3307685, upload-time = "2026-11-06T15:19:14.126Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/85/d8/1c2c059d85d1f3c5c0bda1991ffd2ed9b2c0f01df1eca0ee9485d349481b/londonaicentre_docsynth-1.1.0-py3-none-any.whl", hash = "sha256:887624909b7c89209feed7f888f3cde09da7278f0698e813391d9b540c022781", size = 4300651, upload-time = "2026-11-05T14:19:31.767Z" },
+    { url = "https://files.pythonhosted.org/packages/80/5d/f1a6878888a38468f3b42911f4c1caffbee1f846014f3f4a3251f7986fdd/londonaicentre_docsynth-2.0.0-py3-none-any.whl", hash = "sha256:8ef5e62c459d79c4d8d7e7d5c2b35e09c3c498911070a3310bca1f15e7e9cb83", size = 4300728, upload-time = "2026-11-06T15:19:12.087Z" },
 ]
 
 [[package]]
 name = "londonaicentre-mesa-datagen"
-version = "1.5.1"
+version = "2.0.0"
 source = { editable = "../../lib/datagen" }
 dependencies = [
     { name = "boto3" },
@@ -1313,7 +1313,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.6.0"
+version = "1.7.0"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
@@ -1588,7 +1588,7 @@ dependencies = [
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "ipykernel", specifier = ">=7.3.0" },
-    { name = "londonaicentre-docsynth", specifier = ">=1.1.0" },
+    { name = "londonaicentre-docsynth", specifier = ">=2.0.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
     { name = "londonaicentre-mesa-runtime" },
     { name = "londonaicentre-paedacuteschema", specifier = ">=1.2.0" },

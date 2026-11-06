@@ -8,7 +8,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "ipykernel>=7.4.0",
     "londonaicentre-chestradschema",
-    "londonaicentre-docsynth>=1.1.0",
+    "londonaicentre-docsynth>=2.0.0",
     "londonaicentre-mesa-datagen",
     "londonaicentre-mesa-runtime>=0.5.0",
 ]

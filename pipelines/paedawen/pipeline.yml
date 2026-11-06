@@ -103,8 +103,8 @@ prompt_config:
 # OUTPUT FOLDER #
 #################
 output:
-  # subdirectory: subdirectory in ./output/ where generated documents are saved
-  ## resulting path will be ./output/{subdirectory}/
+  # subdirectory: subdirectory in ./data/docsynth/documents/ where generated documents are saved
+  ## resulting path will be ./data/docsynth/documents/{subdirectory}/
   subdirectory: paedacute-batch
 
   # skip_existing: whether to skip profiles that already have generated documents

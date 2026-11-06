@@ -8,6 +8,6 @@ license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "dotenv>=0.9.9",
     "ipykernel>=7.3.0",
-    "londonaicentre-docsynth>=1.1.0",
+    "londonaicentre-docsynth>=2.0.0",
     "londonaicentre-mesa-runtime",
 ]
