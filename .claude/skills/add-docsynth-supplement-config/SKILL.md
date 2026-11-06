@@ -18,7 +18,7 @@ The user runs `Generator.supplement` in the pipeline's notebook, which generates
 - If the pipeline already has `prompts/supplement.yaml`, extend it rather than replacing it.
   Otherwise create the `prompts/` folder in the pipeline.
 - Run the script below from the pipeline folder, as `uv run python ../../.claude/skills/add-docsynth-supplement-config/scripts/documents.py ...`.
-  It reads the documents in `output/<subdirectory>/` and writes to `_scratch/corrections/`, which git ignores.
+  It reads the documents in `data/docsynth/documents/<subdirectory>/` and writes to `_scratch/corrections/`, which git ignores.
 - Never Read the documents folder whole, as it can hold thousands of documents.
   Use the script, or short scripts of your own that print only counts and truncated examples.
 
