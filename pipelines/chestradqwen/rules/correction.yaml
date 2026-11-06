@@ -1,4 +1,4 @@
-# Non-generative corrections to chestradschema extractions, applied in order.
+# Rule-based corrections to chestradschema extractions, applied in order, and flags (`action: flag`) that send an extraction to Claude to correct.
 # Each rule acts on the targets found by the JSONPath `path` for which the JSON Schema `when` validates {value: target, parent: object or list holding it, note: source note}.
 # Keywords such as `pattern` and `contains` only constrain values of their own type, so they are paired with `type` where the value may be null.
 # See datagen.correction_rules for the rule format.
