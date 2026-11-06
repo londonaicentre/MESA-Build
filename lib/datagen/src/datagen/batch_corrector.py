@@ -68,14 +68,20 @@ class BatchOutputCorrector:
             },
         }
 
-    def correct_with_claude(self, prompt_file: Path, extraction_prompt: str) -> int:
-        """Send, to Claude Code, every output that has no valid extraction.
+    def correct_with_claude(
+        self, prompt_file: Path, extraction_prompt: str, rules_file: Path | None = None
+    ) -> int:
+        """Send, to Claude Code, every output that has no valid extraction, or
+        whose valid extraction a `flag` rule holds for.
 
         Args:
             prompt_file (Path): Correction prompt containing an
                 `{EXTRACTION_PROMPT}` placeholder
             extraction_prompt (str): Prompt originally used to generate the
                 outputs
+            rules_file (Path | None): YAML rules file, as read by
+                `CorrectionRules`, whose `flag` rules raise the issues sent with
+                a valid output. Defaults to None, which flags no valid output
 
         Returns:
             int: Number of records corrected
@@ -84,28 +90,52 @@ class BatchOutputCorrector:
         system_prompt: str = prompt_file.read_text().replace(
             "{EXTRACTION_PROMPT}", extraction_prompt
         )
+        rules: CorrectionRules = (
+            CorrectionRules(rules=[])
+            if rules_file is None
+            else CorrectionRules.load(rules_file)
+        )
         records: list[dict[str, object]] = self._read()
         corrected: int = 0
         for index, record in enumerate(records):
-            if (
-                extract_and_validate_json(
-                    BatchOutputCorrector._get_response(record), self.__schema
-                )[0]
-                is not None
-            ):
+            validated, _ = extract_and_validate_json(
+                BatchOutputCorrector._get_response(record), self.__schema
+            )
+            issues: list[str] = (
+                []
+                if validated is None
+                else rules.flag(
+                    validated.model_dump(mode="json"),
+                    BatchOutputCorrector._get_note(record),
+                )
+            )
+            if validated is not None and not issues:
                 continue
             self._logger.info(
                 f"Correcting record {index + 1}/{len(records)} ({corrected} done)"
             )
-            records[index] = BatchOutputCorrector._replace_response(
-                record,
-                LLM.claude_code(
-                    "haiku",
-                    system_prompt,
-                    f"<note>\n{BatchOutputCorrector._get_note(record)}\n</note>\n\n"
-                    f"<original_response>\n{BatchOutputCorrector._get_response(record)}\n</original_response>",
+            response: str = LLM.claude_code(
+                "haiku",
+                system_prompt,
+                f"<note>\n{BatchOutputCorrector._get_note(record)}\n</note>\n\n"
+                f"<original_response>\n{BatchOutputCorrector._get_response(record)}\n</original_response>"
+                + (
+                    "\n\n<issues>\n"
+                    + "".join(f"- {issue}\n" for issue in issues)
+                    + "</issues>"
+                    if issues
+                    else ""
                 ),
             )
+            if (
+                validated is not None
+                and extract_and_validate_json(response, self.__schema)[0] is None
+            ):
+                self._logger.warning(
+                    f"Kept record {index + 1}, as its correction has no valid extraction"
+                )
+                continue
+            records[index] = BatchOutputCorrector._replace_response(record, response)
             self._write(records)
             corrected += 1
         return corrected

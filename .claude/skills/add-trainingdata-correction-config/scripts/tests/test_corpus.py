@@ -36,6 +36,10 @@ class CorpusFixture(Corpus):
         Corpus._write_text(path, text)
 
     @staticmethod
+    def exists(path: Path) -> bool:
+        return Corpus._exists(path)
+
+    @staticmethod
     def modified(path: Path) -> float:
         return Corpus._modified(path)
 
@@ -45,6 +49,8 @@ class ConstructorMocks:
     getLogger: MagicMock
     basicConfig: MagicMock
     _import: MagicMock
+    _exists: MagicMock
+    load: MagicMock
 
 
 @dataclass
@@ -105,6 +111,8 @@ def constructor_mocks(mocker: MockerFixture) -> ConstructorMocks:
         _import=mocker.patch.object(
             Corpus, "_import", return_value=MagicMock(Schema=MockSchema)
         ),
+        _exists=mocker.patch.object(Corpus, "_exists", return_value=True),
+        load=mocker.patch("corpus.CorrectionRules.load"),
     )
 
 
@@ -156,6 +164,13 @@ class TestFileAccess:
         mkdir.assert_called_once_with(parents=True, exist_ok=True)
         write_text.assert_called_once_with("baz")
 
+    @pytest.mark.parametrize("exists", [True, False])
+    def test_exists_path_returns_existence(
+        self, mocker: MockerFixture, exists: bool
+    ) -> None:
+        mocker.patch.object(Path, "exists", return_value=exists)
+        assert CorpusFixture.exists(Path("foo")) is exists
+
     def test_modified_path_returns_modification_time(
         self, mocker: MockerFixture
     ) -> None:
@@ -169,6 +184,18 @@ class TestRecordAccess:
     ) -> None:
         constructor_mocks._import.assert_called_once_with("foo")
         assert corpus.get_schema() is MockSchema
+        constructor_mocks.load.assert_called_once_with(Corpus.RULES_FILE)
+
+    def test_init_no_rules_file_flags_nothing(
+        self, constructor_mocks: ConstructorMocks, mocker: MockerFixture
+    ) -> None:
+        constructor_mocks._exists.return_value = False
+        mocker.patch(
+            "corpus.extract_and_validate_json",
+            return_value=(MockSchema(field="foo"), {"field": "foo"}),
+        )
+        assert CorpusFixture("foo").status(make_record()) == "valid"
+        constructor_mocks.load.assert_not_called()
 
     @pytest.mark.parametrize(
         "record_ids, expected",
@@ -195,6 +222,7 @@ class TestRecordAccess:
         "validated, data, response, stop_reason, expected",
         [
             (MockSchema(field="foo"), {"field": "foo"}, "foo", "end_turn", "valid"),
+            (MockSchema(field="foo"), {"field": "foo"}, "foo", "end_turn", "flagged"),
             (None, {"field": 1}, "foo", "end_turn", "invalid"),
             (None, None, " ", "end_turn", "empty"),
             (None, None, "foo", "max_tokens", "max_tokens"),
@@ -206,6 +234,7 @@ class TestRecordAccess:
         self,
         corpus: CorpusFixture,
         mocker: MockerFixture,
+        constructor_mocks: ConstructorMocks,
         validated: MockSchema | None,
         data: dict[str, object] | None,
         response: str,
@@ -214,24 +243,39 @@ class TestRecordAccess:
     ) -> None:
         mocker.patch("corpus.extract_and_validate_json", return_value=(validated, data))
         mocker.patch.object(Corpus, "response", return_value=response)
+        constructor_mocks.load.return_value.flag.return_value = (
+            ["bar"] if expected == "flagged" else []
+        )
         assert corpus.status(make_record(stop_reason=stop_reason)) == expected
 
 
 class TestCensus:
-    def test_census_records_groups_and_writes_record_ids(
+    def test_census_records_groups_writes_and_reports_claude_share(
         self,
         corpus: CorpusFixture,
+        constructor_mocks: ConstructorMocks,
         file_mocks: FileMocks,
         record_mocks: RecordMocks,
     ) -> None:
         record_mocks.records.return_value = [
             ("", make_record(record_id)) for record_id in ["foo", "bar", "baz"]
         ]
-        record_mocks.status.side_effect = ["valid", "prose", "valid"]
-        expected: dict[str, list[str]] = {"valid": ["foo", "baz"], "prose": ["bar"]}
+        record_mocks.status.side_effect = ["valid", "prose", "flagged", "valid"]
+        record_mocks.records.return_value = [
+            ("", make_record(record_id)) for record_id in ["foo", "bar", "qux", "baz"]
+        ]
+        expected: dict[str, list[str]] = {
+            "valid": ["foo", "baz"],
+            "prose": ["bar"],
+            "flagged": ["qux"],
+        }
         assert corpus.census() == expected
         file_mocks._write_text.assert_called_once_with(
             Corpus.CENSUS_FILE, json.dumps(expected)
+        )
+        assert (
+            "\nSent to Claude: 50.0% (limit 5%)\n"
+            in (constructor_mocks.getLogger.return_value.info.call_args.args[0])
         )
 
 
@@ -282,8 +326,13 @@ class TestShow:
 
 
 class TestTestPrompt:
+    @pytest.mark.parametrize(
+        "exists, rules_file", [(True, Corpus.RULES_FILE), (False, None)]
+    )
     def test_test_prompt_record_ids_corrects_copies_and_reports(
         self,
+        exists: bool,
+        rules_file: Path | None,
         corpus: CorpusFixture,
         mocker: MockerFixture,
         constructor_mocks: ConstructorMocks,
@@ -295,12 +344,14 @@ class TestTestPrompt:
         record_mocks.status.side_effect = ["prose", "valid"]
         file_mocks._read_text.return_value = make_line("foo")
         test_file: Path = Corpus.SCRATCH_FOLDER / "prompt_test.jsonl.out"
+        constructor_mocks._exists.return_value = exists
         corpus.test_prompt(Path("baz.txt"), ["foo"], 3)
         file_mocks._write_text.assert_called_once_with(test_file, "bar\n")
         batch_output_corrector.assert_called_once_with(MockSchema, test_file)
         batch_output_corrector.return_value.correct_with_claude.assert_called_once_with(
             Path("baz.txt"),
             constructor_mocks._import.return_value.PromptBuilder.return_value.build_datagen_prompt.return_value,
+            rules_file,
         )
         constructor_mocks.getLogger.return_value.info.assert_called_once_with(
             "=== foo: prose -> valid\nghi"

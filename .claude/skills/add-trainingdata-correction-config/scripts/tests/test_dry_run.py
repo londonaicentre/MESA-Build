@@ -34,8 +34,8 @@ class ConstructorMocks:
     load: MagicMock
 
 
-def make_rule(name: str) -> MagicMock:
-    rule: MagicMock = MagicMock()
+def make_rule(name: str, action: str = "clear") -> MagicMock:
+    rule: MagicMock = MagicMock(action=action)
     rule.name = name
     return rule
 
@@ -86,6 +86,28 @@ class TestApply:
         changes, unstable = dry_run.apply([rule])
         assert changes == {"garply": [Change("foo", "quux", {"field": "corge"}, after)]}
         assert unstable == expected_unstable
+
+    def test_apply_flag_rule_records_flag_and_skips_second_pass(
+        self,
+        dry_run: DryRunFixture,
+        mocker: MockerFixture,
+        constructor_mocks: ConstructorMocks,
+    ) -> None:
+        constructor_mocks.Corpus.records.return_value = [
+            ("", MagicMock(recordId="foo"))
+        ]
+        constructor_mocks.Corpus.note.return_value = "quux"
+        sample: dict[str, JSONValue] = {"field": "corge"}
+        mocker.patch(
+            "dry_run.extract_and_validate_json",
+            return_value=(MockSchema(field="corge"), None),
+        )
+        rule: MagicMock = make_rule("garply", "flag")
+        rule.apply.return_value = (sample, True)
+        changes, unstable = dry_run.apply([rule])
+        assert changes == {"garply": [Change("foo", "quux", sample, sample)]}
+        assert unstable == []
+        assert rule.apply.call_count == 1
 
     def test_apply_invalid_correction_raises(
         self,
@@ -149,13 +171,17 @@ class TestRun:
         mocker.patch.object(
             DryRun, "_apply", return_value=({"foo": [change], "bar": []}, [])
         )
+        constructor_mocks.load.return_value.rules = [
+            make_rule("foo"),
+            make_rule("bar", "flag"),
+        ]
         render: MagicMock = mocker.patch.object(
             DryRun, "_render", return_value="grault"
         )
         dry_run.run(None, show, 600)
         info: MagicMock = constructor_mocks.getLogger.return_value.info
         assert info.call_args_list[0].args[0] == (
-            "foo: 1\nbar: 0\nRecords changed: 1"
+            "foo: 1\nbar: 0 flagged\nRecords changed: 1\nRecords flagged: 0"
             "\nRecords changed again by a second pass: 0 []"
         )
         assert info.call_count == expected_calls

@@ -19,10 +19,14 @@ class CorrectionRule(BaseModel):
         path (str): JSONPath to the targets within a sample (e.g.
             `procedures[*].implants[*].manufacturer`)
         action (str): One of `clear` (set to null), `set` (set to `value`),
-            `lower` (lowercase a string), `remove` (remove a list element)
-            or `remove_items` (remove the items in `value` from a list)
-        value (Scalar | list[Scalar]): Argument of `set` or `remove_items`.
-            Defaults to None
+            `lower` (lowercase a string), `remove` (remove a list element),
+            `remove_items` (remove the items in `value` from a list),
+            `add_items` (append the items in `value` missing from a list),
+            `dedupe` (remove repeated elements from a list) or `flag` (leave
+            the sample unchanged, and send it to Claude with `description`
+            as the issue to correct)
+        value (Scalar | list[Scalar]): Argument of `set`, `remove_items` or
+            `add_items`. Defaults to None
         when (dict[str, JSONValue]): JSON Schema the rule's document must
             satisfy. Defaults to an empty schema, which always holds
 
@@ -32,7 +36,9 @@ class CorrectionRule(BaseModel):
     name: str
     description: str
     path: str
-    action: Literal["clear", "set", "lower", "remove", "remove_items"]
+    action: Literal[
+        "clear", "set", "lower", "remove", "remove_items", "add_items", "dedupe", "flag"
+    ]
     value: Scalar | list[Scalar] = None
     when: dict[str, JSONValue] = {}
     _expression: JSONPath = PrivateAttr()
@@ -81,6 +87,9 @@ class CorrectionRule(BaseModel):
         )
 
     def _transform(self, value: JSONValue) -> JSONValue:
+        items: list[Scalar] = (
+            self.value if isinstance(self.value, list) else [self.value]
+        )
         match self.action:
             case "clear":
                 return None
@@ -88,13 +97,22 @@ class CorrectionRule(BaseModel):
                 return value.lower() if isinstance(value, str) else value
             case "remove_items":
                 return (
+                    [item for item in value if item not in items]
+                    if isinstance(value, list)
+                    else value
+                )
+            case "add_items":
+                return (
+                    [*value, *[item for item in items if item not in value]]
+                    if isinstance(value, list)
+                    else value
+                )
+            case "dedupe":
+                return (
                     [
                         item
-                        for item in value
-                        if item
-                        not in (
-                            self.value if isinstance(self.value, list) else [self.value]
-                        )
+                        for index, item in enumerate(value)
+                        if item not in value[:index]
                     ]
                     if isinstance(value, list)
                     else value
@@ -113,12 +131,15 @@ class CorrectionRule(BaseModel):
 
         Returns:
             tuple[dict[str, JSONValue], bool]: The corrected sample, and
-                whether the rule acted on any targets
+                whether the rule acted on any targets (for a `flag` rule,
+                whether it holds for any)
 
         """
         matches: list[DatumInContext] = [
             match for match in self._expression.find(sample) if self._holds(match, note)
         ]
+        if self.action == "flag":
+            return sample, bool(matches)
         for match in reversed(matches):
             if self.action == "remove":
                 match.full_path.filter(lambda _: True, sample)
@@ -153,7 +174,7 @@ class CorrectionRules(BaseModel):
     def apply(
         self, sample: dict[str, JSONValue], note: str
     ) -> tuple[dict[str, JSONValue], bool]:
-        """Apply every rule to a sample.
+        """Apply every rule, other than `flag` rules, to a sample.
 
         Args:
             sample (dict[str, JSONValue]): Extracted sample
@@ -166,6 +187,25 @@ class CorrectionRules(BaseModel):
         """
         changed: bool = False
         for rule in self.rules:
+            if rule.action == "flag":
+                continue
             sample, acted = rule.apply(sample, note)
             changed = changed or acted
         return sample, changed
+
+    def flag(self, sample: dict[str, JSONValue], note: str) -> list[str]:
+        """Find the issues that `flag` rules raise in a sample.
+
+        Args:
+            sample (dict[str, JSONValue]): Extracted sample
+            note (str): Source note the sample was extracted from
+
+        Returns:
+            list[str]: Descriptions of the `flag` rules that hold for the sample
+
+        """
+        return [
+            rule.description
+            for rule in self.rules
+            if rule.action == "flag" and rule.apply(sample, note)[1]
+        ]
