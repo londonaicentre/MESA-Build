@@ -25,7 +25,7 @@ class Corpus:
 
     """
 
-    BATCH_OUTPUT_FILE: Path = Path("anthropic_batch_job.jsonl.out")
+    BATCH_OUTPUT_FILE: Path = Path("data/datagen/anthropic_batch_job.jsonl.out")
     RULES_FILE: Path = Path("rules/correction.yaml")
     SCRATCH_FOLDER: Path = Path("_scratch/corrections")
     CENSUS_FILE: Path = SCRATCH_FOLDER / "census.json"

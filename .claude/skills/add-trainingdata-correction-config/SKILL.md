@@ -18,7 +18,7 @@ The user wires that config into the pipeline's notebook and runs the correction.
 - If the pipeline already has `prompts/correction.txt` or `rules/correction.yaml`, extend them rather than replacing them.
   Otherwise create the `prompts/` and `rules/` folders in the pipeline.
 - Run every script below from the pipeline folder, as `uv run python ../../.claude/skills/add-trainingdata-correction-config/scripts/<script>.py --schema <package> ...`.
-  The scripts read `anthropic_batch_job.jsonl.out` and write to `_scratch/corrections/`, which git ignores.
+  The scripts read `data/datagen/anthropic_batch_job.jsonl.out` and write to `_scratch/corrections/`, which git ignores.
 - Never Read the batch output file, as it can be gigabytes.
   Use the scripts, or short scripts of your own that print only counts and truncated examples.
 
