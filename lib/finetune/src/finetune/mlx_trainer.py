@@ -37,7 +37,7 @@ class MLXLoRATrainer(LoRATrainer):
             (``role`` is unused for local training).
         model_name: Model name used for the model card and the uploaded archive.
         description: Job description, used for naming and the working directory.
-        work_dir: Local working/output root. Defaults to ``data/models``.
+        work_dir: Local working/output root. Defaults to ``data/finetune/models``.
         quantize: Optional MLX quantisation for ``convert`` (``None`` | ``"q4"`` | ``"q8"``).
         config: Pre-loaded config, bypassing ``config_path``. Used when rebuilding a
             trainer from a serialised spec; defaults to loading ``config_path``.
@@ -64,7 +64,7 @@ class MLXLoRATrainer(LoRATrainer):
         aws_config: dict[str, str],
         model_name: str,
         description: str,
-        work_dir: str = "data/models",
+        work_dir: str = "data/finetune/models",
         quantize: str | None = None,
         config: FinetuneConfig | None = None,
     ):
@@ -237,7 +237,9 @@ class MLXLoRATrainer(LoRATrainer):
         # https://github.com/ml-explore/mlx/blob/v0.31.2/python/mlx/optimizers/schedulers.py#L91-L126
         local = update - (warmup_steps + 1 if warmup_steps else 0)
         # https://github.com/ml-explore/mlx/blob/v0.31.2/python/mlx/optimizers/schedulers.py#L61-L86
-        decay = 0.5 * (1 + math.cos(math.pi / schedule_steps * min(local, schedule_steps)))
+        decay = 0.5 * (
+            1 + math.cos(math.pi / schedule_steps * min(local, schedule_steps))
+        )
         seed = end + decay * (initial_lr - end)
         remaining_updates = max(1, remaining_iters // grad_accumulation_steps)
         return {"name": "cosine_decay", "arguments": [seed, remaining_updates, end]}

@@ -117,7 +117,7 @@ def test_init_downloads_and_extracts_batches(
     generator: GeneratorFixture,
 ) -> None:
     mock_generator_dependencies.download_and_extract.assert_called_once_with(
-        filename="foobar.tar.gz", output_folder=Path("./data/documents/foobar")
+        filename="foobar.tar.gz", output_folder=Path("./data/datagen/documents/foobar")
     )
 
 
@@ -128,7 +128,7 @@ def test_init_multiple_batches_extends_document_files(
 ) -> None:
     mock_glob: MagicMock = mocker.patch.object(Path, "glob")
     mock_glob.return_value = [
-        Path(f"./data/documents/foo/document_{i}.json") for i in range(2)
+        Path(f"./data/datagen/documents/foo/document_{i}.json") for i in range(2)
     ]
     GeneratorFixture(
         system_prompt="foo",
@@ -150,8 +150,8 @@ def test_init_multiple_batches_interleaves_document_files(
         Path,
         "glob",
         side_effect=[
-            [Path("./data/documents/batch1/foo.json")],
-            [Path("./data/documents/batch2/bar.json")],
+            [Path("./data/datagen/documents/batch1/foo.json")],
+            [Path("./data/datagen/documents/batch2/bar.json")],
         ],
     )
     mock_interleave: MagicMock = mocker.patch(
@@ -167,8 +167,8 @@ def test_init_multiple_batches_interleaves_document_files(
     )
     mock_interleave.assert_called_once_with(
         [
-            [Path("./data/documents/batch1/foo.json")],
-            [Path("./data/documents/batch2/bar.json")],
+            [Path("./data/datagen/documents/batch1/foo.json")],
+            [Path("./data/datagen/documents/batch2/bar.json")],
         ]
     )
 

@@ -26,7 +26,7 @@ class TrainingDataHandler:
     Download and prepare training data batches from S3
     """
 
-    __CACHE_DIR: Path = Path("data/_cache/training_batches")
+    __CACHE_DIR: Path = Path("data/finetune/_cache")
 
     @staticmethod
     def load_prompt_parameters(
@@ -68,7 +68,7 @@ class TrainingDataHandler:
         max_seq_length: int,
         bucket: str = "aicentre-nlpteam-mesa-build",
         s3_prefix: str = "trainingdata",
-        output_file: str = "train.jsonl",
+        output_file: str = "data/finetune/train.jsonl",
         region: str = "eu-west-2",
         shuffle: bool = True,
     ) -> str:

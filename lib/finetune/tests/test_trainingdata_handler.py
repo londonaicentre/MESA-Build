@@ -210,7 +210,7 @@ class TestLoadPromptParameters:
         load_prompt_parameters_mocks.download_file.assert_called_once_with(
             region_name="qux",
             bucket="bar",
-            file_name="data/_cache/training_batches/foo_metadata.yaml",
+            file_name="data/finetune/_cache/foo_metadata.yaml",
             object_name="baz/foo/metadata.yaml",
         )
 
@@ -398,7 +398,7 @@ class TestOutput:
             TrainingDataHandler.prepare(
                 SchemaFixture, PromptBuilderFixture(), ["foo"], "foo.bar1.2baz", 1024
             )
-            == "train.jsonl"
+            == "data/finetune/train.jsonl"
         )
 
     # prepare() echoes back the output_file it wrote to (a non-default value proves the behaviour).
@@ -435,7 +435,7 @@ class TestMultipleBatches:
                 "foo.bar1.2baz",
                 1024,
             )
-            == "train.jsonl"
+            == "data/finetune/train.jsonl"
         )
         assert prepare_mocks.aws_mocks.list_s3_objects.call_count == 2
 

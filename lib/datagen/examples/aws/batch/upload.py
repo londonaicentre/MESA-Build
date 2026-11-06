@@ -1,7 +1,7 @@
 """
 upload.py
 
-Step 3: package the validated samples in ./data/trainingdata/ and upload them
+Step 3: package the validated samples in ./data/datagen/samples/ and upload them
 to s3://aicentre-nlpteam-mesa-build/trainingdata/<timestamp>_<short_description>/.
 
 TrainingDataUploader re-validates each local sample against the schema, then
@@ -30,7 +30,7 @@ s3_uri = TrainingDataUploader.upload(
     system_prompt=pb.build_main_prompt(),
     short_description="docgen-batch-example-06-2026",
     long_description="Example oncoschema training data from test-batch-2026-01-17-001 via batch inference",
-    input_folder=Path("./data/trainingdata"),
+    input_folder=Path("./data/datagen/samples"),
 )
 
 print("Upload complete")

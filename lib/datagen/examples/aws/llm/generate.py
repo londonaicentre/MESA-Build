@@ -25,7 +25,7 @@ os.environ["AWS_REGION_NAME"] = "eu-west-2"
 #     ]
 #
 # Each batch is downloaded from s3://aicentre-nlpteam-mesa-build/documents/ and
-# extracted into its own ./data/documents/<batch_name>/ folder, then all their
+# extracted into its own ./data/datagen/documents/<batch_name>/ folder, then all their
 # documents are concatenated into one ordered list (batch order, then sorted
 # filename within each batch). SAMPLE_SIZE caps the total across all batches and
 # is consumed in sequence from the start of that list (not randomly).
@@ -46,4 +46,4 @@ gen = LLMGenerator(
 )
 
 gen.generate(SAMPLE_SIZE)
-print("Generation complete. Samples in ./data/trainingdata/")
+print("Generation complete. Samples in ./data/datagen/samples/")

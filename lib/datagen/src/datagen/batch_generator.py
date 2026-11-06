@@ -83,13 +83,13 @@ class BatchGenerator:
         self._model_batch_file: str = model.batch_file
         self._model_max_tokens: int = model.max_tokens
         self._model_price_list_model: str | None = model.price_list_model
-        self.__output_folder_name: str = "./data/trainingdata/"
+        self.__output_folder_name: str = "./data/datagen/samples/"
 
         # download and extract batches from S3
         self.__document_batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
-            output_folder = Path(f"./data/documents/{batch_name}")
+            output_folder = Path(f"./data/datagen/documents/{batch_name}")
             self._logger.info(f"Downloading batch: {batch_filename}")
             DocumentLoader.download_and_extract(
                 filename=batch_filename,
@@ -124,6 +124,7 @@ class BatchGenerator:
             return BatchState.model_validate_json(state_file.read())
 
     def _write_state(self, state: BatchState) -> None:
+        os.makedirs(Path(self.__config.job_id_file).parent, exist_ok=True)
         with open(self.__config.job_id_file, "w") as state_file:
             state_file.write(state.model_dump_json())
 
@@ -157,7 +158,9 @@ class BatchGenerator:
         return dict(islice(pending.items(), sample_size))
 
     def _generate_batch(
-        self, sample_size: int, file_name: str = "anthropic_batch_job.jsonl"
+        self,
+        sample_size: int,
+        file_name: str = "data/datagen/anthropic_batch_job.jsonl",
     ) -> list[str]:
         """Generate batch request file for Anthropic Bedrock model.
 
@@ -171,6 +174,7 @@ class BatchGenerator:
 
         """
         pending: dict[str, Document] = self._pending_documents(sample_size)
+        os.makedirs(Path(file_name).parent, exist_ok=True)
         with open(file_name, "w") as outfile:
             for record_id, doc in pending.items():
                 print(
@@ -211,7 +215,7 @@ class BatchGenerator:
     def extract_batch_output(
         self,
         bucket: str | None = None,
-        file_name: str = "anthropic_batch_job.jsonl.out",
+        file_name: str = "data/datagen/anthropic_batch_job.jsonl.out",
     ) -> tuple[int, int]:
         """Transform batch inference sample outputs to the same format
             (set of output files) as real-time generated samples.
@@ -220,7 +224,7 @@ class BatchGenerator:
             bucket: The bucket from which the batch
                 sample outputs file should be downloaded if it is not local
             file_name: Batch output file from which
-                to extract samples (default to `anthropic_batch_job.jsonl.out`)
+                to extract samples (default to `data/datagen/anthropic_batch_job.jsonl.out`)
 
         Returns:
             Tuple of (successful_count, failed_count)
@@ -295,7 +299,7 @@ class BatchGenerator:
             raise ValueError("No batch job id found; a batch must be submitted first.")
 
         return any(
-            object["Key"].endswith(self._model_batch_file + ".out")
+            object["Key"].endswith(Path(self._model_batch_file).name + ".out")
             for object in AWS.list_s3_objects(
                 self._model_region, bucket, job_id + "/output/"
             )

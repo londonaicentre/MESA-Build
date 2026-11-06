@@ -84,7 +84,7 @@ def prepare_data_mocks(mocker: MockerFixture) -> PrepareDataMocks:
     return PrepareDataMocks(
         mocker.patch(
             "finetune.trainer.TrainingDataHandler.prepare",
-            return_value="train.jsonl",
+            return_value="data/finetune/train.jsonl",
         ),
         mocker.patch("finetune.hf_trainer.AWS.upload_file"),
         _patch_make_job_id(mocker),
@@ -194,7 +194,7 @@ class TestPrepareData:
             max_seq_length=2048,
             bucket="foo-bar",
             s3_prefix="trainingdata",
-            output_file="train.jsonl",
+            output_file="data/finetune/train.jsonl",
             region="foo-bar-1",
             shuffle=True,
         )
@@ -208,7 +208,7 @@ class TestPrepareData:
         trainer.prepare_data()
         prepare_data_mocks.aws.assert_called_once_with(
             region_name="foo-bar-1",
-            file_name="train.jsonl",
+            file_name="data/finetune/train.jsonl",
             bucket="foo-bar",
             object_name="train.jsonl",
             path="jobs/train/20260101-120000-foo/input",

@@ -2,7 +2,7 @@
 extract.py
 
 Step 2: once the batch job started by generate.py has completed, download and
-parse its outputs into ./data/trainingdata/.
+parse its outputs into ./data/datagen/samples/.
 """
 
 import logging
@@ -29,4 +29,4 @@ gen = BedrockBatchGenerator(
 
 successful, failed = gen.extract_batch_output(bucket=BUCKET)
 print(f"Extraction complete: {successful} successful, {failed} failed")
-print("Samples in ./data/trainingdata/")
+print("Samples in ./data/datagen/samples/")

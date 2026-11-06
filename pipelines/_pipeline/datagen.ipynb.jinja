@@ -181,7 +181,7 @@
     "    system_prompt=pb.build_main_prompt({% if condition_based %}prompt_parameters{% endif %}),\n",
     "    short_description=\"{{ _folder_name }}-batch\",\n",
     "    long_description=\"Training data for {{ _folder_name | capitalize }}\",\n",
-    "    input_folder=Path(\"./data/trainingdata\"),\n",
+    "    input_folder=Path(\"./data/datagen/samples\"),\n",
     "{% if condition_based %}    prompt_parameters=prompt_parameters,\n{% endif %}",
     ")"
    ],

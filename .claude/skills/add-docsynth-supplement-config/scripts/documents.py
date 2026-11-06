@@ -29,7 +29,7 @@ class Documents:
         self.__pipeline: dict[str, dict[str, str]] = safe_load(
             Documents._read_text(Path("pipeline.yml"))
         )
-        self.__documents_folder: Path = Path("output") / str(
+        self.__documents_folder: Path = Path("data/docsynth/documents") / str(
             self.__pipeline["output"]["subdirectory"]
         )
         self.__sections: dict[str, SamplingElement] = Documents._sections(
@@ -251,8 +251,10 @@ class Documents:
         Documents._supplement(Documents.TEST_FOLDER)
         self.__logger.info(
             Documents._render(
-                Documents.TEST_FOLDER / "output" / "supplement",
-                Documents._doc_ids(Documents.TEST_FOLDER / "output" / "supplement"),
+                Documents.TEST_FOLDER / "data/docsynth/documents/supplement",
+                Documents._doc_ids(
+                    Documents.TEST_FOLDER / "data/docsynth/documents/supplement"
+                ),
                 chars,
             )
         )

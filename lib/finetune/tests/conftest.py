@@ -152,7 +152,7 @@ def make_mlx_trainer(config_path: str) -> MLXTrainerFactory:
             "aws_config": {"bucket": "qux", "region": "quux", "role": "corge"},
             "model_name": "foo",
             "description": "foo",
-            "work_dir": "data/models",
+            "work_dir": "data/finetune/models",
         }
         kwargs.update(overrides)
         return MLXLoRATrainer(**kwargs)

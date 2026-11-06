@@ -349,7 +349,7 @@ class TestShow:
             Documents, "_render", return_value="bar"
         )
         assert documents.show(["foo"], 3) == "bar"
-        render.assert_called_once_with(Path("output/foo"), ["foo"], 3)
+        render.assert_called_once_with(Path("data/docsynth/documents/foo"), ["foo"], 3)
 
 
 class TestTestSupplement:
@@ -393,10 +393,10 @@ class TestTestSupplement:
         }
         supplement_test_mocks._supplement.assert_called_once_with(Documents.TEST_FOLDER)
         supplement_test_mocks._doc_ids.assert_called_once_with(
-            Documents.TEST_FOLDER / "output" / "supplement"
+            Documents.TEST_FOLDER / "data/docsynth/documents/supplement"
         )
         supplement_test_mocks._render.assert_called_once_with(
-            Documents.TEST_FOLDER / "output" / "supplement", ["foo"], 5
+            Documents.TEST_FOLDER / "data/docsynth/documents/supplement", ["foo"], 5
         )
         constructor_mocks.getLogger.return_value.info.assert_called_once_with("bar")
 
