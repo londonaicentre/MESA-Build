@@ -10,6 +10,7 @@ from types import ModuleType
 from pydantic import BaseModel
 
 from datagen.batch_corrector import BatchOutputCorrector
+from datagen.correction_rules import CorrectionRules
 from datagen.extraction import extract_and_validate_json
 from utils.llm import BatchOutput
 
@@ -25,6 +26,7 @@ class Corpus:
     """
 
     BATCH_OUTPUT_FILE: Path = Path("anthropic_batch_job.jsonl.out")
+    RULES_FILE: Path = Path("rules/correction.yaml")
     SCRATCH_FOLDER: Path = Path("_scratch/corrections")
     CENSUS_FILE: Path = SCRATCH_FOLDER / "census.json"
 
@@ -35,6 +37,11 @@ class Corpus:
 
         self.__schema_package: str = schema_package
         self.__schema: type[BaseModel] = Corpus._import(schema_package).Schema
+        self.__rules: CorrectionRules = (
+            CorrectionRules.load(Corpus.RULES_FILE)
+            if Corpus._exists(Corpus.RULES_FILE)
+            else CorrectionRules(rules=[])
+        )
 
     @staticmethod
     def _import(module: str) -> ModuleType:
@@ -53,6 +60,10 @@ class Corpus:
     def _write_text(path: Path, text: str) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text)
+
+    @staticmethod
+    def _exists(path: Path) -> bool:
+        return path.exists()
 
     @staticmethod
     def _modified(path: Path) -> float:
@@ -122,7 +133,8 @@ class Corpus:
             record (BatchOutput): The record
 
         Returns:
-            str: One of `valid`, `invalid` (JSON failing the schema), `empty`,
+            str: One of `valid`, `flagged` (valid, but a `flag` rule in the
+                rules file holds), `invalid` (JSON failing the schema), `empty`,
                 `max_tokens`, `has_output` (an `<output>` tag without JSON) or
                 `prose`
 
@@ -130,7 +142,13 @@ class Corpus:
         response: str = Corpus.response(record)
         validated, data = extract_and_validate_json(response, self.__schema)
         if validated is not None:
-            return "valid"
+            return (
+                "flagged"
+                if self.__rules.flag(
+                    validated.model_dump(mode="json"), Corpus.note(record)
+                )
+                else "valid"
+            )
         if data is not None:
             return "invalid"
         if not response.strip():
@@ -216,7 +234,8 @@ class Corpus:
 
     def test_prompt(self, prompt_file: Path, record_ids: list[str], chars: int) -> None:
         """Test a correction prompt on copies of some records, leaving the batch
-        output untouched, and report each record's status before and after.
+        output untouched, and report each record's status before and after,
+        sending flagged records with the issues the rules file raises.
 
         Args:
             prompt_file (Path): Correction prompt containing an
@@ -236,6 +255,7 @@ class Corpus:
             Corpus._import(self.__schema_package + ".prompt_builder")
             .PromptBuilder()
             .build_datagen_prompt(),
+            Corpus.RULES_FILE if Corpus._exists(Corpus.RULES_FILE) else None,
         )
         self.__logger.info(
             "\n\n".join(

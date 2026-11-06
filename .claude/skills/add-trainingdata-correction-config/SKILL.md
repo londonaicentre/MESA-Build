@@ -1,6 +1,6 @@
 ---
 name: add-trainingdata-correction-config
-description: Explore a pipeline's batch outputs, then write the correction prompt and declarative rules that BatchOutputCorrector applies to its training data
+description: Explore a pipeline's batch outputs, then write the declarative rules and correction prompt that BatchOutputCorrector applies to its training data
 argument-hint: "<pipeline>"
 ---
 
@@ -24,7 +24,7 @@ The user wires that config into the pipeline's notebook and runs the correction.
 
 ## 2. Explore
 
-- Run `corpus.py census` to count records by extraction status: `valid`, `invalid` (JSON failing the schema), `empty`, `max_tokens`, `has_output` (an `<output>` tag without JSON) and `prose`.
+- Run `corpus.py census` to count records by extraction status: `valid`, `flagged` (valid, but a flag rule in `rules/correction.yaml` holds), `invalid` (JSON failing the schema), `empty`, `max_tokens`, `has_output` (an `<output>` tag without JSON) and `prose`.
 - Check corpus-wide patterns in the `valid` records with short scripts built on `Corpus.records`, `Corpus.note` and `Corpus.response` (with the `scripts` folder on `sys.path`), printing counts and at most three truncated examples each.
   Look for frequent enum values, fields that are set where a related field is null, descriptive fields not found verbatim in the note, and values with no support in the note (e.g. a date or category the note never states).
 - Fan out reviewers across samples of the corpus:
@@ -46,32 +46,39 @@ The user wires that config into the pipeline's notebook and runs the correction.
 - Assign each finding to one of:
   - the prompt, for records with no valid extraction, which Claude must create or fix;
   - a rule, for a mechanical fix to a valid extraction, decidable from its fields and a regular expression over the note;
+  - a flag, for a valid extraction whose error is decidable as for a rule, but whose fix needs content that only Claude can write (e.g. a missing block of metadata);
   - none, for judgement calls on valid extractions (e.g. procedure choice or summaries), which neither the prompt nor the rules can safely make.
 - The schema and datagen prompt are fixed, as the user may not be able to change them, so never triage a finding to a change in either.
-  Where their wording is ambiguous, read it as written, and triage the finding to a rule only if every reading agrees, otherwise to none.
+  Where their wording is ambiguous, read it as written, and triage the finding to a rule or flag only if every reading agrees, otherwise to none.
 - Present the census, the findings with their counts and sources, and the triage to the user, and agree them before writing anything.
 
-## 5. Write the prompt
+## 5. Write the rules
 
-- `correct_with_claude` sends only records with no valid extraction, so write the prompt for those alone.
-- Use these sections: a title, a role, the inputs in `<note>` and `<original_response>` tags, numbered rules for each failure found, the original datagen prompt under REFERENCE INSTRUCTIONS as `{EXTRACTION_PROMPT}`, and OUTPUT last, with no code fences.
-- Do not repeat what the datagen prompt already says.
-- Test the prompt with `corpus.py test-prompt prompts/correction.txt <recordId>...` on up to ten records spread across the failure statuses.
-  It corrects copies of the records with Claude Haiku, leaving the batch output untouched, and reports each record's status before and after.
-  Each record takes about 25 seconds and uses the user's Claude quota.
-- Revise the prompt until every tested record is valid and its correction is right.
-
-## 6. Write the rules
-
-- Write one rule per finding triaged to a rule, each with a `description` stating the convention it enforces.
+- Write one rule per finding triaged to a rule or flag, each with a `description` stating the convention it enforces.
+  A flag rule (`action: flag`) changes nothing, and `correct_with_claude` sends its `description` to Claude as the issue to correct, so word it as an instruction.
 - Pair `pattern` and `contains` with `type` wherever the value may be null or of another type, as they otherwise pass.
 - Use `{value}` in a pattern to test whether the target value appears in the note.
+- Guard `add_items` with `not: {contains: ...}` and `dedupe` with `not: {uniqueItems: true}`, as a rule otherwise counts as acting on every list it reaches.
 - Order the rules so that any rule tidying up after others (e.g. clearing an emptied list) comes last.
-- Run `dry_run.py rules/correction.yaml` to see how many records each rule changes, and whether a second pass would change any further.
+- Run `dry_run.py rules/correction.yaml` to see how many records each rule changes or flags, and whether a second pass would change any further.
 - Run `dry_run.py rules/correction.yaml --rule <name> --show 10` for each rule, and check every change against its note for false positives, using `corpus.py show` for the full note.
   With many rules, fan out one reviewer per group of rules, as in section 2.
 - Narrow any rule with a false positive, preferring to keep a value over wrongly changing it.
 
+## 6. Write the prompt
+
+- Skip this section if the census has no failure statuses and no rule is a flag.
+- `correct_with_claude` sends records with no valid extraction, and valid records that a flag rule holds for, with the flags' descriptions in `<issues>` tags.
+- Use these sections: a title, a role, the inputs in `<note>`, `<original_response>` and (for flagged records) `<issues>` tags, numbered rules for each failure found, the original datagen prompt under REFERENCE INSTRUCTIONS as `{EXTRACTION_PROMPT}`, and OUTPUT last, with no code fences.
+- For flagged records, instruct Claude to correct only the fields the issues name and to keep every other value as it is.
+- Do not repeat what the datagen prompt already says.
+- Run `corpus.py census` again, as records that flag rules hold for now show as `flagged`.
+- Test the prompt with `corpus.py test-prompt prompts/correction.txt <recordId>...` on up to ten records spread across the failure statuses and `flagged`.
+  It corrects copies of the records with Claude Haiku, leaving the batch output untouched, and reports each record's status before and after.
+  Each record takes about 25 seconds and uses the user's Claude quota.
+- Revise the prompt until every tested record is valid, no longer flagged, and its correction is right.
+
 ## 7. Report
 
-- Report the files written and the dry run counts.
+- Report the files written, the dry run counts, and the prompt test results.
+- `correct_with_claude` runs before `correct_with_rules`, so that the rules also tidy Claude's corrections.

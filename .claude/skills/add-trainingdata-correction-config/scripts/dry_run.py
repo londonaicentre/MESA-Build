@@ -57,7 +57,9 @@ class DryRun:
                         Change(record.recordId, note, before, deepcopy(sample))
                     )
             self.__corpus.get_schema().model_validate(sample)
-            if any(rule.apply(sample, note)[1] for rule in rules):
+            if any(
+                rule.apply(sample, note)[1] for rule in rules if rule.action != "flag"
+            ):
                 unstable.append(record.recordId)
         return changes, unstable
 
@@ -79,8 +81,8 @@ class DryRun:
         )
 
     def run(self, rule_name: str | None, show: int, chars: int) -> None:
-        """Report the records each rule would change, whether a second pass
-        would change any further, and a random sample of the changes.
+        """Report the records each rule would change or flag, whether a second
+        pass would change any further, and a random sample of the changes.
 
         Args:
             rule_name (str | None): Only apply this rule, or None for every rule
@@ -99,16 +101,31 @@ class DryRun:
         if not rules:
             raise ValueError(f"No rule named {rule_name}")
         changes, unstable = self._apply(rules)
+        flag_names: set[str] = {rule.name for rule in rules if rule.action == "flag"}
         self.__logger.info(
             "\n".join(
-                f"{name}: {len(rule_changes)}" for name, rule_changes in changes.items()
+                f"{name}: {len(rule_changes)}"
+                + (" flagged" if name in flag_names else "")
+                for name, rule_changes in changes.items()
             )
             + "\nRecords changed: "
             + str(
                 len(
                     {
                         change.record_id
-                        for rule_changes in changes.values()
+                        for name, rule_changes in changes.items()
+                        if name not in flag_names
+                        for change in rule_changes
+                    }
+                )
+            )
+            + "\nRecords flagged: "
+            + str(
+                len(
+                    {
+                        change.record_id
+                        for name, rule_changes in changes.items()
+                        if name in flag_names
                         for change in rule_changes
                     }
                 )
