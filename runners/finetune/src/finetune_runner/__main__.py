@@ -157,7 +157,7 @@ class FinetuneMLXRunner(FinetuneRunner):
             },
             model_name=self.model,
             description=self.description,
-            work_dir="data/models",
+            work_dir="data/finetune/models",
             quantize=None,
         )
 

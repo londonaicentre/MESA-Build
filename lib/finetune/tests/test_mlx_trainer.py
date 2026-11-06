@@ -100,7 +100,7 @@ def write_config_mocks(mocker: MockerFixture) -> WriteConfigMocks:
 def run_mocks(mocker: MockerFixture) -> RunMocks:
     return RunMocks(
         mocker.patch.object(
-            MLXLoRATrainer, "prepare_data", return_value="data/models/foo/data"
+            MLXLoRATrainer, "prepare_data", return_value="data/finetune/models/foo/data"
         ),
         mocker.patch.object(
             MLXLoRATrainer, "_write_config", return_value="resolved.yaml"
@@ -580,7 +580,7 @@ class TestRun:
     ) -> None:
         make_mlx_trainer().run()
         run_mocks.prepare_data.assert_called_once()
-        run_mocks.write_config.assert_called_once_with("data/models/foo/data")
+        run_mocks.write_config.assert_called_once_with("data/finetune/models/foo/data")
         run_mocks.train.assert_called_once_with("resolved.yaml")
 
     def test_returns_job_id(

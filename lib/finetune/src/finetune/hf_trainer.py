@@ -85,7 +85,7 @@ class HuggingFaceLoRATrainer(LoRATrainer):
         """
         logger.info(f"Preparing training data for job: {self.job_id}")
 
-        train_jsonl = self._prepare_training_data("train.jsonl")
+        train_jsonl = self._prepare_training_data("data/finetune/train.jsonl")
 
         logger.info(f"Uploading to S3: {self.s3_input_path}")
         AWS.upload_file(
@@ -238,7 +238,7 @@ class HuggingFaceLoRATrainer(LoRATrainer):
             push_public (bool): Also upload the public tarball. Defaults to False.
 
         """
-        model_folder = f"data/models/{self.description}"
+        model_folder = f"data/finetune/models/{self.description}"
         source_folder = Path(f"{model_folder}/source")
         source_folder.mkdir(parents=True, exist_ok=True)
         s3_output_path = s3_output_path or self.s3_output_path
