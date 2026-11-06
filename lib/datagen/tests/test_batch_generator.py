@@ -776,8 +776,25 @@ def test_extract_batch_output_bucket_provided_downloads_file(
     generator: BatchGeneratorFixture,
 ) -> None:
     mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
+    mocker.patch("datagen.batch_generator.os.path.exists", return_value=False)
     generator.extract_batch_output("test-bucket")
     mock_extract_dependencies.get_batch_inference_outputs.assert_called_once()
+
+
+def test_extract_batch_output_local_file_exists_skips_download(
+    mocker: MockerFixture,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_extract_dependencies: ExtractDependencies,
+    generator: BatchGeneratorFixture,
+) -> None:
+    mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
+    mocker.patch("datagen.batch_generator.os.path.exists", return_value=True)
+    warning: MagicMock = mocker.patch.object(generator._logger, "warning")
+    generator.extract_batch_output("test-bucket")
+    mock_extract_dependencies.get_batch_inference_outputs.assert_not_called()
+    mock_extract_dependencies.parse_batch_output.assert_called_once()
+    warning.assert_called_once()
 
 
 def test_extract_batch_output_download_fails_raises_value_error(
@@ -788,6 +805,7 @@ def test_extract_batch_output_download_fails_raises_value_error(
     generator: BatchGeneratorFixture,
 ) -> None:
     mocker.patch("builtins.open", mock_open(read_data='{"job_id": "foo/bar"}'))
+    mocker.patch("datagen.batch_generator.os.path.exists", return_value=False)
     mock_extract_dependencies.get_batch_inference_outputs.side_effect = ValueError(
         "Error downloading file"
     )
