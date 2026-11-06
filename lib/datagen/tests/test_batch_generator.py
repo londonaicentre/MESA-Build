@@ -125,14 +125,14 @@ def mock_generator_dependencies(mocker: MockerFixture) -> GeneratorDependencies:
             "foo_model": MagicMock(
                 model="bedrock/foo",
                 region="eu-west-2",
-                batch_file="batch.jsonl",
+                batch_file="grault/batch.jsonl",
                 max_tokens=123,
                 price_list_model="Foo Bar 1.2",
             ),
             "bar_model": MagicMock(
                 model="bedrock/bar",
                 region="eu-west-2",
-                batch_file="batch.jsonl",
+                batch_file="grault/batch.jsonl",
                 max_tokens=123,
                 price_list_model=None,
             ),
@@ -501,6 +501,7 @@ def test_write_state_state_given_writes_json(
     generator: BatchGeneratorFixture,
 ) -> None:
     generator.write_state(BatchState(job_id="foo/bar", sent_record_ids=["baz"]))
+    mock_filesystem.makedirs.assert_called_once_with(Path("."), exist_ok=True)
     mock_filesystem.open.assert_called_once_with(".job_id.json", "w")
     mock_filesystem.open().write.assert_called_once_with(
         '{"job_id":"foo/bar","sent_record_ids":["baz"]}'
@@ -604,8 +605,9 @@ def test_generate_batch_documents_pending_returns_record_ids(
     mock_batch_dependencies: BatchDependencies,
     generator: BatchGeneratorFixture,
 ) -> None:
-    assert generator.generate_batch(3, "custom.jsonl") == ["id0", "id1", "id2"]
-    mock_filesystem.open.assert_called_once_with("custom.jsonl", "w")
+    assert generator.generate_batch(3, "grault/custom.jsonl") == ["id0", "id1", "id2"]
+    mock_filesystem.makedirs.assert_called_once_with(Path("grault"), exist_ok=True)
+    mock_filesystem.open.assert_called_once_with("grault/custom.jsonl", "w")
 
 
 def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
@@ -615,7 +617,7 @@ def test_generate_via_batch_valid_params_submits_to_bedrock_returns_id(
     assert bedrock_generator.generate_via_batch(10, "foo", "bar") == "foo/bar"
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.run_batch_inference.assert_called_once_with(
-        "baz/qux", "bedrock/foo", "batch.jsonl", "foo", "bar", "eu-west-2"
+        "baz/qux", "bedrock/foo", "grault/batch.jsonl", "foo", "bar", "eu-west-2"
     )
 
 
@@ -665,7 +667,7 @@ def test_estimate_cost_sample_size_given_estimates_pending_documents(
 @pytest.mark.parametrize(
     ("runtime_generator", "model_id", "batch_file"),
     [
-        ({"model_name": "foo_model"}, "bedrock/foo", "batch.jsonl"),
+        ({"model_name": "foo_model"}, "bedrock/foo", "grault/batch.jsonl"),
         ({}, None, "runtime.jsonl"),
     ],
     indirect=["runtime_generator"],
