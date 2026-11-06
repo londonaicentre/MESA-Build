@@ -76,3 +76,16 @@ resource "aws_s3_object" "mesa_build_bucket_models" {
 resource "aws_s3_bucket" "mesa_public_bucket" {
   bucket = "aicentre-nlpteam-mesa-public"
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "mesa_public_bucket_lifecycle_configuration" {
+  bucket = aws_s3_bucket.mesa_public_bucket.id
+
+  rule {
+    id = "abort_incomplete_multipart_uploads"
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
+
+    status = "Enabled"
+  }
+}
