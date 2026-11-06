@@ -349,7 +349,7 @@ def test_init_batches_provided_downloads_and_extracts(
     generator: BatchGeneratorFixture,
 ) -> None:
     mock_generator_dependencies.download_and_extract.assert_called_once_with(
-        filename="foobar.tar.gz", output_folder=Path("./data/documents/foobar")
+        filename="foobar.tar.gz", output_folder=Path("./data/datagen/documents/foobar")
     )
 
 
@@ -382,7 +382,7 @@ def test_init_multiple_batches_downloads_all(
 ) -> None:
     mock_glob: MagicMock = mocker.patch.object(Path, "glob")
     mock_glob.return_value = [
-        Path(f"./data/documents/foo/document_{i}.json") for i in range(2)
+        Path(f"./data/datagen/documents/foo/document_{i}.json") for i in range(2)
     ]
     BatchGeneratorFixture(
         system_prompt="foo",
@@ -403,8 +403,8 @@ def test_init_multiple_batches_interleaves_document_files(
         Path,
         "glob",
         side_effect=[
-            [Path("./data/documents/batch1/foo.json")],
-            [Path("./data/documents/batch2/bar.json")],
+            [Path("./data/datagen/documents/batch1/foo.json")],
+            [Path("./data/datagen/documents/batch2/bar.json")],
         ],
     )
     mock_interleave: MagicMock = mocker.patch(
@@ -419,8 +419,8 @@ def test_init_multiple_batches_interleaves_document_files(
     )
     mock_interleave.assert_called_once_with(
         [
-            [Path("./data/documents/batch1/foo.json")],
-            [Path("./data/documents/batch2/bar.json")],
+            [Path("./data/datagen/documents/batch1/foo.json")],
+            [Path("./data/datagen/documents/batch2/bar.json")],
         ]
     )
 
@@ -876,7 +876,9 @@ def test_extract_batch_output_called_creates_output_directory(
     generator: BatchGeneratorFixture,
 ) -> None:
     generator.extract_batch_output()
-    mock_filesystem.makedirs.assert_called_with("./data/trainingdata/", exist_ok=True)
+    mock_filesystem.makedirs.assert_called_with(
+        "./data/datagen/samples/", exist_ok=True
+    )
 
 
 def test_check_batch_output_status_output_present_returns_true(

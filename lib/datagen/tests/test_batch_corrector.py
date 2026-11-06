@@ -162,7 +162,7 @@ class TestFileAccess:
         self, corrector: BatchOutputCorrectorFixture, file_mocks: FileMocks
     ) -> None:
         corrector.write([{"foo": 1}])
-        file_mocks.rmtree.assert_called_once_with(Path("data/trainingdata"))
+        file_mocks.rmtree.assert_called_once_with(Path("data/datagen/samples"))
 
     def test_write_records_no_trainingdata_clears_nothing(
         self, corrector: BatchOutputCorrectorFixture, file_mocks: FileMocks

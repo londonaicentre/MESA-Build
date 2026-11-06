@@ -47,7 +47,7 @@ class DocumentLoader:
             Count of documents extracted and validated
         """
         # S3 -> local cache dir
-        cache_dir = Path("data/_cache/document_batches")
+        cache_dir = Path("data/datagen/_cache")
         cache_dir.mkdir(parents=True, exist_ok=True)
         tar_path = cache_dir / filename
         s3_key = f"{s3_prefix}/{filename}" if s3_prefix else filename

@@ -7,7 +7,7 @@ A minimal reference for generating schema-aligned training data with the `datage
 The flow is split into three scripts (batch inference is asynchronous):
 
 - `generate.py` — downloads + extracts a document batch from `s3://aicentre-nlpteam-mesa-build/documents/test-batch-2026-01-17-001.tar.gz`, builds a JSONL batch specification, uploads it to S3, and submits a Bedrock batch inference job with `BedrockBatchGenerator`. The job ID is saved to `data/datagen/.job_id.json`.
-- `extract.py` — once the job completes, downloads the output from S3 and parses it into `{content, output}` samples in `./data/trainingdata/` with `extract_batch_output`. Outputs that parse but fail schema validation go to `./data/trainingdata/invalid/`.
+- `extract.py` — once the job completes, downloads the output from S3 and parses it into `{content, output}` samples in `./data/datagen/samples/` with `extract_batch_output`. Outputs that parse but fail schema validation go to `./data/datagen/samples/invalid/`.
 - `upload.py` — packages the validated samples and uploads them to `s3://aicentre-nlpteam-mesa-build/trainingdata/<timestamp>_docgen-batch-test/` with `TrainingDataUploader.upload`. The system prompt from the schema is baked into the JSONL.
 
 ## Prerequisites

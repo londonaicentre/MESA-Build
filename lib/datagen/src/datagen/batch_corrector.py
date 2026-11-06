@@ -32,7 +32,7 @@ class BatchOutputCorrector:
 
         self.__schema: type[BaseModel] = schema
         self.__batch_output_file: Path = batch_output_file
-        self.__trainingdata_folder: Path = Path("data/trainingdata")
+        self.__trainingdata_folder: Path = Path("data/datagen/samples")
 
     def _read(self) -> list[dict[str, object]]:
         return [

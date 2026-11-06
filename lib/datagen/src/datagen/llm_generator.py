@@ -59,13 +59,13 @@ class LLMGenerator:
         self.__max_tokens: int = max_tokens
         self.__temperature: float = temperature
         self.__schema_version: str = get_schema_version(schema_name)
-        self.__output_folder_name: str = "./data/trainingdata/"
+        self.__output_folder_name: str = "./data/datagen/samples/"
 
         # batches from S3
         batches: list[list[Path]] = []
         for batch_filename in document_batches:
             batch_name = batch_filename.replace(".tar.gz", "").replace(".tar", "")
-            output_folder = Path(f"./data/documents/{batch_name}")
+            output_folder = Path(f"./data/datagen/documents/{batch_name}")
             self._logger.info(f"Downloading batch: {batch_filename}")
             DocumentLoader.download_and_extract(
                 filename=batch_filename,

@@ -1,7 +1,7 @@
 """
 upload.py
 
-Step 2: package the validated samples in ./data/trainingdata/ and upload them
+Step 2: package the validated samples in ./data/datagen/samples/ and upload them
 to s3://aicentre-nlpteam-mesa-build/trainingdata/<timestamp>_<short_description>/.
 
 TrainingDataUploader re-validates each local sample against the schema, then
@@ -33,7 +33,7 @@ s3_uri = TrainingDataUploader.upload(
     system_prompt=pb.build_main_prompt(),  # main (inference) prompt, baked into JSONL
     short_description="docgen-gemini-example-batch-06-2026",
     long_description="Example oncoschema training data (Gemini) from test-batch-2026-01-17-001",
-    input_folder=Path("./data/trainingdata"),
+    input_folder=Path("./data/datagen/samples"),
     # bucket / s3_prefix / region default to
     # aicentre-nlpteam-mesa-build / trainingdata / eu-west-2
 )

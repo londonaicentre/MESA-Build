@@ -98,7 +98,7 @@ def mock_helper_methods(mocker: MockerFixture) -> HelperMethods:
 def mock_uploader_path_operations(mocker: MockerFixture) -> PathOperations:
     mock_glob: MagicMock = mocker.patch.object(Path, "glob")
     mock_glob.return_value = [
-        Path(f"./data/trainingdata/sample_{i}.json") for i in range(3)
+        Path(f"./data/datagen/samples/sample_{i}.json") for i in range(3)
     ]
     return PathOperations(
         read_text=mocker.patch.object(Path, "read_text", return_value="{}"),

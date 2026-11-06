@@ -11,7 +11,8 @@ from tests.types import PathOperations
 def mock_path_operations(mocker: MockerFixture) -> PathOperations:
     mock_glob: MagicMock = mocker.patch.object(Path, "glob")
     mock_glob.return_value = sorted(
-        Path(f"./data/documents/foo/document_{index}.json") for index in range(5)
+        Path(f"./data/datagen/documents/foo/document_{index}.json")
+        for index in range(5)
     )
     return PathOperations(
         read_text=mocker.patch.object(

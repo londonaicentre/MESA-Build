@@ -6,7 +6,7 @@ A minimal reference for generating schema-aligned training data with the `datage
 
 The flow is split into two scripts:
 
-- `generate.py` — downloads + extracts a document batch from `s3://aicentre-nlpteam-mesa-build/documents/test-batch-2026-01-17-001.tar.gz`, then runs real-time Gemini inference over each document with `LLMGenerator`. The Gemini key is loaded from `.env` via `load_dotenv()`. Validated `{content, output}` samples are written to `./data/trainingdata/`; outputs that parse but fail schema validation go to `./data/trainingdata/invalid/` and are excluded downstream.
+- `generate.py` — downloads + extracts a document batch from `s3://aicentre-nlpteam-mesa-build/documents/test-batch-2026-01-17-001.tar.gz`, then runs real-time Gemini inference over each document with `LLMGenerator`. The Gemini key is loaded from `.env` via `load_dotenv()`. Validated `{content, output}` samples are written to `./data/datagen/samples/`; outputs that parse but fail schema validation go to `./data/datagen/samples/invalid/` and are excluded downstream.
 - `upload.py` — packages the validated samples and uploads them to `s3://aicentre-nlpteam-mesa-build/trainingdata/<timestamp>_docgen-gemini-example-batch-06-2026/` with `TrainingDataUploader.upload`. The system prompt from the schema is baked into the JSONL.
 
 ## Prerequisites

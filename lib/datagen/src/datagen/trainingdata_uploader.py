@@ -120,7 +120,7 @@ class TrainingDataUploader:
         system_prompt: str,
         short_description: str,
         long_description: str | None = None,
-        input_folder: Path = Path("./data/trainingdata"),
+        input_folder: Path = Path("./data/datagen/samples"),
         bucket: str = "aicentre-nlpteam-mesa-build",
         s3_prefix: str = "trainingdata",
         region: str = "eu-west-2",
