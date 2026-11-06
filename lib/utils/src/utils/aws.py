@@ -274,7 +274,7 @@ class AWS:
             job_id (str): The id to give to the batch job
             model_id (str): The Bedrock id of the model to use for
                 inference in the batch job
-            batch_file (str): The name of the local file
+            batch_file (str): The path to the local file
                 containing the batch specification
             bucket (str): The name of the bucket in which the batch
                 specification exists
@@ -296,7 +296,7 @@ class AWS:
             roleArn=bedrock_execution_role,
             inputDataConfig={
                 "s3InputDataConfig": {
-                    "s3Uri": "s3://" + bucket + "/" + job_id + "/input/" + batch_file
+                    "s3Uri": f"s3://{bucket}/{job_id}/input/{Path(batch_file).name}"
                 }
             },
             outputDataConfig={
@@ -322,7 +322,7 @@ class AWS:
             job_id (str): The id to give to the batch job
             model_id (str): The Bedrock id of the model to use for
                 inference in the batch job
-            batch_file (str): The name of the local file
+            batch_file (str): The path to the local file
                 containing the batch specification
             bucket (str): The name of the bucket to which the batch
                 specification should be uploaded
@@ -337,8 +337,7 @@ class AWS:
             model_region,
             batch_file,
             bucket,
-            batch_file,
-            job_id + "/input",
+            path=job_id + "/input",
         )
 
         # Generate samples in batch mode
@@ -359,7 +358,7 @@ class AWS:
             model_region (str): The region in which the batch job ran
             bucket (str): The name of the bucket containing the job output
             job_id (str): The id given to the batch job
-            local_file_name (str): The name to use for the downloaded file
+            local_file_name (str): The local path to download the file to
 
         Raises:
             ValueError: If the output file could not be found/downloaded
@@ -369,7 +368,7 @@ class AWS:
             model_region,
             bucket,
             local_file_name,
-            local_file_name,
+            Path(local_file_name).name,
             job_id + "/output/*",
         ):
             raise ValueError(
@@ -406,7 +405,7 @@ class AWS:
             model_region (str): The region in which the batch job ran
             bucket (str): The name of the bucket containing the job output
             job_id (str): The id given to the batch job
-            local_file_name (str): The name to use for the downloaded file
+            local_file_name (str): The local path to download the file to
 
         Returns:
             BatchOutputs: The parsed batch output records
