@@ -169,6 +169,19 @@ class TestCorrectionRuleTransform:
             ({"action": "remove_items", "value": ["bar"]}, ["foo", "bar"], ["foo"]),
             ({"action": "remove_items", "value": ["bar"]}, "bar", "bar"),
             ({"action": "remove_items", "value": "bar"}, ["foo", "bar"], ["foo"]),
+            (
+                {"action": "add_items", "value": ["bar", "baz"]},
+                ["foo", "bar"],
+                ["foo", "bar", "baz"],
+            ),
+            ({"action": "add_items", "value": "bar"}, ["foo"], ["foo", "bar"]),
+            ({"action": "add_items", "value": ["bar"]}, "foo", "foo"),
+            (
+                {"action": "dedupe"},
+                [{"foo": 1}, "bar", {"foo": 1}, "bar"],
+                [{"foo": 1}, "bar"],
+            ),
+            ({"action": "dedupe"}, "foo", "foo"),
         ],
     )
     def test_transform_action_returns_expected(
@@ -196,6 +209,19 @@ class TestCorrectionRuleApply:
         result, acted = make_rule(action="remove", path="foo[*]").apply(sample, "quux")
         assert acted is True
         assert result == {"foo": ["baz"]}
+        apply_mocks._transform.assert_not_called()
+
+    @pytest.mark.parametrize(
+        "held, expected", [([True, False], True), ([False], False)]
+    )
+    def test_apply_flag_rule_leaves_sample_and_returns_whether_held(
+        self, apply_mocks: ApplyMocks, held: list[bool], expected: bool
+    ) -> None:
+        apply_mocks._holds.side_effect = held
+        sample: dict[str, JSONValue] = {"foo": ["bar", "baz"][: len(held)]}
+        result, acted = make_rule(action="flag", path="foo[*]").apply(sample, "quux")
+        assert acted is expected
+        assert result == {"foo": ["bar", "baz"][: len(held)]}
         apply_mocks._transform.assert_not_called()
 
     def test_apply_unmatched_path_leaves_sample(self, apply_mocks: ApplyMocks) -> None:
@@ -246,3 +272,30 @@ class TestCorrectionRules:
             ({"foo": 1}, "quux"),
             ({"foo": 1}, "quux"),
         ]
+
+    def test_apply_rules_skips_flag_rules(self, mocker: MockerFixture) -> None:
+        mock_apply: MagicMock = mocker.patch.object(
+            CorrectionRule, "apply", autospec=True, return_value=({"foo": 1}, True)
+        )
+        rules: CorrectionRules = CorrectionRules(rules=[make_rule(action="flag")])
+        assert rules.apply({"foo": 1}, "quux") == ({"foo": 1}, False)
+        mock_apply.assert_not_called()
+
+    def test_flag_rules_returns_descriptions_of_held_flag_rules(
+        self, mocker: MockerFixture
+    ) -> None:
+        mock_apply: MagicMock = mocker.patch.object(
+            CorrectionRule,
+            "apply",
+            autospec=True,
+            side_effect=[({"foo": 1}, True), ({"foo": 1}, False)],
+        )
+        rules: CorrectionRules = CorrectionRules(
+            rules=[
+                make_rule(action="flag", description="qux"),
+                make_rule(),
+                make_rule(action="flag", description="corge"),
+            ]
+        )
+        assert rules.flag({"foo": 1}, "quux") == ["qux"]
+        assert mock_apply.call_count == 2
