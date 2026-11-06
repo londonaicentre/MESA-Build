@@ -40,6 +40,8 @@ class FileMocks:
     read_text: MagicMock
     write_text: MagicMock
     replace: MagicMock
+    exists: MagicMock
+    rmtree: MagicMock
 
 
 @dataclass
@@ -89,6 +91,8 @@ def file_mocks(mocker: MockerFixture) -> FileMocks:
         ),
         write_text=mocker.patch.object(Path, "write_text"),
         replace=mocker.patch("datagen.batch_corrector.os.replace", autospec=True),
+        exists=mocker.patch.object(Path, "exists", return_value=True),
+        rmtree=mocker.patch("datagen.batch_corrector.shutil.rmtree", autospec=True),
     )
 
 
@@ -153,6 +157,19 @@ class TestFileAccess:
         file_mocks.replace.assert_called_once_with(
             Path("foo.jsonl.tmp"), Path("foo.jsonl.out")
         )
+
+    def test_write_records_clears_trainingdata(
+        self, corrector: BatchOutputCorrectorFixture, file_mocks: FileMocks
+    ) -> None:
+        corrector.write([{"foo": 1}])
+        file_mocks.rmtree.assert_called_once_with(Path("data/trainingdata"))
+
+    def test_write_records_no_trainingdata_clears_nothing(
+        self, corrector: BatchOutputCorrectorFixture, file_mocks: FileMocks
+    ) -> None:
+        file_mocks.exists.return_value = False
+        corrector.write([{"foo": 1}])
+        file_mocks.rmtree.assert_not_called()
 
 
 class TestRecordAccess:
