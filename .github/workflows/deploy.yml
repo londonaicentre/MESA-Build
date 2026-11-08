@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::307869389845:role/AICentre-MesaBuildTerraformRole
+          role-to-assume: arn:aws:iam::307869389845:role/${{ github.event_name == 'push' && 'AICentre-MesaBuildTerraformRole' || 'AICentre-MesaBuildTerraformPlanRole' }}
           aws-region: eu-west-2
       - run: |
           mkdir --parents "$HOME/.terraform.d/plugin-cache"
