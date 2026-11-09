@@ -219,9 +219,7 @@ class TrainingDataHandler:
         """
         from transformers import AutoTokenizer
 
-        tokenizer = AutoTokenizer.from_pretrained(  # type: ignore[no-untyped-call]
-            base_model, trust_remote_code=True
-        )
+        tokenizer = AutoTokenizer.from_pretrained(base_model)  # type: ignore[no-untyped-call]
         return [
             sample
             for sample in samples
