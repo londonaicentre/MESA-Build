@@ -18,6 +18,7 @@ class ResolveRemoteSchemaInfoMocks:
 class InstallSchemaPackageMocks:
     version: MagicMock
     subprocess_run: MagicMock
+    httpx_get: MagicMock
 
 
 @pytest.fixture
@@ -31,9 +32,14 @@ def resolve_remote_schema_info_mocks(
 
 @pytest.fixture
 def install_schema_package_mocks(mocker: MockerFixture) -> InstallSchemaPackageMocks:
+    response: MagicMock = MagicMock()
+    response.json.return_value = {"ownership": {"organization": "londonaicentre"}}
     return InstallSchemaPackageMocks(
         version=mocker.patch("utils.schema_resolver.version"),
         subprocess_run=mocker.patch("utils.schema_resolver.subprocess.run"),
+        httpx_get=mocker.patch(
+            "utils.schema_resolver.httpx.get", return_value=response
+        ),
     )
 
 
@@ -140,6 +146,7 @@ class TestInstallSchemaPackage:
 
         assert result == "londonaicentre-oncoschema"
         install_schema_package_mocks.subprocess_run.assert_not_called()
+        install_schema_package_mocks.httpx_get.assert_not_called()
 
     def test_install_schema_package_use_latest_ignores_pinned_version(
         self, install_schema_package_mocks: InstallSchemaPackageMocks
@@ -161,6 +168,68 @@ class TestInstallSchemaPackage:
             check=True,
         )
         install_schema_package_mocks.version.assert_not_called()
+
+    def test_install_schema_package_org_owned_checks_pypi_project(
+        self, install_schema_package_mocks: InstallSchemaPackageMocks
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+
+        SchemaResolver.install_schema_package("londonaicentre-oncoschema", "2.1.0")
+
+        install_schema_package_mocks.httpx_get.assert_called_once_with(
+            "https://pypi.org/pypi/londonaicentre-oncoschema/json", timeout=30.0
+        )
+
+    @pytest.mark.parametrize(
+        "schema_name",
+        [
+            "foo",
+            "londonaicentre-foo",
+            "foo-oncoschema",
+            "londonaicentre-onco1schema",
+            "londonaicentre-oncoschema-foo",
+        ],
+    )
+    def test_install_schema_package_unexpected_name_raises_value_error(
+        self, install_schema_package_mocks: InstallSchemaPackageMocks, schema_name: str
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+
+        with pytest.raises(ValueError, match="not a londonaicentre schema package"):
+            SchemaResolver.install_schema_package(schema_name, "1.0.0")
+
+        install_schema_package_mocks.httpx_get.assert_not_called()
+        install_schema_package_mocks.subprocess_run.assert_not_called()
+
+    @pytest.mark.parametrize(
+        "project",
+        [{"ownership": {"organization": "foo"}}, {"ownership": None}, {}],
+    )
+    def test_install_schema_package_not_org_owned_raises_value_error(
+        self,
+        install_schema_package_mocks: InstallSchemaPackageMocks,
+        project: dict[str, object],
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+        install_schema_package_mocks.httpx_get.return_value.json.return_value = project
+
+        with pytest.raises(ValueError, match="not owned by the londonaicentre"):
+            SchemaResolver.install_schema_package("londonaicentre-fooschema", "1.0.0")
+
+        install_schema_package_mocks.subprocess_run.assert_not_called()
+
+    def test_install_schema_package_unpublished_project_raises_http_status_error(
+        self, install_schema_package_mocks: InstallSchemaPackageMocks
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+        install_schema_package_mocks.httpx_get.return_value.raise_for_status.side_effect = httpx.HTTPStatusError(
+            "error", request=MagicMock(), response=MagicMock()
+        )
+
+        with pytest.raises(httpx.HTTPStatusError):
+            SchemaResolver.install_schema_package("londonaicentre-fooschema", "1.0.0")
+
+        install_schema_package_mocks.subprocess_run.assert_not_called()
 
 
 class TestImportSchemaModules:

@@ -1043,7 +1043,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-finetune"
-version = "2.0.0"
+version = "2.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "accelerate" },
@@ -1139,7 +1139,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "1.7.0"
+version = "1.8.0"
 source = { editable = "../utils" }
 dependencies = [
     { name = "boto3" },

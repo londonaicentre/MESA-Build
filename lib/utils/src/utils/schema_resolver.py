@@ -2,6 +2,7 @@ import logging
 import subprocess
 from importlib import import_module
 from importlib.metadata import PackageNotFoundError, version
+from re import match
 from types import ModuleType
 
 import httpx
@@ -11,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 class SchemaResolver:
     """Resolves, installs and imports the schema package serving a model."""
+
+    __PACKAGE_PATTERN: str = r"londonaicentre-[a-z]+schema\Z"
+    __ORGANISATION: str = "londonaicentre"
 
     @staticmethod
     def resolve_remote_schema_info(
@@ -49,6 +53,10 @@ class SchemaResolver:
 
         Returns:
             str: The distribution package name of the installed schema.
+
+        Raises:
+            ValueError: If the package is not a londonaicentre schema package owned by
+                the londonaicentre organisation on PyPI.
         """
         if use_latest:
             log_message = f"Installing latest schema package '{schema_name}'"
@@ -63,9 +71,24 @@ class SchemaResolver:
             log_message = f"Installing schema package '{schema_name}=={schema_version}'"
             pip_args = [f"{schema_name}=={schema_version}"]
 
+        SchemaResolver.__check_published_by_organisation(schema_name)
         logger.info(log_message)
         subprocess.run(["uv", "pip", "install", *pip_args], check=True)
         return schema_name
+
+    @staticmethod
+    def __check_published_by_organisation(schema_name: str) -> None:
+        if not match(SchemaResolver.__PACKAGE_PATTERN, schema_name):
+            raise ValueError(f"'{schema_name}' is not a londonaicentre schema package")
+        response = httpx.get(f"https://pypi.org/pypi/{schema_name}/json", timeout=30.0)
+        response.raise_for_status()
+        if (response.json().get("ownership") or {}).get(
+            "organization"
+        ) != SchemaResolver.__ORGANISATION:
+            raise ValueError(
+                f"'{schema_name}' is not owned by the "
+                f"{SchemaResolver.__ORGANISATION} organisation on PyPI"
+            )
 
     @staticmethod
     def import_schema_modules(schema_name: str) -> tuple[ModuleType, ModuleType]:
