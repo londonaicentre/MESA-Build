@@ -141,3 +141,9 @@ Most folders are self-contained python packages, allowing for the selective rele
 - Create a tag for the merge commit referencing the version increment
 
 - Build and push the package to pypi (`python -m build` and `uv run twine upload -r pypi dist/*`), or rely on CI/CD for this
+
+Workflows from fork pull requests need approval for every outside contributor, a repository setting outside the GitHub Terraform provider, so it is set by hand:
+
+```sh
+gh api -X PUT repos/londonaicentre/MESA-Build/actions/permissions/fork-pr-contributor-approval -f approval_policy=all_external_contributors
+```
