@@ -730,7 +730,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-chestradschema"
-version = "0.5.1"
+version = "0.5.2"
 source = { editable = "." }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
@@ -781,7 +781,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "2.0.0"
+version = "2.0.1"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },

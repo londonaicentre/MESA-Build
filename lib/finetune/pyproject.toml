@@ -6,7 +6,7 @@ authors = [
     { name = "Sophie Ratkai", email = "s.ratkai@nhs.net" },
     { name = "Martin Chapman", email = "contact@martinchapman.co.uk" },
 ]
-version = "2.0.1"
+version = "2.0.2"
 requires-python = ">=3.12"
 license = "LicenseRef-Proprietary"
 dependencies = [
@@ -15,7 +15,7 @@ dependencies = [
     "londonaicentre-mesa-types",
     "pydantic>=2.12.5",
     "pyyaml>=6.0",
-    "sagemaker==2.254.1",
+    "sagemaker==2.257.7",
     "transformers>=4.36.0",
     "trl>=0.7.0",
     "peft>=0.7.0",

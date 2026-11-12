@@ -15,6 +15,12 @@ jobs:
         working-directory: runners/finetune
     steps:
       - uses: actions/checkout@v6
+      - uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: runners/finetune/uv.lock
+          ignore-unfixed: true
+          exit-code: 1
       - uses: astral-sh/setup-uv@v7
       - run: uv sync
       - run: uv run ruff check src/ tests/
