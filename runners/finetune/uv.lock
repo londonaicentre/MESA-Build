@@ -1155,7 +1155,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-genoschema"
-version = "2.2.2"
+version = "2.2.3"
 source = { editable = "../../schemas/genoschema" }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
@@ -1339,7 +1339,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-oncoschema"
-version = "2.1.2"
+version = "2.1.3"
 source = { editable = "../../schemas/oncoschema" }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
