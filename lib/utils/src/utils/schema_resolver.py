@@ -2,7 +2,10 @@ import logging
 import subprocess
 from importlib import import_module
 from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 from re import match
+from shutil import which
+from tempfile import TemporaryDirectory
 from types import ModuleType
 
 import httpx
@@ -73,8 +76,36 @@ class SchemaResolver:
 
         SchemaResolver.__check_published_by_organisation(schema_name)
         logger.info(log_message)
+        SchemaResolver.__scan(pip_args[-1])
         subprocess.run(["uv", "pip", "install", *pip_args], check=True)
         return schema_name
+
+    @staticmethod
+    def __scan(requirement: str) -> None:
+        if which("trivy") is None:
+            logger.warning(f"Trivy not found, so '{requirement}' is not scanned")
+            return
+        with TemporaryDirectory() as directory:
+            requirements: str = str(Path(directory) / "requirements.txt")
+            subprocess.run(
+                ["uv", "pip", "compile", "-", "-o", requirements],
+                input=requirement,
+                text=True,
+                check=True,
+            )
+            subprocess.run(
+                [
+                    "trivy",
+                    "fs",
+                    "--scanners",
+                    "vuln",
+                    "--ignore-unfixed",
+                    "--exit-code",
+                    "1",
+                    requirements,
+                ],
+                check=True,
+            )
 
     @staticmethod
     def __check_published_by_organisation(schema_name: str) -> None:

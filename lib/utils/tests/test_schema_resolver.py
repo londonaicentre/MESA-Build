@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from importlib.metadata import PackageNotFoundError
-from unittest.mock import MagicMock
+from subprocess import CalledProcessError
+from unittest.mock import MagicMock, call
 
 import httpx
 import pytest
@@ -19,6 +20,8 @@ class InstallSchemaPackageMocks:
     version: MagicMock
     subprocess_run: MagicMock
     httpx_get: MagicMock
+    TemporaryDirectory: MagicMock
+    which: MagicMock
 
 
 @pytest.fixture
@@ -34,13 +37,17 @@ def resolve_remote_schema_info_mocks(
 def install_schema_package_mocks(mocker: MockerFixture) -> InstallSchemaPackageMocks:
     response: MagicMock = MagicMock()
     response.json.return_value = {"ownership": {"organization": "londonaicentre"}}
-    return InstallSchemaPackageMocks(
+    mocks: InstallSchemaPackageMocks = InstallSchemaPackageMocks(
         version=mocker.patch("utils.schema_resolver.version"),
         subprocess_run=mocker.patch("utils.schema_resolver.subprocess.run"),
         httpx_get=mocker.patch(
             "utils.schema_resolver.httpx.get", return_value=response
         ),
+        TemporaryDirectory=mocker.patch("utils.schema_resolver.TemporaryDirectory"),
+        which=mocker.patch("utils.schema_resolver.which", return_value="/foo/trivy"),
     )
+    mocks.TemporaryDirectory.return_value.__enter__.return_value = "/foo"
+    return mocks
 
 
 class TestResolveRemoteSchemaInfo:
@@ -117,7 +124,7 @@ class TestInstallSchemaPackage:
         )
 
         assert result == "londonaicentre-oncoschema"
-        install_schema_package_mocks.subprocess_run.assert_called_once_with(
+        install_schema_package_mocks.subprocess_run.assert_called_with(
             ["uv", "pip", "install", "londonaicentre-oncoschema==2.1.0"], check=True
         )
 
@@ -131,7 +138,7 @@ class TestInstallSchemaPackage:
         )
 
         assert result == "londonaicentre-oncoschema"
-        install_schema_package_mocks.subprocess_run.assert_called_once_with(
+        install_schema_package_mocks.subprocess_run.assert_called_with(
             ["uv", "pip", "install", "londonaicentre-oncoschema==2.1.0"], check=True
         )
 
@@ -156,7 +163,7 @@ class TestInstallSchemaPackage:
         )
 
         assert result == "londonaicentre-oncoschema"
-        install_schema_package_mocks.subprocess_run.assert_called_once_with(
+        install_schema_package_mocks.subprocess_run.assert_called_with(
             [
                 "uv",
                 "pip",
@@ -168,6 +175,77 @@ class TestInstallSchemaPackage:
             check=True,
         )
         install_schema_package_mocks.version.assert_not_called()
+
+    @pytest.mark.parametrize(
+        ("use_latest", "spec"),
+        [
+            (False, "londonaicentre-oncoschema==2.1.0"),
+            (True, "londonaicentre-oncoschema"),
+        ],
+    )
+    def test_install_schema_package_new_package_scans_requirements_before_install(
+        self,
+        install_schema_package_mocks: InstallSchemaPackageMocks,
+        use_latest: bool,
+        spec: str,
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+
+        SchemaResolver.install_schema_package(
+            "londonaicentre-oncoschema", "2.1.0", use_latest
+        )
+
+        assert install_schema_package_mocks.subprocess_run.call_args_list[:2] == [
+            call(
+                ["uv", "pip", "compile", "-", "-o", "/foo/requirements.txt"],
+                input=spec,
+                text=True,
+                check=True,
+            ),
+            call(
+                [
+                    "trivy",
+                    "fs",
+                    "--scanners",
+                    "vuln",
+                    "--ignore-unfixed",
+                    "--exit-code",
+                    "1",
+                    "/foo/requirements.txt",
+                ],
+                check=True,
+            ),
+        ]
+
+    def test_install_schema_package_failed_scan_raises_called_process_error(
+        self, install_schema_package_mocks: InstallSchemaPackageMocks
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+        install_schema_package_mocks.subprocess_run.side_effect = [
+            None,
+            CalledProcessError(1, "trivy"),
+        ]
+
+        with pytest.raises(CalledProcessError):
+            SchemaResolver.install_schema_package("londonaicentre-oncoschema", "2.1.0")
+
+        assert install_schema_package_mocks.subprocess_run.call_count == 2
+
+    def test_install_schema_package_missing_trivy_installs_without_scan(
+        self,
+        install_schema_package_mocks: InstallSchemaPackageMocks,
+        mocker: MockerFixture,
+    ) -> None:
+        install_schema_package_mocks.version.side_effect = PackageNotFoundError
+        install_schema_package_mocks.which.return_value = None
+        logger: MagicMock = mocker.patch("utils.schema_resolver.logger")
+
+        SchemaResolver.install_schema_package("londonaicentre-oncoschema", "2.1.0")
+
+        install_schema_package_mocks.subprocess_run.assert_called_once_with(
+            ["uv", "pip", "install", "londonaicentre-oncoschema==2.1.0"], check=True
+        )
+        logger.warning.assert_called_once()
 
     def test_install_schema_package_org_owned_checks_pypi_project(
         self, install_schema_package_mocks: InstallSchemaPackageMocks
