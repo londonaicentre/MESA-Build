@@ -17,6 +17,7 @@ dependencies = [
     "markdown>=3.10",
     "pydantic>=2.12.5",
     "londonaicentre-mesa-types>=1.0.0",
+    "google-genai>=2.34.0",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]

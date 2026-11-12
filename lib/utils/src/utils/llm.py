@@ -5,6 +5,14 @@ from re import Match, DOTALL, search
 from typing import Any, Literal
 
 import boto3
+from google import genai
+from google.genai.types import (
+    FinishReason,
+    GenerateContentConfig,
+    GenerateContentResponse,
+    SafetySetting,
+    SafetySettingOrDict,
+)
 from litellm import completion
 from pydantic import BaseModel
 
@@ -75,6 +83,7 @@ class LLM:
         api_key: str,
         max_tokens: int = 8192,
         temperature: float = 0.001,
+        safety_settings: list[SafetySettingOrDict] | None = None,
         **kwargs: Any,
     ) -> ModelResponse:
         """Use an LLM for inference.
@@ -86,6 +95,8 @@ class LLM:
             api_key (str): API key to access the remote API
             max_tokens (int): Maximum output tokens. Defaults to 8192.
             temperature (float): Model randomness. Defaults to 0.001.
+            safety_settings (list[SafetySettingOrDict], optional): Safety settings of a
+                Gemini model. Defaults to Gemini's.
 
         Returns:
             ModelResponse: The model's response and why it finished
@@ -99,6 +110,16 @@ class LLM:
                 api_key,
                 max_tokens,
                 temperature,
+            )
+        if model_name.startswith("gemini/"):
+            return LLM.gemini(
+                model_name.removeprefix("gemini/"),
+                system_prompt,
+                user_prompt,
+                api_key,
+                max_tokens,
+                temperature,
+                safety_settings,
             )
         messages: list[dict[str, str]] = []
         if system_prompt is not None:
@@ -171,6 +192,62 @@ class LLM:
                         )
                     ),
                     finish_reason=response["stopReason"],
+                )
+            ]
+        )
+
+    @staticmethod
+    def gemini(
+        model_name: str,
+        system_prompt: str | None,
+        user_prompt: str,
+        api_key: str,
+        max_tokens: int = 8192,
+        temperature: float = 0.001,
+        safety_settings: list[SafetySettingOrDict] | None = None,
+    ) -> ModelResponse:
+        """Use a Gemini LLM for inference, through the Gemini API.
+
+        Args:
+            model_name (str): The Gemini model name
+            system_prompt (str): The system prompt to use
+            user_prompt (str): The user prompt to use
+            api_key (str): Gemini API key
+            max_tokens (int): Maximum output tokens. Defaults to 8192.
+            temperature (float): Model randomness. Defaults to 0.001.
+            safety_settings (list[SafetySettingOrDict], optional): Safety settings for
+                the request. Defaults to Gemini's.
+
+        Returns:
+            ModelResponse: The model's response and why it finished
+
+        """
+        with genai.Client(api_key=api_key) as client:
+            response: GenerateContentResponse = client.models.generate_content(
+                model=model_name,
+                contents=user_prompt,
+                config=GenerateContentConfig(
+                    system_instruction=system_prompt,
+                    max_output_tokens=max_tokens,
+                    temperature=temperature,
+                    safety_settings=None
+                    if safety_settings is None
+                    else [
+                        SafetySetting.model_validate(setting)
+                        for setting in safety_settings
+                    ],
+                ),
+            )
+        finish_reason: FinishReason | None = (
+            response.candidates[0].finish_reason if response.candidates else None
+        )
+        return ModelResponse(
+            choices=[
+                Choice(
+                    message=ResponseMessage(content=response.text),
+                    finish_reason=None
+                    if finish_reason is None
+                    else finish_reason.value,
                 )
             ]
         )
