@@ -4,6 +4,7 @@ import tempfile
 from re import Match, DOTALL, search
 from typing import Any, Literal
 
+import boto3
 from litellm import completion
 from pydantic import BaseModel
 
@@ -90,6 +91,15 @@ class LLM:
             ModelResponse: The model's response and why it finished
 
         """
+        if model_name.startswith("bedrock/"):
+            return LLM.bedrock(
+                model_name.removeprefix("bedrock/"),
+                system_prompt,
+                user_prompt,
+                api_key,
+                max_tokens,
+                temperature,
+            )
         messages: list[dict[str, str]] = []
         if system_prompt is not None:
             messages.append({"content": system_prompt, "role": "system"})
@@ -108,6 +118,59 @@ class LLM:
                 Choice(
                     message=ResponseMessage(content=choice.message.content),
                     finish_reason=choice.finish_reason,
+                )
+            ]
+        )
+
+    @staticmethod
+    def bedrock(
+        model_name: str,
+        system_prompt: str | None,
+        user_prompt: str,
+        api_key: str,
+        max_tokens: int = 8192,
+        temperature: float = 0.001,
+        region_name: str | None = None,
+    ) -> ModelResponse:
+        """Use a Bedrock LLM for inference, through the Converse API.
+
+        Args:
+            model_name (str): The Bedrock model id
+            system_prompt (str): The system prompt to use
+            user_prompt (str): The user prompt to use
+            api_key (str): Bedrock API key
+            max_tokens (int): Maximum output tokens. Defaults to 8192.
+            temperature (float): Model randomness. Defaults to 0.001.
+            region_name (str, optional): AWS region of the model. Defaults to the
+                configured region.
+
+        Returns:
+            ModelResponse: The model's response and why it finished
+
+        """
+        os.environ["AWS_BEARER_TOKEN_BEDROCK"] = api_key
+        response: dict[str, Any] = boto3.client(
+            "bedrock-runtime", region_name=region_name
+        ).converse(
+            modelId=model_name,
+            messages=[{"role": "user", "content": [{"text": user_prompt}]}],
+            inferenceConfig={"maxTokens": max_tokens, "temperature": temperature},
+            **({} if system_prompt is None else {"system": [{"text": system_prompt}]}),
+        )
+        return ModelResponse(
+            choices=[
+                Choice(
+                    message=ResponseMessage(
+                        content=next(
+                            (
+                                block["text"]
+                                for block in response["output"]["message"]["content"]
+                                if "text" in block
+                            ),
+                            None,
+                        )
+                    ),
+                    finish_reason=response["stopReason"],
                 )
             ]
         )

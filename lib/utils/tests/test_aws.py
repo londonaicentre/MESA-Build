@@ -3,7 +3,6 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from botocore.exceptions import ClientError
-from litellm import RateLimitError
 import pytest
 
 from utils.aws import AWS
@@ -40,24 +39,41 @@ def test_download_file_with_wildcard_invalid_input_fails(
     assert not AWS.download_file_with_wildcard("foo", "bar", "baz", "qux", "quux/*")
 
 
-@patch("utils.aws.LLM.completion")
+@patch("utils.aws.LLM.bedrock")
 def test_bedrock_completion_completes_in_eu_west_2(
-    mock_completion: MagicMock, model_response: ModelResponse
+    mock_bedrock: MagicMock, model_response: ModelResponse
 ) -> None:
-    mock_completion.return_value = model_response
+    mock_bedrock.return_value = model_response
     assert AWS.bedrock_completion("foo", "bar", "baz", "quux") == model_response
-    assert mock_completion.call_args.kwargs["aws_region_name"] == "eu-west-2"
+    mock_bedrock.assert_called_once_with(
+        "foo", "bar", "baz", "quux", 8192, 0.001, "eu-west-2"
+    )
 
 
 @patch("utils.aws.time.sleep")
-@patch("utils.aws.LLM.completion", side_effect=RateLimitError("", "", ""))
-def test_bedrock_completion_rate_limited_raises_rate_limit_error_after_retries(
-    mock_completion: MagicMock, mock_sleep: MagicMock
+@patch(
+    "utils.aws.LLM.bedrock",
+    side_effect=ClientError({"Error": {"Code": "ThrottlingException"}}, "Converse"),
+)
+def test_bedrock_completion_throttled_raises_client_error_after_retries(
+    mock_bedrock: MagicMock, mock_sleep: MagicMock
 ) -> None:
-    with pytest.raises(RateLimitError):
+    with pytest.raises(ClientError):
         AWS.bedrock_completion("foo", "bar", "baz", "quux")
-    assert mock_completion.call_count == 6
+    assert mock_bedrock.call_count == 6
     assert mock_sleep.call_count == 5
+
+
+@patch(
+    "utils.aws.LLM.bedrock",
+    side_effect=ClientError({"Error": {"Code": "ValidationException"}}, "Converse"),
+)
+def test_bedrock_completion_other_error_raises_client_error_without_retry(
+    mock_bedrock: MagicMock,
+) -> None:
+    with pytest.raises(ClientError):
+        AWS.bedrock_completion("foo", "bar", "baz", "quux")
+    mock_bedrock.assert_called_once()
 
 
 def test_create_anthropic_bedrock_batch_entry_valid_fields_are_present() -> None:
