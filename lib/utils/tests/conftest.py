@@ -1,11 +1,17 @@
-from litellm import Choices, Message, ModelResponse
 import pytest
+
+from utils.llm import Choice, ModelResponse, ResponseMessage
 
 
 @pytest.fixture
 def model_response() -> ModelResponse:
-    message: Message = Message(content="The quick brown fox jumped over the lazy dog")
-    choice: Choices = Choices(message=message)
     return ModelResponse(
-        choices=[choice],
+        choices=[
+            Choice(
+                message=ResponseMessage(
+                    content="The quick brown fox jumped over the lazy dog"
+                ),
+                finish_reason="foo",
+            )
+        ]
     )

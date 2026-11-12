@@ -1,6 +1,6 @@
 # Training-data generation on Google Gemini — example
 
-A minimal reference for generating schema-aligned training data with the `datagen` library and the `oncoschema` schema package, running inference against a Google Gemini endpoint (Google AI Studio) routed through LiteLLM.
+A minimal reference for generating schema-aligned training data with the `datagen` library and the `oncoschema` schema package, running inference against a Google Gemini endpoint (Google AI Studio).
 
 ## What it shows
 
