@@ -4,6 +4,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, mock_open
+from uuid import UUID
 
 import pytest
 from pytest_mock import MockerFixture
@@ -173,6 +174,8 @@ def generator(
     )
 
 
+RUN_ID: UUID = UUID("00000000-0000-0000-0000-000000000001")
+
 GENERATOR_ARGS: dict[str, Any] = {
     "system_prompt": "foo",
     "schema": MagicMock,
@@ -335,7 +338,7 @@ def mock_generate_via_dependencies(
             BatchGenerator,
             "_submit_batch",
             autospec=True,
-            return_value=("foo/bar", 123),
+            return_value=("foo/bar", RUN_ID),
         ),
         run_batch_inference=mocker.patch(
             "datagen.batch_generator.AWS.run_batch_inference", autospec=True
@@ -678,7 +681,7 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     model_id: str | None,
     batch_file: str,
 ) -> None:
-    assert runtime_generator.generate_via_batch(10, "foo") == 123
+    assert runtime_generator.generate_via_batch(10, "foo") == RUN_ID
     mock_generate_via_dependencies._submit_batch.call_args.args[2]("baz/qux")
     mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
         "https://foo", "bar", "baz"
@@ -734,10 +737,10 @@ def test_get_batch_run_run_id_given_returns_run(
     mock_mesa_runtime: MagicMock, runtime_generator: MESARuntimeBatchGenerator
 ) -> None:
     assert (
-        runtime_generator.get_batch_run(123)
-        == mock_mesa_runtime.return_value.get_inference_run.return_value
+        runtime_generator.get_batch_run(RUN_ID)
+        == mock_mesa_runtime.return_value.get_run.return_value
     )
-    mock_mesa_runtime.return_value.get_inference_run.assert_called_once_with(123)
+    mock_mesa_runtime.return_value.get_run.assert_called_once_with(RUN_ID)
 
 
 def test_submit_batch_submission_fails_records_nothing(

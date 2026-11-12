@@ -14,6 +14,7 @@ from datetime import datetime
 from importlib.metadata import version
 from itertools import islice
 from pathlib import Path
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -22,7 +23,7 @@ from datagen.cost_estimator import CostEstimator
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import save_training_sample
 from datagen.version_detector import get_schema_version
-from mesa_runtime import MesaRuntime, WorkflowRun
+from mesa_runtime import FlowRun, MesaRuntime
 from mesa_types import Document
 from utils.aws import AWS
 from utils.llm import BatchOutputs
@@ -441,7 +442,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         self,
         sample_size: int,
         bucket: str,
-    ) -> int:
+    ) -> UUID:
         """Generate samples via batch inference on the MESA Runtime, in place
             of Bedrock.
 
@@ -452,7 +453,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
                 runtime reads it
 
         Returns:
-            The id of the started MESA Runtime workflow run
+            The id of the started MESA Runtime run
 
         Raises:
             ValueError: If every available document has already been sent
@@ -470,14 +471,14 @@ class MESARuntimeBatchGenerator(BatchGenerator):
             ),
         )[1]
 
-    def get_batch_run(self, run_id: int) -> WorkflowRun:
-        """Get a MESA Runtime batch inference workflow run.
+    def get_batch_run(self, run_id: UUID) -> FlowRun:
+        """Get a MESA Runtime batch inference run.
 
         Args:
             run_id: The id of the run, as returned by `generate_via_batch`
 
         Returns:
-            The run's current state, including its status, conclusion and URL
+            The run's current state
 
         """
-        return self.__runtime.get_inference_run(run_id)
+        return self.__runtime.get_run(run_id)
