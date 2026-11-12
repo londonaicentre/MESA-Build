@@ -1,33 +1,32 @@
 """
 llm_generator.py
 
-Class to handle real-time APIs via LiteLLM
+Class to handle real-time APIs
 """
 
 import logging
 import os
 from pathlib import Path
 
-from litellm import ModelResponse
 from pydantic import BaseModel
 
 from datagen.document_loader import DocumentLoader
 from datagen.extraction import get_output_filename, save_training_sample
 from datagen.version_detector import get_schema_version
 from mesa_types import Document
-from utils.llm import LLM
+from utils.llm import LLM, ModelResponse
 
 
 class LLMGenerator:
     """Real-time sample generator using any LLM provider.
 
-    Supports any model accessible via LiteLLM (OpenAI, Anthropic, Bedrock, local models, etc.)
+    Supports Bedrock, Gemini and OpenAI-compatible models
 
     Args:
         system_prompt: System prompt for sample generation
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
-        model_name: LiteLLM model string (e.g., 'gpt-4', 'claude-3-opus', 'bedrock/...')
+        model_name: Model string (e.g., 'gpt-4', 'gemini/...', 'bedrock/...')
         api_key: API key for the model provider
         document_batches: S3 batch filenames to download
         max_tokens: Maximum output tokens per sample. Defaults to 32768.

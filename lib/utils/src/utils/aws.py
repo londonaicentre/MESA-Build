@@ -8,10 +8,9 @@ from typing import Any
 
 import boto3
 from botocore.exceptions import ClientError
-from litellm import RateLimitError, ModelResponse
 from pydantic import BaseModel
 
-from utils.llm import LLM, BatchOutputs, Message, TextContent
+from utils.llm import LLM, BatchOutputs, Message, ModelResponse, TextContent
 
 logger = logging.getLogger(__name__)
 
@@ -196,23 +195,26 @@ class AWS:
             temperature (float): Model randomness. Defaults to 0.001.
 
         Returns:
-            ModelResponse: The model's prediction (LiteLLM wrapper object)
+            ModelResponse: The model's response and why it finished
 
         """
         max_retries: int = 5
         for attempt in range(max_retries + 1):
             try:
-                return LLM.completion(
-                    model_name=model_name,
-                    system_prompt=system_prompt,
-                    user_prompt=user_prompt,
-                    api_key=bedrock_api_key,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    aws_region_name="eu-west-2",
+                return LLM.bedrock(
+                    model_name,
+                    system_prompt,
+                    user_prompt,
+                    bedrock_api_key,
+                    max_tokens,
+                    temperature,
+                    "eu-west-2",
                 )
-            except RateLimitError:
-                if attempt == max_retries:
+            except ClientError as error:
+                if (
+                    error.response["Error"]["Code"] != "ThrottlingException"
+                    or attempt == max_retries
+                ):
                     raise
                 # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
                 delay: float = random.uniform(0, min(60, 2**attempt))
