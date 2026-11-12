@@ -552,7 +552,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-genoschema"
-version = "2.2.1"
+version = "2.2.2"
 source = { editable = "." }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
