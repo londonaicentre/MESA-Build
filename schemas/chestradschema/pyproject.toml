@@ -1,6 +1,6 @@
 [project]
 name = "londonaicentre-chestradschema"
-version = "0.5.1"
+version = "0.5.2"
 description = "Chest radiology"
 readme = "README.md"
 authors = [
