@@ -628,7 +628,7 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.41.1" },
     { name = "jsonpath-ng", specifier = ">=1.8.0" },
     { name = "jsonschema", specifier = ">=4.25.1" },
-    { name = "londonaicentre-mesa-runtime", specifier = ">=0.5.0" },
+    { name = "londonaicentre-mesa-runtime", specifier = ">=0.6.0" },
     { name = "londonaicentre-mesa-types", editable = "../../../../types" },
     { name = "londonaicentre-mesa-utils", editable = "../../../../utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
@@ -648,16 +648,16 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-runtime"
-version = "0.5.0"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
     { name = "httpx" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/af/87/3421d8969e24f1966f8596e796313c834efde4f41872b17574e87fb02a08/londonaicentre_mesa_runtime-0.5.0.tar.gz", hash = "sha256:1946c5e61ed1da6591b6290fe27dcc6863d539aff23c5062c75375a867ced4b2", size = 5711, upload-time = "2026-10-18T19:02:11.53Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/30/07b42cd1b7e38ecdf8ac2fb0403b5069d08bcfa405066bebc2ff0491438a/londonaicentre_mesa_runtime-0.6.0.tar.gz", hash = "sha256:1912567351c3c0383b7d652755e077f06e88ea8c61ca3dedbac022a0e0e7d3fb", size = 5536, upload-time = "2026-11-12T19:31:35.806Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ce/7d/aa1155a24bc55f11447a79ceef805b76835bf2c4b93f108077b3e464879e/londonaicentre_mesa_runtime-0.5.0-py3-none-any.whl", hash = "sha256:423c1daad83a94f6915ca2868efbf75e8a675e5716273f04396f0b897123ecdd", size = 6835, upload-time = "2026-10-18T19:02:10.54Z" },
+    { url = "https://files.pythonhosted.org/packages/22/95/4621e345639c18cf7d698336581b2d50215bb8665b38248658813f66983e/londonaicentre_mesa_runtime-0.6.0-py3-none-any.whl", hash = "sha256:030eaac9a3807b600cb3127584fdb132dc870ce41f1b17293a4f48bca7b0c007", size = 6710, upload-time = "2026-11-12T19:31:34.578Z" },
 ]
 
 [[package]]
