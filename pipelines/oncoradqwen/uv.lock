@@ -959,7 +959,7 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "ipykernel", specifier = ">=7.4.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
-    { name = "londonaicentre-mesa-runtime", specifier = ">=0.2.0" },
+    { name = "londonaicentre-mesa-runtime", specifier = ">=0.6.0" },
     { name = "londonaicentre-oncoradschema", editable = "../../schemas/oncoradschema" },
 ]
 

@@ -325,7 +325,7 @@ requires-dist = [
     { name = "londonaicentre-chestradschema", editable = "../../schemas/chestradschema" },
     { name = "londonaicentre-docsynth", specifier = ">=2.0.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../lib/datagen" },
-    { name = "londonaicentre-mesa-runtime", specifier = ">=0.5.0" },
+    { name = "londonaicentre-mesa-runtime", specifier = ">=0.6.0" },
 ]
 
 [[package]]
