@@ -7,6 +7,7 @@ from litellm import RateLimitError
 import pytest
 
 from utils.aws import AWS
+from utils.llm import ModelResponse
 
 
 @patch("utils.aws.boto3.client")
@@ -39,24 +40,24 @@ def test_download_file_with_wildcard_invalid_input_fails(
     assert not AWS.download_file_with_wildcard("foo", "bar", "baz", "qux", "quux/*")
 
 
-@patch("utils.llm.completion")
-def test_completion_content_returned(
-    mock_completion: MagicMock, model_response: MagicMock
+@patch("utils.aws.LLM.completion")
+def test_bedrock_completion_completes_in_eu_west_2(
+    mock_completion: MagicMock, model_response: ModelResponse
 ) -> None:
     mock_completion.return_value = model_response
-    AWS.bedrock_completion(
-        "foo", "bar", "baz", "quux"
-    ) == "The quick brown fox jumped over the lazy dog"
-    AWS.bedrock_completion("foo", "bar", "baz", "quux") is not None
+    assert AWS.bedrock_completion("foo", "bar", "baz", "quux") == model_response
+    assert mock_completion.call_args.kwargs["aws_region_name"] == "eu-west-2"
 
 
-@patch("utils.llm.completion", side_effect=RateLimitError("", "", ""))
-def test_completion_limit_raises_exception(
-    mock_completion: MagicMock, model_response: MagicMock
+@patch("utils.aws.time.sleep")
+@patch("utils.aws.LLM.completion", side_effect=RateLimitError("", "", ""))
+def test_bedrock_completion_rate_limited_raises_rate_limit_error_after_retries(
+    mock_completion: MagicMock, mock_sleep: MagicMock
 ) -> None:
-    mock_completion.return_value = model_response
     with pytest.raises(RateLimitError):
         AWS.bedrock_completion("foo", "bar", "baz", "quux")
+    assert mock_completion.call_count == 6
+    assert mock_sleep.call_count == 5
 
 
 def test_create_anthropic_bedrock_batch_entry_valid_fields_are_present() -> None:

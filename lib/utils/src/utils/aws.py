@@ -8,10 +8,10 @@ from typing import Any
 
 import boto3
 from botocore.exceptions import ClientError
-from litellm import RateLimitError, ModelResponse
+from litellm import RateLimitError
 from pydantic import BaseModel
 
-from utils.llm import LLM, BatchOutputs, Message, TextContent
+from utils.llm import LLM, BatchOutputs, Message, ModelResponse, TextContent
 
 logger = logging.getLogger(__name__)
 
@@ -196,7 +196,7 @@ class AWS:
             temperature (float): Model randomness. Defaults to 0.001.
 
         Returns:
-            ModelResponse: The model's prediction (LiteLLM wrapper object)
+            ModelResponse: The model's response and why it finished
 
         """
         max_retries: int = 5

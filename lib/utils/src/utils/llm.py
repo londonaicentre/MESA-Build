@@ -4,7 +4,7 @@ import tempfile
 from re import Match, DOTALL, search
 from typing import Any, Literal
 
-from litellm import Usage, completion, ModelResponse
+from litellm import completion
 from pydantic import BaseModel
 
 
@@ -22,6 +22,24 @@ class ModelInput(BaseModel):
     anthropic_version: str
     max_tokens: int
     messages: list[Message]
+
+
+class Usage(BaseModel):
+    input_tokens: int = 0
+    output_tokens: int = 0
+
+
+class ResponseMessage(BaseModel):
+    content: str | None
+
+
+class Choice(BaseModel):
+    message: ResponseMessage
+    finish_reason: str | None
+
+
+class ModelResponse(BaseModel):
+    choices: list[Choice]
 
 
 class ModelOutput(BaseModel):
@@ -57,7 +75,7 @@ class LLM:
         max_tokens: int = 8192,
         temperature: float = 0.001,
         **kwargs: Any,
-    ) -> ModelResponse | None:
+    ) -> ModelResponse:
         """Use an LLM for inference.
 
         Args:
@@ -69,14 +87,14 @@ class LLM:
             temperature (float): Model randomness. Defaults to 0.001.
 
         Returns:
-            ModelResponse: The model's prediction (LiteLLM wrapper object)
+            ModelResponse: The model's response and why it finished
 
         """
         messages: list[dict[str, str]] = []
         if system_prompt is not None:
             messages.append({"content": system_prompt, "role": "system"})
         messages.append({"content": user_prompt, "role": "user"})
-        return completion(
+        choice = completion(
             model=model_name,
             max_tokens=max_tokens,
             temperature=temperature,
@@ -84,6 +102,14 @@ class LLM:
             api_key=api_key,
             stream=False,
             **kwargs,
+        ).choices[0]
+        return ModelResponse(
+            choices=[
+                Choice(
+                    message=ResponseMessage(content=choice.message.content),
+                    finish_reason=choice.finish_reason,
+                )
+            ]
         )
 
     @staticmethod

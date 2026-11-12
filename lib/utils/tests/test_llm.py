@@ -2,18 +2,18 @@ from unittest.mock import MagicMock, patch
 
 from pytest_mock import MockerFixture
 
-from utils.llm import LLM
+from utils.llm import LLM, Choice, ModelResponse, ResponseMessage
 
 
 @patch("utils.llm.completion")
-def test_completion_content_returned(
-    mock_completion: MagicMock, model_response: MagicMock
-) -> None:
-    mock_completion.return_value = model_response
-    LLM.completion(
-        "foo", "bar", "baz", "quux"
-    ) == "The quick brown fox jumped over the lazy dog"
-    LLM.completion("foo", "bar", "baz", "quux") is not None
+def test_completion_response_returns_first_choice(mock_completion: MagicMock) -> None:
+    choice: MagicMock = MagicMock()
+    choice.message.content = "foo"
+    choice.finish_reason = "stop"
+    mock_completion.return_value.choices = [choice]
+    assert LLM.completion("bar", "baz", "qux", "quux") == ModelResponse(
+        choices=[Choice(message=ResponseMessage(content="foo"), finish_reason="stop")]
+    )
 
 
 def test_extract_output_content_nested_data_returned() -> None:
