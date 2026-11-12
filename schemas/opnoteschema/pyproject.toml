@@ -1,6 +1,6 @@
 [project]
 name = "londonaicentre-opnoteschema"
-version = "0.3.2"
+version = "0.3.3"
 description = "Operation notes"
 readme = "README.md"
 authors = [
