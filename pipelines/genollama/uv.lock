@@ -1323,7 +1323,7 @@ requires-dist = [
     { name = "peft", specifier = ">=0.7.0" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pyyaml", specifier = ">=6.0" },
-    { name = "sagemaker", specifier = "==2.254.1" },
+    { name = "sagemaker", specifier = "==2.257.7" },
     { name = "transformers", specifier = ">=4.36.0" },
     { name = "trl", specifier = ">=0.7.0" },
 ]
@@ -1376,7 +1376,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "2.0.0"
+version = "2.0.1"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
@@ -2310,6 +2310,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pytz"
+version = "2026.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f5/b0/168030b0bfcc334cf09fa3313afdb888d892c8a0027324683d1de0ec277e/pytz-2026.6.tar.gz", hash = "sha256:3b0fc2727707663d6e517936f444fd8a8b240f1fc32f4bf7ee03274245945284", size = 318520, upload-time = "2026-10-29T09:05:47.011Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/25/564f3fc5b70c1398d706c51f2b1470d0ea0b1b2f96fee67877b6f5bdf3b6/pytz-2026.6-py2.py3-none-any.whl", hash = "sha256:7fed3fee8fd6bd4a2b7b75a8d56021d0624127bf69bd5691f115db929ac570b3", size = 506321, upload-time = "2026-10-29T09:05:45.14Z" },
+]
+
+[[package]]
 name = "pywin32"
 version = "311"
 source = { registry = "https://pypi.org/simple" }
@@ -2616,7 +2625,7 @@ wheels = [
 
 [[package]]
 name = "sagemaker"
-version = "2.254.1"
+version = "2.257.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -2636,6 +2645,7 @@ dependencies = [
     { name = "platformdirs" },
     { name = "protobuf" },
     { name = "psutil" },
+    { name = "pytz" },
     { name = "pyyaml" },
     { name = "requests" },
     { name = "sagemaker-core" },
@@ -2646,9 +2656,9 @@ dependencies = [
     { name = "urllib3" },
     { name = "uvicorn" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4b/09/0f071d8343c4c36f92c1aeaea9b95b069262322f32158278f0b0df271454/sagemaker-2.254.1.tar.gz", hash = "sha256:68074e291540a01f92022d82a3e31b3f49a150634c2cef102000cefcf6f0f184", size = 1230023, upload-time = "2025-10-31T02:54:33.916Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/83/ddc265b3245b53674a4bbe5081987e274f73ed8292f3ec700de31e5281b1/sagemaker-2.257.7.tar.gz", hash = "sha256:67f434cc2477713af479e7e9443304e1a0270c06821bf0d4378c86e2cfd61166", size = 1254854, upload-time = "2026-10-07T23:11:49.092Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/b2/ba24871af1bfede28e0690c8aadf2d87861f29a23ad7ad345282165fa60d/sagemaker-2.254.1-py3-none-any.whl", hash = "sha256:82b7f64ec745e8be4001938614aad8c32d7e1ec9747b98aa674744fbbb06a56b", size = 1691832, upload-time = "2025-10-31T02:54:31.077Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/00/05ce14b4af8e1a847e6cee046ea23d51ea3682778977ebb6c1bd589ada29/sagemaker-2.257.7-py3-none-any.whl", hash = "sha256:afa20b13ede5cfa8eac5de2dd51036047d90152224e8309d07f54ee5aefd0a99", size = 1719858, upload-time = "2026-10-07T23:11:47.241Z" },
 ]
 
 [[package]]
