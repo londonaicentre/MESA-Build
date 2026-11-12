@@ -12,7 +12,7 @@ on:
 
 jobs:
   build-and-publish:
-    runs-on: codebuild-londonaicentre-org-runner-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: codebuild-londonaicentre-org-public-runner-${{ github.run_id }}-${{ github.run_attempt }}
     environment: pypi
     permissions:
       contents: write
