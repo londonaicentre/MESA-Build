@@ -17,6 +17,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ inputs.working-directory }}/uv.lock
+          ignore-unfixed: true
+          exit-code: 1
       - name: check version is bumped
         run: |
           current=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
