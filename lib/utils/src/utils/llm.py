@@ -13,7 +13,8 @@ from google.genai.types import (
     SafetySetting,
     SafetySettingOrDict,
 )
-from litellm import completion
+from openai import OpenAI
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
 
 
@@ -84,7 +85,7 @@ class LLM:
         max_tokens: int = 8192,
         temperature: float = 0.001,
         safety_settings: list[SafetySettingOrDict] | None = None,
-        **kwargs: Any,
+        api_base: str | None = None,
     ) -> ModelResponse:
         """Use an LLM for inference.
 
@@ -97,6 +98,8 @@ class LLM:
             temperature (float): Model randomness. Defaults to 0.001.
             safety_settings (list[SafetySettingOrDict], optional): Safety settings of a
                 Gemini model. Defaults to Gemini's.
+            api_base (str, optional): Base URL of an OpenAI-compatible API. Defaults
+                to OpenAI's.
 
         Returns:
             ModelResponse: The model's response and why it finished
@@ -121,26 +124,14 @@ class LLM:
                 temperature,
                 safety_settings,
             )
-        messages: list[dict[str, str]] = []
-        if system_prompt is not None:
-            messages.append({"content": system_prompt, "role": "system"})
-        messages.append({"content": user_prompt, "role": "user"})
-        choice = completion(
-            model=model_name,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            messages=messages,
-            api_key=api_key,
-            stream=False,
-            **kwargs,
-        ).choices[0]
-        return ModelResponse(
-            choices=[
-                Choice(
-                    message=ResponseMessage(content=choice.message.content),
-                    finish_reason=choice.finish_reason,
-                )
-            ]
+        return LLM.openai(
+            model_name.removeprefix("openai/"),
+            system_prompt,
+            user_prompt,
+            api_key,
+            max_tokens,
+            temperature,
+            api_base,
         )
 
     @staticmethod
@@ -250,6 +241,46 @@ class LLM:
                     else finish_reason.value,
                 )
             ]
+        )
+
+    @staticmethod
+    def openai(
+        model_name: str,
+        system_prompt: str | None,
+        user_prompt: str,
+        api_key: str,
+        max_tokens: int = 8192,
+        temperature: float = 0.001,
+        api_base: str | None = None,
+    ) -> ModelResponse:
+        """Use an LLM for inference, through an OpenAI-compatible API.
+
+        Args:
+            model_name (str): The model name, as the API serves it
+            system_prompt (str): The system prompt to use
+            user_prompt (str): The user prompt to use
+            api_key (str): API key to access the API
+            max_tokens (int): Maximum output tokens. Defaults to 8192.
+            temperature (float): Model randomness. Defaults to 0.001.
+            api_base (str, optional): Base URL of the API. Defaults to OpenAI's.
+
+        Returns:
+            ModelResponse: The model's response and why it finished
+
+        """
+        messages: list[ChatCompletionMessageParam] = []
+        if system_prompt is not None:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": user_prompt})
+        return ModelResponse.model_validate(
+            OpenAI(api_key=api_key, base_url=api_base)
+            .chat.completions.create(
+                model=model_name,
+                messages=messages,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
+            .model_dump()
         )
 
     @staticmethod

@@ -13,11 +13,11 @@ dependencies = [
     "boto3>=1.41.1",
     "bs4>=0.0.2",
     "httpx>=0.28.1",
-    "litellm==1.106.1",
     "markdown>=3.10",
     "pydantic>=2.12.5",
     "londonaicentre-mesa-types>=1.0.0",
     "google-genai>=2.34.0",
+    "openai>=3.45.0",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]

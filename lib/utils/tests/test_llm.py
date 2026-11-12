@@ -18,7 +18,7 @@ from utils.llm import LLM, Choice, ModelResponse, ResponseMessage
 class CompletionMocks:
     bedrock: MagicMock
     gemini: MagicMock
-    completion: MagicMock
+    openai: MagicMock
 
 
 @dataclass
@@ -31,6 +31,11 @@ class GeminiMocks:
     Client: MagicMock
 
 
+@dataclass
+class OpenAIMocks:
+    OpenAI: MagicMock
+
+
 @pytest.fixture
 def completion_mocks(
     mocker: MockerFixture, model_response: ModelResponse
@@ -38,12 +43,8 @@ def completion_mocks(
     mocks: CompletionMocks = CompletionMocks(
         mocker.patch("utils.llm.LLM.bedrock", return_value=model_response),
         mocker.patch("utils.llm.LLM.gemini", return_value=model_response),
-        mocker.patch("utils.llm.completion"),
+        mocker.patch("utils.llm.LLM.openai", return_value=model_response),
     )
-    choice: MagicMock = MagicMock()
-    choice.message.content = "foo"
-    choice.finish_reason = "stop"
-    mocks.completion.return_value.choices = [choice]
     return mocks
 
 
@@ -67,6 +68,16 @@ def gemini_mocks(mocker: MockerFixture) -> GeminiMocks:
     return mocks
 
 
+@pytest.fixture
+def openai_mocks(mocker: MockerFixture) -> OpenAIMocks:
+    mocks: OpenAIMocks = OpenAIMocks(mocker.patch("utils.llm.OpenAI"))
+    mocks.OpenAI.return_value.chat.completions.create.return_value.model_dump.return_value = {
+        "id": "bar",
+        "choices": [{"message": {"content": "foo"}, "finish_reason": "stop"}],
+    }
+    return mocks
+
+
 class TestCompletion:
     def test_completion_bedrock_model_completes_through_bedrock(
         self, completion_mocks: CompletionMocks, model_response: ModelResponse
@@ -87,15 +98,20 @@ class TestCompletion:
             "foo", "bar", "baz", "qux", 8192, 0.001, []
         )
 
-    def test_completion_other_model_returns_first_choice(
-        self, completion_mocks: CompletionMocks
+    @pytest.mark.parametrize("model_name", ["foo", "openai/foo"])
+    def test_completion_other_model_completes_through_openai(
+        self,
+        completion_mocks: CompletionMocks,
+        model_response: ModelResponse,
+        model_name: str,
     ) -> None:
-        assert LLM.completion("foo", "bar", "baz", "qux") == ModelResponse(
-            choices=[
-                Choice(message=ResponseMessage(content="foo"), finish_reason="stop")
-            ]
+        assert (
+            LLM.completion(model_name, "bar", "baz", "qux", api_base="http://corge/v1")
+            == model_response
         )
-        assert completion_mocks.completion.call_args.kwargs["model"] == "foo"
+        completion_mocks.openai.assert_called_once_with(
+            "foo", "bar", "baz", "qux", 8192, 0.001, "http://corge/v1"
+        )
 
 
 class TestBedrock:
@@ -171,6 +187,41 @@ class TestGemini:
     ) -> None:
         gemini_mocks.Client.return_value.__enter__.return_value.models.generate_content.return_value.candidates = None
         assert LLM.gemini("foo", "baz", "qux", "quux").choices[0].finish_reason is None
+
+
+class TestOpenAI:
+    @pytest.mark.parametrize(
+        ("system_prompt", "messages"),
+        [
+            (None, [{"role": "user", "content": "qux"}]),
+            (
+                "baz",
+                [
+                    {"role": "system", "content": "baz"},
+                    {"role": "user", "content": "qux"},
+                ],
+            ),
+        ],
+    )
+    def test_openai_model_returns_response(
+        self,
+        openai_mocks: OpenAIMocks,
+        system_prompt: str | None,
+        messages: list[dict[str, str]],
+    ) -> None:
+        assert LLM.openai(
+            "foo", system_prompt, "qux", "quux", api_base="http://corge/v1"
+        ) == ModelResponse(
+            choices=[
+                Choice(message=ResponseMessage(content="foo"), finish_reason="stop")
+            ]
+        )
+        openai_mocks.OpenAI.assert_called_once_with(
+            api_key="quux", base_url="http://corge/v1"
+        )
+        create: MagicMock = openai_mocks.OpenAI.return_value.chat.completions.create
+        assert create.call_args.kwargs["model"] == "foo"
+        assert create.call_args.kwargs["messages"] == messages
 
 
 def test_extract_output_content_nested_data_returned() -> None:
