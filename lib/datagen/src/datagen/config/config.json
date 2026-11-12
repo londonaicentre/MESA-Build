@@ -1,7 +1,7 @@
 {
     "sonnet4": {
-        "model": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
-        "price_list_model": "Claude Sonnet 4.5",
+        "model": "eu.anthropic.claude-sonnet-4-6",
+        "price_list_model": "Claude Sonnet 4.6",
         "region": "eu-west-2",
         "batch_file": "data/datagen/anthropic_batch_job.jsonl"
     },

@@ -4,6 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.13"
 license = "CC-BY-NC-ND-4.0"
 dependencies = [
+    "londonaicentre-docsynth>=2.1.0",
     "londonaicentre-mesa-datagen",
     "londonaicentre-mesa-finetune",
     "londonaicentre-genoschema",
