@@ -461,7 +461,7 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         """
         return self._submit_batch(
             sample_size,
-            lambda job_id: self.__runtime.run_batch_inference(
+            lambda job_id: self.__runtime.infer(
                 job_id,
                 self._model_batch_file,
                 bucket,
