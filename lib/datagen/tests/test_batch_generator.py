@@ -686,7 +686,7 @@ def test_generate_via_batch_valid_params_submits_to_runtime_returns_id(
     mock_generate_via_dependencies.mesa_runtime.assert_called_once_with(
         "https://foo", "bar", "baz"
     )
-    mock_generate_via_dependencies.mesa_runtime.return_value.run_batch_inference.assert_called_once_with(
+    mock_generate_via_dependencies.mesa_runtime.return_value.infer.assert_called_once_with(
         "baz/qux",
         batch_file,
         "foo",

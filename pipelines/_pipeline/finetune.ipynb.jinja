@@ -51,13 +51,12 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "run_id: int = runtime.dispatch(\n",
+    "run_id: int = runtime.train(\n",
     "    \"<add training batch>\",\n",
     "    model_name=\"{{ _folder_name }}\",\n",
-    "    schema=\"{{ schema_name | replace('schema', '') }}\",\n",
+    "    schema_name=\"{{ schema_name | replace('schema', '') }}\",\n",
     "    version=\"0.1.0\",\n",
-    "    config=\"config.yaml\",\n",
-    "    config_from_file=True\n",
+    "    config=\"config.yaml\"\n",
     ")"
    ],
    "id": "00000004"

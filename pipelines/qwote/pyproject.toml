@@ -9,7 +9,7 @@ dependencies = [
     "ipykernel>=7.3.0",
     "londonaicentre-mesa-datagen",
     "londonaicentre-opnoteschema",
-    "londonaicentre-mesa-runtime",
+    "londonaicentre-mesa-runtime>=0.8.0",
 ]
 
 [tool.uv.sources]

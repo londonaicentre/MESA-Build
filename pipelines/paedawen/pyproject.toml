@@ -10,7 +10,7 @@ dependencies = [
     "londonaicentre-docsynth>=2.0.0",
     "londonaicentre-mesa-datagen",
     "londonaicentre-paedacuteschema>=1.2.0",
-    "londonaicentre-mesa-runtime",
+    "londonaicentre-mesa-runtime>=0.8.0",
 ]
 
 [tool.uv.sources]

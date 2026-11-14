@@ -9,5 +9,5 @@ dependencies = [
     "dotenv>=0.9.9",
     "ipykernel>=7.3.0",
     "londonaicentre-docsynth>=2.0.0",
-    "londonaicentre-mesa-runtime",
+    "londonaicentre-mesa-runtime>=0.8.0",
 ]

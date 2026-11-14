@@ -1183,7 +1183,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-datagen"
-version = "3.0.0"
+version = "3.0.1"
 source = { editable = "../datagen" }
 dependencies = [
     { name = "boto3" },
@@ -1201,7 +1201,7 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.41.1" },
     { name = "jsonpath-ng", specifier = ">=1.8.0" },
     { name = "jsonschema", specifier = ">=4.25.1" },
-    { name = "londonaicentre-mesa-runtime", specifier = ">=0.6.0" },
+    { name = "londonaicentre-mesa-runtime", specifier = ">=0.8.0" },
     { name = "londonaicentre-mesa-types", editable = "../types" },
     { name = "londonaicentre-mesa-utils", editable = "../utils" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
@@ -1281,16 +1281,18 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-runtime"
-version = "0.6.0"
+version = "0.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
     { name = "httpx" },
+    { name = "jmespath" },
     { name = "pydantic" },
+    { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/de/30/07b42cd1b7e38ecdf8ac2fb0403b5069d08bcfa405066bebc2ff0491438a/londonaicentre_mesa_runtime-0.6.0.tar.gz", hash = "sha256:1912567351c3c0383b7d652755e077f06e88ea8c61ca3dedbac022a0e0e7d3fb", size = 5536, upload-time = "2026-11-12T19:31:35.806Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/86/b0/7daf93e9cbb1176241c39068096f8fd72f63738ca026e37f9403da848b72/londonaicentre_mesa_runtime-0.8.0.tar.gz", hash = "sha256:a2156351450d7c97ea557368eb89fe52187a225d7f39e7252be910433731a385", size = 5532, upload-time = "2026-11-14T23:07:01.656Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/95/4621e345639c18cf7d698336581b2d50215bb8665b38248658813f66983e/londonaicentre_mesa_runtime-0.6.0-py3-none-any.whl", hash = "sha256:030eaac9a3807b600cb3127584fdb132dc870ce41f1b17293a4f48bca7b0c007", size = 6710, upload-time = "2026-11-12T19:31:34.578Z" },
+    { url = "https://files.pythonhosted.org/packages/03/b1/1ba995aa08980bec5a6ac5f9fc1b20bcfd03ce7fbb460e16c579c7e521f0/londonaicentre_mesa_runtime-0.8.0-py3-none-any.whl", hash = "sha256:e46c935816582a4489560211cd8cc12ef36f9f37a652025eed6f5c2a19d36b38", size = 6583, upload-time = "2026-11-14T23:07:00.695Z" },
 ]
 
 [[package]]
@@ -2951,11 +2953,11 @@ wheels = [
 
 [[package]]
 name = "soupsieve"
-version = "2.10"
+version = "4.1.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/71/c3/1b817965ac12dc002d7c9cd7dfffdd7d4fbf9b45763ef2ffe7b86ee94670/soupsieve-2.10.tar.gz", hash = "sha256:49e9380d7d2905463583bafe285e818c7366a9ed7b3aee221c1ac79c905d8bc0", size = 124337, upload-time = "2026-09-24T02:36:35.048Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1f/52/ee5646b65d98a252e807ccc37725363942372a4113072e0bce7ed22f8b84/soupsieve-4.1.1.tar.gz", hash = "sha256:b296bd2d2f65b1a78149f3d7bf6736a147d2c9e2dfbde0e4404639d748a02e03", size = 169784, upload-time = "2026-11-14T17:23:32.467Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/66/87/5ed59e1d0290564e2027ed066c52b059892c4637741337fc0967183c8d4d/soupsieve-2.10-py3-none-any.whl", hash = "sha256:8596eb8967d744174820280fa62b4542a2e955bfaccca73ed8a13c6eb8e9b502", size = 38019, upload-time = "2026-09-24T02:36:33.709Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/65/7fae69a095696195334a934eab23aeb12e2715e6c3f08025d2f91942750e/soupsieve-4.1.1-py3-none-any.whl", hash = "sha256:8ff3422dab0b720fb667ee79864d80531a0e57994a13eb701697719ffcb751f6", size = 55089, upload-time = "2026-11-14T17:23:31.001Z" },
 ]
 
 [[package]]
