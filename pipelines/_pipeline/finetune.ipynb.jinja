@@ -26,6 +26,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
+    "from uuid import UUID\n",
     "from mesa_runtime import MesaRuntime\n",
     "runtime: MesaRuntime = MesaRuntime(\n",
     "    os.environ[\"LLM__MESA_RUNTIME__BASE_URL\"],\n",
@@ -51,7 +52,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "run_id: int = runtime.train(\n",
+    "run_id: UUID = runtime.train(\n",
     "    \"<add training batch>\",\n",
     "    model_name=\"{{ _folder_name }}\",\n",
     "    schema_name=\"{{ schema_name | replace('schema', '') }}\",\n",
@@ -67,7 +68,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "runtime.get_run(run_id=run_id)"
+    "runtime.get_run(run_id)"
    ],
    "id": "00000005"
   }

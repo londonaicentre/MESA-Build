@@ -24,6 +24,7 @@
    "source": [
     "import os\n",
     "from pathlib import Path\n",
+    "from uuid import UUID\n",
     "from dotenv import load_dotenv\n",
     "load_dotenv()"
    ],
@@ -111,9 +112,19 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "gen.generate_via_batch(100, os.environ[\"BUCKET\"])"
+    "run_id: UUID = gen.generate_via_batch(100, os.environ[\"BUCKET\"])"
    ],
    "id": "0000000a"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1575b604",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "gen.get_batch_run(run_id)"
+   ]
   },
   {
    "cell_type": "markdown",
@@ -147,9 +158,19 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "gen.generate_via_batch(3000, os.environ[\"BUCKET\"])"
+    "run_id: UUID = gen.generate_via_batch(3000, os.environ[\"BUCKET\"])"
    ],
    "id": "0000000e"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c18ef90c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "gen.get_batch_run(run_id)"
+   ]
   },
   {
    "cell_type": "code",
