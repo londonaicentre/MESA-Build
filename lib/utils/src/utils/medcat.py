@@ -1,16 +1,12 @@
 from collections.abc import Sequence
-from datetime import datetime
 from enum import Enum
+from logging import Logger, getLogger
+from pathlib import Path
 from re import escape, finditer
-from typing import Annotated, Any, NamedTuple, Protocol
+from typing import Any, NamedTuple, Protocol
 
 from mesa_types import TrainingExample
-from pydantic import BaseModel, PlainSerializer
-
-type Timestamp = Annotated[
-    datetime,
-    PlainSerializer(lambda timestamp: timestamp.strftime("%Y-%m-%d %H:%M:%S.%f")),
-]
+from pydantic import BaseModel
 
 
 class Mention(Protocol):
@@ -43,7 +39,6 @@ class Span(NamedTuple):
 class MetaAnnotation(BaseModel):
     name: str
     value: str
-    acc: float
     validated: bool
 
 
@@ -58,30 +53,83 @@ class Annotation(BaseModel):
     deleted: bool
     alternative: bool
     killed: bool
-    irrelevant: bool
-    create_time: Timestamp
-    last_modified: Timestamp
-    comment: str | None
     manually_created: bool
     acc: float
     meta_anns: dict[str, MetaAnnotation]
 
 
+class Document(BaseModel):
+    name: str
+    text: str
+    annotations: list[Annotation]
+
+
+class Project(BaseModel):
+    name: str
+    cuis: str
+    documents: list[Document]
+
+
+class Export(BaseModel):
+    projects: list[Project]
+
+
 class MedCATTrainerExporter:
-    """Export condition mentions as MedCATtrainer annotation records.
+    """Export condition mentions as a MedCATtrainer project, holding only the fields its importer reads rather than a full MedCATtrainer export.
 
     Args:
         schema (Schema): The schema class whose output lists the mentions (e.g.
             conditionschema's `ConditionModel`).
         cui (str): The concept ID each annotation is given.
         user (str): The MedCATtrainer username each annotation is attributed to.
+        project_name (str): The name of the exported project.
 
     """
 
-    def __init__(self, schema: Schema, cui: str, user: str) -> None:
+    def __init__(self, schema: Schema, cui: str, user: str, project_name: str) -> None:
         self.__schema: Schema = schema
         self.__cui: str = cui
         self.__user: str = user
+        self.__project_name: str = project_name
+        self.__logger: Logger = getLogger(__name__)
+
+    def export(self, input_folder: Path, output_file: Path) -> None:
+        """Export a folder of training examples as a MedCATtrainer project.
+
+        Args:
+            input_folder (Path): The folder of training example JSON files.
+            output_file (Path): The file the project is written to.
+
+        """
+        examples: dict[str, TrainingExample] = {
+            path.stem: TrainingExample.model_validate_json(path.read_text())
+            for path in sorted(input_folder.glob("*.json"))
+        }
+        annotations: dict[str, list[Annotation] | None] = {
+            name: self.annotate(example) for name, example in examples.items()
+        }
+        for name in [name for name, located in annotations.items() if located is None]:
+            self.__logger.warning("Skipped %s, as its mentions cannot be located", name)
+        documents: list[Document] = [
+            Document(name=name, text=examples[name].content, annotations=located)
+            for name, located in annotations.items()
+            if located is not None
+        ]
+        self.__logger.info(
+            "Exported %d documents and skipped %d",
+            len(documents),
+            len(examples) - len(documents),
+        )
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        output_file.write_text(
+            Export(
+                projects=[
+                    Project(
+                        name=self.__project_name, cuis=self.__cui, documents=documents
+                    )
+                ]
+            ).model_dump_json()
+        )
 
     def annotate(self, example: TrainingExample) -> list[Annotation] | None:
         """Map each mention in a training example to a MedCATtrainer annotation.
@@ -100,7 +148,6 @@ class MedCATTrainerExporter:
         )
         if located is None:
             return None
-        now: datetime = datetime.now()
         return [
             Annotation(
                 user=self.__user,
@@ -113,16 +160,10 @@ class MedCATTrainerExporter:
                 deleted=False,
                 alternative=False,
                 killed=False,
-                irrelevant=False,
-                create_time=now,
-                last_modified=now,
-                comment=None,
                 manually_created=False,
                 acc=1.0,
                 meta_anns={
-                    name: MetaAnnotation(
-                        name=name, value=meta.value, acc=1.0, validated=True
-                    )
+                    name: MetaAnnotation(name=name, value=meta.value, validated=True)
                     for name, meta in (
                         ("Presence", mention.presence),
                         ("Subject", mention.subject),

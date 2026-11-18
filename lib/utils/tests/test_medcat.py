@@ -1,5 +1,7 @@
+import json
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -7,7 +9,13 @@ from mesa_types import TrainingExample
 from pydantic import BaseModel, ValidationError
 from pytest_mock import MockerFixture
 
-from utils.medcat import Annotation, MedCATTrainerExporter, Mention, Span
+from utils.medcat import (
+    Annotation,
+    MedCATTrainerExporter,
+    Mention,
+    MetaAnnotation,
+    Span,
+)
 
 
 class Foo(Enum):
@@ -31,14 +39,54 @@ class AnnotateMocks:
     locate: MagicMock
 
 
+@dataclass
+class ExportMocks:
+    getLogger: MagicMock
+    annotate: MagicMock
+
+
 @pytest.fixture
 def annotate_mocks(mocker: MockerFixture) -> AnnotateMocks:
     return AnnotateMocks(locate=mocker.patch.object(MedCATTrainerExporter, "locate"))
 
 
+@pytest.fixture
+def export_mocks(mocker: MockerFixture) -> ExportMocks:
+    return ExportMocks(
+        getLogger=mocker.patch("utils.medcat.getLogger"),
+        annotate=mocker.patch.object(MedCATTrainerExporter, "annotate"),
+    )
+
+
 @pytest.fixture(scope="session")
 def exporter() -> MedCATTrainerExporter:
-    return MedCATTrainerExporter(FooExtraction, "123456", "foo")
+    return MedCATTrainerExporter(FooExtraction, "123456", "foo", "bar")
+
+
+@pytest.fixture
+def logged_exporter(export_mocks: ExportMocks) -> MedCATTrainerExporter:
+    return MedCATTrainerExporter(FooExtraction, "123456", "foo", "bar")
+
+
+@pytest.fixture(scope="session")
+def annotation() -> Annotation:
+    return Annotation(
+        user="foo",
+        cui="123456",
+        value="foo",
+        start=0,
+        end=3,
+        validated=True,
+        correct=True,
+        deleted=False,
+        alternative=False,
+        killed=False,
+        manually_created=False,
+        acc=1.0,
+        meta_anns={
+            "Presence": MetaAnnotation(name="Presence", value="bar", validated=True)
+        },
+    )
 
 
 class TestLocate:
@@ -124,10 +172,7 @@ class TestAnnotate:
                 FooMention(value="qux", time=Foo.BAZ),
             ],
         )
-        assert [
-            annotation.model_dump(exclude={"create_time", "last_modified"})
-            for annotation in annotations
-        ] == [
+        assert [annotation.model_dump() for annotation in annotations] == [
             {
                 "user": "foo",
                 "cui": "123456",
@@ -139,12 +184,10 @@ class TestAnnotate:
                 "deleted": False,
                 "alternative": False,
                 "killed": False,
-                "irrelevant": False,
-                "comment": None,
                 "manually_created": False,
                 "acc": 1.0,
                 "meta_anns": {
-                    name: {"name": name, "value": meta, "acc": 1.0, "validated": True}
+                    name: {"name": name, "value": meta, "validated": True}
                     for name, meta in zip(("Presence", "Subject", "Time"), metas)
                 },
             }
@@ -153,10 +196,6 @@ class TestAnnotate:
                 ("qux", 9, 12, ("bar", "bar", "baz")),
             ]
         ]
-        assert all(
-            annotation.create_time == annotation.last_modified
-            for annotation in annotations
-        )
 
     def test_annotate_unlocated_mentions_returns_none(
         self, annotate_mocks: AnnotateMocks, exporter: MedCATTrainerExporter
@@ -176,3 +215,71 @@ class TestAnnotate:
             exporter.annotate(
                 TrainingExample(content="foo", output={"mentions": [{"time": "bar"}]})
             )
+
+
+class TestExport:
+    def test_export_annotated_samples_writes_project(
+        self,
+        export_mocks: ExportMocks,
+        logged_exporter: MedCATTrainerExporter,
+        annotation: Annotation,
+        tmp_path: Path,
+    ) -> None:
+        export_mocks.annotate.side_effect = [[], [annotation]]
+        for name, content in (("foo", "foo then bar"), ("bar", "baz")):
+            (tmp_path / f"{name}.json").write_text(
+                TrainingExample(content=content, output={}).model_dump_json()
+            )
+        logged_exporter.export(tmp_path, tmp_path / "baz" / "qux.json")
+        assert json.loads((tmp_path / "baz" / "qux.json").read_text()) == {
+            "projects": [
+                {
+                    "name": "bar",
+                    "cuis": "123456",
+                    "documents": [
+                        {"name": "bar", "text": "baz", "annotations": []},
+                        {
+                            "name": "foo",
+                            "text": "foo then bar",
+                            "annotations": [annotation.model_dump()],
+                        },
+                    ],
+                }
+            ]
+        }
+        export_mocks.getLogger.return_value.info.assert_called_once_with(
+            "Exported %d documents and skipped %d", 2, 0
+        )
+
+    def test_export_unlocated_sample_skips_document_with_warning(
+        self,
+        export_mocks: ExportMocks,
+        logged_exporter: MedCATTrainerExporter,
+        annotation: Annotation,
+        tmp_path: Path,
+    ) -> None:
+        export_mocks.annotate.side_effect = [None, [annotation]]
+        for name in ("bar", "foo"):
+            (tmp_path / f"{name}.json").write_text(
+                TrainingExample(content="foo", output={}).model_dump_json()
+            )
+        logged_exporter.export(tmp_path, tmp_path / "baz.json")
+        assert [
+            document["name"]
+            for document in json.loads((tmp_path / "baz.json").read_text())["projects"][
+                0
+            ]["documents"]
+        ] == ["foo"]
+        export_mocks.getLogger.return_value.warning.assert_called_once_with(
+            "Skipped %s, as its mentions cannot be located", "bar"
+        )
+        export_mocks.getLogger.return_value.info.assert_called_once_with(
+            "Exported %d documents and skipped %d", 1, 1
+        )
+
+    def test_export_invalid_sample_raises_validation_error(
+        self, logged_exporter: MedCATTrainerExporter, tmp_path: Path
+    ) -> None:
+        (tmp_path / "foo.json").write_text("{}")
+        with pytest.raises(ValidationError):
+            logged_exporter.export(tmp_path, tmp_path / "bar" / "baz.json")
