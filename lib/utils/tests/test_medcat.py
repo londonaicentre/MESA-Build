@@ -9,13 +9,8 @@ from mesa_types import TrainingExample
 from pydantic import BaseModel, ValidationError
 from pytest_mock import MockerFixture
 
-from utils.medcat import (
-    Annotation,
-    MedCATTrainerExporter,
-    Mention,
-    MetaAnnotation,
-    Span,
-)
+from utils.medcat import MedCATTrainerExporter
+from utils.medcat_types import Annotation, Mention, MetaAnnotation, Span
 
 
 class Foo(Enum):
