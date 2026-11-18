@@ -43,10 +43,9 @@ class MedCATTrainerExporter:
             output_file (Path): The file the project is written to.
 
         """
-        examples: dict[str, TrainingExample] = {
-            path.stem: TrainingExample.model_validate_json(path.read_text())
-            for path in sorted(input_folder.glob("*.json"))
-        }
+        examples: dict[str, TrainingExample] = MedCATTrainerExporter.read_examples(
+            input_folder
+        )
         annotations: dict[str, list[Annotation] | None] = {
             name: self.annotate(example) for name, example in examples.items()
         }
@@ -62,16 +61,45 @@ class MedCATTrainerExporter:
             len(documents),
             len(examples) - len(documents),
         )
-        output_file.parent.mkdir(parents=True, exist_ok=True)
-        output_file.write_text(
+        MedCATTrainerExporter.write_export(
             Export(
                 projects=[
                     Project(
                         name=self.__project_name, cuis=self.__cui, documents=documents
                     )
                 ]
-            ).model_dump_json()
+            ),
+            output_file,
         )
+
+    @staticmethod
+    def read_examples(input_folder: Path) -> dict[str, TrainingExample]:
+        """Read a folder of training example JSON files.
+
+        Args:
+            input_folder (Path): The folder of training example JSON files.
+
+        Returns:
+            dict[str, TrainingExample]: Each example by its file name without the
+                extension, in name order.
+
+        """
+        return {
+            path.stem: TrainingExample.model_validate_json(path.read_text())
+            for path in sorted(input_folder.glob("*.json"))
+        }
+
+    @staticmethod
+    def write_export(export: Export, output_file: Path) -> None:
+        """Write a MedCATtrainer project import as JSON, creating its folder.
+
+        Args:
+            export (Export): The project import to write.
+            output_file (Path): The file it is written to.
+
+        """
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        output_file.write_text(export.model_dump_json())
 
     def annotate(self, example: TrainingExample) -> list[Annotation] | None:
         """Map each mention in a training example to a MedCATtrainer annotation.
