@@ -412,12 +412,21 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         schema: Pydantic schema class for validation
         schema_name: Schema name for output filenames
         document_batches: S3 batch filenames to download
-        base_url: Base URL of the MESA Runtime API
-        username: Basic auth username for the MESA Runtime API
-        password: Basic auth password for the MESA Runtime API
+        base_url: Base URL of the MESA Runtime API, given with username and
+            password in place of runtime. Defaults to None.
+        username: Basic auth username for the MESA Runtime API. Defaults to
+            None.
+        password: Basic auth password for the MESA Runtime API. Defaults to
+            None.
         model_name: Model name from config.json (e.g., 'sonnet4', 'opus4'),
             or None to split samples across every model the runtime serves.
             Defaults to None.
+        runtime: A MESA Runtime client (e.g. a MesaRuntimeAdmin), given in
+            place of base_url, username and password. Defaults to None.
+
+    Raises:
+        ValueError: If runtime is given with any of base_url, username and
+            password, or without runtime any of them is missing.
     """
 
     def __init__(
@@ -426,15 +435,20 @@ class MESARuntimeBatchGenerator(BatchGenerator):
         schema: type[BaseModel],
         schema_name: str,
         document_batches: list[str],
-        base_url: str,
-        username: str,
-        password: str,
+        base_url: str | None = None,
+        username: str | None = None,
+        password: str | None = None,
         model_name: str | None = None,
+        runtime: MesaRuntime | None = None,
     ):
         super().__init__(
             system_prompt, schema, schema_name, model_name, document_batches
         )
-        self.__runtime: MesaRuntime = MesaRuntime(base_url, username, password)
+        if runtime is None and base_url and username and password:
+            runtime = MesaRuntime(base_url, username, password)
+        elif runtime is None or base_url or username or password:
+            raise ValueError("Give either runtime, or base_url, username and password")
+        self.__runtime: MesaRuntime = runtime
         self.__schema_package: str = f"londonaicentre-{schema_name}"
         self.__schema_version: str = version(self.__schema_package)
 
