@@ -437,6 +437,7 @@ dependencies = [
     { name = "londonaicentre-docsynth" },
     { name = "londonaicentre-mesa-datagen" },
     { name = "londonaicentre-mesa-runtime" },
+    { name = "londonaicentre-mesa-utils" },
 ]
 
 [package.dev-dependencies]
@@ -451,6 +452,7 @@ requires-dist = [
     { name = "londonaicentre-docsynth", specifier = ">=2.2.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../../../lib/datagen" },
     { name = "londonaicentre-mesa-runtime", specifier = ">=0.8.0" },
+    { name = "londonaicentre-mesa-utils", editable = "../../../../lib/utils" },
 ]
 
 [package.metadata.requires-dev]

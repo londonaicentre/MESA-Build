@@ -10,11 +10,13 @@ dependencies = [
     "londonaicentre-docsynth>=2.2.0",
     "londonaicentre-mesa-datagen",
     "londonaicentre-mesa-runtime>=0.8.0",
+    "londonaicentre-mesa-utils",
 ]
 
 [tool.uv.sources]
 londonaicentre-mesa-datagen = { path = "../../../../lib/datagen", editable = true }
 londonaicentre-conditionschema = { path = "../../../../schemas/conditionschema", editable = true }
+londonaicentre-mesa-utils = { path = "../../../../lib/utils", editable = true }
 
 [dependency-groups]
 dev = [
