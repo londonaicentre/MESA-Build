@@ -1,0 +1,22 @@
+[project]
+name = "endocarditis"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "CC-BY-NC-ND-4.0"
+dependencies = [
+    "dotenv>=0.9.9",
+    "londonaicentre-conditionschema",
+    "londonaicentre-docsynth>=2.2.0",
+    "londonaicentre-mesa-datagen",
+    "londonaicentre-mesa-runtime>=0.8.0",
+]
+
+[tool.uv.sources]
+londonaicentre-mesa-datagen = { path = "../../../../lib/datagen", editable = true }
+londonaicentre-conditionschema = { path = "../../../../schemas/conditionschema", editable = true }
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+]
