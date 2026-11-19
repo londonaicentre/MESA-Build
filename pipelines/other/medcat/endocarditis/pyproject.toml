@@ -7,9 +7,9 @@ license = "CC-BY-NC-ND-4.0"
 dependencies = [
     "dotenv>=0.9.9",
     "londonaicentre-conditionschema",
-    "londonaicentre-docsynth>=2.2.0",
+    "londonaicentre-docsynth>=2.3.0",
     "londonaicentre-mesa-datagen",
-    "londonaicentre-mesa-runtime>=0.8.0",
+    "londonaicentre-mesa-runtime[admin]>=0.9.0",
     "londonaicentre-mesa-utils",
 ]
 
