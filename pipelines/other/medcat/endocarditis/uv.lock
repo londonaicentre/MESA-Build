@@ -532,7 +532,7 @@ requires-dist = [
     { name = "londonaicentre-conditionschema", editable = "../../../../schemas/conditionschema" },
     { name = "londonaicentre-docsynth", specifier = ">=2.3.0" },
     { name = "londonaicentre-mesa-datagen", editable = "../../../../lib/datagen" },
-    { name = "londonaicentre-mesa-runtime", extras = ["admin"], specifier = ">=0.9.0" },
+    { name = "londonaicentre-mesa-runtime", extras = ["admin"], specifier = ">=0.11.1" },
     { name = "londonaicentre-mesa-utils", editable = "../../../../lib/utils" },
 ]
 
@@ -1118,7 +1118,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-runtime"
-version = "0.10.0"
+version = "0.11.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -1127,9 +1127,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5f/76/f057671a22b9d49da831d328a3dc62bdf06858ba10af07b6cffcee23af62/londonaicentre_mesa_runtime-0.10.0.tar.gz", hash = "sha256:8548ec90f79711621558a9f9d4c7a749dadd4037748fc8ddff04f655f74c7f56", size = 7196, upload-time = "2026-11-19T14:07:42.502Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fa/b4/aff5c745d2cf100c3dd4bd016b6c415a879d18d6b5f4641f4a86cfcd35a8/londonaicentre_mesa_runtime-0.11.1.tar.gz", hash = "sha256:bd8b1db4ee3a4cf86eb8bd380ac038bc4073f2ddcc788267f40cbee71051510f", size = 7212, upload-time = "2026-11-19T19:30:50.687Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/57/76/66a7ff0ada9ab9470b9027d83dd39109cb035d80aee1d65a9269b8fc89a1/londonaicentre_mesa_runtime-0.10.0-py3-none-any.whl", hash = "sha256:621d88609b6d58c2e1d17b8e1f234487b41bcd919a6ecdf77590a82443c04c46", size = 8801, upload-time = "2026-11-19T14:07:41.587Z" },
+    { url = "https://files.pythonhosted.org/packages/4e/55/d734b44842ae010fe58f2da7b38c0ba0bd3c6d6e87db4612c162a4afc00d/londonaicentre_mesa_runtime-0.11.1-py3-none-any.whl", hash = "sha256:0b44c7bf83bb87b9cf01a7631c087d88efb48fdbf46e3f2801de558de6c7c3a3", size = 8821, upload-time = "2026-11-19T19:30:49.577Z" },
 ]
 
 [package.optional-dependencies]
