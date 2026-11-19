@@ -743,6 +743,70 @@ def test_get_batch_run_run_id_given_returns_run(
     mock_mesa_runtime.return_value.get_run.assert_called_once_with(RUN_ID)
 
 
+def test_init_credentials_given_builds_runtime(
+    mock_mesa_runtime: MagicMock, runtime_generator: MESARuntimeBatchGenerator
+) -> None:
+    mock_mesa_runtime.assert_called_once_with("https://foo", "bar", "baz")
+
+
+def test_init_runtime_given_uses_runtime(
+    mock_mesa_runtime: MagicMock,
+    mock_version: MagicMock,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+) -> None:
+    runtime: MagicMock = MagicMock()
+    generator: MESARuntimeBatchGenerator = MESARuntimeBatchGenerator(
+        system_prompt="foo",
+        schema=MagicMock,
+        schema_name="baz",
+        document_batches=["foobar.tar.gz"],
+        runtime=runtime,
+        model_name="foo_model",
+    )
+    mock_mesa_runtime.assert_not_called()
+    assert generator.get_batch_run(RUN_ID) == runtime.get_run.return_value
+
+
+@pytest.mark.parametrize(
+    "client",
+    [
+        {"runtime": MagicMock(), "base_url": "https://foo"},
+        {"runtime": MagicMock(), "username": "bar"},
+        {"runtime": MagicMock(), "password": "baz"},
+        {"base_url": "https://foo", "username": "bar"},
+        {"base_url": "", "username": "bar", "password": "baz"},
+        {},
+    ],
+    ids=[
+        "runtime_and_credentials",
+        "runtime_and_username",
+        "runtime_and_password",
+        "missing_credential",
+        "empty_credential",
+        "neither",
+    ],
+)
+def test_init_runtime_and_credentials_mismatched_raises_value_error(
+    mock_mesa_runtime: MagicMock,
+    mock_version: MagicMock,
+    mock_path_operations: PathOperations,
+    mock_filesystem: FileSystem,
+    mock_generator_dependencies: GeneratorDependencies,
+    client: dict[str, Any],
+) -> None:
+    with pytest.raises(ValueError):
+        MESARuntimeBatchGenerator(
+            system_prompt="foo",
+            schema=MagicMock,
+            schema_name="baz",
+            document_batches=["foobar.tar.gz"],
+            model_name="foo_model",
+            **client,
+        )
+
+
 def test_submit_batch_submission_fails_records_nothing(
     mock_submit_batch_dependencies: SubmitBatchDependencies,
     generator: BatchGeneratorFixture,
