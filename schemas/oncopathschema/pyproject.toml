@@ -1,10 +1,12 @@
 [project]
 name = "oncopathschema"
-version = "0.5.1"
+version = "0.7.0"
 description = "Histopathology"
 readme = "README.md"
 authors = [
-    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" }
+    { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
+    { name = "Dr. Emily Jin", email = "emily.jin3@nhs.net" },
+    { name = "Dr. Martin Chapman", email = "martin.chapman@nhs.net" }
 ]
 requires-python = ">=3.13"
 license = "LicenseRef-Proprietary"
@@ -28,7 +30,7 @@ dev = [
 ]
 [tool.setuptools.package-data]
 oncopathschema = [
-    "*.txt", 
-    "examples/*.json", 
+    "*.txt",
+    "examples/*.json",
     "py.typed"
 ]
