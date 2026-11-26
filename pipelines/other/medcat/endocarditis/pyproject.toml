@@ -3,7 +3,7 @@ name = "endocarditis"
 version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.13"
-license = "CC-BY-NC-ND-4.0"
+license = "LicenseRef-Proprietary"
 dependencies = [
     "dotenv>=0.9.9",
     "londonaicentre-conditionschema",
