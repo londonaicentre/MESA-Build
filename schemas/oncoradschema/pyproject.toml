@@ -1,6 +1,6 @@
 [project]
 name = "londonaicentre-oncoradschema"
-version = "0.6.4"
+version = "0.6.5"
 description = "Oncology radiology report extraction schema for MESA"
 readme = "README.md"
 authors = [
