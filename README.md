@@ -106,7 +106,7 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 
 [**oncopathschema**](schemas/oncopathschema/src/oncopathschema/schema.py): Histopathology
 
-[**oncoradschema**](schemas/oncoradschema/src/oncoradschema/schema.py): Radiology
+[**oncoradschema**](schemas/oncoradschema/src/oncoradschema/schema.py): Oncology radiology report extraction schema for MESA
 
 [**oncoschema**](schemas/oncoschema/src/oncoschema/schema.py): Oncology extraction schema for MESA
 
