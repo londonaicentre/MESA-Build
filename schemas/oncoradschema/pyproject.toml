@@ -1,7 +1,7 @@
 [project]
 name = "londonaicentre-oncoradschema"
 version = "0.6.4"
-description = "Radiology"
+description = "Oncology radiology report extraction schema for MESA"
 readme = "README.md"
 authors = [
     { name = "Dr. Joe Zhang", email = "jzhang@nhs.net" },
