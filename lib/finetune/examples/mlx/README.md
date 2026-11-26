@@ -41,5 +41,6 @@ This prepares the data, trains a LoRA adapter locally, fuses it into the base mo
 
 ## License
 
-finetune-mlx-example © 2026 by London AI Centre is licensed under CC BY-NC-ND 4.0.
-To view a copy of this license, visit <https://creativecommons.org/licenses/by-nc-nd/4.0/>
+Copyright 2026 London AI Centre.
+All rights reserved.
+Published for reference only; no license is granted to use, copy or modify this code (see [LICENSE](LICENSE.md)).
