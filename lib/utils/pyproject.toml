@@ -18,6 +18,7 @@ dependencies = [
     "londonaicentre-mesa-types>=1.0.0",
     "google-genai>=2.34.0",
     "openai>=3.45.0",
+    "huggingface-hub>=2.4.0",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
