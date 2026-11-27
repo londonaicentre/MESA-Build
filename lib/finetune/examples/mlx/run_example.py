@@ -86,7 +86,7 @@ def main():
     # 4. Fuse and publish.
     #
     # `post_process` fuses the trained adapter into the base model on disk to produce a single
-    # merged model, then uploads the unpacked merged model plus model_card.yaml to the build bucket
+    # merged model, then uploads the unpacked merged model plus model_card.yml to the build bucket
     #
     # It is possible to publish models to the MESA public bucket where it is available for deployment
     # Set push_public=True to upload to public distribution bucket as a tarball, found at:

@@ -18,7 +18,7 @@ It then runs the full flow end-to-end:
 - fuses the adapter into the base model via `mlx_lm.fuse`,
 - builds a model card and uploads the unpacked merged model to the build bucket.
 
-The merged model is published to the build bucket under `s3://aicentre-nlpteam-mesa-build/models/<model_name>/<model_name>_<major>_<minor>_<patch>/` as individual files (`*.safetensors`, `config.json`, `tokenizer*`, `model_card.yaml`).
+The merged model is published to the build bucket under `s3://aicentre-nlpteam-mesa-build/models/<model_name>/<model_name>_<major>_<minor>_<patch>/` as individual files (`*.safetensors`, `config.json`, `tokenizer*`, `model_card.yml`).
 
 The example passes `push_public=False` to `post_process`. If set `push_public=True`, then this would additionally publish a `.tar.gz` to the public bucket for production runs.
 

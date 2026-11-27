@@ -1249,7 +1249,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-finetune"
-version = "2.0.3"
+version = "2.1.0"
 source = { editable = "../../" }
 dependencies = [
     { name = "accelerate" },
@@ -1310,7 +1310,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.6.0"
+version = "2.6.1"
 source = { editable = "../../../types" }
 dependencies = [
     { name = "pydantic" },
@@ -1332,7 +1332,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "2.0.1"
+version = "2.1.1"
 source = { editable = "../../../utils" }
 dependencies = [
     { name = "boto3" },

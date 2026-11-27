@@ -774,5 +774,11 @@ class TestPostProcess:
             aws_config={"bucket": "baz", "region": "qux", "role": "x"},
         ).post_process(model_card, push_public=True)
         post_process_mocks.archive_and_upload.assert_called_once_with(
-            str(post_process_mocks.path.return_value), model_card
+            "qux",
+            Path(str(post_process_mocks.path.return_value)),
+            "grault",
+            model_card.model_identifier,
+            model_card.to_yaml_bytes.return_value,
+            "aicentre-nlpteam-mesa-public",
+            False,
         )

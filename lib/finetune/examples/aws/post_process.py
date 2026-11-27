@@ -79,7 +79,7 @@ def main(s3_output_path: str, job_name: str):
     #
     # `post_process` downloads the trained LoRA adapter from `s3_output_path` (the SageMaker
     # output location), merges it into the base model, then uploads the unpacked merged model
-    # plus model_card.yaml to the build bucket.
+    # plus model_card.yml to the build bucket.
     #
     # It is possible to publish models to the MESA public bucket where it is available for deployment
     # Set push_public=True to upload to public distribution bucket as a tarball, found at:

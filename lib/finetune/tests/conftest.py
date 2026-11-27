@@ -4,6 +4,7 @@ Holds the cross-file stubs (prompt builder, a parseable config file, and the
 trainer factory fixtures) so the HF and MLX trainer tests can share them.
 """
 
+import tarfile
 import textwrap
 from pathlib import Path
 from typing import Any, Protocol
@@ -67,13 +68,43 @@ class LoRATrainerFixture(LoRATrainer):
     def upload_model_folder(self, target_folder: str, model_card: Any) -> None:
         return self._upload_model_folder(target_folder, model_card)
 
+    @staticmethod
+    def download(region: str, bucket: str, file_path: Path, prefix: str) -> Path:
+        return LoRATrainer._download(region, bucket, file_path, prefix)
+
+    @staticmethod
+    def add_model_card_and_license(
+        tar: tarfile.TarFile, model_card_bytes: bytes
+    ) -> None:
+        return LoRATrainer._add_model_card_and_license(tar, model_card_bytes)
+
+    @staticmethod
+    def upload_archive(
+        region: str, archive_path: Path, bucket: str, model_name: str, force: bool
+    ) -> None:
+        return LoRATrainer._upload_archive(
+            region, archive_path, bucket, model_name, force
+        )
+
+    @staticmethod
     def archive_and_upload(
-        self,
-        target_folder: str,
-        model_card: Any,
-        bucket: str = "aicentre-nlpteam-mesa-public",
-    ) -> bool:
-        return self._archive_and_upload(target_folder, model_card, bucket)
+        region: str,
+        target_path: Path,
+        model_name: str,
+        model_identifier: str,
+        model_card_bytes: bytes,
+        bucket: str,
+        force: bool,
+    ) -> None:
+        return LoRATrainer._archive_and_upload(
+            region,
+            target_path,
+            model_name,
+            model_identifier,
+            model_card_bytes,
+            bucket,
+            force,
+        )
 
     def publish(self, target_folder: str, model_card: Any, push_public: bool) -> None:
         return self._publish(target_folder, model_card, push_public)
