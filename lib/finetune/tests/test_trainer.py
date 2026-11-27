@@ -268,7 +268,7 @@ def read_tar(file: Path | io.BytesIO) -> list[tuple[str, bytes]]:
         else tarfile.open(file, "r:gz") as tar
     ):
         return [
-            (member.name, tar.extractfile(member).read())  # ty: ignore[missing-union-attribute]
+            (member.name, (tar.extractfile(member) or io.BytesIO()).read())
             for member in tar
         ]
 
@@ -470,11 +470,12 @@ class TestRepackageModel:
     def write_source(
         repackage_model_mocks: RepackageModelMocks, members: dict[str, bytes]
     ) -> None:
-        repackage_model_mocks._download.side_effect = lambda *args: (
-            args[2].parent.mkdir(parents=True, exist_ok=True)
-            or write_tar(args[2], members)
-            or args[2]
-        )
+        def download(_: str, __: str, file_path: Path, ___: str) -> Path:
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            write_tar(file_path, members)
+            return file_path
+
+        repackage_model_mocks._download.side_effect = download
 
     @pytest.mark.parametrize(
         "source, model_card_bytes",
