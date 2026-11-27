@@ -6,7 +6,7 @@ import tarfile
 from datetime import datetime
 from importlib import import_module
 from pathlib import Path
-from typing import Any, Self
+from typing import IO, Any, Final, Self
 
 from mesa_types.model_card import ModelCard
 from pydantic import BaseModel
@@ -34,6 +34,13 @@ class LoRATrainer:
         config: Pre-loaded config, bypassing ``config_path``. Used when rebuilding a
             trainer from a serialised spec; defaults to loading ``config_path``.
     """
+
+    __LICENSE: Final[Path] = Path(__file__).parents[2] / "LICENSE.md"
+    __MODEL_CARDS: Final[tuple[Path, Path]] = (
+        Path("model_card.yml"),
+        Path("model_card.yaml"),
+    )
+    __REPLACED: Final[tuple[Path, Path]] = (Path("LICENSE.md"), Path("model_card.yml"))
 
     def __init__(
         self,
@@ -236,37 +243,181 @@ class LoRATrainer:
             ):
                 raise ValueError(f"Failed to upload {item.name} to build bucket")
 
+    @staticmethod
+    def _add_model_card_and_license(
+        tar: tarfile.TarFile, model_card_bytes: bytes
+    ) -> None:
+        tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
+        tarinfo.size = len(model_card_bytes)
+        tar.addfile(tarinfo, io.BytesIO(model_card_bytes))
+        tar.add(LoRATrainer.__LICENSE, arcname="LICENSE.md")
+
+    @staticmethod
+    def _upload_archive(
+        region: str, archive_path: Path, bucket: str, model_name: str, force: bool
+    ) -> None:
+        if not AWS.upload_file(
+            region_name=region,
+            file_name=str(archive_path),
+            bucket=bucket,
+            object_name=archive_path.name,
+            path=model_name,
+            force=force,
+        ):
+            raise ValueError("Failed to upload merged model weights")
+
+    @staticmethod
     def _archive_and_upload(
-        self,
-        target_folder: str,
-        model_card: ModelCard,
-        bucket: str = "aicentre-nlpteam-mesa-public",
-    ) -> bool:
-        target_path = Path(target_folder)
-        archive_name = f"{model_card.model_identifier}.tar.gz"
-        archive_path = target_path.parent / archive_name
-        if not archive_path.exists():
+        region: str,
+        target_path: Path,
+        model_name: str,
+        model_identifier: str,
+        model_card_bytes: bytes,
+        bucket: str,
+        force: bool,
+    ) -> None:
+        archive_path: Path = target_path.parent / f"{model_identifier}.tar.gz"
+        if force or not archive_path.exists():
             with tarfile.open(archive_path, "w:gz") as tar:
                 for item in target_path.iterdir():
                     tar.add(item, arcname=item.name)
-                yaml_bytes: bytes = model_card.to_yaml_bytes()
-                tarinfo: tarfile.TarInfo = tarfile.TarInfo(name="model_card.yml")
-                tarinfo.size = len(yaml_bytes)
-                tar.addfile(tarinfo, io.BytesIO(yaml_bytes))
-                tar.add(Path(__file__).parents[2] / "LICENSE.md", arcname="LICENSE.md")
-        if not AWS.upload_file(
-            region_name=self.region,
-            file_name=str(archive_path),
-            bucket=bucket,
-            object_name=archive_name,
-            path=self.model_name,
-        ):
-            raise ValueError("Failed to upload merged model weights")
-        return True
+                LoRATrainer._add_model_card_and_license(tar, model_card_bytes)
+        LoRATrainer._upload_archive(region, archive_path, bucket, model_name, force)
 
     def _publish(
         self, target_folder: str, model_card: ModelCard, push_public: bool
     ) -> None:
         self._upload_model_folder(target_folder, model_card)
         if push_public:
-            self._archive_and_upload(target_folder, model_card)
+            LoRATrainer._archive_and_upload(
+                self.region,
+                Path(target_folder),
+                self.model_name,
+                model_card.model_identifier,
+                model_card.to_yaml_bytes(),
+                "aicentre-nlpteam-mesa-public",
+                False,
+            )
+
+    @staticmethod
+    def _download(region: str, bucket: str, file_path: Path, prefix: str) -> Path:
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        if not AWS.download_file(
+            region, bucket, str(file_path), file_path.name, prefix
+        ):
+            raise ValueError(f"Failed to download {prefix}/{file_path.name}")
+        return file_path
+
+    @staticmethod
+    def make_public(
+        model_name: str,
+        model_identifier: str,
+        work_dir: str,
+        region: str = "eu-west-2",
+        bucket: str = "aicentre-nlpteam-mesa-build",
+        public_bucket: str = "aicentre-nlpteam-mesa-public",
+    ) -> None:
+        """Make a model in the build bucket public as a tarball in the public bucket.
+
+        Args:
+            model_name (str): Model name, the model's folder in both buckets.
+            model_identifier (str): Model identifier (e.g. ``foo_1_2_3``), the
+                model's folder under its name in the build bucket.
+            work_dir (str): Local folder to download the model and write the
+                tarball to.
+            region (str): AWS region of both buckets. Defaults to
+                ``"eu-west-2"``.
+            bucket (str): Build bucket holding the model. Defaults to
+                ``"aicentre-nlpteam-mesa-build"``.
+            public_bucket (str): Bucket to publish the tarball to, overwriting
+                any tarball already there. Defaults to
+                ``"aicentre-nlpteam-mesa-public"``.
+
+        Raises:
+            ValueError: If a model file fails to download or the tarball fails
+                to upload.
+
+        """
+        target_path: Path = Path(work_dir) / model_identifier
+        prefix: str = f"models/{model_name}/{model_identifier}"
+        for object in AWS.list_s3_objects(region, bucket, prefix + "/"):
+            if not object["Key"].endswith("/"):
+                LoRATrainer._download(
+                    region, bucket, target_path / Path(object["Key"]).name, prefix
+                )
+        LoRATrainer._archive_and_upload(
+            region,
+            target_path,
+            model_name,
+            model_identifier,
+            (target_path / "model_card.yaml").read_bytes(),
+            public_bucket,
+            True,
+        )
+
+    @staticmethod
+    def repackage_model(
+        model_name: str,
+        model_identifier: str,
+        work_dir: str,
+        model_card: ModelCard | None = None,
+        region: str = "eu-west-2",
+        public_bucket: str = "aicentre-nlpteam-mesa-public",
+    ) -> None:
+        """Repackage a public model tarball with a model card and the current licence.
+
+        Args:
+            model_name (str): Model name, the tarball's folder in the public
+                bucket.
+            model_identifier (str): Model identifier (e.g. ``foo_1_2_3``), the
+                tarball's name without ``.tar.gz``.
+            work_dir (str): Local folder to download and rewrite the tarball in.
+            model_card (ModelCard | None): Model card to write as
+                ``model_card.yml``. Defaults to ``None``, which keeps the
+                tarball's ``model_card.yml``, or failing that copies its
+                ``model_card.yaml``.
+            region (str): AWS region of the public bucket. Defaults to
+                ``"eu-west-2"``.
+            public_bucket (str): Bucket holding the tarball, which is
+                overwritten. Defaults to ``"aicentre-nlpteam-mesa-public"``.
+
+        Raises:
+            ValueError: If the tarball fails to download or upload, or no model
+                card is given and the tarball holds none.
+
+        """
+        archive_path: Path = Path(work_dir) / f"{model_identifier}.tar.gz"
+        model_cards: dict[Path, bytes] = {}
+        with (
+            tarfile.open(
+                LoRATrainer._download(
+                    region,
+                    public_bucket,
+                    Path(work_dir) / "source" / archive_path.name,
+                    model_name,
+                ),
+                "r:gz",
+            ) as source,
+            tarfile.open(archive_path, "w:gz") as tar,
+        ):
+            for member in source:
+                path: Path = Path(member.name)
+                content: IO[bytes] | None = source.extractfile(member)
+                if path in LoRATrainer.__MODEL_CARDS and content is not None:
+                    model_cards[path] = content.read()
+                    content = io.BytesIO(model_cards[path])
+                if path not in LoRATrainer.__REPLACED:
+                    tar.addfile(member, content)
+            model_card_bytes: bytes | None = (
+                model_card.to_yaml_bytes()
+                if model_card is not None
+                else next(
+                    filter(None, map(model_cards.get, LoRATrainer.__MODEL_CARDS)), None
+                )
+            )
+            if model_card_bytes is None:
+                raise ValueError(f"{model_name}/{archive_path.name} has no model card")
+            LoRATrainer._add_model_card_and_license(tar, model_card_bytes)
+        LoRATrainer._upload_archive(
+            region, archive_path, public_bucket, model_name, True
+        )

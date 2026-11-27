@@ -1,3 +1,5 @@
+import io
+import tarfile
 from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -6,6 +8,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from conftest import BaseTrainerFactory, LoRATrainerFixture, PromptBuilderFixture
+from finetune import trainer
 from finetune.trainer import LoRATrainer
 from fixtures import SchemaFixture
 
@@ -189,151 +192,369 @@ class TestUploadModelFolder:
 
 
 @dataclass
-class ArchiveMocks:
-    path: MagicMock
-    tarfile: MagicMock
-    tarinfo: MagicMock
-    io: MagicMock
-    aws: MagicMock
+class ArchiveAndUploadMocks:
+    _add_model_card_and_license: MagicMock
+    _upload_archive: MagicMock
 
 
 @pytest.fixture
-def archive_mocks(mocker: MockerFixture) -> ArchiveMocks:
-    return ArchiveMocks(
-        mocker.patch("finetune.trainer.Path"),
-        mocker.patch("finetune.trainer.tarfile.open"),
-        mocker.patch("finetune.trainer.tarfile.TarInfo"),
-        mocker.patch("finetune.trainer.io.BytesIO"),
-        mocker.patch("finetune.trainer.AWS.upload_file"),
+def archive_and_upload_mocks(mocker: MockerFixture) -> ArchiveAndUploadMocks:
+    return ArchiveAndUploadMocks(
+        mocker.patch.object(LoRATrainer, "_add_model_card_and_license"),
+        mocker.patch.object(LoRATrainer, "_upload_archive"),
     )
 
 
-class TestArchiveAndUpload:
-    def test_archive_exists_calls_aws_upload_file(
-        self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+@dataclass
+class MakePublicMocks:
+    list_s3_objects: MagicMock
+    _download: MagicMock
+    _archive_and_upload: MagicMock
+
+
+@pytest.fixture
+def make_public_mocks(mocker: MockerFixture) -> MakePublicMocks:
+    return MakePublicMocks(
+        mocker.patch(
+            "finetune.trainer.AWS.list_s3_objects",
+            return_value=[
+                {"Key": "models/foo/foo_1_2_3/"},
+                {"Key": "models/foo/foo_1_2_3/bar.safetensors"},
+                {"Key": "models/foo/foo_1_2_3/model_card.yaml"},
+            ],
+        ),
+        mocker.patch.object(LoRATrainer, "_download"),
+        mocker.patch.object(LoRATrainer, "_archive_and_upload"),
+    )
+
+
+@dataclass
+class RepackageModelMocks:
+    _download: MagicMock
+    _add_model_card_and_license: MagicMock
+    _upload_archive: MagicMock
+
+
+@pytest.fixture
+def repackage_model_mocks(mocker: MockerFixture) -> RepackageModelMocks:
+    return RepackageModelMocks(
+        mocker.patch.object(LoRATrainer, "_download"),
+        mocker.patch.object(LoRATrainer, "_add_model_card_and_license"),
+        mocker.patch.object(LoRATrainer, "_upload_archive"),
+    )
+
+
+@pytest.fixture
+def license_text() -> bytes:
+    return (Path(trainer.__file__).parents[2] / "LICENSE.md").read_bytes()
+
+
+def write_tar(file: Path | io.BytesIO, members: dict[str, bytes]) -> None:
+    with (
+        tarfile.open(fileobj=file, mode="w:gz")
+        if isinstance(file, io.BytesIO)
+        else tarfile.open(file, "w:gz") as tar
+    ):
+        for name, content in members.items():
+            tarinfo: tarfile.TarInfo = tarfile.TarInfo(name)
+            tarinfo.size = len(content)
+            tar.addfile(tarinfo, io.BytesIO(content))
+
+
+def read_tar(file: Path | io.BytesIO) -> list[tuple[str, bytes]]:
+    with (
+        tarfile.open(fileobj=file, mode="r:gz")
+        if isinstance(file, io.BytesIO)
+        else tarfile.open(file, "r:gz") as tar
+    ):
+        return [
+            (member.name, tar.extractfile(member).read())  # ty: ignore[missing-union-attribute]
+            for member in tar
+        ]
+
+
+class TestDownload:
+    def test_download_creates_folder_and_returns_path(
+        self, mocker: MockerFixture, tmp_path: Path
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
-        archive_mocks.aws.return_value = True
-        assert make_base_trainer(
-            model_name="waldo",
-            aws_config={"bucket": "x", "region": "qux", "role": "y"},
-        ).archive_and_upload("grault/garply", model_card, "public-bucket")
-        archive_mocks.tarfile.assert_not_called()
-        archive_mocks.aws.assert_called_once_with(
+        download: MagicMock = mocker.patch(
+            "finetune.trainer.AWS.download_file", return_value=True
+        )
+        assert LoRATrainerFixture.download(
+            "qux", "bar", tmp_path / "baz" / "foo.tar.gz", "quux"
+        ) == (tmp_path / "baz" / "foo.tar.gz")
+        assert (tmp_path / "baz").is_dir()
+        download.assert_called_once_with(
+            "qux", "bar", str(tmp_path / "baz" / "foo.tar.gz"), "foo.tar.gz", "quux"
+        )
+
+    def test_download_download_fails_raises_value_error(
+        self, mocker: MockerFixture, tmp_path: Path
+    ) -> None:
+        mocker.patch("finetune.trainer.AWS.download_file", return_value=False)
+        with pytest.raises(ValueError, match="Failed to download quux/foo.tar.gz"):
+            LoRATrainerFixture.download("qux", "bar", tmp_path / "foo.tar.gz", "quux")
+
+
+class TestAddModelCardAndLicense:
+    def test_add_model_card_and_license_appends_card_then_license(
+        self, license_text: bytes
+    ) -> None:
+        file: io.BytesIO = io.BytesIO()
+        with tarfile.open(fileobj=file, mode="w:gz") as tar:
+            LoRATrainerFixture.add_model_card_and_license(tar, b"baz")
+        file.seek(0)
+        assert read_tar(file) == [
+            ("model_card.yml", b"baz"),
+            ("LICENSE.md", license_text),
+        ]
+
+
+class TestUploadArchive:
+    def test_upload_archive_calls_aws_upload_file(self, mocker: MockerFixture) -> None:
+        upload: MagicMock = mocker.patch(
+            "finetune.trainer.AWS.upload_file", return_value=True
+        )
+        LoRATrainerFixture.upload_archive(
+            "qux", Path("grault/foo_1_2_3.tar.gz"), "bar", "waldo", True
+        )
+        upload.assert_called_once_with(
             region_name="qux",
-            file_name=str(
-                archive_mocks.path.return_value.parent.__truediv__.return_value
-            ),
-            bucket="public-bucket",
+            file_name="grault/foo_1_2_3.tar.gz",
+            bucket="bar",
             object_name="foo_1_2_3.tar.gz",
             path="waldo",
+            force=True,
         )
 
-    def test_default_bucket_is_public(
-        self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+    def test_upload_archive_upload_fails_raises_value_error(
+        self, mocker: MockerFixture
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
-        archive_mocks.aws.return_value = True
-        make_base_trainer().archive_and_upload("bar/baz", model_card)
+        mocker.patch("finetune.trainer.AWS.upload_file", return_value=False)
+        with pytest.raises(ValueError, match="Failed to upload merged model weights"):
+            LoRATrainerFixture.upload_archive(
+                "qux", Path("foo_1_2_3.tar.gz"), "bar", "waldo", False
+            )
+
+
+class TestArchiveAndUpload:
+    @staticmethod
+    def make_target(tmp_path: Path) -> Path:
+        (tmp_path / "foo_1_2_3").mkdir()
+        (tmp_path / "foo_1_2_3" / "bar.safetensors").write_bytes(b"baz")
+        return tmp_path / "foo_1_2_3"
+
+    @pytest.mark.parametrize(
+        "exists, force", [(False, False), (False, True), (True, True)]
+    )
+    def test_archive_and_upload_archive_missing_or_forced_writes_items(
+        self,
+        tmp_path: Path,
+        archive_and_upload_mocks: ArchiveAndUploadMocks,
+        exists: bool,
+        force: bool,
+    ) -> None:
+        if exists:
+            write_tar(tmp_path / "foo_1_2_3.tar.gz", {"corge": b"grault"})
+        LoRATrainerFixture.archive_and_upload(
+            "qux",
+            TestArchiveAndUpload.make_target(tmp_path),
+            "waldo",
+            "foo_1_2_3",
+            b"bar",
+            "garply",
+            force,
+        )
+        assert read_tar(tmp_path / "foo_1_2_3.tar.gz") == [("bar.safetensors", b"baz")]
         assert (
-            archive_mocks.aws.call_args.kwargs["bucket"]
-            == "aicentre-nlpteam-mesa-public"
+            archive_and_upload_mocks._add_model_card_and_license.call_args.args[1]
+            == b"bar"
         )
 
-    def test_archive_exists_upload_fails_raises_value_error(
-        self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+    def test_archive_and_upload_archive_exists_not_forced_keeps_archive(
+        self, tmp_path: Path, archive_and_upload_mocks: ArchiveAndUploadMocks
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = True
-        archive_mocks.aws.return_value = False
-        with pytest.raises(ValueError, match="Failed to upload merged model weights"):
-            make_base_trainer().archive_and_upload("bar/baz", model_card)
+        write_tar(tmp_path / "foo_1_2_3.tar.gz", {"corge": b"grault"})
+        LoRATrainerFixture.archive_and_upload(
+            "qux",
+            TestArchiveAndUpload.make_target(tmp_path),
+            "waldo",
+            "foo_1_2_3",
+            b"bar",
+            "garply",
+            False,
+        )
+        assert read_tar(tmp_path / "foo_1_2_3.tar.gz") == [("corge", b"grault")]
+        archive_and_upload_mocks._add_model_card_and_license.assert_not_called()
 
-    def test_archive_not_exists_creates_tarfile(
+    @pytest.mark.parametrize("force", [True, False])
+    def test_archive_and_upload_uploads_archive(
         self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+        tmp_path: Path,
+        archive_and_upload_mocks: ArchiveAndUploadMocks,
+        force: bool,
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
-        archive_mocks.path.return_value.iterdir.return_value = []
-        archive_mocks.aws.return_value = True
-        make_base_trainer().archive_and_upload("bar/baz", model_card)
-        archive_mocks.tarfile.assert_called_once_with(
-            archive_mocks.path.return_value.parent.__truediv__.return_value, "w:gz"
+        LoRATrainerFixture.archive_and_upload(
+            "qux",
+            TestArchiveAndUpload.make_target(tmp_path),
+            "waldo",
+            "foo_1_2_3",
+            b"bar",
+            "garply",
+            force,
+        )
+        archive_and_upload_mocks._upload_archive.assert_called_once_with(
+            "qux", tmp_path / "foo_1_2_3.tar.gz", "garply", "waldo", force
         )
 
-    def test_archive_not_exists_adds_all_target_items(
-        self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
-    ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
-        archive_mocks.aws.return_value = True
-        item1: MagicMock = MagicMock()
-        item1.name = "baz.txt"
-        item2: MagicMock = MagicMock()
-        item2.name = "qux.txt"
-        archive_mocks.path.return_value.iterdir.return_value = [item1, item2]
-        make_base_trainer().archive_and_upload("quux/corge", model_card)
-        mock_tar: MagicMock = archive_mocks.tarfile.return_value.__enter__.return_value
-        assert mock_tar.add.call_count == 3
-        mock_tar.add.assert_any_call(item1, arcname="baz.txt")
-        mock_tar.add.assert_any_call(item2, arcname="qux.txt")
 
-    def test_archive_not_exists_adds_model_card_yml(
-        self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+class TestMakePublic:
+    def test_make_public_downloads_each_model_file(
+        self, tmp_path: Path, make_public_mocks: MakePublicMocks
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
-        archive_mocks.path.return_value.iterdir.return_value = []
-        archive_mocks.aws.return_value = True
-        make_base_trainer().archive_and_upload("baz/qux", model_card)
-        archive_mocks.tarinfo.assert_called_once_with(name="model_card.yml")
-        archive_mocks.io.assert_called_once_with(b"bar")
-        archive_mocks.tarfile.return_value.__enter__.return_value.addfile.assert_called_once_with(
-            archive_mocks.tarinfo.return_value, archive_mocks.io.return_value
+        (tmp_path / "foo_1_2_3").mkdir()
+        (tmp_path / "foo_1_2_3" / "model_card.yaml").write_bytes(b"bar")
+        LoRATrainer.make_public("foo", "foo_1_2_3", str(tmp_path), "qux", "baz")
+        make_public_mocks.list_s3_objects.assert_called_once_with(
+            "qux", "baz", "models/foo/foo_1_2_3/"
+        )
+        assert [
+            download_call.args
+            for download_call in make_public_mocks._download.call_args_list
+        ] == [
+            ("qux", "baz", tmp_path / "foo_1_2_3" / file_name, "models/foo/foo_1_2_3")
+            for file_name in ["bar.safetensors", "model_card.yaml"]
+        ]
+
+    def test_make_public_archives_and_uploads_with_force(
+        self, tmp_path: Path, make_public_mocks: MakePublicMocks
+    ) -> None:
+        (tmp_path / "foo_1_2_3").mkdir()
+        (tmp_path / "foo_1_2_3" / "model_card.yaml").write_bytes(b"bar")
+        LoRATrainer.make_public("foo", "foo_1_2_3", str(tmp_path))
+        make_public_mocks._archive_and_upload.assert_called_once_with(
+            "eu-west-2",
+            tmp_path / "foo_1_2_3",
+            "foo",
+            "foo_1_2_3",
+            b"bar",
+            "aicentre-nlpteam-mesa-public",
+            True,
         )
 
-    def test_archive_not_exists_adds_license(
-        self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+
+class TestRepackageModel:
+    @staticmethod
+    def write_source(
+        repackage_model_mocks: RepackageModelMocks, members: dict[str, bytes]
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
-        archive_mocks.path.return_value.iterdir.return_value = []
-        archive_mocks.aws.return_value = True
-        make_base_trainer().archive_and_upload("baz/qux", model_card)
-        mock_tar: MagicMock = archive_mocks.tarfile.return_value.__enter__.return_value
-        mock_tar.add.assert_called_once_with(
-            archive_mocks.path.return_value.parents.__getitem__.return_value
-            / "LICENSE.md",
-            arcname="LICENSE.md",
+        repackage_model_mocks._download.side_effect = lambda *args: (
+            args[2].parent.mkdir(parents=True, exist_ok=True)
+            or write_tar(args[2], members)
+            or args[2]
         )
 
-    def test_archive_not_exists_upload_fails_raises_value_error(
+    @pytest.mark.parametrize(
+        "source, model_card_bytes",
+        [
+            ({"bar.safetensors": b"baz", "model_card.yml": b"qux"}, b"qux"),
+            ({"bar.safetensors": b"baz", "./model_card.yml": b"qux"}, b"qux"),
+            (
+                {
+                    "bar.safetensors": b"baz",
+                    "model_card.yaml": b"quux",
+                    "model_card.yml": b"qux",
+                },
+                b"qux",
+            ),
+        ],
+    )
+    def test_repackage_model_existing_model_card_yml_is_kept(
         self,
-        archive_mocks: ArchiveMocks,
-        model_card: MagicMock,
-        make_base_trainer: BaseTrainerFactory,
+        tmp_path: Path,
+        repackage_model_mocks: RepackageModelMocks,
+        source: dict[str, bytes],
+        model_card_bytes: bytes,
     ) -> None:
-        archive_mocks.path.return_value.parent.__truediv__.return_value.exists.return_value = False
-        archive_mocks.path.return_value.iterdir.return_value = []
-        archive_mocks.aws.return_value = False
-        with pytest.raises(ValueError, match="Failed to upload merged model weights"):
-            make_base_trainer().archive_and_upload("baz/qux", model_card)
+        TestRepackageModel.write_source(repackage_model_mocks, source)
+        LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path))
+        assert (
+            repackage_model_mocks._add_model_card_and_license.call_args.args[1]
+            == model_card_bytes
+        )
+
+    def test_repackage_model_model_card_yaml_only_is_copied(
+        self, tmp_path: Path, repackage_model_mocks: RepackageModelMocks
+    ) -> None:
+        TestRepackageModel.write_source(
+            repackage_model_mocks,
+            {"bar.safetensors": b"baz", "model_card.yaml": b"quux"},
+        )
+        LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path))
+        assert (
+            repackage_model_mocks._add_model_card_and_license.call_args.args[1]
+            == b"quux"
+        )
+        assert read_tar(tmp_path / "foo_1_2_3.tar.gz") == [
+            ("bar.safetensors", b"baz"),
+            ("model_card.yaml", b"quux"),
+        ]
+
+    def test_repackage_model_given_model_card_replaces_existing(
+        self,
+        tmp_path: Path,
+        repackage_model_mocks: RepackageModelMocks,
+        model_card: MagicMock,
+    ) -> None:
+        TestRepackageModel.write_source(
+            repackage_model_mocks,
+            {"bar.safetensors": b"baz", "model_card.yml": b"qux"},
+        )
+        LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path), model_card)
+        assert (
+            repackage_model_mocks._add_model_card_and_license.call_args.args[1]
+            == b"bar"
+        )
+
+    @pytest.mark.parametrize("license_name", ["LICENSE.md", "./LICENSE.md", None])
+    def test_repackage_model_drops_existing_license_and_card(
+        self,
+        tmp_path: Path,
+        repackage_model_mocks: RepackageModelMocks,
+        license_name: str | None,
+    ) -> None:
+        TestRepackageModel.write_source(
+            repackage_model_mocks,
+            {"bar.safetensors": b"baz", "model_card.yml": b"qux"}
+            | ({} if license_name is None else {license_name: b"corge"}),
+        )
+        LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path))
+        assert read_tar(tmp_path / "foo_1_2_3.tar.gz") == [("bar.safetensors", b"baz")]
+
+    def test_repackage_model_uploads_archive_with_force(
+        self, tmp_path: Path, repackage_model_mocks: RepackageModelMocks
+    ) -> None:
+        TestRepackageModel.write_source(
+            repackage_model_mocks, {"model_card.yml": b"qux"}
+        )
+        LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path))
+        repackage_model_mocks._upload_archive.assert_called_once_with(
+            "eu-west-2",
+            tmp_path / "foo_1_2_3.tar.gz",
+            "aicentre-nlpteam-mesa-public",
+            "foo",
+            True,
+        )
+
+    def test_repackage_model_no_model_card_raises_value_error(
+        self, tmp_path: Path, repackage_model_mocks: RepackageModelMocks
+    ) -> None:
+        TestRepackageModel.write_source(
+            repackage_model_mocks, {"bar.safetensors": b"baz"}
+        )
+        with pytest.raises(ValueError, match="foo/foo_1_2_3.tar.gz has no model card"):
+            LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path))
+        repackage_model_mocks._upload_archive.assert_not_called()
 
 
 @dataclass
@@ -508,5 +729,16 @@ class TestPublish:
     ) -> None:
         mocker.patch.object(LoRATrainer, "_upload_model_folder")
         archive: MagicMock = mocker.patch.object(LoRATrainer, "_archive_and_upload")
-        make_base_trainer().publish("target", model_card, True)
-        archive.assert_called_once_with("target", model_card)
+        make_base_trainer(
+            model_name="waldo",
+            aws_config={"bucket": "x", "region": "qux", "role": "y"},
+        ).publish("target", model_card, True)
+        archive.assert_called_once_with(
+            "qux",
+            Path("target"),
+            "waldo",
+            "foo_1_2_3",
+            b"bar",
+            "aicentre-nlpteam-mesa-public",
+            False,
+        )

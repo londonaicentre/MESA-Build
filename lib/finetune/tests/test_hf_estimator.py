@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -553,5 +554,11 @@ class TestPostProcess:
             aws_config={"bucket": "baz", "region": "qux", "role": "quux"},
         ).post_process(mock_model_card, "foo/bar", "fred", push_public=True)
         post_process_mocks.archive_and_upload.assert_called_once_with(
-            str(post_process_mocks.path.return_value), mock_model_card
+            "qux",
+            Path(str(post_process_mocks.path.return_value)),
+            "grault",
+            mock_model_card.model_identifier,
+            mock_model_card.to_yaml_bytes.return_value,
+            "aicentre-nlpteam-mesa-public",
+            False,
         )
