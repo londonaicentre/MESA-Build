@@ -1235,7 +1235,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-genoschema"
-version = "2.2.3"
+version = "2.2.4"
 source = { editable = "../../schemas/genoschema" }
 dependencies = [
     { name = "londonaicentre-mesa-utils" },
@@ -1295,7 +1295,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-finetune"
-version = "2.0.3"
+version = "2.1.0"
 source = { editable = "../../lib/finetune" }
 dependencies = [
     { name = "accelerate" },
@@ -1356,7 +1356,7 @@ wheels = [
 
 [[package]]
 name = "londonaicentre-mesa-types"
-version = "2.6.0"
+version = "2.6.1"
 source = { editable = "../../lib/types" }
 dependencies = [
     { name = "pydantic" },
@@ -1378,7 +1378,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "2.0.1"
+version = "2.1.1"
 source = { editable = "../../lib/utils" }
 dependencies = [
     { name = "boto3" },
