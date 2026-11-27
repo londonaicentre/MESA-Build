@@ -40,7 +40,7 @@ class LoRATrainer:
         Path("model_card.yml"),
         Path("model_card.yaml"),
     )
-    __REPLACED: Final[tuple[Path, Path]] = (Path("LICENSE.md"), Path("model_card.yml"))
+    __REPLACED: Final[tuple[Path, Path, Path]] = (Path("LICENSE.md"), *__MODEL_CARDS)
 
     def __init__(
         self,
@@ -228,8 +228,7 @@ class LoRATrainer:
 
     def _upload_model_folder(self, target_folder: str, model_card: ModelCard) -> None:
         target_path = Path(target_folder)
-        # Write model_card.yaml into the folder (same bytes as the public tarball, .yaml filename).
-        (target_path / "model_card.yaml").write_bytes(model_card.to_yaml_bytes())
+        (target_path / "model_card.yml").write_bytes(model_card.to_yaml_bytes())
 
         for item in target_path.iterdir():
             if not item.is_file():
@@ -280,7 +279,8 @@ class LoRATrainer:
         if force or not archive_path.exists():
             with tarfile.open(archive_path, "w:gz") as tar:
                 for item in target_path.iterdir():
-                    tar.add(item, arcname=item.name)
+                    if Path(item.name) not in LoRATrainer.__MODEL_CARDS:
+                        tar.add(item, arcname=item.name)
                 LoRATrainer._add_model_card_and_license(tar, model_card_bytes)
         LoRATrainer._upload_archive(region, archive_path, bucket, model_name, force)
 
@@ -334,8 +334,8 @@ class LoRATrainer:
                 ``"aicentre-nlpteam-mesa-public"``.
 
         Raises:
-            ValueError: If a model file fails to download or the tarball fails
-                to upload.
+            ValueError: If a model file fails to download, the model has no
+                model card, or the tarball fails to upload.
 
         """
         target_path: Path = Path(work_dir) / model_identifier
@@ -345,12 +345,22 @@ class LoRATrainer:
                 LoRATrainer._download(
                     region, bucket, target_path / Path(object["Key"]).name, prefix
                 )
+        model_card_bytes: bytes | None = next(
+            (
+                (target_path / path).read_bytes()
+                for path in LoRATrainer.__MODEL_CARDS
+                if (target_path / path).exists()
+            ),
+            None,
+        )
+        if model_card_bytes is None:
+            raise ValueError(f"{prefix} has no model card")
         LoRATrainer._archive_and_upload(
             region,
             target_path,
             model_name,
             model_identifier,
-            (target_path / "model_card.yaml").read_bytes(),
+            model_card_bytes,
             public_bucket,
             True,
         )
@@ -374,8 +384,8 @@ class LoRATrainer:
             work_dir (str): Local folder to download and rewrite the tarball in.
             model_card (ModelCard | None): Model card to write as
                 ``model_card.yml``. Defaults to ``None``, which keeps the
-                tarball's ``model_card.yml``, or failing that copies its
-                ``model_card.yaml``.
+                tarball's ``model_card.yml``, or failing that its
+                ``model_card.yaml``, renamed to ``model_card.yml``.
             region (str): AWS region of the public bucket. Defaults to
                 ``"eu-west-2"``.
             public_bucket (str): Bucket holding the tarball, which is

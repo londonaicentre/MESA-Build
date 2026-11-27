@@ -81,7 +81,7 @@ Region is `eu-west-2` throughout (default arg in the utils; passed via `aws_conf
 
    ```text
    s3://aicentre-nlpteam-mesa-build/models/<model_name>/<model_name>_<major>_<minor>_<patch>/
-       config.json, *.safetensors, tokenizer*, model_card.yaml      # individual files, no tarball
+       config.json, *.safetensors, tokenizer*, model_card.yml       # individual files, no tarball
    ```
 
    With `push_public=True`, a tarball is additionally pushed to the public bucket:

@@ -161,9 +161,9 @@ class TestUploadModelFolder:
             aws_config={"bucket": "baz", "region": "qux", "role": "x"}
         ).upload_model_folder(str(target), model_card)
 
-        assert (target / "model_card.yaml").read_bytes() == b"bar"
+        assert (target / "model_card.yml").read_bytes() == b"bar"
         uploaded = {call.kwargs["object_name"] for call in upload.call_args_list}
-        assert uploaded == {"model.safetensors", "config.json", "model_card.yaml"}
+        assert uploaded == {"model.safetensors", "config.json", "model_card.yml"}
         assert all(
             call.kwargs
             == {
@@ -342,6 +342,8 @@ class TestArchiveAndUpload:
     def make_target(tmp_path: Path) -> Path:
         (tmp_path / "foo_1_2_3").mkdir()
         (tmp_path / "foo_1_2_3" / "bar.safetensors").write_bytes(b"baz")
+        (tmp_path / "foo_1_2_3" / "model_card.yml").write_bytes(b"qux")
+        (tmp_path / "foo_1_2_3" / "model_card.yaml").write_bytes(b"quux")
         return tmp_path / "foo_1_2_3"
 
     @pytest.mark.parametrize(
@@ -426,21 +428,41 @@ class TestMakePublic:
             for file_name in ["bar.safetensors", "model_card.yaml"]
         ]
 
+    @pytest.mark.parametrize(
+        "model_cards, model_card_bytes",
+        [
+            ({"model_card.yml": b"bar"}, b"bar"),
+            ({"model_card.yaml": b"baz"}, b"baz"),
+            ({"model_card.yml": b"bar", "model_card.yaml": b"baz"}, b"bar"),
+        ],
+    )
     def test_make_public_archives_and_uploads_with_force(
-        self, tmp_path: Path, make_public_mocks: MakePublicMocks
+        self,
+        tmp_path: Path,
+        make_public_mocks: MakePublicMocks,
+        model_cards: dict[str, bytes],
+        model_card_bytes: bytes,
     ) -> None:
         (tmp_path / "foo_1_2_3").mkdir()
-        (tmp_path / "foo_1_2_3" / "model_card.yaml").write_bytes(b"bar")
+        for name, content in model_cards.items():
+            (tmp_path / "foo_1_2_3" / name).write_bytes(content)
         LoRATrainer.make_public("foo", "foo_1_2_3", str(tmp_path))
         make_public_mocks._archive_and_upload.assert_called_once_with(
             "eu-west-2",
             tmp_path / "foo_1_2_3",
             "foo",
             "foo_1_2_3",
-            b"bar",
+            model_card_bytes,
             "aicentre-nlpteam-mesa-public",
             True,
         )
+
+    def test_make_public_no_model_card_raises_value_error(
+        self, tmp_path: Path, make_public_mocks: MakePublicMocks
+    ) -> None:
+        with pytest.raises(ValueError, match="models/foo/foo_1_2_3 has no model card"):
+            LoRATrainer.make_public("foo", "foo_1_2_3", str(tmp_path))
+        make_public_mocks._archive_and_upload.assert_not_called()
 
 
 class TestRepackageModel:
@@ -483,7 +505,7 @@ class TestRepackageModel:
             == model_card_bytes
         )
 
-    def test_repackage_model_model_card_yaml_only_is_copied(
+    def test_repackage_model_model_card_yaml_only_is_renamed(
         self, tmp_path: Path, repackage_model_mocks: RepackageModelMocks
     ) -> None:
         TestRepackageModel.write_source(
@@ -495,10 +517,7 @@ class TestRepackageModel:
             repackage_model_mocks._add_model_card_and_license.call_args.args[1]
             == b"quux"
         )
-        assert read_tar(tmp_path / "foo_1_2_3.tar.gz") == [
-            ("bar.safetensors", b"baz"),
-            ("model_card.yaml", b"quux"),
-        ]
+        assert read_tar(tmp_path / "foo_1_2_3.tar.gz") == [("bar.safetensors", b"baz")]
 
     def test_repackage_model_given_model_card_replaces_existing(
         self,
@@ -525,7 +544,11 @@ class TestRepackageModel:
     ) -> None:
         TestRepackageModel.write_source(
             repackage_model_mocks,
-            {"bar.safetensors": b"baz", "model_card.yml": b"qux"}
+            {
+                "bar.safetensors": b"baz",
+                "model_card.yml": b"qux",
+                "model_card.yaml": b"quux",
+            }
             | ({} if license_name is None else {license_name: b"corge"}),
         )
         LoRATrainer.repackage_model("foo", "foo_1_2_3", str(tmp_path))
