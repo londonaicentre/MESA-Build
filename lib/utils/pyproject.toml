@@ -15,16 +15,24 @@ dependencies = [
     "httpx>=0.28.1",
     "markdown>=3.10",
     "pydantic>=2.12.5",
-    "londonaicentre-mesa-types>=1.0.0",
+    "londonaicentre-mesa-types>=2.7.0",
     "google-genai>=2.34.0",
     "openai>=3.45.0",
     "huggingface-hub>=2.4.0",
+    "pyyaml>=6.0.3",
+]
+
+[project.optional-dependencies]
+basemodelcheck = [
+    "torch>=2.15.0",
+    "transformers>=5.24.1",
 ]
 [build-system]
 requires = ["setuptools>=80.9.0"]
 build-backend = "setuptools.build_meta"
 [tool.uv.sources]
 londonaicentre-mesa-types = { path = "../types", editable = true }
+torch = { index = "pytorch-cpu" }
 [tool.setuptools]
 package-data = {"utils" = ["py.typed"]}
 [dependency-groups]
@@ -34,9 +42,17 @@ dev = [
     "pytest>=9.0.2",
     "pytest-mock>=3.15.1",
     "ruff>=0.14.6",
+    "torch>=2.15.0",
+    "transformers>=5.24.1",
     "types-markdown>=3.10.0.20251106",
+    "types-pyyaml>=6.0.12.20261122",
 ]
 
 [tool.pytest.ini_options]
 addopts = "--strict-markers"
 markers = ["integration: tests that read or write files on disk"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
