@@ -774,7 +774,7 @@ dev = [
 
 [[package]]
 name = "londonaicentre-mesa-utils"
-version = "2.1.1"
+version = "2.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "boto3" },
